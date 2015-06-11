@@ -21,6 +21,8 @@ List of flows:
 
 Usefull links:
  How to setup node-red instance on BlueMix Cloud - https://www.ng.bluemix.net/docs/#starters/Node-RED/nodered.html#nodered
+ 
  Node Red on Raspberry Pi - http://nodered.org/docs/hardware/raspberrypi.html
+ 
  freeboard - http://freeboard.io
  
