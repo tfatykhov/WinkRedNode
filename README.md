@@ -12,6 +12,6 @@ Please open the file and copy all it contents to the clipboard. Go to your Node 
 
 List of flows:
 
-1. InitializeWinkApi.txt - First flow that will be used to request authotisation token from wink. You need to edit GEtOAuthTocken function and add yuor credentials and Wink API key. Inject node is configured to run every 24 hours. You need to manually start it by clicking on the "start" button of inect node first.
+1. InitializeWinkApi.txt - First flow that will be used to request authorization token from wink. You need to edit GEtOAuthTocken function and add yuor credentials and Wink API key. Inject node is configured to run every 24 hours. You need to manually start it by clicking on the "start" button of inect node first.
 
 2. SampleWebServices.txt - this set of flows will give you example of how other application can communicate with your node-red app wia REST API. It has a comments node with more details.
