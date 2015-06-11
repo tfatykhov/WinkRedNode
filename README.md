@@ -23,7 +23,7 @@ List of flows:
 
 Usefull links:
 
-Wink APi (not up to date but give an idea) - http://docs.wink.apiary.io
+Wink APi  - http://docs.wink.apiary.io
 
  How to setup node-red instance on BlueMix Cloud - https://www.ng.bluemix.net/docs/#starters/Node-RED/nodered.html#nodered
  
