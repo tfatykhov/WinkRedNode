@@ -17,3 +17,10 @@ List of flows:
 2. SampleWebServices.txt - this set of flows will give you example of how other application can communicate with your node-red app wia REST API. It has a comments node with more details.
 
 3. SampleLightControl.txt this flow will actually create 3 subflows which can be used to turn binary switches on/off and adjust a dimmable light. Check corresponding functions on how to prepare json message to each subflow.
+
+
+Usefull links:
+ How to setup node-red instance on BlueMix Cloud - https://www.ng.bluemix.net/docs/#starters/Node-RED/nodered.html#nodered
+ Node Red on Raspberry Pi - http://nodered.org/docs/hardware/raspberrypi.html
+ freeboard - http://freeboard.io
+ 
