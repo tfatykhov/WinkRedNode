@@ -24,6 +24,9 @@ List of flows:
 
 6. SampleGroupControl.txt - sample flow to control Wink Light groups.
 
+7. LockControls.txt - sample flow that also creates 2 subflows to lock/unlock z-wave lock.
+
+
 Usefull links:
 
 Wink APi  - http://docs.wink.apiary.io
