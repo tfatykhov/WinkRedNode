@@ -22,6 +22,8 @@ List of flows:
 
 5. SubscribeForLightsUpdates.txt - sample flow that will subscribe for all light_bulbs in your setup and will update global variable with light status. You can also add function to add additional processing if needed.
 
+6. SampleGroupControl.txt - sample flow to control Wink Light groups.
+
 Usefull links:
 
 Wink APi  - http://docs.wink.apiary.io
