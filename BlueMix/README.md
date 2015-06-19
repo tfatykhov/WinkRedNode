@@ -29,3 +29,5 @@ In order to add additional nodes to your cloud instance you need node name from 
  * Deployment will start. Wait until it completes
  * Navigate to your_ibm_bluemix_application_name.mybluemix.net and click on "Go to your Node-RED flow editor" enter uid and password you defined at step 2 when prompted.
  * Start importing flows or creating your own.
+ * freeboard will be accessible via your_ibm_bluemix_application_name.mybluemix.net/freeboard
+ 
