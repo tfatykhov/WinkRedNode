@@ -8,7 +8,8 @@
 * You will be redirected back to your dashboard page. Just wait until your initial application is getting ready.
 * Once it will be ready your can access it by navigating to http://MyWinkNodeRed.mybluemix.net in the browser.
 
-Now we need to add freeboard node to your default instance.
+
+<b>Now we need to add freeboard node to your default instance.</b>
 
 
 
