@@ -22,7 +22,7 @@ In order to add additional nodes to your cloud instance you need node name from 
  * open windows command line (cmd)
  * navigate to the directory where you extracted this folder content (cd c:\BlueMix)
  * type - cf api https://api.ng.bluemix.net
- * type - cf login -u <your ibm bluemix login id>
+ * type - cf login -u your_ibm_bluemix_login_id
  * type your ibm bluemix password when promted
  * Select proper workspace (by default you only have one)
  * type cf push <your ibm bluemix application name>
