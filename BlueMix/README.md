@@ -27,5 +27,5 @@ In order to add additional nodes to your cloud instance you need node name from 
  * Select proper workspace (by default you only have one)
  * type cf push <your ibm bluemix application name>
  * Deployment will start. Wait until it completes
- * Navigate to <your ibm bluemix application name>.mybluemix.net and click on "Go to your Node-RED flow editor" enter uid and password you defined at step 2 when prompted.
+ * Navigate to your_ibm_bluemix_application_name.mybluemix.net and click on "Go to your Node-RED flow editor" enter uid and password you defined at step 2 when prompted.
  * Start importing flows or creating your own.
