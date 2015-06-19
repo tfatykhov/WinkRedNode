@@ -51,7 +51,12 @@ var settings = module.exports = {
     // Serve up the welcome page
     httpStatic: path.join(__dirname,"public"),
 
-    functionGlobalContext: { },
+    functionGlobalContext: {
+	WinkUser: {"uid":"your wink id","pwd":" your wink pwd"},
+	BlueMixUrlBase: "https://<your app name>.mybluemix.net",
+	forecastIoApiKey: "your api key",
+	HomeLocation: { "lon":"your home longtitude","lat":"your home lattitude"}
+ },
 
     storageModule: require("./couchstorage")
 }
@@ -91,5 +96,4 @@ if (!couchService) {
     throw new Error("No cloudant service found");
 }    
 settings.couchUrl = couchService.credentials.url;
-
 
