@@ -11,7 +11,7 @@
 Now we need to add freeboard node to your default instance.
 
 
-<b>Configure your bluemix node-red instance with basic authentication and add freeboard and pushbullet nodes (example for MS Windows workstation)</b>
+
 In order to add additional nodes to your cloud instance you need node name from npm (for example node-red-contrib-freeboard is the name for freeboard package)
 
  * Please copy all files and folders from this directlry to your local drive (for example c:\BlueMix)
