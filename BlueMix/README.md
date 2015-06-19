@@ -1,16 +1,14 @@
 <b>Creating your inital cloud instance for Node-Red and IBM BlueMix cloud</b>
 
-First you need to signup for a free account at http://bluemix.net/
-Once you have that installed log in to your account and navigate to dashboard
-Click on Create an App, select WEB and then click on "Browse Boilerplates"
-On the next page look for Node-Red starter pack and select it.
-On the Node-Red configuration page just put your app name (MyWinkNodeRed for example) and click - Create
-You will be send back to dashboard page. Just wait until your initial application is getting ready.
-Once it will be ready your can access it by navigating to http://MyWinkNodeRed.mybluemix.net in the browser.
+* First you need to signup for a free account at http://bluemix.net/
+* Once you have that done  log in to your account and navigate to dashboard
+* Click on Create an App, select WEB and then click on "Browse Boilerplates"
+* On the next page look for Node-Red starter pack and select it.
+* On the Node-Red configuration page just put your app name (MyWinkNodeRed for example) and click - Create
+* You will be redirected back to your dashboard page. Just wait until your initial application is getting ready.
+* Once it will be ready your can access it by navigating to http://MyWinkNodeRed.mybluemix.net in the browser.
 
 Now we need to add freeboard node to your default instance.
-
-
 
 
 <b>Configure your bluemix node-red instance with basic authentication and add freeboard and pushbullet nodes (example for MS Windows workstation)</b>
