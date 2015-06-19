@@ -15,7 +15,7 @@ Now we need to add freeboard node to your default instance.
 In order to add additional nodes to your cloud instance you need node name from npm (for example node-red-contrib-freeboard is the name for freeboard package). You can get that info on http://flows.nodered.org/ (navigate to "Flows" and do a search for freeboard)
 
  * Please copy all files and folders from this directory to your local drive (for example c:\BlueMix)
- * Open package.json file with text editor and add that package name to dependecies section. This dstribution already have it added so you can just check syntax or skip this step
+ * Open package.json file with text editor and add freeboard package name to dependecies section. <i>This dstribution already have it added so you can just check syntax or skip this step</i>
  * Open manifest.yml file with any text editor
  * update values for  NODE_RED_USERNAME and  NODE_RED_PASSWORD: with any desired values.
  * Download bluemix cloudfoundry command line tool from https://github.com/cloudfoundry/cli/releases
