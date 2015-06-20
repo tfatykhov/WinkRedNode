@@ -185,9 +185,33 @@ and run the `cf push MyWinkNodeRed` command:
 <img src='images/12.png'/>
 
 ## Next Steps
-Go to [http://MyWinkNodeRed.mybluemix.net](http://MyWinkNodeRed.mybluemix.net) and click on "Go to your Node-RED flow editor"
+Go to [http://MyWinkNodeRed.mybluemix.net](http://MyWinkNodeRed.mybluemix.net) and click on 
+["Go to your Node-RED flow editor"](http://mywinknodered.mybluemix.net/red)
 
 You will be prompted to enter the `NODE_RED_USERNAME` and `NODE_RED_PASSWORD` values that you entered into `manifest.yml`
 
- * Start importing flows or creating your own.
- * freeboard will be accessible via http://MyWinkNodeRed.mybluemix.net/freeboard
+Click on the three bars in the upper-right hand corner to get the menu,
+select "Import > Clipboard",
+copy the contents of `Flows/InitializeWinkApi.txt` into the pop-up window,
+and click OK.
+
+Click on the "+" to create "Sheet 2",
+then click on the three bars in the upper-right hand corner to get the menu,
+select "Import > Clipboard",
+copy the contents of `Flows/SampleWebServices.txt` into the pop-up window,
+ and click OK
+
+Click on "Deploy"
+
+**What URL should the user go to in order to see the JSON data?
+http://MyWinkNodeRed.mybluemix.net:1880 does not respond**
+
+Go to [http://mywinknodered.mybluemix.net/freeboard/](http://mywinknodered.mybluemix.net/freeboard/),
+and under "DataSources" cick on "Add".
+
+Select the "JSON" type,
+enter "My Wink Data" as the "Name",
+"http://127.0.0.1:1880/getGlobalData" as the "URL",
+and click "Save".
+
+**When i click on the refresh icon, "Last Updated" is still "never", so i'm pretty sure this is the wrong URL as well**
