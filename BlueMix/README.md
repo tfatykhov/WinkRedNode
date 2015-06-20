@@ -152,7 +152,7 @@ below the line:
                 "node-red-contrib-ibmpush":"0.x",
                 "node-red-contrib-bluemix-hdfs":"0.x",
                 "node-red-contrib-freeboard":"0.x",
-                "node-red-nodes-cf-sqldb-dashdb":"0.x",
+                "node-red-nodes-cf-sqldb-dashdb":"0.x"
             },
             "engines": {
                 "node": "0.10.x"
