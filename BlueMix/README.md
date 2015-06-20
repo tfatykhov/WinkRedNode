@@ -7,7 +7,7 @@ however, be sure to keep this in mind as you read the documentation!
 
 ## Creating the MyWinkNodeRed Application
 
-If you haven't already, please signup for a free **IBM Bluemix** account at [http://bluemix.net/](http://bluemix.net/):
+If you haven't already, please signup for a free **IBM Bluemix** account at [https://bluemix.net/](https://bluemix.net/):
 
 <img src='images/01.png'/>
 
@@ -43,7 +43,7 @@ this creates a folder named as your application:
 <img src='images/10.png'/>
 
 Wait about two minutes --
-you'll see "Your app is running. [http://MyWinkNodeRed.mybluemix.net](http://MyWinkNodeRed.mybluemix.net)" -- 
+you'll see "Your app is running. [https://MyWinkNodeRed.mybluemix.net](https://MyWinkNodeRed.mybluemix.net)" -- 
 click on the link to access your application:
 
 <img src='images/09.png'/>
@@ -185,33 +185,72 @@ and run the `cf push MyWinkNodeRed` command:
 <img src='images/12.png'/>
 
 ## Next Steps
-Go to [http://MyWinkNodeRed.mybluemix.net](http://MyWinkNodeRed.mybluemix.net) and click on 
-["Go to your Node-RED flow editor"](http://mywinknodered.mybluemix.net/red)
+Go to [https://MyWinkNodeRed.mybluemix.net](https://MyWinkNodeRed.mybluemix.net) and click on 
+["Go to your Node-RED flow editor"](https://mywinknodered.mybluemix.net/red)
 
 You will be prompted to enter the `NODE_RED_USERNAME` and `NODE_RED_PASSWORD` values that you entered into `manifest.yml`
 
 Click on the three bars in the upper-right hand corner to get the menu,
 select "Import > Clipboard",
-copy the contents of `Flows/InitializeWinkApi.txt` into the pop-up window,
+copy the contents of `../Flows/BlueMixMonitoringApp/BlueMixMonitoring.json` into the pop-up window,
 and click OK.
 
 Click on the "+" to create "Sheet 2",
 then click on the three bars in the upper-right hand corner to get the menu,
 select "Import > Clipboard",
-copy the contents of `Flows/SampleWebServices.txt` into the pop-up window,
- and click OK
+copy the contents of `Flows/InitializeWinkApi.json` into the pop-up window,
+and click OK.
+
+Click on the "+" to create "Sheet 3",
+then click on the three bars in the upper-right hand corner to get the menu,
+select "Import > Clipboard",
+copy the contents of `Flows/SampleWebServices.json` into the pop-up window,
+and click OK
 
 Click on "Deploy"
 
-**What URL should the user go to in order to see the JSON data?
-http://MyWinkNodeRed.mybluemix.net:1880 does not respond**
+Within moments,
+the URL [https://mywinknodered.mybluemix.net/red/getGlobalDataJson](https://mywinknodered.mybluemix.net/red/getGlobalDataJson)
+will return a JSON object with properties for both your devices and scenes.
 
-Go to [http://mywinknodered.mybluemix.net/freeboard/](http://mywinknodered.mybluemix.net/freeboard/),
-and under "DataSources" cick on "Add".
+Go to [https://mywinknodered.mybluemix.net/freeboard/](https://mywinknodered.mybluemix.net/freeboard/),
+and under "DataSources" click on "Add".
 
 Select the "JSON" type,
-enter "My Wink Data" as the "Name",
-"http://127.0.0.1:1880/getGlobalData" as the "URL",
-and click "Save".
+enter "WinkData" as the "Name",
+enter [https://mywinknodered.mybluemix.net/red/getGlobalDataJson](https://mywinknodered.mybluemix.net/red/getGlobalDataJson)
+as the "URL":
 
-**When i click on the refresh icon, "Last Updated" is still "never", so i'm pretty sure this is the wrong URL as well**
+<img src='images/Freeboard/SampleFreeboard1.png'/>
+
+Click "Save":
+
+<img src='images/20.png'/>
+
+Here's how to create a gauge that shows the current setting of a smart bulb.
+
+Click on "Add Pane" and in the pane, click on "+":
+
+<img src='images/Freeboard/CreateNewWidget_1.png'/>
+
+Select "Gauge", enter a name for the gauge, click "+ DataSource", and then click on "WinkData":
+
+<img src='images/Freeboard/CreateNewWidget_2.png'/>
+
+Click on "Lights"
+
+<img src='images/Freeboard/CreateNewWidget_3.png'/>
+
+Click on "brightness", and then append "*100"
+
+<img src='images/Freeboard/CreateNewWidget_4.png'/>
+
+Enter "%" for "Units":
+
+<img src='images/Freeboard/CreateNewWidget_5.png'/>
+
+Click on "Save":
+
+<img src='images/Freeboard/CreateNewWidget_6.png'/>
+
+Finally, click on "Save Freeboard"

@@ -1,0 +1,102 @@
+[
+  {
+    "id": "fd5610d7.02a9f",
+    "type": "http in",
+    "name": "",
+    "url": "\/red\/getGlobalDataJSon",
+    "method": "get",
+    "x": 243,
+    "y": 111,
+    "z": "b2a932d6.4d56d",
+    "wires": [
+      [
+        "7b06fba4.84f904"
+      ]
+    ]
+  },
+  {
+    "id": "7b06fba4.84f904",
+    "type": "function",
+    "name": "Throw Wink Data",
+    "func": "\/\/Sample function that generate a JSON response for a web call with all Wink global\n\/\/variables and cached states. Can be used as an input data source for node freeboard\n\/\/or any other purpose\nmsg.payload.Lights=context.global.WinkLightBulbs;\nmsg.payload.BinarySwitches=context.global.WinkSwitches;\nmsg.payload.Locks=context.global.WinkLocks;\nmsg.payload.MotionSensors=context.global.WinkMSensors;\nmsg.payload.Trippers=context.global.WinkTrippers;\nmsg.payload.Groups=context.global.WinkGroups;\nmsg.payload.Scenes=context.global.WinkScenes;\nmsg.payload.Thermostats=context.global.WinkThermostats;\nmsg.payload.Eggtrays=context.global.WinkEggTrays;\nmsg.payload.Piggybanks=context.global.WinkPiggyBanks;\nmsg.payload.PropaneTanks=context.global.WinkPropaneTanks;\nmsg.payload.Weather=context.global.Weather;\nreturn msg;",
+    "outputs": 1,
+    "valid": true,
+    "x": 524,
+    "y": 110,
+    "z": "b2a932d6.4d56d",
+    "wires": [
+      [
+        "c6467fc3.39b98"
+      ]
+    ]
+  },
+  {
+    "id": "c6467fc3.39b98",
+    "type": "http response",
+    "name": "",
+    "x": 753,
+    "y": 111,
+    "z": "b2a932d6.4d56d",
+    "wires": [
+      
+    ]
+  },
+  {
+    "id": "77eca4ee.88135c",
+    "type": "http in",
+    "name": "",
+    "url": "\/red\/getGlobalData",
+    "method": "get",
+    "x": 250,
+    "y": 188,
+    "z": "b2a932d6.4d56d",
+    "wires": [
+      [
+        "45f4cdb0.ba0b34"
+      ]
+    ]
+  },
+  {
+    "id": "45f4cdb0.ba0b34",
+    "type": "function",
+    "name": "Throw Wink Data",
+    "func": "WinkLightBulbsStatInd =new Array();\nWinkBinSwitchesInd = new Array();\nvar i=0;\n for (var Name in context.global.WinkLightBulbs)\n    {\n        \n        LightId=context.global.WinkLightBulbs[Name].id\n        WinkLightBulbsStatInd[i]={\n            \"name\":Name,\n            \"id\": context.global.WinkLightBulbs[Name].id,\n            \"brightness\": context.global.WinkLightBulbs[Name].brightness*100,\n            \"powered\":(context.global.WinkLightBulbs[Name].powered ? \"On\":\"Off\")\n        }\n    i++;\n    }\ni=0;\nfor (var Name in context.global.WinkSwitches)\n{\n    LightId=context.global.WinkSwitches[Name].id;\n    WinkBinSwitchesInd[i]={\n        \"name\":Name,\n        \"id\":context.global.WinkSwitches[Name].id,\n        \"powered\":(context.global.WinkSwitches[Name].powered ? \"checked\":\"\")\n    }\n    i++;\n}\n\nmsg.payload.lights=WinkLightBulbsStatInd;\nmsg.payload.switches=WinkBinSwitchesInd;\nreturn msg;",
+    "outputs": 1,
+    "valid": true,
+    "x": 465,
+    "y": 189,
+    "z": "b2a932d6.4d56d",
+    "wires": [
+      [
+        "e7d6ba39.182948"
+      ]
+    ]
+  },
+  {
+    "id": "e7d6ba39.182948",
+    "type": "template",
+    "name": "",
+    "field": "payload",
+    "format": "handlebars",
+    "template": "<html>\n<b>Dimmable Lights<\/b>\n<table border=1>\n<tr>\n    <th>Name<\/th>\n    <th>Status<\/th>\n    <th>Brightness<\/th>\n    <th>Id<\/th>\n<\/tr>\n{{#payload.lights}}\n<tr>\n    <td>{{name}}<\/td>\n    <td>{{powered}}<\/td>\n    <td>{{brightness}}<\/td>\n    <td>{{id}}<\/td>\n<\/tr>\n{{\/payload.lights}}\n<\/table>\n<br>\n<b>Switches<\/b>\n<table border=1>\n<tr>\n    <th>Name<\/th>\n    <th>Status<\/th>\n    <th>Id<\/th>\n<\/tr>\n{{#payload.switches}}\n<tr>\n    <td>{{name}}<\/td>\n    <td>{{powered}}<\/td>\n    <td>{{id}}<\/td>\n<\/tr>\n{{\/payload.switches}}\n<\/table>\n<\/html>",
+    "x": 611,
+    "y": 185,
+    "z": "b2a932d6.4d56d",
+    "wires": [
+      [
+        "3532e568.cacd1a"
+      ]
+    ]
+  },
+  {
+    "id": "3532e568.cacd1a",
+    "type": "http response",
+    "name": "",
+    "x": 765,
+    "y": 183,
+    "z": "b2a932d6.4d56d",
+    "wires": [
+      
+    ]
+  }
+]
