@@ -23,7 +23,7 @@ Click on "Browse Boilerplates" -- and when the pop-up appears, click on "Browse 
 
 <img src='images/04.png'/>
 
-Click on "Node-RED Starter":
+Click on "Node-RED Starter" -- you may have to wait a while for the form in the right-hand column to finish loading:
 
 <img src='images/05.png'/>
 
@@ -89,8 +89,8 @@ look for this line:
                                  }
             , BlueMixUrlBase   : "https://MyWinkNodeRed.mybluemix.net"
             , forecastIoApiKey : "your api key"
-            , HomeLocation     : { "lon" : "the longitude of your home location"
-                                 , "lat" : "the lattitude of your home location"
+            , HomeLocation     : { lon : "the longitude of your home location"
+                                 , lat : "the lattitude of your home location"
                                  }
         },
 
@@ -114,6 +114,24 @@ below the line:
             NODE_RED_PASSWORD: pZiMGaK8FtppasbhdPWr=JRPzh2vtn
 
     Note that indentation is important!
+
+    When you're done the entire file should look something like:
+
+        applications:
+        - services:
+          - MyWinkNodeRed-cloudantNoSQLDB
+          - MyWinkNodeRed-MonitoringAndAnalytics
+          disk_quota: 1024M
+          host: MyWinkNodeRed
+          name: MyWinkNodeRed
+          command: node --max-old-space-size=384 node_modules/node-red/red.js --settings ./bluemix-settings.js -v
+          path: .
+          domain: mybluemix.net
+          env:
+            NODE_RED_USERNAME: pseudo-random-string-one
+            NODE_RED_PASSWORD: pseudo-random-string-two
+          instances: 1
+          memory: 512M
 
 * In `package.json`,
 below the line:
@@ -172,4 +190,4 @@ Go to [http://MyWinkNodeRed.mybluemix.net](http://MyWinkNodeRed.mybluemix.net) a
 You will be prompted to enter the `NODE_RED_USERNAME` and `NODE_RED_PASSWORD` values that you entered into `manifest.yml`
 
  * Start importing flows or creating your own.
- * freeboard will be accessible via http://your_ibm_bluemix_application_name.mybluemix.net/freeboard
+ * freeboard will be accessible via http://MyWinkNodeRed.mybluemix.net/freeboard
