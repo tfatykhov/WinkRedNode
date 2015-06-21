@@ -1,12 +1,29 @@
-import this flow after proper configuration of bluemix cloud app.
-it will create a subscribtions events to your:
- * Lights
- * Switches
- * Locks
- * Motion Sensors
- * Tripper sensors
- * Thermostats
+Briefly: [Bluemix-Monitoring.json]([Bluemix-Monitoring.json)
+this is a "fundamental" flow that creates subscriptions for:
 
-use following url to define JSON data source in freeboard: https://your_app_name.mybluemix.net/red/getGlobalDataJson
-freeboard will be accessible via https://your_app_name.mybluemix.net/freeboard
+* Lights
+
+* Switches
+
+* Locks
+
+* Motion Sensors
+
+* Trippers
+
+* Groups
+
+* Scenes
+
+* Thermostats
+
+* Eggtrays
+
+* Piggybanks
+
+* PropaneTanks
+
+* Weather
+
+See [README-Bluemix.md](../../README-Bluemix.md) for _all_ the details.
 

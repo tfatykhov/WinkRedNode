@@ -1,4 +1,4 @@
-# How to create a cloud instance for Node-Red and Freeboard in the IBM Bluemix cloud
+# How to create a cloud instance for Node-RED and Freeboard in the IBM Bluemix cloud
 
 In the text that follows,
 the string `MyWinkNodeRed` is used as the application name -- 
@@ -184,29 +184,28 @@ and run the `cf push MyWinkNodeRed` command:
 
 <img src='images/12.png'/>
 
-## Next Steps
+## Fundamental Flows for Node-RED on Bluemix
 Go to [https://MyWinkNodeRed.mybluemix.net](https://MyWinkNodeRed.mybluemix.net) and click on 
-["Go to your Node-RED flow editor"](https://mywinknodered.mybluemix.net/red)
+["Go to your Node-RED flow editor"](https://mywinknodered.mybluemix.net/red).
 
-You will be prompted to enter the `NODE_RED_USERNAME` and `NODE_RED_PASSWORD` values that you entered into `manifest.yml`
+You will be prompted to enter the `NODE_RED_USERNAME` and `NODE_RED_PASSWORD` values
+that you previously entered into `manifest.yml`.
 
 Click on the three bars in the upper-right hand corner to get the menu,
 select "Import > Clipboard",
 copy the contents of `../Flows/BlueMixMonitoringApp/BlueMixMonitoring.json` into the pop-up window,
-and click OK.
+and click "OK".
 
 Click on the "+" to create "Sheet 2",
 then click on the three bars in the upper-right hand corner to get the menu,
 select "Import > Clipboard",
 copy the contents of `../Flows/SampleWebServices.json` into the pop-up window,
-and click OK.
+and click "OK".
 
 Click on "Deploy" -- within moments,
 the URL [https://mywinknodered.mybluemix.net/red/getGlobalDataJson](https://mywinknodered.mybluemix.net/red/getGlobalDataJson)
 will return a JSON object with properties for both your devices and scenes.
 
-Go to [https://mywinknodered.mybluemix.net/freeboard/](https://mywinknodered.mybluemix.net/freeboard/),
-and under "DataSources" click on "Add".
-
-Now take a look at [README-Freeboard.md](README-Freeboard.md).
-
+To start using Freeboard,
+go to [https://mywinknodered.mybluemix.net/freeboard/](https://mywinknodered.mybluemix.net/freeboard/),
+and take a look at [README-Freeboard.md](README-Freeboard.md).
