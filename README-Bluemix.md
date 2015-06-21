@@ -7,7 +7,7 @@ however, be sure to keep this in mind as you read the documentation!
 
 ## Creating the MyWinkNodeRed Application
 
-If you haven't already, please signup for a free **IBM Bluemix** account at [https://bluemix.net/](https://bluemix.net/):
+If you haven't already, please signup for a free **IBM Bluemix** account at [https://bluemix.net](https://bluemix.net/):
 
 <img src='images/01.png'/>
 
@@ -88,7 +88,7 @@ look for this line:
                                  , pwd : "your Wink password"
                                  }
             , BlueMixUrlBase   : "https://MyWinkNodeRed.mybluemix.net"
-            , forecastIoApiKey : "your api key"
+            , forecastIoApiKey : "your API key"
             , HomeLocation     : { lon : "the longitude of your home location"
                                  , lat : "the lattitude of your home location"
                                  }
@@ -193,13 +193,14 @@ that you previously entered into `manifest.yml`.
 
 Click on the three bars in the upper-right hand corner to get the menu,
 select "Import > Clipboard",
-copy the contents of `../Flows/BlueMixMonitoringApp/BlueMixMonitoring.json` into the pop-up window,
+copy the contents of [Flows/Bluemix/Bluemix-Monitoring.json](Flows/Bluemix/Bluemix-Monitoring.json)
+into the pop-up window,
 and click "OK".
 
 Click on the "+" to create "Sheet 2",
 then click on the three bars in the upper-right hand corner to get the menu,
 select "Import > Clipboard",
-copy the contents of `../Flows/SampleWebServices.json` into the pop-up window,
+copy the contents of [Flows/SampleWebServices.json](Flows/SampleWebServices.json) into the pop-up window,
 and click "OK".
 
 Click on "Deploy" -- within moments,
@@ -207,5 +208,5 @@ the URL [https://mywinknodered.mybluemix.net/red/getGlobalDataJson](https://mywi
 will return a JSON object with properties for both your devices and scenes.
 
 To start using Freeboard,
-go to [https://mywinknodered.mybluemix.net/freeboard/](https://mywinknodered.mybluemix.net/freeboard/),
+go to [https://mywinknodered.mybluemix.net/freeboard](https://mywinknodered.mybluemix.net/freeboard/),
 and take a look at [README-Freeboard.md](README-Freeboard.md).
