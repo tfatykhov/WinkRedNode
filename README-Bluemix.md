@@ -1,4 +1,4 @@
-# How to create a cloud instance for Node-Red and Freeboard in the IBM Bluemix cloud
+# How to create a cloud instance for Node-RED and Freeboard in the IBM Bluemix cloud
 
 In the text that follows,
 the string `MyWinkNodeRed` is used as the application name -- 
@@ -7,7 +7,7 @@ however, be sure to keep this in mind as you read the documentation!
 
 ## Creating the MyWinkNodeRed Application
 
-If you haven't already, please signup for a free **IBM Bluemix** account at [http://bluemix.net/](http://bluemix.net/):
+If you haven't already, please signup for a free **IBM Bluemix** account at [https://bluemix.net](https://bluemix.net/):
 
 <img src='images/01.png'/>
 
@@ -23,7 +23,7 @@ Click on "Browse Boilerplates" -- and when the pop-up appears, click on "Browse 
 
 <img src='images/04.png'/>
 
-Click on "Node-RED Starter":
+Click on "Node-RED Starter" -- you may have to wait a while for the form in the right-hand column to finish loading:
 
 <img src='images/05.png'/>
 
@@ -43,7 +43,7 @@ this creates a folder named as your application:
 <img src='images/10.png'/>
 
 Wait about two minutes --
-you'll see "Your app is running. [http://MyWinkNodeRed.mybluemix.net](http://MyWinkNodeRed.mybluemix.net)" -- 
+you'll see "Your app is running. [https://MyWinkNodeRed.mybluemix.net](https://MyWinkNodeRed.mybluemix.net)" -- 
 click on the link to access your application:
 
 <img src='images/09.png'/>
@@ -88,9 +88,9 @@ look for this line:
                                  , pwd : "your Wink password"
                                  }
             , BlueMixUrlBase   : "https://MyWinkNodeRed.mybluemix.net"
-            , forecastIoApiKey : "your api key"
-            , HomeLocation     : { "lon" : "the longitude of your home location"
-                                 , "lat" : "the lattitude of your home location"
+            , forecastIoApiKey : "your API key"
+            , HomeLocation     : { lon : "the longitude of your home location"
+                                 , lat : "the lattitude of your home location"
                                  }
         },
 
@@ -114,6 +114,24 @@ below the line:
             NODE_RED_PASSWORD: pZiMGaK8FtppasbhdPWr=JRPzh2vtn
 
     Note that indentation is important!
+
+    When you're done the entire file should look something like:
+
+        applications:
+        - services:
+          - MyWinkNodeRed-cloudantNoSQLDB
+          - MyWinkNodeRed-MonitoringAndAnalytics
+          disk_quota: 1024M
+          host: MyWinkNodeRed
+          name: MyWinkNodeRed
+          command: node --max-old-space-size=384 node_modules/node-red/red.js --settings ./bluemix-settings.js -v
+          path: .
+          domain: mybluemix.net
+          env:
+            NODE_RED_USERNAME: pseudo-random-string-one
+            NODE_RED_PASSWORD: pseudo-random-string-two
+          instances: 1
+          memory: 512M
 
 * In `package.json`,
 below the line:
@@ -166,10 +184,29 @@ and run the `cf push MyWinkNodeRed` command:
 
 <img src='images/12.png'/>
 
-## Next Steps
-Go to [http://MyWinkNodeRed.mybluemix.net](http://MyWinkNodeRed.mybluemix.net) and click on "Go to your Node-RED flow editor"
+## Fundamental Flows for Node-RED on Bluemix
+Go to [https://MyWinkNodeRed.mybluemix.net](https://MyWinkNodeRed.mybluemix.net) and click on 
+["Go to your Node-RED flow editor"](https://mywinknodered.mybluemix.net/red).
 
-You will be prompted to enter the `NODE_RED_USERNAME` and `NODE_RED_PASSWORD` values that you entered into `manifest.yml`
+You will be prompted to enter the `NODE_RED_USERNAME` and `NODE_RED_PASSWORD` values
+that you previously entered into `manifest.yml`.
 
- * Start importing flows or creating your own.
- * freeboard will be accessible via http://your_ibm_bluemix_application_name.mybluemix.net/freeboard
+Click on the three bars in the upper-right hand corner to get the menu,
+select "Import > Clipboard",
+copy the contents of [Flows/Bluemix/Bluemix-Monitoring.json](Flows/Bluemix/Bluemix-Monitoring.json)
+into the pop-up window,
+and click "OK".
+
+Click on the "+" to create "Sheet 2",
+then click on the three bars in the upper-right hand corner to get the menu,
+select "Import > Clipboard",
+copy the contents of [Flows/SampleWebServices.json](Flows/SampleWebServices.json) into the pop-up window,
+and click "OK".
+
+Click on "Deploy" -- within moments,
+the URL [https://mywinknodered.mybluemix.net/red/getGlobalDataJson](https://mywinknodered.mybluemix.net/red/getGlobalDataJson)
+will return a JSON object with properties for both your devices and scenes.
+
+To start using Freeboard,
+go to [https://mywinknodered.mybluemix.net/freeboard](https://mywinknodered.mybluemix.net/freeboard/),
+and take a look at [README-Freeboard.md](README-Freeboard.md).
