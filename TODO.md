@@ -52,25 +52,4 @@ the `linked_services` call returns onlyl the `linked_service` object type.)
     
 ## Freeboard
 
-* Clone [node-red-contrib-freeboard](https://github.com/urbiworx/node-red-contrib-freeboard)
-to add new widgets.
-    
-* New widget: modified RAG indicator
-    
-    * if color value present, use that instead of R-A-G
-    
-    * if percentage present, display as a (partially-)filled vertical-bar rather than a cricle
-    
-* Displaying objects:
-
-    * RAG indicator: binary_switch, button, gang, hub, lock, smoke_detector, sprinkler_zone, unknown_device
-    
-    * RAG indicator with color: thermostat
-    
-    * RAG indicator with percentage: garage_door, shade
-    
-    * RAG indicator with color and percentage: light_bulb, sensor_pod
-    
-    * TBD: camera
-
-* Indicator Light should evaluate ON/OFF when javascript present (bug!).
+* TBD: camera, remote, sprinkler/zones
