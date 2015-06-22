@@ -1,21 +1,5 @@
 [
   {
-    "id": "db44624f.24bba",
-    "type": "function",
-    "name": "Throw Wink Data",
-    "func": "if(msg.req.headers.authorization && msg.req.headers.authorization==\"Bearer \"+context.global.FreeboardAuthTocken){\nmsg.payload.WinkData=context.global.winkState;\nmsg.payload.LocalWeather=context.global.Weather;\nmsg.payload.WinkSubscriptions=context.global.WinkSubscriptions;\nmsg.res.statusCode=\"200\";\n}\nelse\n{\n    //msg.payload=\"Not Authorized\";\n   msg.res.send(\"403\",\"Forbidden\");\n}\nreturn msg;",
-    "outputs": 1,
-    "valid": true,
-    "x": 358,
-    "y": 240.5,
-    "z": "254ec046.dab14",
-    "wires": [
-      [
-        "ec45064c.13baf8"
-      ]
-    ]
-  },
-  {
     "id": "4dca531a.b235ac",
     "type": "http request",
     "name": "",
@@ -144,6 +128,22 @@
     "wires": [
       [
         "db44624f.24bba"
+      ]
+    ]
+  },
+  {
+    "id": "db44624f.24bba",
+    "type": "function",
+    "name": "Throw Wink Data",
+    "func": "if(msg.req.headers.authorization && msg.req.headers.authorization==\"Bearer \"+context.global.FreeboardAuthTocken){\nmsg.payload.WinkData=context.global.winkState;\nmsg.payload.LocalWeather=context.global.Weather;\nmsg.payload.WinkSubscriptions=context.global.WinkSubscriptions;\nmsg.res.statusCode=\"200\";\nreturn msg;\n}\nelse\n{\n    //msg.payload=\"Not Authorized\";\n   msg.res.send(\"403\",\"Forbidden\");\n  return;\n}",
+    "outputs": 1,
+    "valid": true,
+    "x": 358,
+    "y": 240.5,
+    "z": "254ec046.dab14",
+    "wires": [
+      [
+        "ec45064c.13baf8"
       ]
     ]
   },
