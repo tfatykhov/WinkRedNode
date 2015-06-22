@@ -35,4 +35,4 @@ value of context.global.FreeboardAuthTocken variable.
 Male sure to pass http header in freeboard Authorization: "Bearer "+<value of context.global.FreeboardAuthTocken >
 outbound webservice is accessible via <your node red host>/red/getGlobalDataJson
 Do not forget to add authorization header.
-<img>../../Freeboard/Add%20authorization%20header.png</img>
+<img>../../images/Freeboard/Add%20authorization%20header.png</img>
