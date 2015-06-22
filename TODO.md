@@ -33,12 +33,12 @@
                 }
               }
     
-            , "lastUpdate"      : // information from the last update
+            , "lastUpdates"     : // information from the last update
               {
     
               }
             }
-    
+
         Merge the results of both calls into a single object.
 (The `wink_devices` call returns many different object types;
 the `linked_services` call returns onlyl the `linked_service` object type.)    
