@@ -34,9 +34,9 @@
               }
     
             , "lastUpdates"     : // information from the last update
-              {
+              [
     
-              }
+              ]
             }
 
         Merge the results of both calls into a single object.
