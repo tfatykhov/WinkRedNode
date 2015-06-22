@@ -1,5 +1,21 @@
 [
   {
+    "id": "d9611bdb.269ee8",
+    "type": "function",
+    "name": "Get current weather",
+    "func": "var currDate= new Date();\nvar currHours=currDate.getHours();\nvar currMins=currDate.getMinutes();\nif(msg.payload.currently)\n{\ncontext.global.Weather.Offset=msg.payload.offset;\ncontext.global.Weather.CloudCover=Math.round(msg.payload.currently.cloudCover*100);\ncontext.global.Weather.WeatherSummary=msg.payload.currently.summary;\nvar date = new Date(msg.payload.daily.data[0].sunsetTime*1000);\nvar hours = date.getHours();\nvar minutes =date.getMinutes();\ncontext.global.Weather.SunsetHour=hours+context.global.Weather.Offset;\nif (context.global.Weather.SunsetHour<0)\n {\n     context.global.Weather.SunsetHour=24+context.global.Weather.SunsetHour;\n }\ncontext.global.Weather.SunsetMin=minutes;\nvar date = new Date(msg.payload.daily.data[0].sunriseTime*1000);\nvar hours = date.getHours();\nvar minutes =date.getMinutes();\ncontext.global.Weather.SunriseHour=hours+context.global.Weather.Offset;\ncontext.global.Weather.SunriseMin=minutes;\ncontext.global.Weather.outsideTemp=msg.payload.currently.temperature;\ncontext.global.Weather.PrecipationPbb=msg.payload.currently.precipProbability;\ncontext.global.Weather.HumidityOutside=msg.payload.currently.humidity;\ncurrHours=currHours+context.global.Weather.Offset;\nif (currHours<0)\n {\n     currHours=24+currHours;\n }\n node.warn(\"time \"+currHours+\":\"+currMins);\nif ((currHours > context.global.Weather.SunriseHour && currHours < context.global.Weather.SunsetHour) || (currHours==context.global.Weather.SunsetHour && currMins <context.global.Weather.SunsetMin))\n{\n    var timeFrame=\"DAY\";\n}\nelse {\n    var timeFrame=\"NIGHT\";\n}\ncontext.global.Weather.timeframe=timeFrame;\n}\nnewMsg = {\n    payload: {\n        \"offset\":context.global.Weather.Offset,\n        \"currtime\": currHours+\":\"+currMins,\n        \"CloudCover\": context.global.Weather.CloudCover,\n        \"WeatherSummary\": context.global.Weather.WeatherSummary,\n        \"sunsetTime\": context.global.Weather.SunsetHour+\":\"+context.global.Weather.SunsetMin,\n        \"sunriseTime\": context.global.Weather.SunriseHour+\":\"+context.global.Weather.SunriseMin,\n        \"outsideTemp\": context.global.Weather.outsideTemp,\n        \"precipation\": context.global.Weather.PrecipationPbb+\" %\",\n        \"timeframe\": context.global.Weather.timeframe\n    }\n};\nreturn newMsg;",
+    "outputs": 1,
+    "valid": true,
+    "x": 674,
+    "y": 744.5,
+    "z": "254ec046.dab14",
+    "wires": [
+      [
+        "dc0b7618.23f488"
+      ]
+    ]
+  },
+  {
     "id": "4dca531a.b235ac",
     "type": "http request",
     "name": "",
@@ -135,7 +151,7 @@
     "id": "db44624f.24bba",
     "type": "function",
     "name": "Throw Wink Data",
-    "func": "//Sample function that generate a JSON response for a web call with all Wink global\n//variables and cached states. Can be used as an input data source for node freeboard\n//or any other purpose\n//msg.payload.Lights=context.global.WinkLightBulbs;\n//msg.payload.BinarySwitches=context.global.WinkSwitches;\n//msg.payload.Locks=context.global.WinkLocks;\n//msg.payload.MotionSensors=context.global.WinkMSensors;\n//msg.payload.Trippers=context.global.WinkTrippers;\n//msg.payload.Groups=context.global.WinkGroups;\n//msg.payload.Scenes=context.global.WinkScenes;\n//msg.payload.Thermostats=context.global.WinkThermostats;\n//msg.payload.Eggtrays=context.global.WinkEggTrays;\n//msg.payload.Piggybanks=context.global.WinkPiggyBanks;\n//msg.payload.PropaneTanks=context.global.WinkPropaneTanks;\n//msg.payload.Weather=context.global.Weather;\nnode.warn(msg.req.headers.authorization);\nnode.warn(context.global.FreeboardAuthTocken);\nif(msg.req.headers.authorization && msg.req.headers.authorization==\"Bearer \"+context.global.FreeboardAuthTocken){\nmsg.payload.WinkData=context.global.winkState;\nmsg.payload.LocalWeather=context.global.Weather;\nmsg.payload.WinkSubscriptions=context.global.WinkSubscriptions;\nmsg.res.statusCode=\"200\";\n}\nelse\n{\n    msg.payload=\"Not Authorized\";\n    msg.res.statusCode=\"400\";\n}\nreturn msg;",
+    "func": "//Sample function that generate a JSON response for a web call with all Wink global\n//variables and cached states. Can be used as an input data source for node freeboard\n//or any other purpose\n//msg.payload.Lights=context.global.WinkLightBulbs;\n//msg.payload.BinarySwitches=context.global.WinkSwitches;\n//msg.payload.Locks=context.global.WinkLocks;\n//msg.payload.MotionSensors=context.global.WinkMSensors;\n//msg.payload.Trippers=context.global.WinkTrippers;\n//msg.payload.Groups=context.global.WinkGroups;\n//msg.payload.Scenes=context.global.WinkScenes;\n//msg.payload.Thermostats=context.global.WinkThermostats;\n//msg.payload.Eggtrays=context.global.WinkEggTrays;\n//msg.payload.Piggybanks=context.global.WinkPiggyBanks;\n//msg.payload.PropaneTanks=context.global.WinkPropaneTanks;\n//msg.payload.Weather=context.global.Weather;\n//node.warn(msg.req.headers.authorization);\n//node.warn(context.global.FreeboardAuthTocken);\nif(msg.req.headers.authorization && msg.req.headers.authorization==\"Bearer \"+context.global.FreeboardAuthTocken){\nmsg.payload.WinkData=context.global.winkState;\nmsg.payload.LocalWeather=context.global.Weather;\nmsg.payload.WinkSubscriptions=context.global.WinkSubscriptions;\nmsg.res.statusCode=\"200\";\n}\nelse\n{\n    msg.payload=\"Not Authorized\";\n    msg.res.statusCode=\"400\";\n}\nreturn msg;",
     "outputs": 1,
     "valid": true,
     "x": 354,
@@ -408,7 +424,7 @@
     "type": "comment",
     "name": "Weather-------------------------------------------------------------------------------------------------------------------------------",
     "info": "",
-    "x": 441,
+    "x": 415,
     "y": 623.5,
     "z": "254ec046.dab14",
     "wires": []
@@ -417,7 +433,7 @@
     "id": "dc0b7618.23f488",
     "type": "debug",
     "name": "",
-    "active": false,
+    "active": true,
     "console": "false",
     "complete": "false",
     "x": 950,
@@ -457,22 +473,6 @@
     "wires": [
       [
         "1cd9c8e0.e32637"
-      ]
-    ]
-  },
-  {
-    "id": "d9611bdb.269ee8",
-    "type": "function",
-    "name": "Get current weather",
-    "func": "var currDate= new Date();\nvar currHours=currDate.getHours();\nvar currMins=currDate.getMinutes();\nif(msg.payload.currently)\n{\ncontext.global.Weather.Offset=msg.payload.offset;\ncontext.global.Weather.CloudCover=Math.round(msg.payload.currently.cloudCover*100);\ncontext.global.Weather.WeatherSummary=msg.payload.currently.summary;\nvar date = new Date(msg.payload.daily.data[0].sunsetTime*1000);\nvar hours = date.getHours();\nvar minutes =date.getMinutes();\ncontext.global.Weather.SunsetHour=hours+context.global.Weather.Offset;\nif (context.global.Weather.SunsetHour<0)\n {\n     context.global.Weather.SunsetHour=24+context.global.Weather.SunsetHour;\n }\ncontext.global.Weather.SunsetMin=minutes;\nvar date = new Date(msg.payload.daily.data[0].sunriseTime*1000);\nvar hours = date.getHours();\nvar minutes =date.getMinutes();\ncontext.global.Weather.SunriseHour=hours+context.global.Weather.Offset;\ncontext.global.Weather.SunriseMin=minutes;\ncontext.global.Weather.outsideTemp=msg.payload.currently.temperature;\ncontext.global.Weather.PrecipationPbb=msg.payload.currently.precipProbability;\ncontext.global.Weather.HumidityOutside=msg.payload.currently.humidity;\ncurrHours=currHours+context.global.Weather.Offset;\nif (currHours<0)\n {\n     currHours=24+currHours;\n }\nif ((currHours > context.global.SunriseHour && currHours < context.global.SunsetHour) || (currHours==context.global.SunsetHour && currMins <context.global.SunsetMin))\n{\n    var timeFrame=\"DAY\";\n}\nelse {\n    var timeFrame=\"NIGHT\";\n}\ncontext.global.Weather.timeframe=timeFrame;\n}\nnewMsg = {\n    payload: {\n        \"offset\":context.global.Weather.Offset,\n        \"time\": currHours+\":\"+currMins,\n        \"CloudCover\": context.global.Weather.CloudCover,\n        \"WeatherSummary\": context.global.Weather.WeatherSummary,\n        \"sunsetTime\": context.global.Weather.SunsetHour+\":\"+context.global.Weather.SunsetMin,\n        \"sunriseTime\": context.global.Weather.SunriseHour+\":\"+context.global.Weather.SunriseMin,\n        \"outsideTemp\": context.global.Weather.outsideTemp,\n        \"precipation\": context.global.Weather.PrecipationPbb+\" %\",\n        \"timeframe\": context.global.Weather.timeframe\n    }\n};\nreturn newMsg;",
-    "outputs": 1,
-    "valid": true,
-    "x": 674,
-    "y": 744.5,
-    "z": "254ec046.dab14",
-    "wires": [
-      [
-        "dc0b7618.23f488"
       ]
     ]
   },
@@ -569,7 +569,7 @@
     "name": "Section for web services---------------------------------------------------------------------------------------------------------------------------------",
     "info": "",
     "x": 447.5,
-    "y": 188,
+    "y": 186,
     "z": "254ec046.dab14",
     "wires": []
   },
