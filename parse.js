@@ -49,43 +49,6 @@ var getWinkState = function(body) {
             }
         }
         if (!!result.linked_service_id) winkState[type][key].connection = !result.invalidated_at
-var value = freeboard.wink_helpers.value(winkState[type][key])
-winkState[type][key].freeboard = { }
-winkState[type][key].freeboard.generic = { value: value,
-on: value ? freeboard.wink_helpers.on_text(winkState[type][key]) : '',
-off: !value ? freeboard.wink_helpers.off_text(winkState[type][key]) : ''}
-var a = 
-[ 'co_detected'
-, 'fault'
-, 'liquid_detected'
-, 'locked'
-, 'loudness'
-, 'noise'
-, 'motion'
-, 'opened'
-, 'presence'
-, 'smoke_detected'
-, 'tamper_detected'
-, 'vibration'
-, 'battery'
-, 'brightness'
-, 'co_severity'
-, 'humidity'
-, 'smoke_severity'
-, 'temperature'
-]
-a.forEach(function(property) {
-    var value2
-
-if(type==='light_bulb')return
-    if (typeof winkState[type][key][property] === 'undefined') return
-value2 = freeboard.wink_helpers.value(winkState[type][key], property)
-winkState[type][key].freeboard[property] = { value: value2,
-on: value2 ? freeboard.wink_helpers.on_text(winkState[type][key], property) : '',
-off: !value2 ? freeboard.wink_helpers.off_text(winkState[type][key], property) : ''}
-})
-
-
 
         if (!updateP) return
         if (!winkState.lastUpdates) winkState.lastUpdates = []
@@ -138,37 +101,36 @@ freeboard.wink_helpers.on_text = function(data, property) {
             , garage_door    : 'open'
             , hub            : 'OK'
             , linked_service : 'OK'
-            , light_bulb     : data.brightness === 1.0 ? 'on'   : (data.brightness * 100) + '%'
+            , light_bulb     : (data.brightness === 1.0 ? 'on'   : (data.brightness * 100) + '%')
             , lock           : 'locked'
             , sensor_pod     : 'OK'
-            , shade          : data.position === 1.0   ? 'on'   : (data.position * 100) + '%'
-            , thermostat     : data.cool_active        ? 'cool' : data.heat_active ? 'heat' : data.aux_active ? 'aux' : data.fan_active? 'fan' : 'on'
+            , shade          : (data.position === 1.0   ? 'on'   : (data.position * 100) + '%')
+            , thermostat     : (data.cool_active        ? 'cool' : data.heat_active ? 'heat' : data.aux_active ? 'aux' : data.fan_active? 'fan' : 'on')
             }[data.object_type] || 'on'
     if (typeof property === 'undefined') return (typeof text !== 'undefined' ? text : 'on')
     if ((typeof data[property] === 'undefined') || (data[property] === null )) return ''
 
     value = data[property]
-if (property === 'temperature')console.log('property='+JSON.stringify(property)+' value='+JSON.stringify(value)+'\n'+inspect(data, { depth: null }))
-    text =  { co_detected     : value ? 'CO'        : ''
-            , fault           : value ? 'fault'     : ''
-            , liquid_detected : value ? 'leak'      : ''
-            , locked          : value ? 'locked'    : ''
-            , loudness        : value ? 'loud'      : ''
-            , noise           : value ? 'noisy'     : ''
-            , motion          : value ? 'motion'    : ''
-            , opened          : value ? 'opened'    : ''
-            , presence        : value ? 'presence'  : ''
-            , smoke_detected  : value ? 'smoke'     : ''
-            , tamper_detected : value ? 'tamper'    : ''
-            , vibration       : value ? 'vibration' : ''
+    text =  { co_detected     : (value ? 'CO'        : '')
+            , fault           : (value ? 'fault'     : '')
+            , liquid_detected : (value ? 'leak'      : '')
+            , locked          : (value ? 'locked'    : '')
+            , loudness        : (value ? 'loud'      : '')
+            , noise           : (value ? 'noisy'     : '')
+            , motion          : (value ? 'motion'    : '')
+            , opened          : (value ? 'opened'    : '')
+            , presence        : (value ? 'presence'  : '')
+            , smoke_detected  : (value ? 'smoke'     : '')
+            , tamper_detected : (value ? 'tamper'    : '')
+            , vibration       : (value ? 'vibration' : '')
 
-            , battery         : (value * 100) + '%'
-            , brightness      : (value * 100) + '%'
-            , co_severity     : (value * 100) + '%'
-            , humidity        : (value > 1.0 ? value.toFixed(0) : value * 100) + '%'
-            , smoke_severity  : (value * 100) + '%'
+            , battery         : ((value * 100) + '%')
+            , brightness      : ((value * 100) + '%')
+            , co_severity     : ((value * 100) + '%')
+            , humidity        : ((value > 1.0 ? value.toFixed(0) : value * 100) + '%')
+            , smoke_severity  : ((value * 100) + '%')
 
-            , temperature     : 'ZZZ' // isNaN(value) ? '' : (value.toFixed(1) + '&deg;C' + ' / ' + ((value * 1.8) + 32).toFixed(1) + '&deg;F')
+            , temperature     : (typeof value === 'number' ? (value.toFixed(1) + '&deg;C' + ' / ' + ((value * 1.8) + 32).toFixed(1) + '&deg;F') : '')
             }[property]
 
   return text
@@ -196,12 +158,12 @@ freeboard.wink_helpers.style = function(data, property) {
 
     if (!data.connection) return ('color="' + red + '" shape="diamond"')
 
-    color = { binary_switch  : data.powered          ? blue  : black
-            , button         : !data.pressed         ? blue  : green
-            , garage_door    : data.position === 1.0 ? blue  : yellow
-            , hub            : !data.update_needed   ? blue  : yellow
+    color = { binary_switch  : (data.powered          ? blue  : black)
+            , button         : (!data.pressed         ? blue  : green)
+            , garage_door    : (data.position === 1.0 ? blue  : yellow)
+            , hub            : (!data.update_needed   ? blue  : yellow)
             , light_bulb     : 'ffffff'
-            , thermostat     : { cool_only : blue, heat_only : red }[data.mode] || green
+            , thermostat     : ({ cool_only : blue, heat_only : red }[data.mode] || green)
             }[data.object_type] || blue
 
     if (typeof property === 'undefined') return ('color="' + color + '" shape="' + shape + '"')
@@ -221,7 +183,7 @@ freeboard.wink_helpers.style = function(data, property) {
             , tamper_detected : value && red
             , vibration       : value && yellow
 
-            , battery         : value === 1.0 ? blue : value > 0.66 ? green : value > 0.33 ? yellow : red
+            , battery         : (value === 1.0 ? blue : value > 0.66 ? green : value > 0.33 ? yellow : red)
             , brightness      : false
             , co_severity     : (value > 0) && red
             , humidity        : false
