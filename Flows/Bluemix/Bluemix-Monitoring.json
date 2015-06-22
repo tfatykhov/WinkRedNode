@@ -1,21 +1,5 @@
 [
   {
-    "id": "d9611bdb.269ee8",
-    "type": "function",
-    "name": "Get current weather",
-    "func": "var currDate= new Date();\nvar currHours=currDate.getHours();\nvar currMins=currDate.getMinutes();\nif(msg.payload.currently)\n{\ncontext.global.Weather.Offset=msg.payload.offset;\ncontext.global.Weather.CloudCover=Math.round(msg.payload.currently.cloudCover*100);\ncontext.global.Weather.WeatherSummary=msg.payload.currently.summary;\nvar date = new Date(msg.payload.daily.data[0].sunsetTime*1000);\nvar hours = date.getHours();\nvar minutes =date.getMinutes();\ncontext.global.Weather.SunsetHour=hours+context.global.Weather.Offset;\nif (context.global.Weather.SunsetHour<0)\n {\n     context.global.Weather.SunsetHour=24+context.global.Weather.SunsetHour;\n }\ncontext.global.Weather.SunsetMin=minutes;\nvar date = new Date(msg.payload.daily.data[0].sunriseTime*1000);\nvar hours = date.getHours();\nvar minutes =date.getMinutes();\ncontext.global.Weather.SunriseHour=hours+context.global.Weather.Offset;\ncontext.global.Weather.SunriseMin=minutes;\ncontext.global.Weather.outsideTemp=msg.payload.currently.temperature;\ncontext.global.Weather.PrecipationPbb=msg.payload.currently.precipProbability;\ncontext.global.Weather.HumidityOutside=msg.payload.currently.humidity;\ncurrHours=currHours+context.global.Weather.Offset;\nif (currHours<0)\n {\n     currHours=24+currHours;\n }\n node.warn(\"time \"+currHours+\":\"+currMins);\nif ((currHours > context.global.Weather.SunriseHour && currHours < context.global.Weather.SunsetHour) || (currHours==context.global.Weather.SunsetHour && currMins <context.global.Weather.SunsetMin))\n{\n    var timeFrame=\"DAY\";\n}\nelse {\n    var timeFrame=\"NIGHT\";\n}\ncontext.global.Weather.timeframe=timeFrame;\n}\nnewMsg = {\n    payload: {\n        \"offset\":context.global.Weather.Offset,\n        \"currtime\": currHours+\":\"+currMins,\n        \"CloudCover\": context.global.Weather.CloudCover,\n        \"WeatherSummary\": context.global.Weather.WeatherSummary,\n        \"sunsetTime\": context.global.Weather.SunsetHour+\":\"+context.global.Weather.SunsetMin,\n        \"sunriseTime\": context.global.Weather.SunriseHour+\":\"+context.global.Weather.SunriseMin,\n        \"outsideTemp\": context.global.Weather.outsideTemp,\n        \"precipation\": context.global.Weather.PrecipationPbb+\" %\",\n        \"timeframe\": context.global.Weather.timeframe\n    }\n};\nreturn newMsg;",
-    "outputs": 1,
-    "valid": true,
-    "x": 674,
-    "y": 744.5,
-    "z": "254ec046.dab14",
-    "wires": [
-      [
-        "dc0b7618.23f488"
-      ]
-    ]
-  },
-  {
     "id": "4dca531a.b235ac",
     "type": "http request",
     "name": "",
@@ -171,62 +155,6 @@
     "y": 252.5,
     "z": "254ec046.dab14",
     "wires": []
-  },
-  {
-    "id": "9ff88ca1.60077",
-    "type": "http in",
-    "name": "",
-    "url": "/red/getGlobalData",
-    "method": "get",
-    "x": 756,
-    "y": 249.5,
-    "z": "254ec046.dab14",
-    "wires": [
-      [
-        "cd904196.326fc"
-      ]
-    ]
-  },
-  {
-    "id": "cd904196.326fc",
-    "type": "function",
-    "name": "Throw Wink Data",
-    "func": "WinkLightBulbsStatInd =new Array();\nWinkBinSwitchesInd = new Array();\nvar i=0;\n for (var Name in context.global.WinkLightBulbs)\n    {\n        \n        LightId=context.global.WinkLightBulbs[Name].id\n        WinkLightBulbsStatInd[i]={\n            \"name\":Name,\n            \"id\": context.global.WinkLightBulbs[Name].id,\n            \"brightness\": context.global.WinkLightBulbs[Name].brightness*100,\n            \"powered\":(context.global.WinkLightBulbs[Name].powered ? \"On\":\"Off\")\n        }\n    i++;\n    }\ni=0;\nfor (var Name in context.global.WinkSwitches)\n{\n    LightId=context.global.WinkSwitches[Name].id;\n    WinkBinSwitchesInd[i]={\n        \"name\":Name,\n        \"id\":context.global.WinkSwitches[Name].id,\n        \"powered\":(context.global.WinkSwitches[Name].powered ? \"checked\":\"\")\n    }\n    i++;\n}\n\nmsg.payload.lights=WinkLightBulbsStatInd;\nmsg.payload.switches=WinkBinSwitchesInd;\nreturn msg;",
-    "outputs": 1,
-    "valid": true,
-    "x": 975,
-    "y": 225.5,
-    "z": "254ec046.dab14",
-    "wires": [
-      [
-        "37a93b69.c856c4"
-      ]
-    ]
-  },
-  {
-    "id": "dfe295da.201d68",
-    "type": "http response",
-    "name": "",
-    "x": 1297,
-    "y": 264.5,
-    "z": "254ec046.dab14",
-    "wires": []
-  },
-  {
-    "id": "37a93b69.c856c4",
-    "type": "template",
-    "name": "",
-    "field": "payload",
-    "format": "handlebars",
-    "template": "<html>\n<b>Dimmable Lights</b>\n<table border=1>\n<tr>\n    <th>Name</th>\n    <th>Status</th>\n    <th>Brightness</th>\n    <th>Id</th>\n</tr>\n{{#payload.lights}}\n<tr>\n    <td>{{name}}</td>\n    <td>{{powered}}</td>\n    <td>{{brightness}}</td>\n    <td>{{id}}</td>\n</tr>\n{{/payload.lights}}\n</table>\n<br>\n<b>Switches</b>\n<table border=1>\n<tr>\n    <th>Name</th>\n    <th>Status</th>\n    <th>Id</th>\n</tr>\n{{#payload.switches}}\n<tr>\n    <td>{{name}}</td>\n    <td>{{powered}}</td>\n    <td>{{id}}</td>\n</tr>\n{{/payload.switches}}\n</table>\n</html>",
-    "x": 1158,
-    "y": 227.5,
-    "z": "254ec046.dab14",
-    "wires": [
-      [
-        "dfe295da.201d68"
-      ]
-    ]
   },
   {
     "id": "5e36c299.a1c93c",
@@ -473,6 +401,22 @@
     "wires": [
       [
         "1cd9c8e0.e32637"
+      ]
+    ]
+  },
+  {
+    "id": "d9611bdb.269ee8",
+    "type": "function",
+    "name": "Get current weather",
+    "func": "var currDate= new Date();\nvar currHours=currDate.getHours();\nvar currMins=currDate.getMinutes();\nif(msg.payload.currently)\n{\ncontext.global.Weather.Offset=msg.payload.offset;\ncontext.global.Weather.CloudCover=Math.round(msg.payload.currently.cloudCover*100);\ncontext.global.Weather.WeatherSummary=msg.payload.currently.summary;\nvar date = new Date(msg.payload.daily.data[0].sunsetTime*1000);\nvar hours = date.getHours();\nvar minutes =date.getMinutes();\ncontext.global.Weather.SunsetHour=hours+context.global.Weather.Offset;\nif (context.global.Weather.SunsetHour<0)\n {\n     context.global.Weather.SunsetHour=24+context.global.Weather.SunsetHour;\n }\ncontext.global.Weather.SunsetMin=minutes;\nvar date = new Date(msg.payload.daily.data[0].sunriseTime*1000);\nvar hours = date.getHours();\nvar minutes =date.getMinutes();\ncontext.global.Weather.SunriseHour=hours+context.global.Weather.Offset;\ncontext.global.Weather.SunriseMin=minutes;\ncontext.global.Weather.outsideTemp=msg.payload.currently.temperature;\ncontext.global.Weather.PrecipationPbb=msg.payload.currently.precipProbability;\ncontext.global.Weather.HumidityOutside=msg.payload.currently.humidity;\ncurrHours=currHours+context.global.Weather.Offset;\nif (currHours<0)\n {\n     currHours=24+currHours;\n }\n node.warn(\"time \"+currHours+\":\"+currMins);\nif ((currHours > context.global.Weather.SunriseHour && currHours < context.global.Weather.SunsetHour) || (currHours==context.global.Weather.SunsetHour && currMins <context.global.Weather.SunsetMin))\n{\n    var timeFrame=\"DAY\";\n}\nelse {\n    var timeFrame=\"NIGHT\";\n}\ncontext.global.Weather.timeframe=timeFrame;\n}\nnewMsg = {\n    payload: {\n        \"offset\":context.global.Weather.Offset,\n        \"currtime\": currHours+\":\"+currMins,\n        \"CloudCover\": context.global.Weather.CloudCover,\n        \"WeatherSummary\": context.global.Weather.WeatherSummary,\n        \"sunsetTime\": context.global.Weather.SunsetHour+\":\"+context.global.Weather.SunsetMin,\n        \"sunriseTime\": context.global.Weather.SunriseHour+\":\"+context.global.Weather.SunriseMin,\n        \"outsideTemp\": context.global.Weather.outsideTemp,\n        \"precipation\": context.global.Weather.PrecipationPbb+\" %\",\n        \"timeframe\": context.global.Weather.timeframe\n    }\n};\nreturn newMsg;",
+    "outputs": 1,
+    "valid": true,
+    "x": 674,
+    "y": 744.5,
+    "z": "254ec046.dab14",
+    "wires": [
+      [
+        "dc0b7618.23f488"
       ]
     ]
   },
