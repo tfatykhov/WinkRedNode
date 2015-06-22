@@ -56,9 +56,11 @@ on: value ? freeboard.wink_helpers.on_text(winkState[type][key]) : '',
 off: !value ? freeboard.wink_helpers.off_text(winkState[type][key]) : ''}
 var a = 
 [ 'co_detected'
+, 'fault'
 , 'liquid_detected'
 , 'locked'
 , 'loudness'
+, 'noise'
 , 'motion'
 , 'opened'
 , 'presence'
@@ -75,6 +77,7 @@ var a =
 a.forEach(function(property) {
     var value2
 
+if(type==='light_bulb')return
     if (typeof winkState[type][key][property] === 'undefined') return
 value2 = freeboard.wink_helpers.value(winkState[type][key], property)
 winkState[type][key].freeboard[property] = { value: value2,
@@ -103,10 +106,14 @@ freeboard.wink_helpers = { }
 freeboard.wink_helpers.value = function(data, property) {
     var value
 
-    if ((!data.connection) || (data.object_type === 'camera')) return false
+    if (!data.connection) return false
+    if ({ camera: true, remote: true, sprinkler: true }[data.object_type]) return false
     if (typeof property !== 'undefined') {
-        if (typeof data[property] === 'undefined') return false
-        return ({ sensor_pod : true, smoke_detector: true }[data.object_type] || false)
+        if ((typeof data[property] === 'undefined') || (data[property] === null )) return false
+        return { sensor_pod     : true
+               , smoke_detector : true
+               , thermostat     : (property === 'temperature') || (property === 'humidity')
+               }[data.object_type] || (property === 'battery')
     }
 
     value = { button         : true
@@ -138,20 +145,22 @@ freeboard.wink_helpers.on_text = function(data, property) {
             , thermostat     : data.cool_active        ? 'cool' : data.heat_active ? 'heat' : data.aux_active ? 'aux' : data.fan_active? 'fan' : 'on'
             }[data.object_type] || 'on'
     if (typeof property === 'undefined') return (typeof text !== 'undefined' ? text : 'on')
-    if (typeof data[property] === 'undefined') return ''
+    if ((typeof data[property] === 'undefined') || (data[property] === null )) return ''
 
     value = data[property]
-console.log('property='+JSON.stringify(property)+' value='+JSON.stringify(value)+'\n'+inspect(data, { depth: null }))
-    text =  { co_detected     : value && 'CO'
-            , liquid_detected : value && 'leak'
-            , locked          : value && 'locked'
-            , loudness        : value && 'loud'
-            , motion          : value && 'motion'
-            , opened          : value && 'opened'
-            , presence        : value && 'presence'
-            , smoke_detected  : value && 'smoke'
-            , tamper_detected : value && 'tamper'
-            , vibration       : value && 'vibration'
+if (property === 'temperature')console.log('property='+JSON.stringify(property)+' value='+JSON.stringify(value)+'\n'+inspect(data, { depth: null }))
+    text =  { co_detected     : value ? 'CO'        : ''
+            , fault           : value ? 'fault'     : ''
+            , liquid_detected : value ? 'leak'      : ''
+            , locked          : value ? 'locked'    : ''
+            , loudness        : value ? 'loud'      : ''
+            , noise           : value ? 'noisy'     : ''
+            , motion          : value ? 'motion'    : ''
+            , opened          : value ? 'opened'    : ''
+            , presence        : value ? 'presence'  : ''
+            , smoke_detected  : value ? 'smoke'     : ''
+            , tamper_detected : value ? 'tamper'    : ''
+            , vibration       : value ? 'vibration' : ''
 
             , battery         : (value * 100) + '%'
             , brightness      : (value * 100) + '%'
@@ -159,14 +168,15 @@ console.log('property='+JSON.stringify(property)+' value='+JSON.stringify(value)
             , humidity        : (value > 1.0 ? value.toFixed(0) : value * 100) + '%'
             , smoke_severity  : (value * 100) + '%'
 
-            , temperature     : !isNaN(value) && value.toFixed(1) + '&deg;C' + ' / ' + ((value * 1.8) + 32).toFixed(1) + '&deg;F'
+            , temperature     : 'ZZZ' // isNaN(value) ? '' : (value.toFixed(1) + '&deg;C' + ' / ' + ((value * 1.8) + 32).toFixed(1) + '&deg;F')
             }[property]
 
   return text
 }
 
-freeboard.wink_helpers.off_text = function(data) {
+freeboard.wink_helpers.off_text = function(data, property) {
     if (!data.connection) return 'ERR'
+    if (typeof property !== 'undefined') return ''
 
     return { button          : 'idle'
            , garage_door     : 'closed'
@@ -195,13 +205,15 @@ freeboard.wink_helpers.style = function(data, property) {
             }[data.object_type] || blue
 
     if (typeof property === 'undefined') return ('color="' + color + '" shape="' + shape + '"')
-    if (typeof data[property] === 'undefined') return ''
+    if ((typeof data[property] === 'undefined') || (data[property] === null )) return ''
 
     value = data[property]    
     color = { co_detected     : value && red
+            , fault           : value && red
             , liquid_detected : value && red
             , locked          : (!value) && red
             , loudness        : value && yellow
+            , noise           : value && yellow
             , motion          : value && yellow
             , opened          : value && yellow
             , presence        : value && yellow
