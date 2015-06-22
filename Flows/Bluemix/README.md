@@ -23,7 +23,14 @@ this is a "fundamental" flow that creates subscriptions for:
 
 * PropaneTanks
 
+* Everything else that you have in wink ecosphere...
+
 * Weather
 
 See [README-Bluemix.md](../../README-Bluemix.md) for _all_ the details.
+
+-- updates: Added authorization bearer to the outbound web service.
+in order to retrieve proper data please update "define global objects' and change 
+value of context.global.FreeboardAuthTocken variable.
+Male sure to pass http header in freeboard Authorization: "Bearer "+<value of context.global.FreeboardAuthTocken >
 
