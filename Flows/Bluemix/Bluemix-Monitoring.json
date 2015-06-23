@@ -71,8 +71,8 @@
     "id": "3b3cc9b4.c4c336",
     "type": "function",
     "name": "Prepare HTTPS requests by device type",
-    "func": "var newMsg1 ={\n    \"url\":\"https://winkapi.quirky.com/users/me/wink_devices\",\n    \"method\": \"GET\",\n    headers: {\n        \"Authorization\":\"Bearer \"+context.global.WinkToken,\n        \"User-Agent\":\"Manufacturer/Darwin node/0.10.30 Wink/3.1.0\"\n    }\n}\nvar newMsg2 ={\n    \"url\":\"https://winkapi.quirky.com/users/me/linked_services\",\n    \"method\": \"GET\",\n    headers: {\n        \"Authorization\":\"Bearer \"+context.global.WinkToken\n     //   \"User-Agent\":\"Manufacturer/Darwin node/0.10.30 Wink/3.1.0\"\n }\n\n}\n\nreturn [newMsg1,newMsg2];\n//return [newMsg1,newMsg2,newMsg3,newMsg4,newMsg5,newMsg6,newMsg7,newMsg8,newMsg9,newMsg10,newMsg11];\n",
-    "outputs": "2",
+    "func": "var newMsg1 ={\n    \"url\":\"https://winkapi.quirky.com/users/me/wink_devices\",\n    \"method\": \"GET\",\n    headers: {\n        \"Authorization\":\"Bearer \"+context.global.WinkToken,\n        \"User-Agent\":\"Manufacturer/Darwin node/0.10.30 Wink/3.1.0\"\n    }\n}\nvar newMsg2 ={\n    \"url\":\"https://winkapi.quirky.com/users/me/linked_services\",\n    \"method\": \"GET\",\n    headers: {\n        \"Authorization\":\"Bearer \"+context.global.WinkToken\n     //   \"User-Agent\":\"Manufacturer/Darwin node/0.10.30 Wink/3.1.0\"\n }\n\n}\n\nvar newMsg3 ={\n    \"url\":\"https://winkapi.quirky.com/users/me/groups\",\n    \"method\": \"GET\",\n    headers: {\n        \"Authorization\":\"Bearer \"+context.global.WinkToken,\n        \"User-Agent\":\"Manufacturer/Darwin node/0.10.30 Wink/3.1.0\"\n }\n\n}\n\nvar newMsg4 ={\n    \"url\":\"https://winkapi.quirky.com/users/me/scenes\",\n    \"method\": \"GET\",\n    headers: {\n        \"Authorization\":\"Bearer \"+context.global.WinkToken,\n        \"User-Agent\":\"Manufacturer/Darwin node/0.10.30 Wink/3.1.0\"\n }\n\n}\nreturn [newMsg1,newMsg2,newMsg3,newMsg4];\n//return [newMsg1,newMsg2,newMsg3,newMsg4,newMsg5,newMsg6,newMsg7,newMsg8,newMsg9,newMsg10,newMsg11];\n",
+    "outputs": "4",
     "valid": true,
     "x": 1057,
     "y": 87.5,
@@ -83,6 +83,12 @@
       ],
       [
         "21b6f9e6.de4906"
+      ],
+      [
+        "8486c86.f7b7938"
+      ],
+      [
+        "c531ad72.3ace5"
       ]
     ]
   },
@@ -106,7 +112,7 @@
     "id": "13651326.ec9aed",
     "type": "function",
     "name": "DefineGlobalObjects",
-    "func": "//use this function to initialize global variables that can be used in any flow or function\n//and will keep their values while application is running\n\nif (typeof context.global.ignoreMotion === 'undefined')\n{\n    context.global.ignoreMotion=false;\n}\nif (typeof context.global.mediaPlaying==='undefined')\n{\n    context.global.mediaPlaying=false;\n}\nif (typeof context.global.Weather === 'undefined')\n{\n    context.global.Weather= {};\n}\nif (typeof context.global.winkState==='undefined' )\n{\n    context.global.winkState = {};\n}\ncontext.global.FreeboardAuthTocken=\"400932879e54x103321\";\n\ncontext.global.getWinkState = function (body) {\n    var results, updateP\n\n    updateP = !body.data\n    results = updateP ? [body] : body.data\n\n    results.forEach(function (result) {\n        var key, len, prop, readings, type\n        node.warn(result.object_type+\" \"+ result.object_id+\" \"+result.name) //for debugging\n        type = result.object_type\n        if (type) {\n        key = result.name\n        if (type==\"binary_switch\") type=\"binary_switches\"\n        else type=type+\"s\"\n        }\n        else {\n            if (!result.linked_service_id || result._msgid) return\n            type = 'linked_services'\n            key = result.service\n            result.object_id = result.linked_service_id\n        }\n        if (!context.global.winkState[type]) context.global.winkState[type] = {}\n\n        if ((!!context.global.winkState[type][key]) && (context.global.winkState[type][key].object_id != result.object_id)) {\n            key += ' (#' + result.object_id + ')'\n        }\n\n        context.global.winkState[type][key] =\n        {\n            name: result.name || key\n        , object_type: type\n        , object_id: result.object_id\n        }\n        if (result.lat_lng) {\n            if ((result.lat_lng[0] === 0) && (result.lat_lng[1] === 0)) result.lat_lng = [null, null]\n            context.global.winkState[type][key].coordinates = result.lat_lng\n        }\n\n        readings = result.last_reading\n        for (prop in readings) {\n            len = prop.length\n            if ((prop.indexOf('desired_') === -1) && (prop.lastIndexOf('_at') !== (len - 3))) {\n                context.global.winkState[type][key][prop] = readings[prop]\n            }\n        }\n        if (!!result.linked_service_id) context.global.winkState[type][key].connection = !result.invalidated_at\n\n        if (!updateP) return\n        if (!context.global.winkState.lastUpdates) context.global.winkState.lastUpdates = []\n        context.global.winkState[type][key].timestamp = new Date()\n        context.global.winkState.lastUpdates.splice(0, 0, context.global.winkState[type][key])\n        if (context.global.winkState.lastUpdates.length > 10) context.global.winkState.lastUpdates.pop()\n    })\n}\n\nreturn;",
+    "func": "//use this function to initialize global variables that can be used in any flow or function\n//and will keep their values while application is running\n\nif (typeof context.global.ignoreMotion === 'undefined')\n{\n    context.global.ignoreMotion=false;\n}\nif (typeof context.global.mediaPlaying==='undefined')\n{\n    context.global.mediaPlaying=false;\n}\nif (typeof context.global.Weather === 'undefined')\n{\n    context.global.Weather= {};\n}\n//if (typeof context.global.winkState==='undefined' )\n//{\n    context.global.winkState = {};\n//}\ncontext.global.FreeboardAuthTocken=\"400932879e54x103321\";\n\ncontext.global.getWinkState = function (body) {\n    var results, updateP\n\n    updateP = !body.data\n    results = updateP ? [body] : body.data\n\n    results.forEach(function (result) {\n        var key, len, prop, readings, type\n        node.warn(result.object_type+\" \"+ result.object_id+\" \"+result.name) //for debugging\n        type = result.object_type\n        if (type) {\n        key = result.name\n        if (type==\"binary_switch\") type=\"binary_switches\"\n        else type=type+\"s\"\n        }\n        else {\n            if (!result.linked_service_id || result._msgid) return\n            type = 'linked_services'\n            key = result.service\n            result.object_id = result.linked_service_id\n        }\n        if (!context.global.winkState[type]) context.global.winkState[type] = {}\n\n        if ((!!context.global.winkState[type][key]) && (context.global.winkState[type][key].object_id != result.object_id)) {\n            key += ' (#' + result.object_id + ')'\n        }\n\n        context.global.winkState[type][key] =\n        {\n            name: result.name || key\n        , object_type: type\n        , object_id: result.object_id\n        }\n        if (result.lat_lng) {\n            if ((result.lat_lng[0] === 0) && (result.lat_lng[1] === 0)) result.lat_lng = [null, null]\n            context.global.winkState[type][key].coordinates = result.lat_lng\n        }\n\n        readings = result.last_reading\n        for (prop in readings) {\n            len = prop.length\n            if ((prop.indexOf('desired_') === -1) && (prop.lastIndexOf('_at') !== (len - 3))) {\n                context.global.winkState[type][key][prop] = readings[prop]\n            }\n        }\n        if (!!result.linked_service_id) context.global.winkState[type][key].connection = !result.invalidated_at\n\n        if (!updateP) return\n        if (!context.global.winkState.lastUpdates) context.global.winkState.lastUpdates = []\n        context.global.winkState[type][key].timestamp = new Date()\n        context.global.winkState.lastUpdates.splice(0, 0, context.global.winkState[type][key])\n        if (context.global.winkState.lastUpdates.length > 10) context.global.winkState.lastUpdates.pop()\n    })\n}\n\nreturn;",
     "outputs": 1,
     "valid": true,
     "x": 301,
@@ -221,9 +227,9 @@
     "topic": "",
     "payload": "",
     "payloadType": "none",
-    "repeat": "82800",
+    "repeat": "",
     "crontab": "",
-    "once": true,
+    "once": false,
     "x": 658,
     "y": 461.5,
     "z": "254ec046.dab14",
@@ -293,7 +299,7 @@
     "id": "d2b40238.2d4c",
     "type": "function",
     "name": "CheckResposeCode",
-    "func": "if (typeof context.global.WinkSubscriptions === 'undefined')\n{\n    context.global.WinkSubscriptions = new Object();\n}\nif (msg.statusCode==202)\n{\n    node.warn(\"Subscription ID: \"+msg.payload.data.subscription_id);\n    context.global.WinkSubscriptions[msg.payload.data.subscription_id]={\n        \"subscription_id\": msg.payload.data.subscription_id,\n        \"url_base\":msg.payload.data.topic\n    }\n}\nelse\n{\n    node.warn(\"Subscription issue. Status: \"+msg.statusCode);\n}\nreturn;",
+    "func": "if (typeof context.global.WinkSubscriptions === 'undefined')\n{\n    context.global.WinkSubscriptions = new Object();\n}\nif (msg.statusCode==202)\n{\n    node.warn(\"Subscription ID: \"+msg.payload.data.subscription_id);\n    context.global.WinkSubscriptions[msg.payload.data.subscription_id]={\n        \"subscription_id\": msg.payload.data.subscription_id,\n        \"url_base\":msg.payload.data.topic,\n        \"callback\":msg.payload.data.callback\n    }\n}\nelse\n{\n    node.warn(\"Subscription issue. Status: \"+msg.statusCode);\n}\nreturn;",
     "outputs": 1,
     "valid": true,
     "x": 1270,
@@ -307,7 +313,7 @@
     "id": "dd21f2a7.22de1",
     "type": "debug",
     "name": "",
-    "active": false,
+    "active": true,
     "console": "false",
     "complete": "false",
     "x": 1242,
@@ -427,8 +433,8 @@
     "func": "var newMsg ={\n        \"url\":\"https://api.forecast.io/forecast/\"+context.global.forecastIoApiKey+\"/\"+context.global.HomeLocation.lon+\",\"+context.global.HomeLocation.lat,\n        \"method\": \"GET\"\n}\nreturn newMsg;",
     "outputs": 1,
     "valid": true,
-    "x": 299,
-    "y": 819.5,
+    "x": 275,
+    "y": 748.5,
     "z": "254ec046.dab14",
     "wires": [
       [
@@ -444,8 +450,8 @@
     "active": false,
     "console": "false",
     "complete": "true",
-    "x": 486,
-    "y": 868.5,
+    "x": 459,
+    "y": 804.5,
     "z": "254ec046.dab14",
     "wires": []
   },
@@ -470,8 +476,8 @@
     "method": "use",
     "ret": "obj",
     "url": "",
-    "x": 1371,
-    "y": 117,
+    "x": 1370,
+    "y": 90,
     "z": "254ec046.dab14",
     "wires": [
       [
@@ -528,5 +534,65 @@
     "y": 352,
     "z": "254ec046.dab14",
     "wires": []
+  },
+  {
+    "id": "8486c86.f7b7938",
+    "type": "http request",
+    "name": "GetWGroups",
+    "method": "use",
+    "ret": "obj",
+    "url": "",
+    "x": 1368,
+    "y": 155,
+    "z": "254ec046.dab14",
+    "wires": [
+      [
+        "4eb3e703.b14c18"
+      ]
+    ]
+  },
+  {
+    "id": "4eb3e703.b14c18",
+    "type": "function",
+    "name": "GetGroups",
+    "func": "context.global.getWinkState(msg.payload);\ndelete context.global.winkState._msgid;\nreturn;\n",
+    "outputs": 1,
+    "valid": true,
+    "x": 1602,
+    "y": 192,
+    "z": "254ec046.dab14",
+    "wires": [
+      []
+    ]
+  },
+  {
+    "id": "c531ad72.3ace5",
+    "type": "http request",
+    "name": "GetWGroups",
+    "method": "use",
+    "ret": "obj",
+    "url": "",
+    "x": 1384,
+    "y": 235,
+    "z": "254ec046.dab14",
+    "wires": [
+      [
+        "36b4c612.c94b3a"
+      ]
+    ]
+  },
+  {
+    "id": "36b4c612.c94b3a",
+    "type": "function",
+    "name": "GetScenes",
+    "func": "context.global.getWinkState(msg.payload);\ndelete context.global.winkState._msgid;\nreturn;\n",
+    "outputs": 1,
+    "valid": true,
+    "x": 1618,
+    "y": 272,
+    "z": "254ec046.dab14",
+    "wires": [
+      []
+    ]
   }
 ]
