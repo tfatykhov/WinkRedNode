@@ -64,4 +64,4 @@ Now bookmark the browser location, e.g.,
 
 that's where the new Freeboard lives.
 
-sample dashboard video - <iframe width="854" height="510" src="https://www.youtube.com/embed/gE8lXdsOkNI" frameborder="0" allowfullscreen></iframe>
+sample dashboard video - https://youtu.be/gE8lXdsOkNI
