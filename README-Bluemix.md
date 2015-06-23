@@ -11,34 +11,28 @@ If you haven't already, please signup for a free **IBM Bluemix** account at [htt
 
 <img src='images/01.png'/>
 
-Log in to your account, and make sure that you're on the "Dashboard":
+Log in to your account, and make sure that you're on the "Dashboard" - Scroll down to "Applications" and click on "+ Create an App" and then click on "Web":
 
 <img src='images/02.png'/>
 
-Scroll down to "Applications" and click on "+ Create an App" and then click on "Web":
+Click on "Browse Boilerplates" -- and when the pop-up appears, click on "Browse Boilerplates" in the pop-up:
 
 <img src='images/03.png'/>
 
-Click on "Browse Boilerplates" -- and when the pop-up appears, click on "Browse Boilerplates" in the pop-up:
+Click on "Node-RED Starter" -- you may have to wait a while for the form in the right-hand column to finish loading:
 
 <img src='images/04.png'/>
 
-Click on "Node-RED Starter" -- you may have to wait a while for the form in the right-hand column to finish loading:
-
-<img src='images/05.png'/>
-
 Enter the application "name" in the "Create an app" panel (e.g., "MyWinkNodeRed") --
-the "host" will automatically be filled-in:
+the "host" will automatically be filled-in. Click on "Create":
 
 <img src='images/06.png'/>
 
-Click on "Create" --
-in approximately 30 seconds, the screen will change to "Your application is staging.":
+In approximately 30 seconds, the screen will change to "Your application is staging." While you are waiting, scroll down and click on "Download Starter Code":
 
 <img src='images/07.png'/>
 
-While you are waiting, scroll down and click on "Download Starter Code" --
-this creates a folder named as your application:
+Once downloaded and unzipped, you will have a folder named as your application:
 
 <img src='images/10.png'/>
 
