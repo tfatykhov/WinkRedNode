@@ -63,3 +63,5 @@ Now bookmark the browser location, e.g.,
         https://mywinknodered.mybluemix.net/freeboard/#start-...
 
 that's where the new Freeboard lives.
+
+sample dashboard video - https://www.youtube.com/watch?v=gE8lXdsOkNI
