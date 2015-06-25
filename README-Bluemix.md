@@ -11,34 +11,30 @@ If you haven't already, please signup for a free **IBM Bluemix** account at [htt
 
 <img src='images/01.png'/>
 
-Log in to your account, and make sure that you're on the "Dashboard":
+Log in to your account, and make sure that you're on the "Dashboard" --
+Scroll down to "Applications" and click on "+ Create an App" and then click on "Web":
 
 <img src='images/02.png'/>
 
-Scroll down to "Applications" and click on "+ Create an App" and then click on "Web":
+Click on "Browse Boilerplates" -- and when the pop-up appears, click on "Browse Boilerplates" in the pop-up:
 
 <img src='images/03.png'/>
 
-Click on "Browse Boilerplates" -- and when the pop-up appears, click on "Browse Boilerplates" in the pop-up:
+Click on "Node-RED Starter" -- you may have to wait a while for the form in the right-hand column to finish loading:
 
 <img src='images/04.png'/>
 
-Click on "Node-RED Starter" -- you may have to wait a while for the form in the right-hand column to finish loading:
-
-<img src='images/05.png'/>
-
 Enter the application "name" in the "Create an app" panel (e.g., "MyWinkNodeRed") --
-the "host" will automatically be filled-in:
+the "host" will automatically be filled-in. Click on "Create":
 
 <img src='images/06.png'/>
 
-Click on "Create" --
-in approximately 30 seconds, the screen will change to "Your application is staging.":
+In approximately 30 seconds, the screen will change to "Your application is staging.":
+Once that appears, scroll down and click on "Start Coding >" and then "Download Starter Code":
 
 <img src='images/07.png'/>
 
-While you are waiting, scroll down and click on "Download Starter Code" --
-this creates a folder named as your application:
+Once downloaded and unzipped, you will have a folder named as your application:
 
 <img src='images/10.png'/>
 
@@ -92,6 +88,7 @@ look for this line:
             , HomeLocation     : { lon : "the longitude of your home location"
                                  , lat : "the lattitude of your home location"
                                  }
+            , FREEBOARD_TOKEN  : "pseudo-random-string"
         },
 
     to get an API key for `forecast.io` go [here](https://developer.forecast.io).
@@ -104,8 +101,8 @@ below the line:
     add these three lines:
 
           env:
-            NODE_RED_USERNAME: pseudo-random-string-one
-            NODE_RED_PASSWORD: pseudo-random-string-two
+            NODE_RED_USERNAME: another-pseudo-random-string
+            NODE_RED_PASSWORD: and-another-pseudo-random-string
 
     e.g.,
 
@@ -136,11 +133,11 @@ below the line:
 * In `package.json`,
 below the line:
 
-                "node-red-node-cf-cloudant":"0.x",
+        "node-red-node-cf-cloudant":"0.x",
 
     add this line:
 
-                "node-red-node-pushbullet":"0.x",
+        "node-red-node-pushbullet":"0.x",
 
     Also, below the line:
 
@@ -148,7 +145,7 @@ below the line:
 
     add this line:
 
-        "node-red-contrib-freeboard":"0.x",
+        "node-red-contrib-freeboard":"git://github.com/tfatykhov/node-red-contrib-freeboard.git",
 
     When you're done the entire file should look something like:
 
@@ -169,7 +166,7 @@ below the line:
                 "node-red-contrib-scx-ibmiotapp":"0.x",
                 "node-red-contrib-ibmpush":"0.x",
                 "node-red-contrib-bluemix-hdfs":"0.x",
-                "node-red-contrib-freeboard":"0.x",
+                "node-red-contrib-freeboard":"git://github.com/tfatykhov/node-red-contrib-freeboard.git",
                 "node-red-nodes-cf-sqldb-dashdb":"0.x"
             },
             "engines": {
@@ -179,7 +176,7 @@ below the line:
 
 ### Updating the application
 Open your command line program,
-change to the folder where the the folder named for your application was crated,
+change to the folder where the the folder named for your application was created,
 and run the `cf push MyWinkNodeRed` command:
 
 <img src='images/12.png'/>

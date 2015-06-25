@@ -24,6 +24,11 @@ as the "URL":
 
 <img src='images/Freeboard/SampleFreeboard1.png'/>
 
+Under "Headers", click on "Add and define one header with a "Name" of "Authorization" and a value corresponding to the
+`FREEBOARD-TOKEN` you defined when creating the MyWinkNodeRed application, e.g.,
+
+    Name=Authorization    Value=Bearer pseudo-random-string
+
 Click "Save":
 
 <img src='images/20.png'/>
@@ -63,3 +68,5 @@ Now bookmark the browser location, e.g.,
         https://mywinknodered.mybluemix.net/freeboard/#start-...
 
 that's where the new Freeboard lives.
+
+sample dashboard video - https://youtu.be/gE8lXdsOkNI
