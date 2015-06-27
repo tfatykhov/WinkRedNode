@@ -11,12 +11,9 @@ If you haven't already, please signup for a free **IBM Bluemix** account at [htt
 
 <img src='images/01.png'/>
 
-<<<<<<< HEAD
-Log in to your account, and make sure that you're on the "Dashboard" - Scroll down to "Applications" and click on "+ Create an App" and then click on "Web":
-=======
+
 Log in to your account, and make sure that you're on the "Dashboard" --
 Scroll down to "Applications" and click on "+ Create an App" and then click on "Web":
->>>>>>> 9021727e02bde64556f4935eb3becedf43bb5f34
 
 <img src='images/02.png'/>
 
@@ -33,12 +30,8 @@ the "host" will automatically be filled-in. Click on "Create":
 
 <img src='images/06.png'/>
 
-<<<<<<< HEAD
-In approximately 30 seconds, the screen will change to "Your application is staging." While you are waiting, scroll down and click on "Download Starter Code":
-=======
 In approximately 30 seconds, the screen will change to "Your application is staging.":
 Once that appears, scroll down and click on "Start Coding >" and then "Download Starter Code":
->>>>>>> 9021727e02bde64556f4935eb3becedf43bb5f34
 
 <img src='images/07.png'/>
 
