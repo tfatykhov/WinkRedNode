@@ -1,8 +1,6 @@
 # How to set up Node Red and Freeboard on Windows
 
-While NodeRed.org contains a basic setup, this tutorial will make installation and setup easier.
-
-[A high-level install tutorial can be found on NodeRed.org's website.](http://nodered.org/docs/getting-started/installation.html)
+While [NodeRed.org contains a basic setup tutorial](http://nodered.org/docs/getting-started/installation.html), this tutorial will make installation and setup easier.
 
 ## Download and Install node.js
 To ensure you're installing the latest version, [refer to Node Red's installation tutorial](http://nodered.org/docs/getting-started/installation.html) for the proper 32-bit or 64-bit installation link.
