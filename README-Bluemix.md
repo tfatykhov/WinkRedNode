@@ -202,9 +202,7 @@ copy the contents of [Flows/Bluemix/Bluemix-Monitoring.json](Flows/Bluemix/Bluem
 into the pop-up window,
 and click "OK".
 
-Click on "Deploy" -- within moments,
-the URL [https://mywinknodered.mybluemix.net/red/getGlobalDataJson](https://mywinknodered.mybluemix.net/red/getGlobalDataJson)
-will return a JSON object with properties for both your devices and scenes.
+Click on "Deploy". you will see information will start flow in debug window on right side of the screen (may need to swith to debug tab)
 
 To start using Freeboard,
 go to [https://mywinknodered.mybluemix.net/freeboard](https://mywinknodered.mybluemix.net/freeboard/),
