@@ -202,12 +202,6 @@ copy the contents of [Flows/Bluemix/Bluemix-Monitoring.json](Flows/Bluemix/Bluem
 into the pop-up window,
 and click "OK".
 
-Click on the "+" to create "Sheet 2",
-then click on the three bars in the upper-right hand corner to get the menu,
-select "Import > Clipboard",
-copy the contents of [Flows/SampleWebServices.json](Flows/SampleWebServices.json) into the pop-up window,
-and click "OK".
-
 Click on "Deploy" -- within moments,
 the URL [https://mywinknodered.mybluemix.net/red/getGlobalDataJson](https://mywinknodered.mybluemix.net/red/getGlobalDataJson)
 will return a JSON object with properties for both your devices and scenes.
