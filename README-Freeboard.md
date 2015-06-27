@@ -69,9 +69,5 @@ Now bookmark the browser location, e.g.,
 
 that's where the new Freeboard lives.
 
-<<<<<<< HEAD
-sample dashboard video - https://youtu.be/gE8lXdsOkNI
-=======
 # A Video Example
 Please take a look at [this YouTube video](https://youtu.be/gE8lXdsOkNI)
->>>>>>> 9021727e02bde64556f4935eb3becedf43bb5f34
