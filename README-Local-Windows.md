@@ -35,7 +35,7 @@ To run Node Red, simply type `node-red` into your command prompt window. Take no
 
 <img src='images/Windows/007.PNG'/>
 
-<img src='images/Windows/008.PNG'/>
+<img src='images/Windows/008.png'/>
 
 > Note: To stop Node Red, use `Control+C` in the command window. Type `Y` to confirm.
 
