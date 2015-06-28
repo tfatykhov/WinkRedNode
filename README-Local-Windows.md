@@ -189,36 +189,7 @@ and replace it with these lines:
 
 > To get your public IP address, [perform a Google search for "IP address"](https://www.google.com/webhp?sourceid=chrome-instant&ion=1&espv=2&ie=UTF-8#q=ip+address) and your IP will be returned in the results.
 
-    add this line:
-
-        "node-red-contrib-freeboard":"git://github.com/tfatykhov/node-red-contrib-freeboard.git",
-
-    When you're done the entire file should look something like:
-
-        {
-            "name"         : "node-red-bluemix",
-            "version"      : "0.4.20",
-            "dependencies": {
-                "when": "~3.x",
-                "mongodb": "~1.4.x",
-                "nano": "~5.11.0",
-                "cfenv":"~1.0.0",
-                "feedparser":"~0.19.2",
-                "redis":"~0.10.1",
-                "node-red": "0.x",
-                "node-red-bluemix-nodes":"0.x",
-                "node-red-node-cf-cloudant":"0.x",
-                "node-red-node-pushbullet":"0.x",
-                "node-red-contrib-scx-ibmiotapp":"0.x",
-                "node-red-contrib-ibmpush":"0.x",
-                "node-red-contrib-bluemix-hdfs":"0.x",
-                "node-red-contrib-freeboard":"git://github.com/tfatykhov/node-red-contrib-freeboard.git",
-                "node-red-nodes-cf-sqldb-dashdb":"0.x"
-            },
-            "engines": {
-                "node": "0.10.x"
-            }
-        }
+Save the `settings.js` file, return to your Command Prompt window and start Node Red using `node-red` command. Node Red should start without any errors. 
 
 ## Configure port forwarding to make Node Red internet accessible
 For the Wink flows to work your Node Red application must be accessible from the internet. This requires setting up a port forwarding rule to route any requests to http://(your public IP):1880/ goes to your computer's Node Red application.
