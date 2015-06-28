@@ -33,3 +33,7 @@ See [README-Bluemix.md](../../README-Bluemix.md) for _all_ the details.
 in order to retrieve proper data please make sure to pass http header in freeboard Authorization: "Bearer "+"value of FREEBOARD_TOKEN" (one that you set during bluemix configuration)
 outbound webservice is accessible via "your node red host"/red/getGlobalDataJson
 <img src="../../images/Freeboard/Add%20authorization%20header.png"></img>
+
+ -- updates after proper deployment system can generate sample dashboard automatically:
+ navigate to "your_host"/freeboard/winkboard to check it.
+ 
