@@ -45,7 +45,8 @@ To stop Node Red, use `Control+C` in the command window. Type `Y` to confirm.
 
 ## Add additional nodes to your installation
 
-Additional Node Modules can be added to your default installation to add more functionality. We will walk you through installing Pushbullet and Freeboard by editing the `package.json` file, but [additional modules can be found on Node Red's website](http://flows.nodered.org/). Noteworthy modules which you can install on your own include nodes for interacting with Wemo devices, Hue devices, and Nest thermostats.
+Additional Node Modules can be added to your default installation to add more functionality. We will walk you through installing Pushbullet and Freeboard by editing the `package.json` file, but [additional modules can be found on Node Red's website](http://flows.nodered.org/). Noteworthy modules which you can install on your own include nodes for interacting with Wemo devices, Hue devices, and Nest thermostats. 
+> Note: Any time you run the `npm install` command from the command prompt, make sure you are in your Node Red install folder as described below.
 
 Return to the command prompt window where you used the `node-red` command. As noted earlier, use `Control+C` to stop the application, then `Y` to confirm termination.
 
