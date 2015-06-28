@@ -36,4 +36,5 @@ outbound webservice is accessible via "your node red host"/red/getGlobalDataJson
 
  -- updates after proper deployment system can generate sample dashboard automatically:
  navigate to "your_host"/freeboard/winkboard to check it.
+ <img src="../../images/Freeboard/winkboard.png"></img>
  
