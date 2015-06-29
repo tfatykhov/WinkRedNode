@@ -5,7 +5,9 @@ While [NodeRed.org contains a basic setup tutorial](http://nodered.org/docs/gett
 ## Download and Install node.js
 To ensure you're installing the latest version, [refer to Node Red's installation tutorial](http://nodered.org/docs/getting-started/installation.html) for the proper 32-bit or 64-bit installation link.
 
-Download the latest version of Node.js from the installation tutorial above and run the installation. You can leave the default settings.
+Download the latest **supported** version of Node.js from the installation tutorial above and run the installation. You can leave the default settings.
+
+> Note: At the time of this writing, Node.js is on version 0.12.x but Node Red only supports up to version 0.10.x. Be sure to only use the install link provided in the Node Red installation tutorial above - do not go directly to Node.js to download their latest version as it may not be supported by Node Red.
 
 <img src='images/Windows/001.PNG'/>
 
