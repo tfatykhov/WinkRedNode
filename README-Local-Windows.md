@@ -138,6 +138,8 @@ In `settings.js`, look for this line:
 
 This step is completely optional, but if you would like to change the port which Node Red uses, you can change this setting here. If you're not sure, leave the port alone.
 
+> Note: This should not be confused with the port forwarding configuration section further down in this tutorial. You can leave your local port set to 1880, but when setting up port forwarding you would set the external port to something greater than 32000 and your local port to 1880.
+
 ### *REQUIRED* Password Protection
 In `settings.js`, around line 21 is `module.exports = {` - paste the following beneath this line:
 
@@ -194,7 +196,11 @@ and replace it with these lines:
 Save the `settings.js` file, return to your Command Prompt window and start Node Red using `node-red` command. Node Red should start without any errors. 
 
 ## Configure port forwarding to make Node Red internet accessible
-For the Wink flows to work your Node Red application must be accessible from the internet. This requires setting up a port forwarding rule to route any requests to http://(your public IP):1880/ goes to your computer's Node Red application.
+For the Wink flows to work your Node Red application must be accessible from the internet. This requires setting up a port forwarding rule to route any requests to http://(your public IP):(port number)/ goes to your computer's Node Red application.
+
+>Note: When setting up port forwarding - either through your home router or via the link below, it is recommended that you set the external port to a port number greater than 32000. Since the default port 1880 is a known port, it's likely that a port scanner would pick up your Node Red application while sweeping network segments. If you use a port greater than 32000 then it is less likely the port scanner would detect the Node Red application running on your network. 
+>
+> If you do decide to change your external port number, be sure to update the `BlueMixUrlBase` in the `settings.js` file so that Wink's subscription service can get to your Node Red application.
 
 By far the easiest Port Forwarding tutorial ever, use the following link to set up port forwarding for Node Red entirely through Windows. You won't even have to log into your router's web interface at all. I was stunned this works, but it does!
 
