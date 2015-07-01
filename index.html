@@ -22,208 +22,80 @@
       <h3>
 <a id="welcome-to-github-pages" class="anchor" href="#welcome-to-github-pages" aria-hidden="true"><span class="octicon octicon-link"></span></a>Welcome to GitHub Pages.</h3>
 
-# How to create a cloud instance for Node-RED and Freeboard in the IBM Bluemix cloud
+# WinkRedNode
 
-In the text that follows,
-the string `MyWinkNodeRed` is used as the application name -- 
-you are free to use a different name'
-however, be sure to keep this in mind as you read the documentation!
+This repository explains how to use [Node-RED](http://nodered.org/) and [Freeboard](http://freeboard.io/)
+with the [Wink API](http://docs.wink.apiary.io/) in order to enhance your home automation experience.
 
-## Creating the MyWinkNodeRed Application
-
-If you haven't already, please signup for a free **IBM Bluemix** account at [https://bluemix.net](https://bluemix.net/):
-
-<img src='images/01.png'/>
+This repository is neither officially-endorsed (or supported) by [Wink](http://wink.com/);
+however, Wink publishes an API and there are lots of wonderful open source tools that allow us to build on that API.
 
 
-Log in to your account, and make sure that you're on the "Dashboard" --
-Scroll down to "Applications" and click on "+ Create an App" and then click on "Web":
+## Overview
 
-<img src='images/02.png'/>
+Node-RED operates around the notion of a "flow".
+This repository contains examples of many flows that "know" about the Wink API.
+Once you have one or more flows deployed in your Node-RED process,
+you can make use of that data.
+The easiest way is to visual the data using [Freeboard](http://freeboard.io/).
 
-Click on "Browse Boilerplates" -- and when the pop-up appears, click on "Browse Boilerplates" in the pop-up:
+### Running Locally...
 
-<img src='images/03.png'/>
+You can run this software on your own computer,
+such as a [Raspberry Pi 2 model B](https://www.raspberrypi.org/products/raspberry-pi-2-model-b/)
+or even your own laptop computer!
+In order to run Node-RED locally,
+take a look at the [documentation](http://nodered.org/docs/).
+Here is the [QUICKSTART](http://nodered.org/docs/hardware/raspberrypi.html) for running Node-RED on Raspberry Pi.
 
-Click on "Node-RED Starter" -- you may have to wait a while for the form in the right-hand column to finish loading:
-
-<img src='images/04.png'/>
-
-Enter the application "name" in the "Create an app" panel (e.g., "MyWinkNodeRed") --
-the "host" will automatically be filled-in. Click on "Create":
-
-<img src='images/06.png'/>
-
-In approximately 30 seconds, the screen will change to "Your application is staging.":
-Once that appears, scroll down and click on "Start Coding >" and then "Download Starter Code":
-
-<img src='images/07.png'/>
-
-Once downloaded and unzipped, you will have a folder named as your application:
-
-<img src='images/10.png'/>
-
-Wait about two minutes --
-you'll see "Your app is running. [https://MyWinkNodeRed.mybluemix.net](https://MyWinkNodeRed.mybluemix.net)" -- 
-click on the link to access your application:
-
-<img src='images/09.png'/>
-
-## Download and Configure the Cloud Foundry environment
-Go to [https://github.com/cloudfoundry/cli/releases](https://github.com/cloudfoundry/cli/releases):
-
-<img src='images/00.png'/>
-
-Click on the link for the appropriate installer,
-after it successfully downloads,
-double-click on the installer program,
-and then follow the steps.
-
-Open your command line program (`cmd` on Windows, `iTerm` on Mac OS X, `xterm` on Linux, etc.) and
-and run the `cf api https://api.ng.bluemix.net` command:
-
-<img src='images/11.png'/>
-
-Then run the 
-
-        cf login -u your_ibm_bluemix_login_id
-
-command,
-and when prompted, enter your IBM Bluemix password.
-
-## Configuring Your Application
-
-### Editing three files
-In the "MyWinkNodeRed" folder that was created,
-there are three files to be edited.
-
-* In `bluemix-settings.js`,
-look for this line:
-
-        functionGlobalContext: { },
-
-    and replace it with these lines:
-
-        functionGlobalContext: {
-              WinkUser         : { uid : "your Wink username"
-                                 , pwd : "your Wink password"
-                                 }
-            , BlueMixUrlBase   : "https://MyWinkNodeRed.mybluemix.net"
-            , forecastIoApiKey : "your API key"
-            , HomeLocation     : { lon : "the longitude of your home location"
-                                 , lat : "the lattitude of your home location"
-                                 }
-            , FREEBOARD_TOKEN  : "pseudo-random-string"
-        },
-
-    to get an API key for `forecast.io` go [here](https://developer.forecast.io).
-
-* In 'manifest.yml',
-below the line:
-
-          domain: mybluemix.net
-
-    add these three lines:
-
-          env:
-            NODE_RED_USERNAME: another-pseudo-random-string
-            NODE_RED_PASSWORD: and-another-pseudo-random-string
-
-    e.g.,
-
-          env:
-            NODE_RED_USERNAME: zphiZvUMUsMFoyTUD9VkVyThDNV3Vh
-            NODE_RED_PASSWORD: pZiMGaK8FtppasbhdPWr=JRPzh2vtn
-
-    Note that indentation is important!
-
-    When you're done the entire file should look something like:
-
-        applications:
-        - services:
-          - MyWinkNodeRed-cloudantNoSQLDB
-          - MyWinkNodeRed-MonitoringAndAnalytics
-          disk_quota: 1024M
-          host: MyWinkNodeRed
-          name: MyWinkNodeRed
-          command: node --max-old-space-size=384 node_modules/node-red/red.js --settings ./bluemix-settings.js -v
-          path: .
-          domain: mybluemix.net
-          env:
-            NODE_RED_USERNAME: pseudo-random-string-one
-            NODE_RED_PASSWORD: pseudo-random-string-two
-          instances: 1
-          memory: 512M
-
-* In `package.json`,
-below the line:
-
-        "node-red-node-cf-cloudant":"0.x",
-
-    add this line:
-
-        "node-red-node-pushbullet":"0.x",
-
-    Also, below the line:
-
-        "node-red-contrib-bluemix-hdfs":"0.x",
-
-    add this line:
-
-        "node-red-contrib-freeboard":"git://github.com/tfatykhov/node-red-contrib-freeboard.git",
-
-    When you're done the entire file should look something like:
-
-        {
-            "name"         : "node-red-bluemix",
-            "version"      : "0.4.20",
-            "dependencies": {
-                "when": "~3.x",
-                "mongodb": "~1.4.x",
-                "nano": "~5.11.0",
-                "cfenv":"~1.0.0",
-                "feedparser":"~0.19.2",
-                "redis":"~0.10.1",
-                "node-red": "0.x",
-                "node-red-bluemix-nodes":"0.x",
-                "node-red-node-cf-cloudant":"0.x",
-                "node-red-node-pushbullet":"0.x",
-                "node-red-contrib-scx-ibmiotapp":"0.x",
-                "node-red-contrib-ibmpush":"0.x",
-                "node-red-contrib-bluemix-hdfs":"0.x",
-                "node-red-contrib-freeboard":"git://github.com/tfatykhov/node-red-contrib-freeboard.git",
-                "node-red-nodes-cf-sqldb-dashdb":"0.x"
-            },
-            "engines": {
-                "node": "0.10.x"
-            }
-        }
-
-### Updating the application
-Open your command line program,
-change to the folder where the the folder named for your application was created,
-and run the `cf push MyWinkNodeRed` command:
-
-<img src='images/12.png'/>
-
-## Fundamental Flows for Node-RED on Bluemix
-Go to [https://MyWinkNodeRed.mybluemix.net](https://MyWinkNodeRed.mybluemix.net) and click on 
-["Go to your Node-RED flow editor"](https://mywinknodered.mybluemix.net/red).
-
-You will be prompted to enter the `NODE_RED_USERNAME` and `NODE_RED_PASSWORD` values
-that you previously entered into `manifest.yml`.
-
+Once you have Node-RED running,
+there are two "fundamental" flows that you should deploy before doing anything else.
+To deploy a flow,
+point your browser to your Node-RED configuration page, e.g., [http://127.0.0.1:1880/].
 Click on the three bars in the upper-right hand corner to get the menu,
 select "Import > Clipboard",
-copy the contents of [Flows/Bluemix/Bluemix-Monitoring.json](Flows/Bluemix/Bluemix-Monitoring.json)
-into the pop-up window,
-and click "OK".
+cut-and-paste the contents of the Flow file into the pop-up window,
+and click OK.
+Then click on the "Deploy" button.
 
-Click on "Deploy". you will see information will start flow in debug window on right side of the screen (may need to swith to debug tab)
+1. [Flows/InitializeWinkApi.txt](Flows/InitializeWinkApi.txt):
+this set of flows requests an authorization token from Wink.
+You need to edit GetOAuthTocken function and add your credentials and Wink API key.
+Inject node is configured to run every 24 hours.
+You need to manually start it by clicking on the "start" button of inject node first.
 
-To start using Freeboard,
-go to [https://mywinknodered.mybluemix.net/freeboard](https://mywinknodered.mybluemix.net/freeboard/),
-and take a look at [README-Freeboard.md](README-Freeboard.md).
+2. [Flows/SampleWebServices.txt](Flows/SampleWebServices.txt):
+this set of flows gives you an example of how other applications communicate with your Node-RED app via Wink's REST API.
+It has a comments node with more details.
+
+**timur do we need some instructions on how to install Freeboard locally?**
+
+### ... or in the Cloud
+You can also run this software in the cloud.
+The [HOWTO](README-Bluemix.md) for the IBM Bluemix cloud explains how to install both Node-RED and Freeboard,
+and how to deploy the appropriate "fundamental" flows.
+
+There are many excellent cloud platforms as a service;
+if you really like another,
+perhaps you contribute a "HOWTO" for installing Node-RED and Freeboard?
+
+## Node-RED Flows
+The [Flows/ directory](Flows/README.md) has many examples!
+
+## Freeboard
+
+Here is the [HOWTO](README-Freeboard.md) for how to use Freeboard with Node-RED and Wink.
+
+## Useful links
+
+* [Node-RED](http://nodered.org/)
+
+* [Wink API](http://docs.wink.apiary.io/)
+
+* [Node-RED on Raspberry Pi](http://nodered.org/docs/hardware/raspberrypi.html)
+ 
+* [Freeboard](http://freeboard.io/)
+
 
       <footer class="site-footer">
         <span class="site-footer-owner"><a href="https://github.com/tfatykhov/WinkRedNode">Winkrednode</a> is maintained by <a href="https://github.com/tfatykhov">tfatykhov</a>.</span>
