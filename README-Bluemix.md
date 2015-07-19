@@ -201,3 +201,7 @@ Click on "Deploy". you will see information will start flow in debug window on r
 To start using Freeboard,
 go to [https://mywinknodered.mybluemix.net/freeboard](https://mywinknodered.mybluemix.net/freeboard/),
 and take a look at [README-Freeboard.md](README-Freeboard.md).
+
+To start using IFTTT,
+take a look at [README-IFTTT.md](README-IFTTT.md).
+
