@@ -28,6 +28,12 @@ Body
 ------------------------------------------------------------
 
 to process wink node-red in IFTTT
+wink event will send 3 parameters as permitted in IFTTT
+value1 - device name
+
+value2 - device state (on/off locked/unlocked, motion/no motion, leaking/no leak, opened/closed, propane level for gas tank sensor
+
+value3 - currently used for dimmable lights. will provide dim level
 
 Action - 
 For "THIS" select the Maker channel
