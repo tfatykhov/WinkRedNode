@@ -90,10 +90,11 @@ look for this line:
                                  , lat : "the lattitude of your home location"
                                  }
             , FREEBOARD_TOKEN  : "pseudo-random-string"
+            , IFTTT_TOKEN: "your IFTTT secret key"
         },
 
     to get an API key for `forecast.io` go [here](https://developer.forecast.io).
-
+    to get an IFTTT token go to http://ifttt.com/maker and look for secret key strinkg
 * In 'manifest.yml',
 below the line:
 
