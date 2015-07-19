@@ -37,5 +37,6 @@ Click "Create Trigger"
 
 For "THAT" select the Android Wear channel
 Click "Send a Notification" as the Action
-For the Notification text, I used "Wink Event: {{value1}} {{value2}} {{value3}}" (without the quotations)
-For the image URL, I used a Wink image -- http://www.winkapp.com/assets/mediakit/wink-logo-icon-knockout-50235153b274cdf35ef39fb780448596.png
+For the Notification text - Wink Event: {{value1}} {{value2}} {{value3}}
+For the image URL, use Wink image --
+[http://www.winkapp.com/assets/mediakit/wink-logo-icon-knockout-50235153b274cdf35ef39fb780448596.png](http://www.winkapp.com/assets/mediakit/wink-logo-icon-knockout-50235153b274cdf35ef39fb780448596.png)
