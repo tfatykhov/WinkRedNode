@@ -35,7 +35,7 @@ Next, select "Receive a web request"
 For "Event Name" type "WinkEvent"
 Click "Create Trigger"
 
-For "THAT" select the Android Wear channel
+For "THAT" for example - select the Android Wear channel
 Click "Send a Notification" as the Action
 For the Notification text - Wink Event: {{value1}} {{value2}} {{value3}}
 For the image URL, use Wink image --
