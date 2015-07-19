@@ -30,7 +30,7 @@ Body
   wink event will send 3 parameters as permitted in IFTTT
   
   * value1 - device name
-  * value2 - device state (on/off locked/unlocked, motion/no motion, leaking/no leak, opened/closed, propane level for gas       tank sensor)
+  * value2 - device state (on/off for lights and powerstrip outlets, locked/unlocked for locks, motion/no motion, leaking/no leak, opened/closed for trippers and garage doors, propane level value for gas tank sensor)
   * value3 - currently used for dimmable lights. will provide dim level
 
 ------------------------------------------------------------
