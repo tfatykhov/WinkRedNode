@@ -1,9 +1,11 @@
+IFTTT Integration
+---------------------------------------------------
 
 Add IFTTT_TOKEN="iftt maker secret key"
 to     functionGlobalContext section
 in bluemix-settings.json
 
-check for details README-Bluemix.md
+check for details [README-Bluemix.md](README-Bluemix.md)
 
 ---------------------------------------------------
 to initiate node-red callbacks to ifttt create a "do" button or any other trigger
@@ -22,6 +24,7 @@ Body
 
 "ifttt":"On" - will turn callbacks to ifttt on
 "ifttt":"Off" - turn them off
+
 ------------------------------------------------------------
 
 to process wink node-red in IFTTT
