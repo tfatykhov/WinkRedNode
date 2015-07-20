@@ -25,7 +25,7 @@ take a look at the [documentation](http://nodered.org/docs/).
 Here is the [QUICKSTART](http://nodered.org/docs/hardware/raspberrypi.html) for running Node-RED on Raspberry Pi.
 
 Once you have Node-RED running,
-there are two "fundamental" flows that you should deploy before doing anything else.
+there are some "fundamental" flows that you should deploy before doing anything else.
 To deploy a flow,
 point your browser to your Node-RED configuration page, e.g., [http://127.0.0.1:1880/].
 Click on the three bars in the upper-right hand corner to get the menu,
@@ -33,6 +33,10 @@ select "Import > Clipboard",
 cut-and-paste the contents of the Flow file into the pop-up window,
 and click OK.
 Then click on the "Deploy" button.
+
+====UPDATE====
+[Flows/Bluemix/Bluemix-monitoring.json]Flows/Bluemix/Bluemix-monitoring.json:
+works perfectly locally and in the cloud. For local version all you need - port forwarding so your instance can be accessed from outside.
 
 1. [Flows/InitializeWinkApi.txt](Flows/InitializeWinkApi.txt):
 this set of flows requests an authorization token from Wink.
