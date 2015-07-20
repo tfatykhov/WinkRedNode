@@ -187,6 +187,7 @@ and replace it with these lines:
                                  , lat : "the lattitude of your home location"
                                  }
             , FREEBOARD_TOKEN  : "pseudo-random-string"
+            , IFTTT_TOKEN: "your IFTTT secret key"
         },
 
 > Notes: To get an API key for `forecast.io` go [here](https://developer.forecast.io)
