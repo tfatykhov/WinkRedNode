@@ -39,7 +39,7 @@ Then click on the "Deploy" button.
 [Flows/Bluemix/Bluemix-monitoring.json](Flows/Bluemix/Bluemix-monitoring.json):
 
 works perfectly locally and in the cloud. For local version all you need - port forwarding so your instance can be accessed from outside. This is best option to start with. Other flows below are just starting points that shows you how to use the system.
-Brian created schedule flow that works with blue mix monitoring - check it [Flows/BMeissen Sample Flows](here)
+Brian created schedule flow that works with blue mix monitoring - check it here:[Flows/BMeissen Sample Flows](Flows/BMeissen Sample Flows)
 
 1. [Flows/InitializeWinkApi.txt](Flows/InitializeWinkApi.txt):
 this set of flows requests an authorization token from Wink.
