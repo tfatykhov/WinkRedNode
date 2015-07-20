@@ -38,7 +38,7 @@ Then click on the "Deploy" button.
 
 [Flows/Bluemix/Bluemix-monitoring.json](Flows/Bluemix/Bluemix-monitoring.json):
 
-works perfectly locally and in the cloud. For local version all you need - port forwarding so your instance can be accessed from outside.
+works perfectly locally and in the cloud. For local version all you need - port forwarding so your instance can be accessed from outside. This is best option to start with. Other flows below are just starting points that shows you how to use the system.
 
 1. [Flows/InitializeWinkApi.txt](Flows/InitializeWinkApi.txt):
 this set of flows requests an authorization token from Wink.
