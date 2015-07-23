@@ -10,7 +10,7 @@ check for details [README-Bluemix.md](README-Bluemix.md)
 ---------------------------------------------------
 to initiate node-red callbacks to ifttt create a "do" button or any other trigger
 
-for "THIS" select maker channel and use following settings
+for "THAT" select maker channel and use following settings
 
 
 url - http(s)://your node-red host/red/ifttt
@@ -48,3 +48,34 @@ Click "Send a Notification" as the Action
 For the Notification text - Wink Event: {{value1}} {{value2}} {{value3}}
 For the image URL, use Wink image --
 [http://www.winkapp.com/assets/mediakit/wink-logo-icon-knockout-50235153b274cdf35ef39fb780448596.png](http://www.winkapp.com/assets/mediakit/wink-logo-icon-knockout-50235153b274cdf35ef39fb780448596.png)
+
+
+--------------------------------------------------------------
+Send WINK device CMD via IFTTT (new)
+
+
+Maker channel send web request parameters (used in THAT):
+
+url 
+<your node-red host>/red/ifttt
+
+method: POST
+
+content-type: application/json
+
+example of Maker channel body
+{"winkName":"Second floor","type":"group","cmd":"on","level":50 , "iftttkey" : "ifttt maker channel secret key"}
+{"winkName":"Bedroom floor lamp","type":"light","cmd":"on","level":50 , "iftttkey" : "ifttt maker channel secret key"}
+{"winkName":"Bedroom floor lamp","type":"light","cmd":"off" , "iftttkey" : "ifttt maker channel secret key"}
+{"winkName":"Front door","type":"lock","cmd":"unlock" , "iftttkey" : "ifttt maker channel secret key"}
+{"winkName":"Evening mode","type":"shortcut", "iftttkey" : "ifttt maker channel secret key"}
+
+
+
+format:
+winkName - name of wink device/group/shortcut as defined in the wink app
+
+type: lock/light/group/shortcut
+
+cmd: on/off, lock/unlock
+level - dim level 0-100 required for light dimmers and groups
