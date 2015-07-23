@@ -64,11 +64,11 @@ method: POST
 content-type: application/json
 
 example of Maker channel body
-{"winkName":"Second floor","type":"group","cmd":"on","level":50 , "iftttkey" : "ifttt maker channel secret key"}
-{"winkName":"Bedroom floor lamp","type":"light","cmd":"on","level":50 , "iftttkey" : "ifttt maker channel secret key"}
-{"winkName":"Bedroom floor lamp","type":"light","cmd":"off" , "iftttkey" : "ifttt maker channel secret key"}
-{"winkName":"Front door","type":"lock","cmd":"unlock" , "iftttkey" : "ifttt maker channel secret key"}
-{"winkName":"Evening mode","type":"shortcut", "iftttkey" : "ifttt maker channel secret key"}
+  * {"winkName":"Second floor","type":"group","cmd":"on","level":50 , "iftttkey" : "ifttt maker channel secret key"}
+  * {"winkName":"Bedroom floor lamp","type":"light","cmd":"on","level":50 , "iftttkey" : "ifttt maker channel secret key"}
+  * {"winkName":"Bedroom floor lamp","type":"light","cmd":"off" , "iftttkey" : "ifttt maker channel secret key"}
+  * {"winkName":"Front door","type":"lock","cmd":"unlock" , "iftttkey" : "ifttt maker channel secret key"}
+  * {"winkName":"Evening mode","type":"shortcut", "iftttkey" : "ifttt maker channel secret key"}
 
 
 
