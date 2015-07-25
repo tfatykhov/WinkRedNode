@@ -1,5 +1,24 @@
 [
   {
+    "id": "27b1f238.d84e0e",
+    "type": "inject",
+    "name": "",
+    "topic": "",
+    "payload": "",
+    "payloadType": "none",
+    "repeat": "82800",
+    "crontab": "",
+    "once": true,
+    "x": 658,
+    "y": 461.5,
+    "z": "254ec046.dab14",
+    "wires": [
+      [
+        "81b61dca.7e49e"
+      ]
+    ]
+  },
+  {
     "id": "4dca531a.b235ac",
     "type": "http request",
     "name": "",
@@ -215,25 +234,6 @@
     "y": 472.5,
     "z": "254ec046.dab14",
     "wires": []
-  },
-  {
-    "id": "27b1f238.d84e0e",
-    "type": "inject",
-    "name": "",
-    "topic": "",
-    "payload": "",
-    "payloadType": "none",
-    "repeat": "82800",
-    "crontab": "",
-    "once": true,
-    "x": 658,
-    "y": 461.5,
-    "z": "254ec046.dab14",
-    "wires": [
-      [
-        "81b61dca.7e49e"
-      ]
-    ]
   },
   {
     "id": "81b61dca.7e49e",
@@ -902,7 +902,7 @@
     "id": "bae7fe17.4518",
     "type": "function",
     "name": "Get current weather",
-    "func": "var currDate= new Date();\nvar currHours=currDate.getHours();\nvar currMins=currDate.getMinutes();\nif(msg.payload.currently)\n{\ncontext.global.Weather.Offset=msg.payload.offset;\ncontext.global.Weather.CloudCover=Math.round(msg.payload.currently.cloudCover*100);\ncontext.global.Weather.WeatherSummary=msg.payload.currently.summary;\nvar date = new Date(msg.payload.currently.time*1000);\nvar hours = date.getHours();\nvar minutes = date.getMinutes();\nif (currHours==hours){context.global.Weather.Offset=0}\nvar date = new Date(msg.payload.daily.data[0].sunsetTime*1000);\nvar hours = date.getHours();\nvar minutes =date.getMinutes();\ncontext.global.Weather.SunsetHour=hours+context.global.Weather.Offset;\nif (context.global.Weather.SunsetHour<0)\n {\n     context.global.Weather.SunsetHour=24+context.global.Weather.SunsetHour;\n }\ncontext.global.Weather.SunsetMin=minutes;\nvar date = new Date(msg.payload.daily.data[0].sunriseTime*1000);\nvar hours = date.getHours();\nvar minutes =date.getMinutes();\ncontext.global.Weather.SunriseHour=hours+context.global.Weather.Offset;\ncontext.global.Weather.SunriseMin=minutes;\ncontext.global.Weather.outsideTemp=msg.payload.currently.temperature;\ncontext.global.Weather.PrecipationPbb=msg.payload.currently.precipProbability;\ncontext.global.Weather.HumidityOutside=msg.payload.currently.humidity;\ncurrHours=currHours+context.global.Weather.Offset;\nif (currHours<0)\n {\n     currHours=24+currHours;\n }\n node.warn(\"time \"+currHours+\":\"+currMins);\nif ((currHours > context.global.Weather.SunriseHour && currHours < context.global.Weather.SunsetHour) || (currHours==context.global.Weather.SunsetHour && currMins <context.global.Weather.SunsetMin))\n{\n    var timeFrame=\"DAY\";\n}\nelse {\n    var timeFrame=\"NIGHT\";\n}\ncontext.global.Weather.timeframe=timeFrame;\ncontext.global.Weather.currently=msg.payload.currently;\n}\nnewMsg = {\n    payload: {\n        \"offset\":context.global.Weather.Offset,\n        \"currtime\": currHours+\":\"+currMins,\n        \"CloudCover\": context.global.Weather.CloudCover,\n        \"WeatherSummary\": context.global.Weather.WeatherSummary,\n        \"sunsetTime\": context.global.Weather.SunsetHour+\":\"+context.global.Weather.SunsetMin,\n        \"sunriseTime\": context.global.Weather.SunriseHour+\":\"+context.global.Weather.SunriseMin,\n        \"outsideTemp\": context.global.Weather.outsideTemp,\n        \"precipation\": context.global.Weather.PrecipationPbb+\" %\",\n        \"timeframe\": context.global.Weather.timeframe\n    }\n};\nreturn newMsg;",
+    "func": "var currDate= new Date();\nvar currHours=currDate.getHours();\nvar currMins=currDate.getMinutes();\nif(msg.payload.currently)\n{\ncontext.global.Weather.Offset=msg.payload.offset;\ncontext.global.Weather.CloudCover=Math.round(msg.payload.currently.cloudCover*100);\ncontext.global.Weather.WeatherSummary=msg.payload.currently.summary;\nvar date = new Date(msg.payload.currently.time*1000);\nvar hours = date.getHours();\nvar minutes = date.getMinutes();\n//if (currHours==hours){context.global.Weather.Offset=0}\nvar date = new Date(msg.payload.daily.data[0].sunsetTime*1000);\nvar hours = date.getHours();\nvar minutes =date.getMinutes();\ncontext.global.Weather.SunsetHour=hours+context.global.Weather.Offset;\nif (context.global.Weather.SunsetHour<0)\n {\n     context.global.Weather.SunsetHour=24+context.global.Weather.SunsetHour;\n }\ncontext.global.Weather.SunsetMin=minutes;\nvar date = new Date(msg.payload.daily.data[0].sunriseTime*1000);\nvar hours = date.getHours();\nvar minutes =date.getMinutes();\ncontext.global.Weather.SunriseHour=hours+context.global.Weather.Offset;\ncontext.global.Weather.SunriseMin=minutes;\ncontext.global.Weather.outsideTemp=msg.payload.currently.temperature;\ncontext.global.Weather.PrecipationPbb=msg.payload.currently.precipProbability;\ncontext.global.Weather.HumidityOutside=msg.payload.currently.humidity;\ncurrHours=currHours+context.global.Weather.Offset;\nif (currHours<0)\n {\n     currHours=24+currHours;\n }\n node.warn(\"time \"+currHours+\":\"+currMins);\nif ((currHours > context.global.Weather.SunriseHour && currHours < context.global.Weather.SunsetHour) || (currHours==context.global.Weather.SunsetHour && currMins <context.global.Weather.SunsetMin))\n{\n    var timeFrame=\"DAY\";\n}\nelse {\n    var timeFrame=\"NIGHT\";\n}\ncontext.global.Weather.timeframe=timeFrame;\ncontext.global.Weather.currently=msg.payload.currently;\n}\nnewMsg = {\n    payload: {\n        \"offset\":context.global.Weather.Offset,\n        \"currtime\": currHours+\":\"+currMins,\n        \"CloudCover\": context.global.Weather.CloudCover,\n        \"WeatherSummary\": context.global.Weather.WeatherSummary,\n        \"sunsetTime\": context.global.Weather.SunsetHour+\":\"+context.global.Weather.SunsetMin,\n        \"sunriseTime\": context.global.Weather.SunriseHour+\":\"+context.global.Weather.SunriseMin,\n        \"outsideTemp\": context.global.Weather.outsideTemp,\n        \"precipation\": context.global.Weather.PrecipationPbb+\" %\",\n        \"timeframe\": context.global.Weather.timeframe\n    }\n};\nreturn newMsg;",
     "outputs": 1,
     "noerr": 0,
     "x": 682,
@@ -911,6 +911,108 @@
     "wires": [
       [
         "dc0b7618.23f488"
+      ]
+    ]
+  },
+  {
+    "id": "f0d962de.0f26a",
+    "type": "comment",
+    "name": "Wink API Apdex-------------------------------------------------------------------------------------------------------------------------------",
+    "info": "",
+    "x": 425,
+    "y": 1356,
+    "z": "254ec046.dab14",
+    "wires": []
+  },
+  {
+    "id": "1817d342.e7e82d",
+    "type": "inject",
+    "name": "",
+    "topic": "",
+    "payload": "",
+    "payloadType": "date",
+    "repeat": "600",
+    "crontab": "",
+    "once": true,
+    "x": 115,
+    "y": 1397,
+    "z": "254ec046.dab14",
+    "wires": [
+      [
+        "886845a.f7797b8"
+      ]
+    ]
+  },
+  {
+    "id": "e625fdd7.19da",
+    "type": "debug",
+    "name": "",
+    "active": false,
+    "console": "true",
+    "complete": "payload",
+    "x": 836,
+    "y": 1397,
+    "z": "254ec046.dab14",
+    "wires": []
+  },
+  {
+    "id": "886845a.f7797b8",
+    "type": "function",
+    "name": "",
+    "func": "var newMsg ={\n    \"url\":\"http://status.winkapp.com/metrics-display/009ykpcmnm25/day.json\",\n    headers: {\n        \"Content-Type\":\"application/json\"\n    }\n};\nreturn newMsg;",
+    "outputs": 1,
+    "noerr": 0,
+    "x": 256,
+    "y": 1397,
+    "z": "254ec046.dab14",
+    "wires": [
+      [
+        "8ce5781b.731a88"
+      ]
+    ]
+  },
+  {
+    "id": "8ce5781b.731a88",
+    "type": "http request",
+    "name": "",
+    "method": "GET",
+    "ret": "txt",
+    "url": "",
+    "x": 408,
+    "y": 1397,
+    "z": "254ec046.dab14",
+    "wires": [
+      [
+        "7867d5dc.87982c"
+      ]
+    ]
+  },
+  {
+    "id": "2abebdbc.d54142",
+    "type": "function",
+    "name": "",
+    "func": "context.global.winkState.winkAPI = \"\";\nwinkAPI=\"\";\nfor(i = 0; i<msg.payload.metrics.length; i++) \n    {                   \n        for(j = 0; j<msg.payload.metrics[i].data.length; j++)\n        {\n            winkAPI = msg.payload.metrics[i].data[j].value;\n        }\n    }\ncontext.global.winkState.winkAPI=winkAPI;\nvar newMsg={\n    payload:\"Wink Apdex is currently: \"+context.global.winkState.winkAPI\n};\nreturn newMsg;",
+    "outputs": 1,
+    "noerr": 0,
+    "x": 691,
+    "y": 1397,
+    "z": "254ec046.dab14",
+    "wires": [
+      [
+        "e625fdd7.19da"
+      ]
+    ]
+  },
+  {
+    "id": "7867d5dc.87982c",
+    "type": "json",
+    "name": "",
+    "x": 560,
+    "y": 1397,
+    "z": "254ec046.dab14",
+    "wires": [
+      [
+        "2abebdbc.d54142"
       ]
     ]
   }
