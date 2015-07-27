@@ -1,24 +1,5 @@
 [
   {
-    "id": "27b1f238.d84e0e",
-    "type": "inject",
-    "name": "",
-    "topic": "",
-    "payload": "",
-    "payloadType": "none",
-    "repeat": "82800",
-    "crontab": "",
-    "once": true,
-    "x": 658,
-    "y": 461.5,
-    "z": "254ec046.dab14",
-    "wires": [
-      [
-        "81b61dca.7e49e"
-      ]
-    ]
-  },
-  {
     "id": "4dca531a.b235ac",
     "type": "http request",
     "name": "",
@@ -236,6 +217,25 @@
     "wires": []
   },
   {
+    "id": "27b1f238.d84e0e",
+    "type": "inject",
+    "name": "",
+    "topic": "",
+    "payload": "",
+    "payloadType": "none",
+    "repeat": "82800",
+    "crontab": "",
+    "once": true,
+    "x": 658,
+    "y": 461.5,
+    "z": "254ec046.dab14",
+    "wires": [
+      [
+        "81b61dca.7e49e"
+      ]
+    ]
+  },
+  {
     "id": "81b61dca.7e49e",
     "type": "delay",
     "name": "",
@@ -402,20 +402,6 @@
       [
         "1cd9c8e0.e32637"
       ]
-    ]
-  },
-  {
-    "id": "d9611bdb.269ee8",
-    "type": "function",
-    "name": "Get current weather",
-    "func": "var currDate= new Date();\nvar currHours=currDate.getHours();\nvar currMins=currDate.getMinutes();\nif(msg.payload.currently)\n{\ncontext.global.Weather.Offset=msg.payload.offset;\ncontext.global.Weather.CloudCover=Math.round(msg.payload.currently.cloudCover*100);\ncontext.global.Weather.WeatherSummary=msg.payload.currently.summary;\nvar date = new Date(msg.payload.daily.data[0].sunsetTime*1000);\nvar hours = date.getHours();\nvar minutes =date.getMinutes();\ncontext.global.Weather.SunsetHour=hours+context.global.Weather.Offset;\nif (context.global.Weather.SunsetHour<0)\n {\n     context.global.Weather.SunsetHour=24+context.global.Weather.SunsetHour;\n }\ncontext.global.Weather.SunsetMin=minutes;\nvar date = new Date(msg.payload.daily.data[0].sunriseTime*1000);\nvar hours = date.getHours();\nvar minutes =date.getMinutes();\ncontext.global.Weather.SunriseHour=hours+context.global.Weather.Offset;\ncontext.global.Weather.SunriseMin=minutes;\ncontext.global.Weather.outsideTemp=msg.payload.currently.temperature;\ncontext.global.Weather.PrecipationPbb=msg.payload.currently.precipProbability;\ncontext.global.Weather.HumidityOutside=msg.payload.currently.humidity;\ncurrHours=currHours+context.global.Weather.Offset;\nif (currHours<0)\n {\n     currHours=24+currHours;\n }\n node.warn(\"time \"+currHours+\":\"+currMins);\nif ((currHours > context.global.Weather.SunriseHour && currHours < context.global.Weather.SunsetHour) || (currHours==context.global.Weather.SunsetHour && currMins <context.global.Weather.SunsetMin))\n{\n    var timeFrame=\"DAY\";\n}\nelse {\n    var timeFrame=\"NIGHT\";\n}\ncontext.global.Weather.timeframe=timeFrame;\ncontext.global.Weather.currently=msg.payload.currently;\n}\nnewMsg = {\n    payload: {\n        \"offset\":context.global.Weather.Offset,\n        \"currtime\": currHours+\":\"+currMins,\n        \"CloudCover\": context.global.Weather.CloudCover,\n        \"WeatherSummary\": context.global.Weather.WeatherSummary,\n        \"sunsetTime\": context.global.Weather.SunsetHour+\":\"+context.global.Weather.SunsetMin,\n        \"sunriseTime\": context.global.Weather.SunriseHour+\":\"+context.global.Weather.SunriseMin,\n        \"outsideTemp\": context.global.Weather.outsideTemp,\n        \"precipation\": context.global.Weather.PrecipationPbb+\" %\",\n        \"timeframe\": context.global.Weather.timeframe\n    }\n};\nreturn newMsg;",
-    "outputs": 1,
-    "noerr": 0,
-    "x": 666,
-    "y": 665.5,
-    "z": "254ec046.dab14",
-    "wires": [
-      []
     ]
   },
   {
@@ -900,7 +886,7 @@
     "id": "bae7fe17.4518",
     "type": "function",
     "name": "Get current weather",
-    "func": "var currDate= new Date();\nvar currHours=currDate.getHours();\nvar currMins=currDate.getMinutes();\nif(msg.payload.currently)\n{\ncontext.global.Weather.Offset=msg.payload.offset;\ncontext.global.Weather.CloudCover=Math.round(msg.payload.currently.cloudCover*100);\ncontext.global.Weather.WeatherSummary=msg.payload.currently.summary;\nvar date = new Date(msg.payload.currently.time*1000);\nvar hours = date.getHours();\nvar minutes = date.getMinutes();\n//if (currHours==hours){context.global.Weather.Offset=0}\nvar date = new Date(msg.payload.daily.data[0].sunsetTime*1000);\nvar hours = date.getHours();\nvar minutes =date.getMinutes();\ncontext.global.Weather.SunsetHour=hours+context.global.Weather.Offset;\nif (context.global.Weather.SunsetHour<0)\n {\n     context.global.Weather.SunsetHour=24+context.global.Weather.SunsetHour;\n }\ncontext.global.Weather.SunsetMin=minutes;\nvar date = new Date(msg.payload.daily.data[0].sunriseTime*1000);\nvar hours = date.getHours();\nvar minutes =date.getMinutes();\ncontext.global.Weather.SunriseHour=hours+context.global.Weather.Offset;\ncontext.global.Weather.SunriseMin=minutes;\ncontext.global.Weather.outsideTemp=msg.payload.currently.temperature;\ncontext.global.Weather.PrecipationPbb=msg.payload.currently.precipProbability;\ncontext.global.Weather.HumidityOutside=msg.payload.currently.humidity;\ncurrHours=currHours+context.global.Weather.Offset;\nif (currHours<0)\n {\n     currHours=24+currHours;\n }\n node.warn(\"time \"+currHours+\":\"+currMins);\nif ((currHours > context.global.Weather.SunriseHour && currHours < context.global.Weather.SunsetHour) || (currHours==context.global.Weather.SunsetHour && currMins <context.global.Weather.SunsetMin))\n{\n    var timeFrame=\"DAY\";\n}\nelse {\n    var timeFrame=\"NIGHT\";\n}\ncontext.global.Weather.timeframe=timeFrame;\ncontext.global.Weather.currently=msg.payload.currently;\n}\nnewMsg = {\n    payload: {\n        \"offset\":context.global.Weather.Offset,\n        \"currtime\": currHours+\":\"+currMins,\n        \"CloudCover\": context.global.Weather.CloudCover,\n        \"WeatherSummary\": context.global.Weather.WeatherSummary,\n        \"sunsetTime\": context.global.Weather.SunsetHour+\":\"+context.global.Weather.SunsetMin,\n        \"sunriseTime\": context.global.Weather.SunriseHour+\":\"+context.global.Weather.SunriseMin,\n        \"outsideTemp\": context.global.Weather.outsideTemp,\n        \"precipation\": context.global.Weather.PrecipationPbb+\" %\",\n        \"timeframe\": context.global.Weather.timeframe\n    }\n};\nreturn newMsg;",
+    "func": "var currDate= new Date();\nvar currHours=currDate.getHours();\nvar currMins=currDate.getMinutes();\nvar currOffset=currDate.getTimezoneOffset()/60;\nif(msg.payload.currently)\n{\ncontext.global.Weather.Offset = (currOffset!=msg.payload.offset ? msg.payload.offset : 0);\ncontext.global.Weather.CloudCover=Math.round(msg.payload.currently.cloudCover*100);\ncontext.global.Weather.WeatherSummary=msg.payload.currently.summary;\nvar date = new Date(msg.payload.currently.time*1000);\nvar hours = date.getHours();\nvar minutes = date.getMinutes();\n//if (currHours==hours){context.global.Weather.Offset=0}\nvar date = new Date(msg.payload.daily.data[0].sunsetTime*1000);\nvar hours = date.getHours();\nvar minutes =date.getMinutes();\ncontext.global.Weather.SunsetHour=hours+context.global.Weather.Offset;\nif (context.global.Weather.SunsetHour<0)\n {\n     context.global.Weather.SunsetHour=24+context.global.Weather.SunsetHour;\n }\ncontext.global.Weather.SunsetMin=minutes;\nvar date = new Date(msg.payload.daily.data[0].sunriseTime*1000);\nvar hours = date.getHours();\nvar minutes =date.getMinutes();\ncontext.global.Weather.SunriseHour=hours+context.global.Weather.Offset;\ncontext.global.Weather.SunriseMin=minutes;\ncontext.global.Weather.outsideTemp=msg.payload.currently.temperature;\ncontext.global.Weather.PrecipationPbb=msg.payload.currently.precipProbability;\ncontext.global.Weather.HumidityOutside=msg.payload.currently.humidity;\ncurrHours=currHours+context.global.Weather.Offset;\nif (currHours<0)\n {\n     currHours=24+currHours;\n }\n node.warn(\"time \"+currHours+\":\"+currMins);\nif ((currHours > context.global.Weather.SunriseHour && currHours < context.global.Weather.SunsetHour) || (currHours==context.global.Weather.SunsetHour && currMins <context.global.Weather.SunsetMin))\n{\n    var timeFrame=\"DAY\";\n}\nelse {\n    var timeFrame=\"NIGHT\";\n}\ncontext.global.Weather.timeframe=timeFrame;\ncontext.global.Weather.currently=msg.payload.currently;\n}\nnewMsg = {\n    payload: {\n        \"offset\":context.global.Weather.Offset,\n        \"currtime\": currHours+\":\"+currMins,\n        \"CloudCover\": context.global.Weather.CloudCover,\n        \"WeatherSummary\": context.global.Weather.WeatherSummary,\n        \"sunsetTime\": context.global.Weather.SunsetHour+\":\"+context.global.Weather.SunsetMin,\n        \"sunriseTime\": context.global.Weather.SunriseHour+\":\"+context.global.Weather.SunriseMin,\n        \"outsideTemp\": context.global.Weather.outsideTemp,\n        \"precipation\": context.global.Weather.PrecipationPbb+\" %\",\n        \"timeframe\": context.global.Weather.timeframe\n    }\n};\nreturn newMsg;",
     "outputs": 1,
     "noerr": 0,
     "x": 682,
