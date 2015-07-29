@@ -51,7 +51,6 @@ You need to manually start it by clicking on the "start" button of inject node f
 this set of flows gives you an example of how other applications communicate with your Node-RED app via Wink's REST API.
 It has a comments node with more details.
 
-**timur do we need some instructions on how to install Freeboard locally?**
 
 ### ... or in the Cloud
 You can also run this software in the cloud.
