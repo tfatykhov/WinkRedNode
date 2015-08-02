@@ -23,6 +23,13 @@ or even your own laptop computer!
 In order to run Node-RED locally,
 take a look at the [documentation](http://nodered.org/docs/).
 Here is the [QUICKSTART](http://nodered.org/docs/hardware/raspberrypi.html) for running Node-RED on Raspberry Pi.
+You can use configuration settings from [local windows config](README-Local-Windows.md)
+if you do not see package.json in .node-red installation folder 2 things you need to install in order to start using node-red authentication: 
+on your raspbery pi session execute following prior to start using node-red:
+* cd .node-red
+* npm install when
+* npm install path
+
 
 Once you have Node-RED running,
 there are some "fundamental" flows that you should deploy before doing anything else.
