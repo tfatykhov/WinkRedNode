@@ -25,7 +25,7 @@ Click on "Node-RED Starter" -- you may have to wait a while for the form in the 
 
 <img src='images/04.png'/>
 
-Enter the application "name" in the "Create an app" panel (e.g., "MyWinkNodeRed") --
+Enter the application "name" in the "Create an app" panel (e.g., "MyWinkNodeRed". <br><b>remember name you created as you will use it later in the configuration</b>
 the "host" will automatically be filled-in. Click on "Create":
 
 <img src='images/06.png'/>
