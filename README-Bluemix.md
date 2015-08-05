@@ -2,7 +2,7 @@
 
 In the text that follows,
 the string `MyWinkNodeRed` is used as the application name -- 
-<b>you need to use a different name and change corresponding configuration lines with your name.</b><br>
+<b>you need to use a different name and change corresponding configuration lines with that name.</b><br>
 <b>Keep this in mind as you read the documentation!</b>
 
 ## Creating the MyWinkNodeRed Application
