@@ -78,7 +78,7 @@ look for this line:
 
         functionGlobalContext: { },
 
-    and replace it with these lines:
+    and replace it with these lines: (remember to change <b>MyWinkNodeRed</b> part to the app name you selected during BlueMix configuration
 
         functionGlobalContext: {
               WinkUser         : { uid : "your Wink username"
@@ -114,7 +114,7 @@ below the line:
 
     Note that indentation is important!
 
-    When you're done the entire file should look something like:
+    When you're done the entire file should look something like: ((remember to change <b>MyWinkNodeRed</b> part to the app name you selected during BlueMix configuration)
 
         applications:
         - services:
