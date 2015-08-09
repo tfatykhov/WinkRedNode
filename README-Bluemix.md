@@ -1,9 +1,16 @@
+# UPDATE
+
+added integration for thermostats that can be switched between 'home' and 'away' modes:
+check section about bluemix-settings.json 
+
 # How to create a cloud instance for Node-RED and Freeboard in the IBM Bluemix cloud
 
 In the text that follows,
 the string `MyWinkNodeRed` is used as the application name -- 
 <b>you need to use a different name and change corresponding configuration lines with that name.</b><br>
 <b>Keep this in mind as you read the documentation!</b>
+
+
 
 ## Creating the MyWinkNodeRed Application
 
@@ -91,6 +98,7 @@ look for this line:
                                  }
             , FREEBOARD_TOKEN  : "pseudo-random-string"
             , IFTTT_TOKEN: "your IFTTT secret key"
+            , motionAdjustTstat: true
         },
 
     to get an API key for `forecast.io` go [here](https://developer.forecast.io).
