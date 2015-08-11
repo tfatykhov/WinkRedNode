@@ -297,6 +297,16 @@
     "wires": []
   },
   {
+    "id": "93a7031d.6c59",
+    "type": "comment",
+    "name": "^-- Double click these subflows above, then click \"Edit subflow\"",
+    "info": "",
+    "x": 817,
+    "y": 173,
+    "z": "47c504f6.b83afc",
+    "wires": []
+  },
+  {
     "id": "96a37e7f.695c8",
     "type": "function",
     "name": "ScheduleLogic",
@@ -443,12 +453,12 @@
     "wires": []
   },
   {
-    "id": "93a7031d.6c59",
+    "id": "183978f0.e7c687",
     "type": "comment",
-    "name": "Double click these subflows, then click \"Edit subflow\"",
+    "name": "Double click to edit --^",
     "info": "",
-    "x": 640,
-    "y": 171,
+    "x": 210,
+    "y": 116,
     "z": "47c504f6.b83afc",
     "wires": []
   }
