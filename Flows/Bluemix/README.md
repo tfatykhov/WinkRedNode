@@ -15,8 +15,8 @@ Please remove current flow from your instance and start by creating 3 tabs or "w
 Import corresponding json from github into each tab and re-deploy your flows.
 
 
-Briefly: [Bluemix-Monitoring.json]([Bluemix-Monitoring.json)
-this is a "fundamental" flow that creates subscriptions for:
+Briefly: these 3 flows
+are "fundamental" flows. they cache state of your wink devides, getting weather and provide you with auto dashboards for:
 
 * Lights
 
