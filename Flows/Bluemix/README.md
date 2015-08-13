@@ -1,3 +1,17 @@
+== UPDATE ==
+Please note that Bluemix-Monitoring.json has been divided into 3 sections.
+Updates to that file are discontinued as of today.
+
+3 new json files have been created representing different sections
+Please remove current flow from your instance and start by creating 3 tabs or "workspaces" in node-red
+
+1. wink Core
+2. wink Freeboards
+3. wink Integration
+
+Import corresponding json from github into each tab and re-deploy your flows.
+
+
 Briefly: [Bluemix-Monitoring.json]([Bluemix-Monitoring.json)
 this is a "fundamental" flow that creates subscriptions for:
 
