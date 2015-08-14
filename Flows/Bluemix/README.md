@@ -1,5 +1,18 @@
 == UPDATE ==
 
+8/13/2015
+----------------
+Initial State integration.
+Sign in to initialstate.com and get your api key.
+update bluemix-settings.json and add following line
+context.global.InitialStateKey="<your initial state api key>" to the  functionGlobalContext section
+update winkCore flow from github.
+your activity should flow to initial State website
+
+
+
+8/12/2015
+------------------
 Please note that Bluemix-Monitoring.json has been divided into 3 sections.
 Updates to that file are discontinued as of today.
 
