@@ -5,7 +5,7 @@
 Initial State integration.
 Sign in to initialstate.com and get your api key.
 update bluemix-settings.json and add following line:
-InitialStateKey="your initial state api key" 
+InitialStateKey:"your initial state api key" 
 
 do not forget to put comma unless it is last line in that section
 to the  functionGlobalContext section
