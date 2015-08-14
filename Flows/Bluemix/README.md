@@ -1,5 +1,21 @@
 == UPDATE ==
 
+8/13/2015
+----------------
+Initial State integration.
+Sign in to initialstate.com and get your api key.
+update bluemix-settings.json and add following line:
+InitialStateKey="your initial state api key" 
+
+do not forget to put comma unless it is last line in that section
+to the  functionGlobalContext section
+update winkCore flow from github.
+your activity should flow to initial State website
+
+
+
+8/12/2015
+------------------
 Please note that Bluemix-Monitoring.json has been divided into 3 sections.
 Updates to that file are discontinued as of today.
 
@@ -7,14 +23,16 @@ Updates to that file are discontinued as of today.
 Please remove current flow from your instance and start by creating 3 tabs or "workspaces" in node-red
 
 1. wink Core
-2. wink Freeboards
-3. wink Integration
+2. Freeboards
+3. Integration
+
+<img src="../../images/Workspaces.png"></img>
 
 Import corresponding json from github into each tab and re-deploy your flows.
 
 
-Briefly: [Bluemix-Monitoring.json]([Bluemix-Monitoring.json)
-this is a "fundamental" flow that creates subscriptions for:
+Briefly: these 3 flows
+are "fundamental" flows. they cache state of your wink devides, getting weather and provide you with auto dashboards for:
 
 * Lights
 
@@ -47,7 +65,7 @@ See [README-Bluemix.md](../../README-Bluemix.md) for _all_ the details.
 -- updates: Added authorization bearer to the outbound web service.
 in order to retrieve proper data please make sure to pass http header in freeboard Authorization: "Bearer "+"value of FREEBOARD_TOKEN" (one that you set during bluemix configuration)
 outbound webservice is accessible via "your node red host"/red/getGlobalDataJson
-<img src="../../images/Freeboard/Add%20authorization%20header.png"></img>
+img src="../../images/Freeboard/Add%20authorization%20header.png"></img>
 
  -- updates after proper deployment system can generate sample dashboard automatically:
  navigate to "your_host"/freeboard/winkboard to check it.
