@@ -1,8 +1,15 @@
 == UPDATE ==
 
+8/17/2015
+----------------
+Ecobee Node Red Project Integration
+
+If you are using the [Ecobee Node Red project](https://github.com/mifbody/EcobeeNodeRed) to pull Ecobee thermostat data into Node Red, we've added a flow to the winkIntegration.json file which will import the data into WinkState. This flow will allow your Ecobee3 thermostats to appear directly in the Winkboard - showing up as thermostats AND motion sensors! Remove the current winkIntegration flow and re-import. The `inject` node is currently set to only trigger manually -- edit the node to fire automatically on start and to repeat on a scheduled interval.
+
 8/13/2015
 ----------------
-Initial State integration.
+Initial State integration
+
 Sign in to initialstate.com and get your api key.
 update bluemix-settings.json and add following line:
 InitialStateKey:"your initial state api key" 
