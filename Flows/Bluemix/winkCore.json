@@ -1,55 +1,55 @@
 [
   {
-    "id": "ba65810e.459a8",
+    "id": "a3442467.5cbbd8",
+    "type": "inject",
+    "name": "",
+    "topic": "",
+    "payload": "",
+    "payloadType": "none",
+    "repeat": "82800",
+    "crontab": "",
+    "once": true,
+    "x": 679.4999847412109,
+    "y": 876,
+    "z": "90661725.6f99e8",
+    "wires": [
+      [
+        "4e37a1c9.b1c86"
+      ]
+    ]
+  },
+  {
+    "id": "1ce37171.e31c8f",
     "type": "function",
     "name": "CheckResposeCode",
     "func": "if (typeof context.global.WinkSubscriptions === 'undefined')\n{\n    context.global.WinkSubscriptions = {};\n}\nif (msg.statusCode==202)\n{\n    node.warn(\"Subscription ID: \"+msg.payload.data.subscription_id);\n    context.global.WinkSubscriptions[msg.payload.data.subscription_id]={\n        \"subscription_id\": msg.payload.data.subscription_id,\n        \"url_base\":msg.payload.data.topic,\n        \"callback\":msg.payload.data.callback\n    }\n}\nelse\n{\n    node.warn(\"Subscription issue. Status: \"+msg.statusCode);\n}\nreturn;",
     "outputs": 1,
     "noerr": 0,
     "x": 1449.5000457763672,
-    "y": 478.0000305175781,
-    "z": "8630683c.79cf98",
+    "y": 961.0000305175781,
+    "z": "90661725.6f99e8",
     "wires": [
       []
     ]
   },
   {
-    "id": "fb58fbca.04a708",
-    "type": "inject",
-    "name": "",
-    "topic": "",
-    "payload": "",
-    "payloadType": "none",
-    "repeat": "",
-    "crontab": "",
-    "once": false,
-    "x": 679.4999847412109,
-    "y": 393,
-    "z": "8630683c.79cf98",
-    "wires": [
-      [
-        "38c485d7.c73b7a"
-      ]
-    ]
-  },
-  {
-    "id": "c912521f.36edb",
+    "id": "c72a1e3d.38d5e",
     "type": "http request",
     "name": "",
     "method": "use",
     "ret": "obj",
     "url": "",
     "x": 549.5,
-    "y": 98,
-    "z": "8630683c.79cf98",
+    "y": 581,
+    "z": "90661725.6f99e8",
     "wires": [
       [
-        "507c0504.af83fc"
+        "e9576fff.16a89"
       ]
     ]
   },
   {
-    "id": "603d3122.9fc2d",
+    "id": "3cf6cb8e.c30934",
     "type": "inject",
     "name": "",
     "topic": "",
@@ -59,186 +59,186 @@
     "crontab": "",
     "once": true,
     "x": 106.5,
-    "y": 102,
-    "z": "8630683c.79cf98",
+    "y": 585,
+    "z": "90661725.6f99e8",
     "wires": [
       [
-        "3f877545.c0788a",
-        "5c46d11c.a3b93"
+        "ac7f6e4c.53809",
+        "3510b239.caef4e"
       ]
     ]
   },
   {
-    "id": "3f877545.c0788a",
+    "id": "ac7f6e4c.53809",
     "type": "function",
     "name": "Get OAuth Tocken",
     "func": "var uid=context.global.WinkUser.uid;\nvar pwd=context.global.WinkUser.pwd;\nvar newMsg ={\n    \"url\":\"https://winkapi.quirky.com/oauth2/token\",\n    \"method\": \"POST\",\n    headers: {\n        \"Content-Type\":\"application/json\"\n    },\n    payload: {\n        \"client_id\": \"7243d8212e040d75dada47ce68a04c24\",\n        \"client_secret\": \"7d597e496afd6196db8d8738829f5a09\",\n        \"username\": uid,\n        \"password\": pwd,\n        \"grant_type\": \"password\"\n    }\n}\nreturn newMsg;",
     "outputs": 1,
     "noerr": 0,
     "x": 300.5,
-    "y": 102,
-    "z": "8630683c.79cf98",
+    "y": 585,
+    "z": "90661725.6f99e8",
     "wires": [
       [
-        "c912521f.36edb"
+        "c72a1e3d.38d5e"
       ]
     ]
   },
   {
-    "id": "507c0504.af83fc",
+    "id": "e9576fff.16a89",
     "type": "function",
     "name": "DefineGlobalTocken",
     "func": "// sample function that stores wink token in a global variable so other api calls\n//can use that\ncontext.global.WinkToken=msg.payload.data.access_token;\nnode.log(context.global.WinkToken);\nvar msg ={ \"payload\":\"Done\"}\nreturn msg;",
     "outputs": 1,
     "x": 750.5,
-    "y": 103,
-    "z": "8630683c.79cf98",
+    "y": 586,
+    "z": "90661725.6f99e8",
     "wires": [
       [
-        "8ec290cb.713d7"
+        "3cd69dcf.c32962"
       ]
     ]
   },
   {
-    "id": "8ec290cb.713d7",
+    "id": "3cd69dcf.c32962",
     "type": "function",
     "name": "Prepare HTTPS requests by device type",
     "func": "var newMsg1 ={\n    \"url\":\"https://winkapi.quirky.com/users/me/wink_devices\",\n    \"method\": \"GET\",\n    headers: {\n        \"Authorization\":\"Bearer \"+context.global.WinkToken,\n        \"User-Agent\":\"Manufacturer/Darwin node/0.10.30 Wink/999.99.9\"\n    }\n}\nvar newMsg2 ={\n    \"url\":\"https://winkapi.quirky.com/users/me/linked_services\",\n    \"method\": \"GET\",\n    headers: {\n        \"Authorization\":\"Bearer \"+context.global.WinkToken\n       // \"User-Agent\":\"Manufacturer/Darwin node/0.10.30 Wink/3.1.0\"\n }\n\n}\n\nvar newMsg3 ={\n    \"url\":\"https://winkapi.quirky.com/users/me/groups\",\n    \"method\": \"GET\",\n    headers: {\n        \"Authorization\":\"Bearer \"+context.global.WinkToken,\n        \"User-Agent\":\"Manufacturer/Darwin node/0.10.30 Wink/999.99.9\"\n }\n\n}\n\nvar newMsg4 ={\n    \"url\":\"https://winkapi.quirky.com/users/me/scenes\",\n    \"method\": \"GET\",\n    headers: {\n        \"Authorization\":\"Bearer \"+context.global.WinkToken,\n        \"User-Agent\":\"Manufacturer/Darwin node/0.10.30 Wink/999.99.9\"\n }\n\n}\nreturn [newMsg1,newMsg2,newMsg3,newMsg4];\n//return [newMsg1,newMsg2,newMsg3,newMsg4,newMsg5,newMsg6,newMsg7,newMsg8,newMsg9,newMsg10,newMsg11];\n",
     "outputs": "4",
     "noerr": 0,
     "x": 1040.5,
-    "y": 110,
-    "z": "8630683c.79cf98",
+    "y": 593,
+    "z": "90661725.6f99e8",
     "wires": [
       [
-        "79809617.867f68"
+        "e8266914.17d998"
       ],
       [
-        "74aff41f.8b500c"
+        "b37cf598.4c8308"
       ],
       [
-        "601d0185.9fe3"
+        "b62993b5.49d67"
       ],
       [
-        "586f8023.a7908"
+        "8e55c5ad.71aa38"
       ]
     ]
   },
   {
-    "id": "79809617.867f68",
+    "id": "e8266914.17d998",
     "type": "http request",
     "name": "GetWDevices",
     "method": "use",
     "ret": "obj",
     "url": "",
     "x": 1362.5,
-    "y": 62,
-    "z": "8630683c.79cf98",
+    "y": 545,
+    "z": "90661725.6f99e8",
     "wires": [
       [
-        "456c64d2.ba939c"
+        "c61b6678.39e498"
       ]
     ]
   },
   {
-    "id": "5c46d11c.a3b93",
+    "id": "3510b239.caef4e",
     "type": "function",
     "name": "DefineGlobalObjects",
     "func": "//use this function to initialize global variables that can be used in any flow or function\n//and will keep their values while application is running\nif (typeof context.global.ifttt === 'undefined')\n{\n    context.global.ifttt=false;\n}\n\nif (typeof (context.global.PresenceHistory) === 'undefined') context.global.PresenceHistory=[]\n\nif (typeof(context.global.Presence) === 'undefined')\n{\n    context.global.Presence = {}  \n}\n\nif (typeof context.global.ignoreMotion === 'undefined')\n{\n    context.global.ignoreMotion=false;\n}\nif (typeof context.global.mediaPlaying==='undefined')\n{\n    context.global.mediaPlaying=false;\n}\nif (typeof context.global.Weather === 'undefined')\n{\n    context.global.Weather= {};\n}\nif (typeof context.global.winkState==='undefined' )\n{\n    context.global.winkState = {};\n}\n\nif (typeof context.global.winkDevCap==='undefined' )\n{\n    context.global.winkDevCap = {};\n}\n\ncontext.global.checkPresence = function() {\n    var i=0;\n    if (typeof(context.global.Presence) ==='undefined') return false;\n    for (var key in context.global.Presence){\n        if (context.global.Presence[key].home=='yes') i++;\n    }\n    return (i>0 ? true : false);\n};\n\ncontext.global.getCameraActivities = function(name,body){\n    var results;\n    results=body.data;\n    context.global.winkState.cameras[name].activities=[]\n    results.forEach(function (result){\n    if (result.category!='reading' && result.category!='desired_state'){\n    var act_rec={\n    \"id\": result.activity_id,\n    \"category\":result.category,\n    \"object_id\":result.object.objext_id,\n    \"name\":result.object.object_name,\n    \"cuepoint_id\":result.content.cuepoint_id,\n    \"media_url\":result.content.media_url\n    }\n    context.global.winkState.cameras[name].activities.push(act_rec);\n    }\n    });\n}\n\ncontext.global.getWinkState = function (body) {\n    var results, updateP;\n\n    updateP = !body.data;\n    results = updateP ? [body] : body.data;\n\n    results.forEach(function (result) {\n        var key, len, prop, readings, type,reading_aggregations, agg_prop, capabilities, capb, outlets, outl;\n        //node.warn(result.object_type+\" \"+ result.object_id+\" \"+result.name) //for debugging\n        type = result.object_type;\n        if (type) {\n        key = result.name;\n        if (type==\"binary_switch\") type=\"binary_switches\";\n        else type=type+\"s\";\n        }\n        else {\n            if (!result.linked_service_id || result._msgid) return;\n            type = 'linked_services';\n            key = result.service;\n            result.object_id = result.linked_service_id;\n        }\n        if (!context.global.winkState[type]) context.global.winkState[type] = {};\n\n        if ((!!context.global.winkState[type][key]) && (context.global.winkState[type][key].object_id != result.object_id)) {\n            key += ' (#' + result.object_id + ')';\n        }\n\n        context.global.winkState[type][key] =\n        {\n            name: result.name || key\n        , object_type: type\n        , object_id: result.object_id\n        , freeboard:0\n        };\n        if (result.savings_goal){\n         context.global.winkState[type][key].savings_goal=result.savings_goal ;\n         context.global.winkState[type][key].nose_color=result.nose_color;\n        }\n        if (result.lat_lng) {\n            if ((result.lat_lng[0] === 0) && (result.lat_lng[1] === 0)) result.lat_lng = [null, null];\n            context.global.winkState[type][key].coordinates = result.lat_lng;\n        }\n        \n        // Add group membership\n        if (type==\"groups\" && result.name.substring(0,1)!==\".\" && result.name.substring(0,1)!==\"@\")\n        {\n            if (result.members && result.members.length>0) {\n                context.global.winkState[type][key].members = {};\n                for (i=0; i<result.members.length; i++) {\n                    var light_type= (result.members[i].object_type == 'binary_switch' ? 'binary_switches' : result.members[i].object_type+'s');\n                    for (var name in context.global.winkState[light_type])\n                    {\n                        if (context.global.winkState[light_type][name].object_id == result.members[i].object_id) \n                        {\n                            context.global.winkState[type][key].members[name] = { \n                                    name:name,\n                                    object_id:result.members[i].object_id,\n                                    object_type:light_type\n                                };\n                            }\n                        }\n                    }\n                }\n                \n        }\n\n        if (type=='cameras'){\n        if (!context.global.winkState[type][key].activities) context.global.winkState[type][key].activities=[]\n        }\n\n        readings = result.last_reading;\n        for (prop in readings) {\n            len = prop.length;\n            if ((prop.indexOf('desired_') === -1) && (prop.lastIndexOf('_at') !== (len - 3))) {\n                context.global.winkState[type][key][prop] = readings[prop];\n            }\n        }\n        \n        reading_aggregations = result.reading_aggregation;\n        for (agg_prop in reading_aggregations) {\n            context.global.winkState[type][key][agg_prop]=reading_aggregations[agg_prop];\n        }\n        \n        capabilities = result.capabilities;\n        for (capb in capabilities) {\n            if(!context.global.winkDevCap[key]) context.global.winkDevCap[key]={};\n            if(!context.global.winkDevCap[key][capb]) context.global.winkDevCap[key][capb]={};\n          context.global.winkDevCap[key][capb]=capabilities[capb];\n        }\n        \n        outlets = result.outlets;\n        for (outl in outlets) {\n         if (!context.global.winkState[type][outlets[outl].name]) context.global.winkState[type][outlets[outl].name] = {};\n        context.global.winkState[type][outlets[outl].name]=outlets[outl];\n        }\n        \n        \n        if (!!result.linked_service_id) context.global.winkState[type][key].connection = !result.invalidated_at;\n\n        if (!updateP) return;\n        if (!context.global.winkState.lastUpdates) context.global.winkState.lastUpdates = [];\n        context.global.winkState[type][key].timestamp = new Date();\n        context.global.winkState.lastUpdates.splice(0, 0, context.global.winkState[type][key]);\n        if (context.global.winkState.lastUpdates.length > 15) context.global.winkState.lastUpdates.pop();\n        //addind special array for motion sensors to check how often they occur\n        if (type == \"sensor_pods\" && typeof (context.global.winkState[type][key].motion) !== 'undefined') {\n        if (!context.global.winkState.motionUpdates) context.global.winkState.motionUpdates=[];\n        context.global.winkState.motionUpdates.splice(0, 0, context.global.winkState[type][key]);\n        if (context.global.winkState.motionUpdates.length > 30) context.global.winkState.motionUpdates.pop();\n        }\n        \n    });\n};\n\n//global function to generate wink cmd message for various objects\n\ncontext.global.executeWinkCMD = function (winkName,type,cmd,level) {\nvar WinkCMDmsg;\n//node.warn(winkName+' '+type+' '+cmd)\nswitch (type.toLowerCase()) {\n\ncase 'lock':\nif (context.global.winkState.locks[winkName])\n{\n   WinkCMDmsg ={\n    \"url\":\"https://winkapi.quirky.com/locks/\"+context.global.winkState.locks[winkName].object_id,\n    \"method\": \"PUT\",\n    headers: {\n        \"Authorization\":\"Bearer \"+context.global.WinkToken,\n        \"Content-Type\":\"application/json\"\n    },\n    payload: {\n        \"desired_state\": {\n            \"locked\":(cmd.toLowerCase() ==\"lock\" ? true:false)\n        }\n    }\n};\n}\nbreak;\ncase 'light':\nif (context.global.winkState.light_bulbs[winkName]){\n WinkCMDmsg ={\n    \"url\":\"https://winkapi.quirky.com/light_bulbs/\"+context.global.winkState.light_bulbs[winkName].object_id,\n    \"method\": \"PUT\",\n    headers: {\n        \"Authorization\":\"Bearer \"+context.global.WinkToken,\n        \"Content-Type\":\"application/json\"\n    },\n    payload: {\n        \"desired_state\": {\n            \"powered\":(cmd.toLowerCase() ==\"on\" ? true:false),\n            \"brightness\": level/100\n        }\n    }\n};   \n} else if(context.global.winkState.binary_switches[winkName]){\n WinkCMDmsg ={\n    \"url\":\"https://winkapi.quirky.com/binary_switches/\"+context.global.winkState.binary_switches[winkName].object_id,\n    \"method\": \"PUT\",\n    headers: {\n        \"Authorization\":\"Bearer \"+context.global.WinkToken,\n        \"Content-Type\":\"application/json\"\n    },\n    payload: {\n        \"desired_state\": {\n            \"powered\":(cmd.toLowerCase() ==\"on\" ? true:false)\n        }\n    }\n};\n}\nbreak;\ncase 'group':\nif (context.global.winkState.groups[winkName]){\nnode.warn(context.global.winkState.groups[winkName]);\n WinkCMDmsg ={\n    \"url\":\"https://winkapi.quirky.com/groups/\"+context.global.winkState.groups[winkName].object_id+\"/activate\",\n    \"method\": \"POST\",\n    headers: {\n        \"Authorization\":\"Bearer \"+context.global.WinkToken,\n        \"Content-Type\":\"application/json\"\n    },\n    payload: {\n        \"desired_state\": {\n            \"powered\":(cmd.toLowerCase() ==\"on\" ? true:false),\n            \"brightness\": level/100\n        }\n    }\n  };\n }\nbreak;\ncase 'shortcut':\nif (context.global.winkState.scenes.winkName){\n WinkCMDmsg ={\n    \"url\":\"https://winkapi.quirky.com/scenes/\"+context.global.winkState.scenes[winkName].object_id+\"/activate\",\n    \"method\": \"POST\",\n    headers: {\n        \"Authorization\":\"Bearer \"+context.global.WinkToken,\n        \"Content-Type\":\"application/json\"\n    }\n  };\n }\nbreak;\ndefault:\nWinkCMDmsg={};\n}\nnode.warn(WinkCMDmsg.url);\nreturn WinkCMDmsg;\n};",
     "outputs": 1,
     "noerr": 0,
     "x": 299.5,
-    "y": 148,
-    "z": "8630683c.79cf98",
+    "y": 631,
+    "z": "90661725.6f99e8",
     "wires": [
       []
     ]
   },
   {
-    "id": "eb81d926.147e28",
+    "id": "6cbe64a7.93419c",
     "type": "http in",
     "name": "",
     "url": "/red/getGlobalDataJSon",
     "method": "get",
     "x": 122,
-    "y": 251,
-    "z": "8630683c.79cf98",
+    "y": 734,
+    "z": "90661725.6f99e8",
     "wires": [
       [
-        "90d0e68b.6f2f18"
+        "bc3d9d08.43c26"
       ]
     ]
   },
   {
-    "id": "90d0e68b.6f2f18",
+    "id": "bc3d9d08.43c26",
     "type": "function",
     "name": "Throw Wink Data",
     "func": "if(msg.req.headers.authorization && msg.req.headers.authorization==\"Bearer \"+context.global.FREEBOARD_TOKEN){\nmsg.payload.WinkData=context.global.winkState;\nmsg.payload.WinkCapbs=context.global.winkDevCap;\nmsg.payload.WeatherData=context.global.Weather;\nmsg.payload.Weather=context.global.Weather;\nmsg.payload.WinkSubscriptions=context.global.WinkSubscriptions;\nmsg.payload.Presence=context.global.checkPresence();\nmsg.payload.PresenceDetail=context.global.Presence;\nmsg.payload.PresenceHistory=context.global.PresenceHistory;\nmsg.res.statusCode=\"200\";\nreturn msg;\n}\nelse\n{\n    //msg.payload=\"Not Authorized\";\n   msg.res.send(\"403\",\"Forbidden\");\n  return;\n}\n",
     "outputs": 1,
     "noerr": 0,
     "x": 408.49998474121094,
-    "y": 255,
-    "z": "8630683c.79cf98",
+    "y": 738,
+    "z": "90661725.6f99e8",
     "wires": [
       [
-        "5a2a3981.a5d5c8"
+        "ae20210f.51dfe"
       ]
     ]
   },
   {
-    "id": "5a2a3981.a5d5c8",
+    "id": "ae20210f.51dfe",
     "type": "http response",
     "name": "",
     "x": 655.4999847412109,
-    "y": 261,
-    "z": "8630683c.79cf98",
+    "y": 744,
+    "z": "90661725.6f99e8",
     "wires": []
   },
   {
-    "id": "61e3a7f6.9e1c58",
+    "id": "c58957bc.3a76a8",
     "type": "http in",
     "name": "",
     "url": "/red/wink/subscribtions",
     "method": "get",
     "x": 156.5,
-    "y": 390,
-    "z": "8630683c.79cf98",
+    "y": 873,
+    "z": "90661725.6f99e8",
     "wires": [
       [
-        "3a586456.c5a79c"
+        "86c5cec2.793a3"
       ]
     ]
   },
   {
-    "id": "3a586456.c5a79c",
+    "id": "86c5cec2.793a3",
     "type": "function",
     "name": "Wink Subscription resonse",
     "func": "if (msg.payload[\"hub.mode\"]==\"subscribe\")\n{\n    msg.res.send(200,msg.payload[\"hub.challenge\"]);\n}\nelse\n{\n    msg.res.send(400,\"Bad Request darling\");\n}\nreturn msg;",
     "outputs": 1,
     "x": 441.49998474121094,
-    "y": 387,
-    "z": "8630683c.79cf98",
+    "y": 870,
+    "z": "90661725.6f99e8",
     "wires": [
       []
     ]
   },
   {
-    "id": "3cbee605.c3411a",
+    "id": "fcfe1f0f.0301e",
     "type": "http in",
     "name": "",
     "url": "/red/wink/subscribtions",
     "method": "post",
     "x": 146.5,
-    "y": 468.00006103515625,
-    "z": "8630683c.79cf98",
+    "y": 951.0000610351562,
+    "z": "90661725.6f99e8",
     "wires": [
       [
-        "a254983b.5dab68"
+        "6d5166b7.92ae98"
       ]
     ]
   },
   {
-    "id": "38c485d7.c73b7a",
+    "id": "4e37a1c9.b1c86",
     "type": "delay",
     "name": "",
     "pauseType": "delay",
@@ -251,119 +251,119 @@
     "randomUnits": "seconds",
     "drop": false,
     "x": 818.4999847412109,
-    "y": 389,
-    "z": "8630683c.79cf98",
+    "y": 872,
+    "z": "90661725.6f99e8",
     "wires": [
       [
-        "4630bb4.fb9cf44"
+        "eb3c7cf6.14c38"
       ]
     ]
   },
   {
-    "id": "4630bb4.fb9cf44",
+    "id": "eb3c7cf6.14c38",
     "type": "function",
     "name": "Prepare Wink devices subscription request",
     "func": "var baseUrl = \"https://winkapi.quirky.com/\";\nvar callbackUrl=context.global.BlueMixUrlBase+\"/red/wink/subscribtions\";\n   for (var winkDevice in context.global.winkState)\n    {\n        if (winkDevice!=\"linked_services\")\n        {\n            var deviceUrl=baseUrl+winkDevice;\n            for (var winkDeviceName in context.global.winkState[winkDevice])\n            {\n                deviceId=context.global.winkState[winkDevice][winkDeviceName].object_id;\n                node.warn(winkDeviceName+\" \"+deviceId);\n                var newMsg ={\n                    \"url\":baseUrl+\"/\"+winkDevice+\"/\"+deviceId+\"/subscriptions\",\n                    \"method\": \"POST\",\n                    headers: {\n                        \"Authorization\":\"Bearer \"+context.global.WinkToken,\n                        \"User-Agent\":\"Manufacturer/Darwin node/0.10.30 Wink/999.99.9\",\n                        \"Content-Type\":\"application/json\"\n                    },\n                    payload: {\n                        \"callback\": callbackUrl\n                    }\n                };\n                node.send(newMsg);\n            }\n        }\n    }\nreturn;",
     "outputs": 1,
     "noerr": 0,
     "x": 1106.5001068115234,
-    "y": 379,
-    "z": "8630683c.79cf98",
+    "y": 862,
+    "z": "90661725.6f99e8",
     "wires": [
       [
-        "4285854.fbd7a7c"
+        "914cfc29.6eb3"
       ]
     ]
   },
   {
-    "id": "4285854.fbd7a7c",
+    "id": "914cfc29.6eb3",
     "type": "http request",
     "name": "",
     "method": "use",
     "ret": "obj",
     "url": "",
     "x": 1270.5000457763672,
-    "y": 453,
-    "z": "8630683c.79cf98",
+    "y": 936,
+    "z": "90661725.6f99e8",
     "wires": [
       [
-        "ba65810e.459a8",
-        "b68a0091.4976"
+        "1ce37171.e31c8f",
+        "775fc34e.88a03c"
       ]
     ]
   },
   {
-    "id": "b68a0091.4976",
+    "id": "775fc34e.88a03c",
     "type": "debug",
     "name": "",
     "active": false,
     "console": "false",
     "complete": "false",
     "x": 1464.5000457763672,
-    "y": 387,
-    "z": "8630683c.79cf98",
+    "y": 870,
+    "z": "90661725.6f99e8",
     "wires": []
   },
   {
-    "id": "762b108.f89d4f",
+    "id": "6ccb893c.933478",
     "type": "comment",
     "name": "Section for status  subscription---------------------------------------------------------------------------------------------------------------------------------",
     "info": "",
     "x": 447.5,
-    "y": 324,
-    "z": "8630683c.79cf98",
+    "y": 807,
+    "z": "90661725.6f99e8",
     "wires": []
   },
   {
-    "id": "122127b7.edded8",
+    "id": "621177c8.9dee88",
     "type": "comment",
     "name": "Initialize section-----------------------------------------------------------------------------------------------------------",
     "info": "",
     "x": 359.5,
-    "y": 37,
-    "z": "8630683c.79cf98",
+    "y": 520,
+    "z": "90661725.6f99e8",
     "wires": []
   },
   {
-    "id": "d2369dec.2dc96",
+    "id": "e73cee72.18c31",
     "type": "comment",
     "name": "Weather-------------------------------------------------------------------------------------------------------------------------------",
     "info": "",
     "x": 381.5,
-    "y": 793.9999694824219,
-    "z": "8630683c.79cf98",
+    "y": 1276.9999694824219,
+    "z": "90661725.6f99e8",
     "wires": []
   },
   {
-    "id": "1c309c33.e3cf64",
+    "id": "dec23053.213dd",
     "type": "debug",
     "name": "",
     "active": true,
     "console": "false",
     "complete": "false",
     "x": 951.4999847412109,
-    "y": 855.0000915527344,
-    "z": "8630683c.79cf98",
+    "y": 1338.0000915527344,
+    "z": "90661725.6f99e8",
     "wires": []
   },
   {
-    "id": "76751a00.898ae8",
+    "id": "2f9088d.fd06f78",
     "type": "http request",
     "name": "Get Weather",
     "method": "use",
     "ret": "obj",
     "url": "",
     "x": 438.5,
-    "y": 853.9999694824219,
-    "z": "8630683c.79cf98",
+    "y": 1336.9999694824219,
+    "z": "90661725.6f99e8",
     "wires": [
       [
-        "a728e369.58d72"
+        "abbc5c04.5443a"
       ]
     ]
   },
   {
-    "id": "ec07021d.13f9",
+    "id": "9a47ed18.65b81",
     "type": "inject",
     "name": "",
     "topic": "",
@@ -373,256 +373,256 @@
     "crontab": "",
     "once": true,
     "x": 89.5,
-    "y": 852.9999694824219,
-    "z": "8630683c.79cf98",
+    "y": 1335.9999694824219,
+    "z": "90661725.6f99e8",
     "wires": [
       [
-        "75983c90.8a67c4"
+        "b553c3aa.4aac4"
       ]
     ]
   },
   {
-    "id": "75983c90.8a67c4",
+    "id": "b553c3aa.4aac4",
     "type": "function",
     "name": "",
     "func": "var newMsg ={\n        \"url\":\"https://api.forecast.io/forecast/\"+context.global.forecastIoApiKey+\"/\"+context.global.HomeLocation.lat+\",\"+context.global.HomeLocation.lon,\n        \"method\": \"GET\"\n}\nreturn newMsg;",
     "outputs": 1,
     "noerr": 0,
     "x": 253.5,
-    "y": 853.9999694824219,
-    "z": "8630683c.79cf98",
+    "y": 1336.9999694824219,
+    "z": "90661725.6f99e8",
     "wires": [
       [
-        "76751a00.898ae8"
+        "2f9088d.fd06f78"
       ]
     ]
   },
   {
-    "id": "456c64d2.ba939c",
+    "id": "c61b6678.39e498",
     "type": "function",
     "name": "GetDevices",
     "func": "context.global.getWinkState(msg.payload);\ndelete context.global.winkState._msgid;\nif (\"cameras\" in context.global.winkState){\n    for (var key in context.global.winkState.cameras){\nvar newMsg1 ={\n    \"topic\":key,\n    \"url\":\"https://winkapi.quirky.com/cameras/\"+context.global.winkState.cameras[key].object_id+\"/activities?sort=desc&limit=30\",\n    \"method\": \"GET\",\n    headers: {\n        \"Authorization\":\"Bearer \"+context.global.WinkToken,\n        \"User-Agent\":\"Manufacturer/Darwin node/0.10.30 Wink/999.99.9\"\n    }\n}\nnode.send(newMsg1);\n}\n}\nreturn;\n",
     "outputs": 1,
     "noerr": 0,
     "x": 1587.5,
-    "y": 44.5,
-    "z": "8630683c.79cf98",
+    "y": 527.5,
+    "z": "90661725.6f99e8",
     "wires": [
       [
-        "1ee02e9c.e11fd1"
+        "13da90b3.ec256f"
       ]
     ]
   },
   {
-    "id": "74aff41f.8b500c",
+    "id": "b37cf598.4c8308",
     "type": "http request",
     "name": "GetWServices",
     "method": "use",
     "ret": "obj",
     "url": "",
     "x": 1366.5,
-    "y": 103.5,
-    "z": "8630683c.79cf98",
+    "y": 586.5,
+    "z": "90661725.6f99e8",
     "wires": [
       [
-        "104bc996.efb436"
+        "3dc87525.c2378a"
       ]
     ]
   },
   {
-    "id": "104bc996.efb436",
+    "id": "3dc87525.c2378a",
     "type": "function",
     "name": "GetServices",
     "func": "context.global.getWinkState(msg.payload);\ndelete context.global.winkState._msgid;\nreturn;\n",
     "outputs": 1,
     "x": 1578.5,
-    "y": 102.5,
-    "z": "8630683c.79cf98",
+    "y": 585.5,
+    "z": "90661725.6f99e8",
     "wires": [
       []
     ]
   },
   {
-    "id": "a254983b.5dab68",
+    "id": "6d5166b7.92ae98",
     "type": "function",
     "name": "UpdateDevices",
     "func": "context.global.getWinkState(msg.payload);\ndelete context.global.winkState._msgid;\nreturn msg;\n",
     "outputs": 1,
     "noerr": 0,
     "x": 400.49998474121094,
-    "y": 495.5,
-    "z": "8630683c.79cf98",
+    "y": 978.5,
+    "z": "90661725.6f99e8",
     "wires": [
       [
-        "ee13e89a.11ec18",
-        "df8261f8.207da",
-        "93422ecf.6cbdd",
-        "c97c09ed.3683f8"
+        "c37c850f.3c8378",
+        "369639d1.c969c6",
+        "7b30c4ec.84cf3c",
+        "b28a2a06.4d75d8"
       ]
     ]
   },
   {
-    "id": "bc9311ea.436cf",
+    "id": "2fcd5324.d032ac",
     "type": "comment",
     "name": "Section for web services---------------------------------------------------------------------------------------------------------------------------------",
     "info": "",
     "x": 434,
-    "y": 199.5,
-    "z": "8630683c.79cf98",
+    "y": 682.5,
+    "z": "90661725.6f99e8",
     "wires": []
   },
   {
-    "id": "601d0185.9fe3",
+    "id": "b62993b5.49d67",
     "type": "http request",
     "name": "GetWGroups",
     "method": "use",
     "ret": "obj",
     "url": "",
     "x": 1359.5,
-    "y": 145.5,
-    "z": "8630683c.79cf98",
+    "y": 628.5,
+    "z": "90661725.6f99e8",
     "wires": [
       [
-        "56799c08.a98664"
+        "88c49423.773b68"
       ]
     ]
   },
   {
-    "id": "56799c08.a98664",
+    "id": "88c49423.773b68",
     "type": "function",
     "name": "GetGroups",
     "func": "context.global.getWinkState(msg.payload);\ndelete context.global.winkState._msgid;\nreturn;\n",
     "outputs": 1,
     "x": 1595.5,
-    "y": 169.5,
-    "z": "8630683c.79cf98",
+    "y": 652.5,
+    "z": "90661725.6f99e8",
     "wires": [
       []
     ]
   },
   {
-    "id": "586f8023.a7908",
+    "id": "8e55c5ad.71aa38",
     "type": "http request",
     "name": "GetWScenes",
     "method": "use",
     "ret": "obj",
     "url": "",
     "x": 1357.5,
-    "y": 188.5,
-    "z": "8630683c.79cf98",
+    "y": 671.5,
+    "z": "90661725.6f99e8",
     "wires": [
       [
-        "717c965f.8e8368"
+        "8c26b785.73d948"
       ]
     ]
   },
   {
-    "id": "717c965f.8e8368",
+    "id": "8c26b785.73d948",
     "type": "function",
     "name": "GetScenes",
     "func": "context.global.getWinkState(msg.payload);\ndelete context.global.winkState._msgid;\nreturn;\n",
     "outputs": 1,
     "x": 1596.5,
-    "y": 216.5,
-    "z": "8630683c.79cf98",
+    "y": 699.5,
+    "z": "90661725.6f99e8",
     "wires": [
       []
     ]
   },
   {
-    "id": "ee13e89a.11ec18",
+    "id": "c37c850f.3c8378",
     "type": "function",
     "name": "Send message to IFTTT",
     "func": "if (context.global.ifttt){\nWinkEvent=\"WinkEvent\"\nextra_param=\"\"\nEvent_desc=\"\"\nif (msg.payload.model_name==\"Motion Sensor\") \n{\n    Event_desc= (msg.payload.last_reading.motion ? \"motion detected\":\"no motion\")\n}\nif (msg.payload.model_name==\"Tripper\") \n{\n    Event_desc= (msg.payload.last_reading.opened ? \"Opened\":\"Closed\")\n}\n\nif (typeof msg.payload.last_reading.locked!=='undefined') \n{ \n    Event_desc= (msg.payload.last_reading.locked ? \"Locked\":\"Unlocked\")\n}\n\nif (msg.payload.object_type==\"binary_switch\")\n{\n    Event_desc= (msg.payload.last_reading.powered ? \"On\":\"Off\")\n}\n\nif (msg.payload.object_type==\"garage_doors\")\n{\n    Event_desc= (msg.payload.last_reading.garage_doors==\"0\" ? \"Closed\":\"Opened\")\n}\n\nif (msg.payload.object_type==\"light_bulb\")\n{\n    Event_desc= (msg.payload.last_reading.powered ? \"On\":\"Off\")\n    extra_param=(msg.payload.last_reading.powered ? msg.payload.last_reading.brightness*100 : 0)\n}\nif (typeof msg.payload.liquid_detected !=='undefined')\n{\n    Event_desc= (msg.payload.last_reading.liquid_detected ? \"Water detected\":\"No water detected\")\n}\n\nif (msg.payload.object_type ==\"propane_tanks\")\n{\n    Event_desc= (\"Propane level - \"+msg.payload.last_reading.remaining)\n}\n\nif (msg.payload.object_type ==\"powerstrips\")\n{\n    Event_Desc = msg.payload.outlets[0].name+\" \"+ (msg.payload.outlets[0].powered ? \"On, \":\"Off, \")+msg.payload.outlets[0].name+\" \"+(msg.payload.outlets[1].powered ? \"On\":\"Off\")\n}\n\nif (Event_desc!==\"\")\n{\n var newMsg ={\n                    \"url\":\"https://maker.ifttt.com/trigger/\"+WinkEvent+\"/with/key/\"+context.global.IFTTT_TOKEN,\n                    \"method\": \"POST\",\n                    headers: \n                    {\n                        \"Content-Type\":\"application/json\"\n                    },\n                    payload: \n                    {\"value1\":msg.payload.name,\"value2\":Event_desc,\"value3\":extra_param}\n            }\nnode.send(newMsg);\n}\n}\nreturn;",
     "outputs": 1,
     "noerr": 0,
     "x": 730.4999847412109,
-    "y": 551.4999694824219,
-    "z": "8630683c.79cf98",
+    "y": 1034.4999694824219,
+    "z": "90661725.6f99e8",
     "wires": [
       [
-        "b53d6723.4ac298"
+        "dd66aad.f229958"
       ]
     ]
   },
   {
-    "id": "b53d6723.4ac298",
+    "id": "dd66aad.f229958",
     "type": "http request",
     "name": "",
     "method": "use",
     "ret": "txt",
     "url": "",
     "x": 940.5,
-    "y": 551.5,
-    "z": "8630683c.79cf98",
+    "y": 1034.5,
+    "z": "90661725.6f99e8",
     "wires": [
       []
     ]
   },
   {
-    "id": "a728e369.58d72",
+    "id": "abbc5c04.5443a",
     "type": "function",
     "name": "Get current weather",
     "func": "var currDate= new Date();\nvar currHours=currDate.getHours();\nvar currMins=currDate.getMinutes();\nvar currOffset=currDate.getTimezoneOffset()*-1/60;\nif(msg.payload.currently)\n{\ncontext.global.Weather.Offset = (currOffset!=msg.payload.offset ? msg.payload.offset : 0);\ncontext.global.Weather.CloudCover=Math.round(msg.payload.currently.cloudCover*100);\ncontext.global.Weather.WeatherSummary=msg.payload.currently.summary;\nvar date = new Date(msg.payload.currently.time*1000);\nvar hours = date.getHours();\nvar minutes = date.getMinutes();\n//if (currHours==hours){context.global.Weather.Offset=0}\nvar date = new Date(msg.payload.daily.data[0].sunsetTime*1000);\nvar hours = date.getHours();\nvar minutes =date.getMinutes();\ncontext.global.Weather.SunsetHour=hours+context.global.Weather.Offset;\nif (context.global.Weather.SunsetHour<0)\n {\n     context.global.Weather.SunsetHour=24+context.global.Weather.SunsetHour;\n }\ncontext.global.Weather.SunsetMin=minutes;\nvar date = new Date(msg.payload.daily.data[0].sunriseTime*1000);\nvar hours = date.getHours();\nvar minutes =date.getMinutes();\ncontext.global.Weather.SunriseHour=hours+context.global.Weather.Offset;\ncontext.global.Weather.SunriseMin=minutes;\ncontext.global.Weather.outsideTemp=msg.payload.currently.temperature;\ncontext.global.Weather.PrecipationPbb=msg.payload.currently.precipProbability;\ncontext.global.Weather.HumidityOutside=msg.payload.currently.humidity;\ncurrHours=currHours+context.global.Weather.Offset;\nif (currHours<0)\n {\n     currHours=24+currHours;\n }\n node.warn(\"time \"+currHours+\":\"+currMins);\nif ((currHours > context.global.Weather.SunriseHour && currHours < context.global.Weather.SunsetHour) || (currHours==context.global.Weather.SunsetHour && currMins <context.global.Weather.SunsetMin))\n{\n    var timeFrame=\"DAY\";\n}\nelse {\n    var timeFrame=\"NIGHT\";\n}\ncontext.global.Weather.timeframe=timeFrame;\ncontext.global.Weather.currently=msg.payload.currently;\n}\nnewMsg = {\n    payload: {\n        \"offset\":context.global.Weather.Offset,\n        \"currtime\": currHours+\":\"+currMins,\n        \"CloudCover\": context.global.Weather.CloudCover,\n        \"WeatherSummary\": context.global.Weather.WeatherSummary,\n        \"sunsetTime\": context.global.Weather.SunsetHour+\":\"+context.global.Weather.SunsetMin,\n        \"sunriseTime\": context.global.Weather.SunriseHour+\":\"+context.global.Weather.SunriseMin,\n        \"outsideTemp\": context.global.Weather.outsideTemp,\n        \"precipation\": context.global.Weather.PrecipationPbb+\" %\",\n        \"timeframe\": context.global.Weather.timeframe\n    }\n};\nreturn newMsg;",
     "outputs": 1,
     "noerr": 0,
     "x": 739.4999847412109,
-    "y": 856.4999694824219,
-    "z": "8630683c.79cf98",
+    "y": 1339.4999694824219,
+    "z": "90661725.6f99e8",
     "wires": [
       [
-        "1c309c33.e3cf64"
+        "dec23053.213dd"
       ]
     ]
   },
   {
-    "id": "df8261f8.207da",
+    "id": "369639d1.c969c6",
     "type": "function",
     "name": "Switch t-stat back to home mode if motion is detected",
     "func": "var canControl = (typeof(context.global.motionAdjustTstat)!=='undefined' ? context.global.motionAdjustTstat : 'true');\nif (msg.payload.object_type =='thermostat' && ((\"users_away\" in msg.payload.last_reading) && typeof(msg.payload.last_reading.users_away)!=='undefined' && msg.payload.last_reading.users_away) && canControl){\n    if (context.global.winkState.groups['.sensors'].motion.or || context.golbal.checkPresence()){\n    var newMsg ={\n    \"url\":\"https://winkapi.quirky.com/thermostats/\"+msg.payload.object_id,\n    \"method\": \"PUT\",\n    headers: {\n        \"Authorization\":\"Bearer \"+context.global.WinkToken,\n        \"Content-Type\":\"application/json\"\n    },\n    payload: {\n        \"desired_state\": {\n            \"powered\":true,\n            \"users_away\":false\n                }\n            }\n        };\n    node.send(newMsg);\n    }\n}\nif ((\"last_reading\" in msg.payload) && (\"motion\" in msg.payload.last_reading) && typeof(msg.payload.last_reading.motion!=='undefined') && msg.payload.last_reading.motion && canControl){\n    for (var key in context.global.winkState.thermostats){\n        if ((\"users_away\" in context.global.winkState.thermostats[key]) && typeof(context.global.winkState.thermostats[key].users_away)!=='undefined' && context.global.winkState.thermostats[key].users_away){\n               var newMsg ={\n                \"url\":\"https://winkapi.quirky.com/thermostats/\"+context.global.winkState.thermostats[key].object_id,\n                \"method\": \"PUT\",\n                headers: {\n                    \"Authorization\":\"Bearer \"+context.global.WinkToken,\n                    \"Content-Type\":\"application/json\"\n                },\n                payload: {\n                    \"desired_state\": {\n                     \"powered\":true,\n                    \"users_away\":false\n                }\n            }\n        };\n    node.send(newMsg); \n    }\n  }\n}\n\nreturn;",
     "outputs": 1,
     "noerr": 0,
     "x": 815.8958129882812,
-    "y": 597.111083984375,
-    "z": "8630683c.79cf98",
+    "y": 1080.111083984375,
+    "z": "90661725.6f99e8",
     "wires": [
       [
-        "c246b69c.3db948"
+        "a7b37aa1.584c88"
       ]
     ]
   },
   {
-    "id": "c246b69c.3db948",
+    "id": "a7b37aa1.584c88",
     "type": "http request",
     "name": "",
     "method": "use",
     "ret": "obj",
     "url": "",
     "x": 1126.8959350585938,
-    "y": 597.111083984375,
-    "z": "8630683c.79cf98",
+    "y": 1080.111083984375,
+    "z": "90661725.6f99e8",
     "wires": [
       []
     ]
   },
   {
-    "id": "5c11de10.a3ee2",
+    "id": "feefca6.f011038",
     "type": "function",
     "name": "",
     "func": "if (typeof context.global.InitialStateKey !=='undefined'){\ncontext.global.InitialStateBucket=\"WinkDataISN\"\nvar newMsg={\n  method: 'POST',\n  url: 'https://groker.initialstate.com/api/buckets',\n  headers: {\n    'Content-Type': 'application/json',\n    'X-IS-AccessKey': context.global.InitialStateKey,\n    'Accept-Version': '~0'\n  },\n    payload: \n    {\n    \"bucketKey\": context.global.InitialStateBucket,\n    \"bucketName\": \"Wink Data Node Red\"\n}\n}\nnode.send(newMsg);\n}\nreturn;",
     "outputs": 1,
     "noerr": 0,
     "x": 307.89581298828125,
-    "y": 1002.3333435058594,
-    "z": "8630683c.79cf98",
+    "y": 1485.3333435058594,
+    "z": "90661725.6f99e8",
     "wires": [
       [
-        "d0489a6.f2fb768"
+        "86a41697.795be8"
       ]
     ]
   },
   {
-    "id": "70e81d12.8f17e4",
+    "id": "1a674542.e598bb",
     "type": "inject",
     "name": "",
     "topic": "",
@@ -632,169 +632,169 @@
     "crontab": "",
     "once": true,
     "x": 108.89579772949219,
-    "y": 1003.3333435058594,
-    "z": "8630683c.79cf98",
+    "y": 1486.3333435058594,
+    "z": "90661725.6f99e8",
     "wires": [
       [
-        "5c11de10.a3ee2"
+        "feefca6.f011038"
       ]
     ]
   },
   {
-    "id": "d0489a6.f2fb768",
+    "id": "86a41697.795be8",
     "type": "http request",
     "name": "",
     "method": "use",
     "ret": "txt",
     "url": "",
     "x": 506,
-    "y": 1003.4444274902344,
-    "z": "8630683c.79cf98",
+    "y": 1486.4444274902344,
+    "z": "90661725.6f99e8",
     "wires": [
       [
-        "cec8e57c.313718"
+        "b9bb5b01.4644a8"
       ]
     ]
   },
   {
-    "id": "cec8e57c.313718",
+    "id": "b9bb5b01.4644a8",
     "type": "debug",
     "name": "",
     "active": true,
     "console": "false",
     "complete": "true",
     "x": 691,
-    "y": 1002.4444580078125,
-    "z": "8630683c.79cf98",
+    "y": 1485.4444580078125,
+    "z": "90661725.6f99e8",
     "wires": []
   },
   {
-    "id": "10c5d618.ef3a2a",
+    "id": "1564f027.ea9b1",
     "type": "comment",
     "name": "IS State bucket initialization -------------------------------------------------------------------------------------------------------------------------------",
     "info": "modfy bluemix-settings.json and add following line:\n\ncontext.global.InitialStateKey=\"<your initial state api key>\"",
     "x": 443.5,
-    "y": 950.9999694824219,
-    "z": "8630683c.79cf98",
+    "y": 1433.9999694824219,
+    "z": "90661725.6f99e8",
     "wires": []
   },
   {
-    "id": "61a6b650.9e5948",
+    "id": "bc11a354.43ee6",
     "type": "http request",
     "name": "",
     "method": "use",
     "ret": "txt",
     "url": "",
     "x": 837.8957977294922,
-    "y": 501.888916015625,
-    "z": "8630683c.79cf98",
+    "y": 984.888916015625,
+    "z": "90661725.6f99e8",
     "wires": [
       [
-        "a3fc91ad.5c037"
+        "425de0ee.bda22"
       ]
     ]
   },
   {
-    "id": "93422ecf.6cbdd",
+    "id": "7b30c4ec.84cf3c",
     "type": "function",
     "name": "Is State",
     "func": "if (typeof context.global.InitialStateKey !=='undefined'){\nvar keyName;\nvar keyValue;\nvar winkObjectType=(msg.payload.object_type=='binary_switch' ? msg.payload.object_type+'es' : msg.payload.object_type+'s')\nvar pct = function(value) {\n    return ((value > 1.0 ? value : value * 100).toFixed(0) + '%')\n}\nvar dual_temp = function (value) {\n    return (typeof value === 'number' ? (value.toFixed(1) + 'C / ' + ((value * 1.8) + 32).toFixed(1) + 'F') : '')\n}\n\nvar dollars = function (value) {\n    return (typeof value === 'number' ? (value / 100).toFixed(2) : '')\n}\n\nvar GenValueText = function (property,value){\n    text =  { co_detected     : (value ? 'CO DETECTED'     : '')\n            , fault           : (value ? 'FAULT DETECTED'  : '')\n            , liquid_detected : (value ? 'LEAK DETECTED'   : '')\n            , locked          : (value ? 'LOCKED'          : 'UNLOCKED')\n            , loudness        : (value ? 'LOUD'            : '')\n            , noise           : (value ? 'NOISY'           : '')\n            , motion          : (value ? 'MOTION'          : '')\n            , opened          : (value ? 'OPEN'            : 'CLOSED')\n            , presence        : (value ? 'PRESENCE'        : '')\n            , smoke_detected  : (value ? 'SMOKE DETECTED'  : '')\n            , tamper_detected : (value ? 'TAMPER DETECTED' : '')\n            , vibration       : (value ? 'VIBRATION'       : '')\n\n            , battery         : pct(value)\n            , brightness      : pct(value)\n            , co_severity     : pct(value)\n            , humidity        : pct(value)\n            , smoke_severity  : pct(value)\n\n            , remaining       : pct(value)\n            , temperature     : value\n            }[property]\n    if (text === '') text = 'OK'\n    return text;\n}\n\nvar sendMsg = function(key,value){\n    var newMsg={\n  method: 'POST',\n  url: 'https://groker.initialstate.com/api/events',\n  headers: {\n    \"Content-Type\": \"application/json\",\n    \"X-IS-AccessKey\": context.global.InitialStateKey,\n    \"X-IS-BucketKey\": context.global.InitialStateBucket,\n    \"Accept-Version\": '~0'\n  },\n    payload: \n    {\n    \"key\": key,\n    \"value\":value\n}\n}\nnode.send(newMsg);\n}\nnode.warn(winkObjectType)\nnode.warn(msg.payload.name)\nswitch (winkObjectType){\n    case 'binary_switches':\n        keyName=msg.payload.name+' Brightness';\n        keyValue=(msg.payload.last_reading.powered ? 100: 0);\n        sendMsg(keyName,keyValue);\n        break;\n    case 'light_bulbs':\n        keyName=msg.payload.name+' Brightness';\n        keyValue=(msg.payload.last_reading.powered ? pct(msg.payload.last_reading.brightness) : 0);\n        sendMsg(keyName,keyValue);\n        break;\n    case 'locks':\n        keyName=msg.payload.name+' Status';\n        keyValue= GenValueText('locked',msg.payload.last_reading.locked);\n        sendMsg(keyName,keyValue);\n        break;\n    case 'thermostats':\n        keyName=msg.payload.name+' Temperature';\n        keyValue=msg.payload.last_reading.temperature;\n        sendMsg(keyName,keyValue);\n        break;\n case 'sensor_pods':\n        for (var i=0; i< context.global.winkDevCap[msg.payload.name].sensor_types.length; i++){\n        sensor_type=context.global.winkDevCap[msg.payload.name].sensor_types[i].field;\n        keyName=msg.payload.name+' '+context.global.winkDevCap[msg.payload.name].sensor_types[i].field.replace(\"_\",\" \");\n        keyValue=GenValueText(context.global.winkDevCap[msg.payload.name].sensor_types[i].field,context.global.winkState.sensor_pods[msg.payload.name][sensor_type]);\n        sendMsg(keyName,keyValue);\n        }\n        break;\n    case 'propane_tanks':\n        keyName=msg.payload.name+' Propane';\n        keyValue= GenValueText('remaining',msg.payload.last_reading.remaining);\n        sendMsg(keyName,keyValue);\n        break;\n        \n    case 'cameras':\n        node.warn('camera subscription event '+msg.payload.last_reading.motion)\n        keyName=msg.payload.name+' Motion';\n        keyValue= GenValueText('motion',msg.payload.last_reading.motion);\n        sendMsg(keyName,keyValue);\n        break;    \n}\n\n}\nreturn;",
     "outputs": 1,
     "noerr": 0,
     "x": 657.7916107177734,
-    "y": 505.7778015136719,
-    "z": "8630683c.79cf98",
+    "y": 988.7778015136719,
+    "z": "90661725.6f99e8",
     "wires": [
       [
-        "61a6b650.9e5948"
+        "bc11a354.43ee6"
       ]
     ]
   },
   {
-    "id": "a3fc91ad.5c037",
+    "id": "425de0ee.bda22",
     "type": "debug",
     "name": "",
     "active": false,
     "console": "false",
     "complete": "true",
     "x": 1056.8958282470703,
-    "y": 503.8888854980469,
-    "z": "8630683c.79cf98",
+    "y": 986.8888854980469,
+    "z": "90661725.6f99e8",
     "wires": []
   },
   {
-    "id": "1ee02e9c.e11fd1",
+    "id": "13da90b3.ec256f",
     "type": "http request",
     "name": "",
     "method": "GET",
     "ret": "obj",
     "url": "",
     "x": 1791.451409116204,
-    "y": 51.888885498046875,
-    "z": "8630683c.79cf98",
+    "y": 534.8888854980469,
+    "z": "90661725.6f99e8",
     "wires": [
       [
-        "c7bf5e10.3840a"
+        "35ee884d.ca1178"
       ]
     ]
   },
   {
-    "id": "c7bf5e10.3840a",
+    "id": "35ee884d.ca1178",
     "type": "function",
     "name": "",
     "func": "context.global.getCameraActivities(msg.topic,msg.payload);\nreturn msg;",
     "outputs": 1,
     "noerr": 0,
     "x": 2012.784745716755,
-    "y": 46.888885498046875,
-    "z": "8630683c.79cf98",
+    "y": 529.8888854980469,
+    "z": "90661725.6f99e8",
     "wires": [
       []
     ]
   },
   {
-    "id": "494d5b55.b6b2a4",
+    "id": "45ba8935.ba4578",
     "type": "http request",
     "name": "",
     "method": "GET",
     "ret": "obj",
     "url": "",
     "x": 910.8958129882812,
-    "y": 646.888916015625,
-    "z": "8630683c.79cf98",
+    "y": 1129.888916015625,
+    "z": "90661725.6f99e8",
     "wires": [
       [
-        "a11f5628.5ee0a8"
+        "e0c263a0.1f3da"
       ]
     ]
   },
   {
-    "id": "a11f5628.5ee0a8",
+    "id": "e0c263a0.1f3da",
     "type": "function",
     "name": "UpdateCameraActivities",
     "func": "context.global.getCameraActivities(msg.topic,msg.payload);\nreturn msg;",
     "outputs": 1,
     "noerr": 0,
     "x": 1131.2294311523438,
-    "y": 646.888916015625,
-    "z": "8630683c.79cf98",
+    "y": 1129.888916015625,
+    "z": "90661725.6f99e8",
     "wires": [
       []
     ]
   },
   {
-    "id": "c97c09ed.3683f8",
+    "id": "b28a2a06.4d75d8",
     "type": "function",
     "name": "getCameraActivities",
     "func": "if (msg.payload.object_type=='camera'){\nvar newMsg1 ={\n    \"topic\":msg.payload.name,\n    \"url\":\"https://winkapi.quirky.com/cameras/\"+msg.payload.object_id+\"/activities?sort=desc&limit=40\",\n    \"method\": \"GET\",\n    headers: {\n        \"Authorization\":\"Bearer \"+context.global.WinkToken,\n        \"User-Agent\":\"Manufacturer/Darwin node/0.10.30 Wink/999.99.9\"\n    }\n}\nreturn newMsg1;\n}\nreturn;",
     "outputs": 1,
     "noerr": 0,
     "x": 708.8958129882812,
-    "y": 645.888916015625,
-    "z": "8630683c.79cf98",
+    "y": 1128.888916015625,
+    "z": "90661725.6f99e8",
     "wires": [
       [
-        "494d5b55.b6b2a4"
+        "45ba8935.ba4578"
       ]
     ]
   }
