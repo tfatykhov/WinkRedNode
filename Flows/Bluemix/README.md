@@ -9,9 +9,9 @@ you need to re-import winkFreeboards.json and then create a new tab call it Fosc
 you also need to edit bluemix-setting.js file and add following section to functionGlobalContext:
 <br>
 <br>
-       , FosCam: {
-	        "Camera1 name": {"hostname":"external ip:port","uid":"admin","pwd":"your pwd"}
-		,"Camera2 name": {"hostname":"external ip:port","uid":"admin","pwd":"your pwd"}
+       , FosCam: {<br>
+		"Camera1 name": {"hostname":"external ip:port","uid":"admin","pwd":"your pwd"}<br>
+		,"Camera2 name": {"hostname":"external ip:port","uid":"admin","pwd":"your pwd"}<br>
        	}
 <br>
 
