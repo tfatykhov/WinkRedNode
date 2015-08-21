@@ -15,6 +15,9 @@ you also need to edit bluemix-setting.js file and add following section to funct
        	}
 <br>
 
+I assume that your foscam camera(s) can be accessed outside your local network (they have documentation on how to do that)
+
+>hostname should not include http so it should look like:  "mycamera.mydomain.com:2233"
 
 Add as many cameras as you have.
 do cf push or redeploy via ibm github.
