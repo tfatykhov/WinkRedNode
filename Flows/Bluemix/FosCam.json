@@ -1,5 +1,27 @@
 [
   {
+    "id": "3e5f7822.c1a088",
+    "type": "delay",
+    "name": "",
+    "pauseType": "delay",
+    "timeout": "60",
+    "timeoutUnits": "seconds",
+    "rate": "1",
+    "rateUnits": "second",
+    "randomFirst": "1",
+    "randomLast": "5",
+    "randomUnits": "seconds",
+    "drop": false,
+    "x": 483.8957977294922,
+    "y": 334.8888854980469,
+    "z": "a5a3f2af.5a5c1",
+    "wires": [
+      [
+        "5c68e61c.a39718"
+      ]
+    ]
+  },
+  {
     "id": "197fb2e7.e6804d",
     "type": "inject",
     "name": "",
@@ -108,14 +130,19 @@
     "id": "2d4b7db4.d2b482",
     "type": "function",
     "name": "",
-    "func": "function delay(ms) {\n        var cur_d = new Date();\n        var cur_ticks = cur_d.getTime();\n        var ms_passed = 0;\n        while(ms_passed < ms) {\n            var d = new Date();  // Possible memory leak?\n            var ticks = d.getTime();\n            ms_passed = ticks - cur_ticks;\n            // d = null;  // Prevent memory leak?\n        }\n    }\n\nnode.warn('foscam camera: reported motion')\nvar postMsg={\n    url:context.global.BlueMixUrlBase+'/red/wink/subscribtions',\n    method:\"POST\",\n    payload:{\n  capabilities: { sensor_types: [ { field: 'motion', type: 'boolean' } ] },\n  desired_state: {},\n  device_manufacturer: 'Foscam',\n  gang_id: null,\n  hidden_at: null,\n  last_event: \n   { brightness_occurred_at: null,\n     loudness_occurred_at: null,\n     vibration_occurred_at: null },\n  last_reading: \n   { \n       agent_session_id: 'FALSE',\n       connection: true,\n       motion: true,\n   },\n  manufacturer_device_model: 'foscam_virtual_motion_sensor',\n  model_name: 'Motion Sensor',\n  name: 'Foscam',\n  object_id: 'Foscam01',\n  object_type: 'sensor_pod',\n  radio_type: 'wifi',\n  sensor_pod_id: 'Foscam01',\n  triggers: [],\n  units: {},\n  upc_code: 'motion_sensor',\n  upc_id: 'foscam01'\n  }\n}\nnode.send(postMsg);\ndelay(50000);\npostMsg.payload.last_reading.motion=false;\nnode.warn('motion flag off')\nnode.send(postMsg);\nreturn;",
-    "outputs": 1,
+    "func": "function delay(ms) {\n        var cur_d = new Date();\n        var cur_ticks = cur_d.getTime();\n        var ms_passed = 0;\n        while(ms_passed < ms) {\n            var d = new Date();  // Possible memory leak?\n            var ticks = d.getTime();\n            ms_passed = ticks - cur_ticks;\n            // d = null;  // Prevent memory leak?\n        }\n    }\n\nnode.warn('foscam camera: reported motion')\nvar postMsg={\n    url:context.global.BlueMixUrlBase+'/red/wink/subscribtions',\n    method:\"POST\",\n    payload:{\n  capabilities: { sensor_types: [ { field: 'motion', type: 'boolean' } ] },\n  desired_state: {},\n  device_manufacturer: 'Foscam',\n  gang_id: null,\n  hidden_at: null,\n  last_event: \n   { brightness_occurred_at: null,\n     loudness_occurred_at: null,\n     vibration_occurred_at: null },\n  last_reading: \n   { \n       agent_session_id: 'FALSE',\n       connection: true,\n       motion: true,\n   },\n  manufacturer_device_model: 'foscam_virtual_motion_sensor',\n  model_name: 'Motion Sensor',\n  name: 'Foscam',\n  object_id: 'Foscam01',\n  object_type: 'sensor_pod',\n  radio_type: 'wifi',\n  sensor_pod_id: 'Foscam01',\n  triggers: [],\n  units: {},\n  upc_code: 'motion_sensor',\n  upc_id: 'foscam01'\n  }\n}\nvar postMsg1=postMsg;\npostMsg1.payload.last_reading.motion=false;\n//delay(50000);\nreturn([postMsg,postMsg1]);",
+    "outputs": "2",
     "noerr": 0,
     "x": 312.89585876464844,
     "y": 316.8888854980469,
     "z": "a5a3f2af.5a5c1",
     "wires": [
-      []
+      [
+        "5d5c999c.a2a368"
+      ],
+      [
+        "3e5f7822.c1a088"
+      ]
     ]
   },
   {
@@ -143,6 +170,34 @@
     "noerr": 0,
     "x": 1325.8959197998047,
     "y": 173.88888549804688,
+    "z": "a5a3f2af.5a5c1",
+    "wires": [
+      []
+    ]
+  },
+  {
+    "id": "5d5c999c.a2a368",
+    "type": "http request",
+    "name": "",
+    "method": "GET",
+    "ret": "txt",
+    "url": "",
+    "x": 695.8957977294922,
+    "y": 300.8888854980469,
+    "z": "a5a3f2af.5a5c1",
+    "wires": [
+      []
+    ]
+  },
+  {
+    "id": "5c68e61c.a39718",
+    "type": "http request",
+    "name": "",
+    "method": "GET",
+    "ret": "txt",
+    "url": "",
+    "x": 701.8957977294922,
+    "y": 351.8888854980469,
     "z": "a5a3f2af.5a5c1",
     "wires": [
       []
