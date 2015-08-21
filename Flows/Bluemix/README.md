@@ -8,10 +8,11 @@ Features:
 you need to re-import winkFreeboards.json and then create a new tab call it Foscam and import new FosCam.json
 you also need to edit bluemix-setting.js file and add following section to functionGlobalContext:
 <br>
-, FosCam: {
-		"Camera1 name": {"hostname":"external ip:port","uid":"admin","pwd":"your pwd"}
-		,"Camera2 name": {"hostname":"external ip:port","uid":"admin","pwd":"your pwd"}
-       }
+	, FosCam: {
+			"Camera1 name": {"hostname":"external ip:port","uid":"admin","pwd":"your pwd"}
+			,"Camera2 name": {"hostname":"external ip:port","uid":"admin","pwd":"your pwd"}
+       	}
+<br>
 Add as many cameras as you have.
 do cf push or redeploy via ibm github.
 Please wait as this will take take to initialize (approx 1-2 minutes after start)
