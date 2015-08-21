@@ -1,19 +1,5 @@
 [
   {
-    "id": "e4a3923f.1b5c7",
-    "type": "function",
-    "name": "",
-    "func": "if ( msg.payload.indexOf('ok')!=-1 && typeof(context.global.winkState.sensor_pods.foscam)==='undefined')\n{\n    node.warn('adding foscam sensor')\n    context.global.winkState.sensor_pods.foscam=\n    {\n    \"name\": \"Foscam\",\n    \"object_type\": \"sensor_pods\",\n    \"object_id\": \"Foscam01\",\n    \"freeboard\": 0,\n    \"connection\": true,\n    \"motion\": false\n    }\n    context.global.winkDevCap.foscam=\n    {\n \"sensor_types\":[\n        {\n        \"field\": \"motion\",\n        \"type\": \"boolean\"\n        }\n    ]\n  }\n}\nreturn msg;",
-    "outputs": 1,
-    "noerr": 0,
-    "x": 1325.8959197998047,
-    "y": 173.88888549804688,
-    "z": "a5a3f2af.5a5c1",
-    "wires": [
-      []
-    ]
-  },
-  {
     "id": "197fb2e7.e6804d",
     "type": "inject",
     "name": "",
@@ -122,7 +108,7 @@
     "id": "2d4b7db4.d2b482",
     "type": "function",
     "name": "",
-    "func": "function delay(ms) {\n        var cur_d = new Date();\n        var cur_ticks = cur_d.getTime();\n        var ms_passed = 0;\n        while(ms_passed < ms) {\n            var d = new Date();  // Possible memory leak?\n            var ticks = d.getTime();\n            ms_passed = ticks - cur_ticks;\n            // d = null;  // Prevent memory leak?\n        }\n    }\n\nnode.warn('foscam camera: reported motion')\nvar postMsg={\n    url:BlueMixUrlBase+'/red/wink/subscribtions',\n    method:\"POST\",\n    payload:{\n  capabilities: { sensor_types: [ { field: 'motion', type: 'boolean' } ] },\n  desired_state: {},\n  device_manufacturer: 'Foscam',\n  gang_id: null,\n  hidden_at: null,\n  last_event: \n   { brightness_occurred_at: null,\n     loudness_occurred_at: null,\n     vibration_occurred_at: null },\n  last_reading: \n   { \n       agent_session_id: 'FALSE',\n       connection: true,\n       motion: true,\n   },\n  manufacturer_device_model: 'foscam_virtual_motion_sensor',\n  model_name: 'Motion Sensor',\n  name: 'Foscam',\n  object_id: 'Foscam01',\n  object_type: 'sensor_pod',\n  radio_type: 'wifi',\n  sensor_pod_id: 'Foscam01',\n  triggers: [],\n  units: {},\n  upc_code: 'motion_sensor',\n  upc_id: 'foscam01'\n  }\n}\nnode.send(postMsg);\ndelay(50000);\npostMsg.payload.last_reading.motion=false;\nnode.warn('motion flag off')\nnode.send(postMsg);\nreturn;",
+    "func": "function delay(ms) {\n        var cur_d = new Date();\n        var cur_ticks = cur_d.getTime();\n        var ms_passed = 0;\n        while(ms_passed < ms) {\n            var d = new Date();  // Possible memory leak?\n            var ticks = d.getTime();\n            ms_passed = ticks - cur_ticks;\n            // d = null;  // Prevent memory leak?\n        }\n    }\n\nnode.warn('foscam camera: reported motion')\nvar postMsg={\n    url:context.global.BlueMixUrlBase+'/red/wink/subscribtions',\n    method:\"POST\",\n    payload:{\n  capabilities: { sensor_types: [ { field: 'motion', type: 'boolean' } ] },\n  desired_state: {},\n  device_manufacturer: 'Foscam',\n  gang_id: null,\n  hidden_at: null,\n  last_event: \n   { brightness_occurred_at: null,\n     loudness_occurred_at: null,\n     vibration_occurred_at: null },\n  last_reading: \n   { \n       agent_session_id: 'FALSE',\n       connection: true,\n       motion: true,\n   },\n  manufacturer_device_model: 'foscam_virtual_motion_sensor',\n  model_name: 'Motion Sensor',\n  name: 'Foscam',\n  object_id: 'Foscam01',\n  object_type: 'sensor_pod',\n  radio_type: 'wifi',\n  sensor_pod_id: 'Foscam01',\n  triggers: [],\n  units: {},\n  upc_code: 'motion_sensor',\n  upc_id: 'foscam01'\n  }\n}\nnode.send(postMsg);\ndelay(50000);\npostMsg.payload.last_reading.motion=false;\nnode.warn('motion flag off')\nnode.send(postMsg);\nreturn;",
     "outputs": 1,
     "noerr": 0,
     "x": 312.89585876464844,
@@ -146,6 +132,20 @@
       [
         "e4a3923f.1b5c7"
       ]
+    ]
+  },
+  {
+    "id": "e4a3923f.1b5c7",
+    "type": "function",
+    "name": "",
+    "func": "if ( msg.payload.indexOf('ok')!=-1 && typeof(context.global.winkState.sensor_pods.foscam)==='undefined')\n{\n    node.warn('adding foscam sensor')\n    context.global.winkState.sensor_pods.foscam=\n    {\n    \"name\": \"Foscam\",\n    \"object_type\": \"sensor_pods\",\n    \"object_id\": \"Foscam01\",\n    \"freeboard\": 0,\n    \"connection\": true,\n    \"motion\": false\n    }\n    context.global.winkDevCap.foscam=\n    {\n \"sensor_types\":[\n        {\n        \"field\": \"motion\",\n        \"type\": \"boolean\"\n        }\n    ]\n  }\n}\nreturn msg;",
+    "outputs": 1,
+    "noerr": 0,
+    "x": 1325.8959197998047,
+    "y": 173.88888549804688,
+    "z": "a5a3f2af.5a5c1",
+    "wires": [
+      []
     ]
   }
 ]
