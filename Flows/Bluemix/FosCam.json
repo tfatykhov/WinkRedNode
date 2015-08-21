@@ -1,0 +1,151 @@
+[
+  {
+    "id": "197fb2e7.e6804d",
+    "type": "inject",
+    "name": "",
+    "topic": "",
+    "payload": "",
+    "payloadType": "date",
+    "repeat": "86400",
+    "crontab": "",
+    "once": true,
+    "x": 120.89582824707031,
+    "y": 177.88888549804688,
+    "z": "a5a3f2af.5a5c1",
+    "wires": [
+      [
+        "94c1439.f6b3ec"
+      ]
+    ]
+  },
+  {
+    "id": "cef154f1.310ea8",
+    "type": "http request",
+    "name": "",
+    "method": "use",
+    "ret": "txt",
+    "url": "",
+    "x": 698.8957977294922,
+    "y": 174.88888549804688,
+    "z": "a5a3f2af.5a5c1",
+    "wires": [
+      [
+        "ed3c034e.12c4"
+      ]
+    ]
+  },
+  {
+    "id": "ed3c034e.12c4",
+    "type": "function",
+    "name": "Initialize foscam",
+    "func": "if (msg.statusCode=='200'){\nvar cam_name=msg.topic;\ncontext.global.FosCam[cam_name].Parameters={}\nvar foscam_params=msg.payload.replace(';','').split('\\n');\nfor (var i=0;i<foscam_params.length;i++){\n     foscam_params[i]=foscam_params[i].replace('var ','').replace(';','').replace('\\'','').replace('\\'','')\n     var str=foscam_params[i].split('=');\n     context.global.FosCam[cam_name].Parameters[str[0]]={\"value\":str[1]}\n     \n}\nnode.warn('Camera info: id '+context.global.FosCam[cam_name].Parameters.id.value+' internal ip: '+context.global.FosCam[cam_name].Parameters.ip.value)\ncontext.global.winkState.cameras[cam_name]={\n \"name\": cam_name,\n\"object_type\": \"cameras\",\n\"object_id\": context.global.FosCam[cam_name].Parameters.id.value,\n\"freeboard\": 0,\n\"manufacturer_device_model\": \"foscam\",\n\"connection\": true,\n\"capturing_audio\": true,\n\"capturing_video\": true,\n\"motion\":(typeof(context.global.FosCam[cam_name].Parameters.alarm_http_url)==='undefined' ? \"N/A\" : false)\n}\nif (typeof(context.global.FosCam[cam_name].Parameters.alarm_http_url)!=='undefined'){\n var camera=context.global.FosCam[cam_name]\n var ArmMsg={\n     url : 'http://'+camera.hostname+'/set_alarm.cgi?motion_armed=1&motion_sensitivity=5&http=1&http_url='+context.global.BlueMixUrlBase+'/red/foscam&user='+camera.uid+'&pwd='+camera.pwd,\n     method : \"GET\"\n }\n    node.send(ArmMsg)\n  }    \n }\n\nreturn;",
+    "outputs": 1,
+    "noerr": 0,
+    "x": 893.8956756591797,
+    "y": 174.88888549804688,
+    "z": "a5a3f2af.5a5c1",
+    "wires": [
+      [
+        "f86223ae.079de"
+      ]
+    ]
+  },
+  {
+    "id": "5c0574cf.a3fa8c",
+    "type": "function",
+    "name": "generate foscam request url",
+    "func": "function delay(ms) {\n        var cur_d = new Date();\n        var cur_ticks = cur_d.getTime();\n        var ms_passed = 0;\n        while(ms_passed < ms) {\n            var d = new Date();  // Possible memory leak?\n            var ticks = d.getTime();\n            ms_passed = ticks - cur_ticks;\n            // d = null;  // Prevent memory leak?\n        }\n    }\n\n//http://timothyr.no-ip.org:1882/get_params.cgi?user=admin&pwd=Dfdbkjy5\nif (typeof(context.global.FosCam)!=='undefined'){\n for (var key in context.global.FosCam){\n    var camera=context.global.FosCam[key]\n    newMsg={}\n    newMsg.topic=key\n    newMsg.url='http://'+camera.hostname+'/get_params.cgi?user='+camera.uid+'&pwd='+camera.pwd\n    newMsg.method=\"POST\"\n    node.send(newMsg)\n    node.warn(key);\n    delay(5000);\n//    for(var i=0;i<1000000000000000;i++){\n//        null;\n//    }\n }\n}\n\n",
+    "outputs": 1,
+    "noerr": 0,
+    "x": 487.89573669433594,
+    "y": 175.88888549804688,
+    "z": "a5a3f2af.5a5c1",
+    "wires": [
+      [
+        "cef154f1.310ea8"
+      ]
+    ]
+  },
+  {
+    "id": "94c1439.f6b3ec",
+    "type": "delay",
+    "name": "",
+    "pauseType": "delay",
+    "timeout": "60",
+    "timeoutUnits": "seconds",
+    "rate": "1",
+    "rateUnits": "second",
+    "randomFirst": "1",
+    "randomLast": "5",
+    "randomUnits": "seconds",
+    "drop": false,
+    "x": 283.8957977294922,
+    "y": 177.88888549804688,
+    "z": "a5a3f2af.5a5c1",
+    "wires": [
+      [
+        "5c0574cf.a3fa8c"
+      ]
+    ]
+  },
+  {
+    "id": "92966c.ff6d699",
+    "type": "http in",
+    "name": "",
+    "url": "/red/foscam",
+    "method": "get",
+    "swaggerDoc": "",
+    "x": 130.8958282470703,
+    "y": 314.8888854980469,
+    "z": "a5a3f2af.5a5c1",
+    "wires": [
+      [
+        "2d4b7db4.d2b482"
+      ]
+    ]
+  },
+  {
+    "id": "2d4b7db4.d2b482",
+    "type": "function",
+    "name": "",
+    "func": "function delay(ms) {\n        var cur_d = new Date();\n        var cur_ticks = cur_d.getTime();\n        var ms_passed = 0;\n        while(ms_passed < ms) {\n            var d = new Date();  // Possible memory leak?\n            var ticks = d.getTime();\n            ms_passed = ticks - cur_ticks;\n            // d = null;  // Prevent memory leak?\n        }\n    }\n\nnode.warn('foscam camera: reported motion')\nvar postMsg={\n    url:BlueMixUrlBase+'/red/wink/subscribtions',\n    method:\"POST\",\n    payload:{\n  capabilities: { sensor_types: [ { field: 'motion', type: 'boolean' } ] },\n  desired_state: {},\n  device_manufacturer: 'Foscam',\n  gang_id: null,\n  hidden_at: null,\n  last_event: \n   { brightness_occurred_at: null,\n     loudness_occurred_at: null,\n     vibration_occurred_at: null },\n  last_reading: \n   { \n       agent_session_id: 'FALSE',\n       connection: true,\n       motion: true,\n   },\n  manufacturer_device_model: 'foscam_virtual_motion_sensor',\n  model_name: 'Motion Sensor',\n  name: 'Foscam',\n  object_id: 'Foscam01',\n  object_type: 'sensor_pod',\n  radio_type: 'wifi',\n  sensor_pod_id: 'Foscam01',\n  triggers: [],\n  units: {},\n  upc_code: 'motion_sensor',\n  upc_id: 'foscam01'\n  }\n}\nnode.send(postMsg);\ndelay(50000);\npostMsg.payload.last_reading.motion=false;\nnode.warn('motion flag off')\nnode.send(postMsg);\nreturn;",
+    "outputs": 1,
+    "noerr": 0,
+    "x": 325.89576721191406,
+    "y": 316.8888854980469,
+    "z": "a5a3f2af.5a5c1",
+    "wires": [
+      []
+    ]
+  },
+  {
+    "id": "f86223ae.079de",
+    "type": "http request",
+    "name": "",
+    "method": "use",
+    "ret": "txt",
+    "url": "",
+    "x": 1129.8958282470703,
+    "y": 171.88888549804688,
+    "z": "a5a3f2af.5a5c1",
+    "wires": [
+      [
+        "e4a3923f.1b5c7"
+      ]
+    ]
+  },
+  {
+    "id": "e4a3923f.1b5c7",
+    "type": "function",
+    "name": "",
+    "func": "if ( msg.payload.indexOf('ok')!=-1 && typeof(context.global.winkState.sensor_pods.foscam)==='undefined')\n{\n    node.warn('adding foscam sensor')\n    context.global.winkState.sensor_pods.foscam=\n    {\n    \"name\": \"Foscam\",\n    \"object_type\": \"sensor_pods\",\n    \"object_id\": \"Foscam01\",\n    \"freeboard\": 0,\n    \"connection\": true,\n    \"motion\": false\n    }\n    context.global.winkDevCap.foscam=\n    {\n \"sensor_types\":[\n        {\n        \"field\": \"motion\",\n        \"type\": \"boolean\"\n        }\n    ]\n  }\n}\nreturn msg;",
+    "outputs": 1,
+    "noerr": 0,
+    "x": 1330.8958282470703,
+    "y": 231.88888549804688,
+    "z": "a5a3f2af.5a5c1",
+    "wires": [
+      []
+    ]
+  }
+]
