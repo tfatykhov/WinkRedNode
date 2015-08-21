@@ -1,4 +1,10 @@
 == UPDATE ==
+8/21/2015
+----------------
+First drop for Foscam mjpeg ip cameras. 
+Features:
+- Motion detection reporting
+- Live video feed in wink dashboards
 
 8/13/2015
 ----------------
