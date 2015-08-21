@@ -1,5 +1,19 @@
 [
   {
+    "id": "5d5c999c.a2a368",
+    "type": "http request",
+    "name": "",
+    "method": "use",
+    "ret": "obj",
+    "url": "",
+    "x": 695.8957977294922,
+    "y": 300.8888854980469,
+    "z": "a5a3f2af.5a5c1",
+    "wires": [
+      []
+    ]
+  },
+  {
     "id": "197fb2e7.e6804d",
     "type": "inject",
     "name": "",
@@ -154,25 +168,11 @@
     ]
   },
   {
-    "id": "5d5c999c.a2a368",
-    "type": "http request",
-    "name": "",
-    "method": "GET",
-    "ret": "txt",
-    "url": "",
-    "x": 695.8957977294922,
-    "y": 300.8888854980469,
-    "z": "a5a3f2af.5a5c1",
-    "wires": [
-      []
-    ]
-  },
-  {
     "id": "5c68e61c.a39718",
     "type": "http request",
     "name": "",
-    "method": "GET",
-    "ret": "txt",
+    "method": "use",
+    "ret": "obj",
     "url": "",
     "x": 701.8957977294922,
     "y": 351.8888854980469,
