@@ -1,10 +1,21 @@
 == UPDATE ==
 8/21/2015
 ----------------
-First drop for Foscam mjpeg ip cameras. 
+First drop for Foscam mjpeg ip cameras. (no need to update if you do not use FosCam cameras)
 Features:
 - Motion detection reporting
 - Live video feed in wink dashboards
+you need to re-import winkFreeboards.json and then create a new tab call it Foscam and import new FosCam.json
+you also need to edit bluemix-setting.js file and add following section to functionGlobalContext:
+<br>
+, FosCam: {
+		"Camera1 name": {"hostname":"external ip:port","uid":"admin","pwd":"your pwd"}
+		,"Camera2 name": {"hostname":"external ip:port","uid":"admin","pwd":"your pwd"}
+       }
+Add as many cameras as you have.
+do cf push or redeploy via ibm github.
+Please wait as this will take take to initialize (approx 1-2 minutes after start)
+
 
 8/13/2015
 ----------------
