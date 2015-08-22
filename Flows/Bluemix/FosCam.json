@@ -1,16 +1,18 @@
 [
   {
-    "id": "5c68e61c.a39718",
-    "type": "http request",
-    "name": "",
-    "method": "use",
-    "ret": "txt",
-    "url": "",
-    "x": 843.8957977294922,
-    "y": 350.8888854980469,
+    "id": "5c0574cf.a3fa8c",
+    "type": "function",
+    "name": "generate foscam request url",
+    "func": "function delay(ms) {\n        var cur_d = new Date();\n        var cur_ticks = cur_d.getTime();\n        var ms_passed = 0;\n        while(ms_passed < ms) {\n            var d = new Date();  // Possible memory leak?\n            var ticks = d.getTime();\n            ms_passed = ticks - cur_ticks;\n            // d = null;  // Prevent memory leak?\n        }\n    }\n\nif (typeof(context.global.FosCam)!=='undefined'){\n for (var key in context.global.FosCam){\n    var camera=context.global.FosCam[key]\n    newMsg={}\n    newMsg.topic=key\n    newMsg.url='http://'+camera.hostname+'/get_params.cgi?user='+camera.uid+'&pwd='+camera.pwd\n    newMsg.method=\"POST\"\n    node.send(newMsg)\n    node.warn(key);\n    delay(5000);\n//    for(var i=0;i<1000000000000000;i++){\n//        null;\n//    }\n }\n}\n\n",
+    "outputs": 1,
+    "noerr": 0,
+    "x": 492.8958282470703,
+    "y": 176.88888549804688,
     "z": "a5a3f2af.5a5c1",
     "wires": [
-      []
+      [
+        "cef154f1.310ea8"
+      ]
     ]
   },
   {
@@ -61,22 +63,6 @@
     "wires": [
       [
         "f86223ae.079de"
-      ]
-    ]
-  },
-  {
-    "id": "5c0574cf.a3fa8c",
-    "type": "function",
-    "name": "generate foscam request url",
-    "func": "function delay(ms) {\n        var cur_d = new Date();\n        var cur_ticks = cur_d.getTime();\n        var ms_passed = 0;\n        while(ms_passed < ms) {\n            var d = new Date();  // Possible memory leak?\n            var ticks = d.getTime();\n            ms_passed = ticks - cur_ticks;\n            // d = null;  // Prevent memory leak?\n        }\n    }\n\n//http://timothyr.no-ip.org:1882/get_params.cgi?user=admin&pwd=Dfdbkjy5\nif (typeof(context.global.FosCam)!=='undefined'){\n for (var key in context.global.FosCam){\n    var camera=context.global.FosCam[key]\n    newMsg={}\n    newMsg.topic=key\n    newMsg.url='http://'+camera.hostname+'/get_params.cgi?user='+camera.uid+'&pwd='+camera.pwd\n    newMsg.method=\"POST\"\n    node.send(newMsg)\n    node.warn(key);\n    delay(5000);\n//    for(var i=0;i<1000000000000000;i++){\n//        null;\n//    }\n }\n}\n\n",
-    "outputs": 1,
-    "noerr": 0,
-    "x": 492.8958282470703,
-    "y": 176.88888549804688,
-    "z": "a5a3f2af.5a5c1",
-    "wires": [
-      [
-        "cef154f1.310ea8"
       ]
     ]
   },
@@ -144,8 +130,8 @@
     "method": "use",
     "ret": "txt",
     "url": "",
-    "x": 1134.8959197998047,
-    "y": 172.88888549804688,
+    "x": 1121.8959197998047,
+    "y": 175.88888549804688,
     "z": "a5a3f2af.5a5c1",
     "wires": [
       [
@@ -160,8 +146,8 @@
     "func": "if ( msg.payload.indexOf('ok')!=-1 && typeof(context.global.winkState.sensor_pods.foscam)==='undefined')\n{\n    node.warn('adding foscam sensor')\n    context.global.winkState.sensor_pods.foscam=\n    {\n    \"name\": \"foscam\",\n    \"object_type\": \"sensor_pods\",\n    \"object_id\": \"Foscam01\",\n    \"freeboard\": 0,\n    \"connection\": true,\n    \"motion\": false\n    }\n    context.global.winkDevCap.foscam=\n    {\n \"sensor_types\":[\n        {\n        \"field\": \"motion\",\n        \"type\": \"boolean\"\n        }\n    ]\n  }\n}\nreturn msg;",
     "outputs": 1,
     "noerr": 0,
-    "x": 1325.8959197998047,
-    "y": 173.88888549804688,
+    "x": 1282.8959197998047,
+    "y": 175.88888549804688,
     "z": "a5a3f2af.5a5c1",
     "wires": [
       []
@@ -176,6 +162,20 @@
     "url": "",
     "x": 847.8957977294922,
     "y": 310.8888854980469,
+    "z": "a5a3f2af.5a5c1",
+    "wires": [
+      []
+    ]
+  },
+  {
+    "id": "5c68e61c.a39718",
+    "type": "http request",
+    "name": "",
+    "method": "use",
+    "ret": "txt",
+    "url": "",
+    "x": 843.8957977294922,
+    "y": 350.8888854980469,
     "z": "a5a3f2af.5a5c1",
     "wires": [
       []
