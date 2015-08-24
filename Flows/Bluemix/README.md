@@ -21,6 +21,7 @@ I assume that your foscam camera(s) can be accessed outside your local network (
 
 Add as many cameras as you have.
 do cf push or redeploy via ibm github.
+Re-import winkCore.json and winkFreeboards.json, create new tab name it FosCam  and import FosCam.json
 Please wait as this will take take to initialize (approx 1-2 minutes after start)
 
 
