@@ -35,8 +35,8 @@ Please wait as this will take take to initialize (approx 1-2 minutes after start
 ----------------
 Initial State integration.
 Sign in to initialstate.com and get your api key.
-update bluemix-settings.json and add following line to functionGlobalContext:
-,InitialStateKey:"your initial state api key" 
+update bluemix-settings.json and add following line to functionGlobalContext:<br>
+<b>,InitialStateKey:"your initial state api key" <b>
 
 do not forget to put comma unless it is last line in that section
 to the  functionGlobalContext section
