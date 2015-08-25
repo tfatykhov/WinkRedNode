@@ -1,26 +1,14 @@
 [
   {
-    "id": "e03ee7c0.1fc118",
-    "type": "debug",
-    "name": "",
-    "active": false,
-    "console": "false",
-    "complete": "false",
-    "x": 339.89581298828125,
-    "y": 552.888916015625,
-    "z": "8630683c.79cf98",
-    "wires": []
-  },
-  {
     "id": "fb58fbca.04a708",
     "type": "inject",
     "name": "",
     "topic": "",
     "payload": "",
     "payloadType": "none",
-    "repeat": "",
+    "repeat": "82800",
     "crontab": "",
-    "once": false,
+    "once": true,
     "x": 679.4999847412109,
     "y": 392,
     "z": "8630683c.79cf98",
@@ -471,8 +459,7 @@
         "df8261f8.207da",
         "93422ecf.6cbdd",
         "c97c09ed.3683f8",
-        "76c41924.893be8",
-        "57d7c07a.a8284"
+        "76c41924.893be8"
       ]
     ]
   },
@@ -816,6 +803,18 @@
     ]
   },
   {
+    "id": "e03ee7c0.1fc118",
+    "type": "debug",
+    "name": "",
+    "active": false,
+    "console": "false",
+    "complete": "false",
+    "x": 339.89581298828125,
+    "y": 552.888916015625,
+    "z": "8630683c.79cf98",
+    "wires": []
+  },
+  {
     "id": "76c41924.893be8",
     "type": "http response",
     "name": "",
@@ -835,46 +834,5 @@
     "y": 550,
     "z": "8630683c.79cf98",
     "wires": []
-  },
-  {
-    "id": "a1c1738b.5e3e9",
-    "type": "debug",
-    "name": "",
-    "active": false,
-    "console": "false",
-    "complete": "payload",
-    "x": 697,
-    "y": 711,
-    "z": "8630683c.79cf98",
-    "wires": []
-  },
-  {
-    "id": "57d7c07a.a8284",
-    "type": "switch",
-    "name": "",
-    "property": "payload.object_type",
-    "rules": [
-      {
-        "t": "eq",
-        "v": "binary_switch"
-      },
-      {
-        "t": "eq",
-        "v": "light_bulb"
-      }
-    ],
-    "checkall": "true",
-    "outputs": 2,
-    "x": 490,
-    "y": 666,
-    "z": "8630683c.79cf98",
-    "wires": [
-      [
-        "a1c1738b.5e3e9"
-      ],
-      [
-        "a1c1738b.5e3e9"
-      ]
-    ]
   }
 ]
