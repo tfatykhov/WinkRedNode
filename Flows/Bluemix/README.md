@@ -1,4 +1,10 @@
 == UPDATE ==
+8/25/2015
+----------------
+Small bug fixes to reduce amount of messages sent to Initial State and IFTTT
+
+
+== UPDATE ==
 8/21/2015
 ----------------
 First drop for Foscam mjpeg ip cameras. (no need to update if you do not use FosCam cameras)
