@@ -198,9 +198,8 @@ Go to [https://MyWinkNodeRed.mybluemix.net](https://MyWinkNodeRed.mybluemix.net)
 You will be prompted to enter the `NODE_RED_USERNAME` and `NODE_RED_PASSWORD` values
 that you previously entered into `manifest.yml`.
 
-Navigate to [Flows/Bluemix/](Flows/Bluemix/)
-[Check readme on how to create tabs and import 3 core flows one to each tab](Flows/Bluemix/README.md#8122015)
-and click "OK".
+Navigate to [Flows/Bluemix/](Flows/Bluemix/) and Import 3 core flows.<br>
+[Check readme on how to create tabs and import 3 core flows one to each tab](Flows/Bluemix/README.md#8122015) if you are a first time user.
 
 Click on "Deploy". you will see information will start flow in debug window on right side of the screen (may need to swith to debug tab)
 
