@@ -38,8 +38,6 @@ Sign in to initialstate.com and get your api key.
 update bluemix-settings.json and add following line to functionGlobalContext:<br>
 <b>,InitialStateKey:"your initial state api key"</b>
 
-do not forget to put comma unless it is last line in that section
-to the  functionGlobalContext section
 update winkCore flow from github.
 your activity should flow to initial State website
 
