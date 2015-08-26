@@ -67,9 +67,9 @@ Updates to that file are discontinued as of today.
 3 new json files have been created representing different sections
 Please remove current flow from your instance and start by creating 3 tabs or "workspaces" in node-red (use <b>+</b> icon on the left side of the flow editor. Then use "3 bar" menu, select Workspaces - Rename and name each:
 
-1. wink Core
-2. Freeboards
-3. Integration
+1. [wink Core](Flows/Bluemix/winkCore.json)
+2. [Freeboards](Flows/Bluemix/winkFreeboards.json)
+3. [Integration](Flows/Bluemix/winkIntegration.json)
 
 <img src="../../images/Workspaces.png"></img>
 
