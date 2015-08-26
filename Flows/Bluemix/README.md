@@ -1,4 +1,20 @@
 == UPDATE ==
+8/25/2015 (part 2)
+----------------
+Added support for Foscam FI98XXX cameras (tested on FI9821W V2.1)
+If you have Foscam FI98XX camera model
+Please add "model":"HD" to you camera definition in  bluemix-settings.json
+For example first camera is FI98XX and second is FI89XX
+<br>
+<br>
+       , FosCam: {<br>
+		"FI98XX Camera1 name": {"hostname":"external ip:port","uid":"admin","pwd":"your pwd","model":"HD"}<br>
+		,"Camera2 name": {"hostname":"external ip:port","uid":"admin","pwd":"your pwd"}<br>
+       	}
+<br>
+import updated winkFreeboards.json and FosCam.json
+re-deploy application.
+
 8/25/2015
 ----------------
 Small bug fixes to reduce amount of messages sent to Initial State and IFTTT
