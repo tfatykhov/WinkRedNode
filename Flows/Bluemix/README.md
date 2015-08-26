@@ -12,7 +12,7 @@ For example first camera is FI98XX and second is FI89XX
 		,"Camera2 name": {"hostname":"external ip:port","uid":"admin","pwd":"your pwd"}<br>
        	}
 <br>
-import updated winkFreeboards.json and FosCam.json
+import updated [winkFreeboards.json](winkFreeboards.json) and [FosCam.json](FosCam.json)
 re-deploy application.
 
 8/25/2015
