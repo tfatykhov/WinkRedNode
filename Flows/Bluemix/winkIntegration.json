@@ -1,84 +1,84 @@
 [
   {
-    "id": "e4d57a93.1b2a88",
+    "id": "64507875.9baf88",
     "type": "function",
     "name": "",
-    "func": "var WinkCMDmsg=\"\";\nif (msg.payload.iftttkey==context.global.IFTTT_TOKEN)\n{\n    if (typeof msg.payload.ifttt !=='undefined')\n    {\n      context.global.ifttt=(msg.payload.ifttt.toLowerCase()==\"on\" ? true:false)\n      msg.res.StatusCode=200;\n    }\n    if (typeof msg.payload.winkName !=='undefined')\n    {\n    node.warn(msg.payload.winkName)\n    if (msg.payload.level !=='undefined')\n    {\n        level=msg.payload.level\n    }\n    else level=100\n    node.warn(level)\n    WinkCMDmsg = context.global.executeWinkCMD(msg.payload.winkName,msg.payload.type,msg.payload.cmd,level)\n    msg.res.StatusCode=200;\n    //node.warn(WinkCMDmsg.payload)\n    }\n}\nelse {\n    node.warn(\"ifttt messages bad request\")\n     msg.res.StatusCode=403;\n}\nif (WinkCMDmsg!==\"\")\n{\n    return [msg,WinkCMDmsg];\n}\nelse\n{\nreturn [msg];\n}",
+    "func": "var WinkCMDmsg=\"\";\nif (msg.payload.iftttkey==context.global.IFTTT_TOKEN)\n{\n    if (typeof msg.payload.ifttt !=='undefined')\n    {\n      context.global.ifttt=(msg.payload.ifttt.toLowerCase()==\"on\" ? true:false)\n      msg.res.StatusCode=200;\n    }\n    if (typeof msg.payload.winkName !=='undefined')\n    {\n    node.warn(msg.payload.winkName)\n    if (msg.payload.level !=='undefined')\n    {\n        level=msg.payload.level\n    }  else level=100\n    if (msg.payload.cmd !=='undefined')\n    {\n        cmd=msg.payload.cmd\n    } else cmd=''   \n//    node.warn(level)\n    WinkCMDmsg = context.global.executeWinkCMD(msg.payload.winkName,msg.payload.type,msg.payload.cmd,level)\n    msg.res.StatusCode=200;\n    //node.warn(WinkCMDmsg.payload)\n    }\n}\nelse {\n    node.warn(\"ifttt messages bad request\")\n     msg.res.StatusCode=403;\n}\nif (WinkCMDmsg!==\"\")\n{\n    return [msg,WinkCMDmsg];\n}\nelse\n{\nreturn [msg];\n}",
     "outputs": "2",
     "noerr": 0,
-    "x": 340.5,
-    "y": 82.99993896484375,
-    "z": "95f60c40.6a09f",
+    "x": 397.89581298828125,
+    "y": 177.88888549804688,
+    "z": "54c33433.ab3ccc",
     "wires": [
       [
-        "ea765f78.1589a"
+        "58b35580.a74cac"
       ],
       [
-        "81f51a30.7e0ae8"
+        "a1cb00a0.5e35"
       ]
     ]
   },
   {
-    "id": "bac7fd34.4538",
+    "id": "365b5385.c9a4ac",
     "type": "http in",
     "name": "",
     "url": "/red/ifttt",
     "method": "post",
     "swaggerDoc": "",
-    "x": 113.5,
-    "y": 83,
-    "z": "95f60c40.6a09f",
+    "x": 170.89581298828125,
+    "y": 177.88894653320312,
+    "z": "54c33433.ab3ccc",
     "wires": [
       [
-        "e4d57a93.1b2a88"
+        "64507875.9baf88"
       ]
     ]
   },
   {
-    "id": "ea765f78.1589a",
+    "id": "58b35580.a74cac",
     "type": "http response",
     "name": "",
-    "x": 549.4999847412109,
-    "y": 52.99993896484375,
-    "z": "95f60c40.6a09f",
+    "x": 606.8957977294922,
+    "y": 147.88888549804688,
+    "z": "54c33433.ab3ccc",
     "wires": []
   },
   {
-    "id": "3616370d.c9e9c8",
+    "id": "1dde409d.e221bf",
     "type": "comment",
     "name": "IFTTT Integration-------------------------------------------------------------------------------------------------------------------------------",
     "info": "",
-    "x": 424.5,
-    "y": 20,
-    "z": "95f60c40.6a09f",
+    "x": 481.89581298828125,
+    "y": 114.88894653320312,
+    "z": "54c33433.ab3ccc",
     "wires": []
   },
   {
-    "id": "81f51a30.7e0ae8",
+    "id": "a1cb00a0.5e35",
     "type": "http request",
     "name": "",
     "method": "use",
     "ret": "obj",
     "url": "",
-    "x": 576.5,
-    "y": 96.99993896484375,
-    "z": "95f60c40.6a09f",
+    "x": 633.8958129882812,
+    "y": 191.88888549804688,
+    "z": "54c33433.ab3ccc",
     "wires": [
       []
     ]
   },
   {
-    "id": "e427dcbe.1bd82",
+    "id": "f716613.f08e9a",
     "type": "comment",
     "name": "Wink API Apdex-------------------------------------------------------------------------------------------------------------------------------",
     "info": "",
-    "x": 416.5,
-    "y": 135.99993896484375,
-    "z": "95f60c40.6a09f",
+    "x": 473.89581298828125,
+    "y": 230.88888549804688,
+    "z": "54c33433.ab3ccc",
     "wires": []
   },
   {
-    "id": "d68278b3.297d88",
+    "id": "b5118e25.4aee7",
     "type": "inject",
     "name": "",
     "topic": "",
@@ -87,257 +87,187 @@
     "repeat": "600",
     "crontab": "",
     "once": true,
-    "x": 114.5,
-    "y": 175.9998779296875,
-    "z": "95f60c40.6a09f",
+    "x": 171.89581298828125,
+    "y": 270.8888244628906,
+    "z": "54c33433.ab3ccc",
     "wires": [
       [
-        "f3c39b86.0c3c68"
+        "1e667558.e1998b"
       ]
     ]
   },
   {
-    "id": "f6a0adf0.095f5",
+    "id": "778d56c1.8872a8",
     "type": "debug",
     "name": "",
-    "active": false,
+    "active": true,
     "console": "true",
     "complete": "payload",
-    "x": 827.5,
-    "y": 176.99993896484375,
-    "z": "95f60c40.6a09f",
+    "x": 884.8958129882812,
+    "y": 271.8888854980469,
+    "z": "54c33433.ab3ccc",
     "wires": []
   },
   {
-    "id": "f3c39b86.0c3c68",
+    "id": "1e667558.e1998b",
     "type": "function",
     "name": "",
-    "func": "var newMsg ={\n    \"url\":\"http://status.winkapp.com/metrics-display/009ykpcmnm25/day.json\",\n    headers: {\n        \"Content-Type\":\"application/json\"\n    }\n};\nreturn newMsg;",
+    "func": "var newMsg ={\n    \"url\":\"http://status.winkapp.com/metrics-display/009ykpcmnm25/day.json\",\n    \"method\":\"GET\",\n    headers: {\n        \"Content-Type\":\"application/json\"\n    }\n};\nreturn newMsg;",
     "outputs": 1,
     "noerr": 0,
-    "x": 247.5,
-    "y": 176.99993896484375,
-    "z": "95f60c40.6a09f",
+    "x": 304.89581298828125,
+    "y": 271.8888854980469,
+    "z": "54c33433.ab3ccc",
     "wires": [
       [
-        "53a38c14.ac5c74"
+        "14b8d208.eb472e"
       ]
     ]
   },
   {
-    "id": "53a38c14.ac5c74",
-    "type": "http request",
-    "name": "",
-    "method": "GET",
-    "ret": "txt",
-    "url": "",
-    "x": 399.5,
-    "y": 176.99993896484375,
-    "z": "95f60c40.6a09f",
-    "wires": [
-      [
-        "e42ea40c.1bd158"
-      ]
-    ]
-  },
-  {
-    "id": "c51a0bef.3ae5f8",
-    "type": "function",
-    "name": "",
-    "func": "context.global.winkState.winkAPI = \"\";\nwinkAPI=\"\";\nfor(i = 0; i<msg.payload.metrics.length; i++) \n    {                   \n        for(j = 0; j<msg.payload.metrics[i].data.length; j++)\n        {\n            winkAPI = msg.payload.metrics[i].data[j].value;\n        }\n    }\ncontext.global.winkState.winkAPI=winkAPI;\nvar newMsg={\n    payload:\"Wink Apdex is currently: \"+context.global.winkState.winkAPI\n};\nreturn newMsg;",
-    "outputs": 1,
-    "noerr": 0,
-    "x": 682.5,
-    "y": 176.99993896484375,
-    "z": "95f60c40.6a09f",
-    "wires": [
-      [
-        "f6a0adf0.095f5"
-      ]
-    ]
-  },
-  {
-    "id": "e42ea40c.1bd158",
-    "type": "json",
-    "name": "",
-    "x": 551.5,
-    "y": 176.99993896484375,
-    "z": "95f60c40.6a09f",
-    "wires": [
-      [
-        "c51a0bef.3ae5f8"
-      ]
-    ]
-  },
-  {
-    "id": "d5fd0fa7.2a02f",
-    "type": "http in",
-    "name": "",
-    "url": "/freeboard/camera",
-    "method": "get",
-    "swaggerDoc": "",
-    "x": 165,
-    "y": 279.4998779296875,
-    "z": "95f60c40.6a09f",
-    "wires": [
-      [
-        "5f7cb809.a08348"
-      ]
-    ]
-  },
-  {
-    "id": "5f7cb809.a08348",
-    "type": "function",
-    "name": "",
-    "func": "if (msg.payload.token==context.global.FREEBOARD_TOKEN)\n{\n   msg.url=\"https://winkapi.quirky.com/cameras/\"+msg.payload.id+\"/image\"\n   msg.method=\"GET\"\n    msg.headers= {\n        \"Authorization\":\"Bearer \"+context.global.WinkToken,\n        \"User-Agent\":\"Manufacturer/Darwin node/0.10.30 Wink/3.1.0\"\n    }\nreturn msg;\n}\nelse {\n    msg.res.send(400,\"Bad Request darling\");\n}\n",
-    "outputs": 1,
-    "noerr": 0,
-    "x": 400,
-    "y": 279.49993896484375,
-    "z": "95f60c40.6a09f",
-    "wires": [
-      [
-        "2a279485.d5d86c"
-      ]
-    ]
-  },
-  {
-    "id": "2a279485.d5d86c",
-    "type": "http request",
-    "name": "",
-    "method": "use",
-    "ret": "bin",
-    "url": "",
-    "x": 570,
-    "y": 278.49993896484375,
-    "z": "95f60c40.6a09f",
-    "wires": [
-      [
-        "e107225d.1ef8e"
-      ]
-    ]
-  },
-  {
-    "id": "e107225d.1ef8e",
-    "type": "http response",
-    "name": "",
-    "x": 735,
-    "y": 279.49993896484375,
-    "z": "95f60c40.6a09f",
-    "wires": []
-  },
-  {
-    "id": "a69abbed.596548",
-    "type": "comment",
-    "name": "DromCam/NestCam Integration-------------------------------------------------------------------------------------------------------------------------------",
-    "info": "",
-    "x": 466.5,
-    "y": 236.4998779296875,
-    "z": "95f60c40.6a09f",
-    "wires": []
-  },
-  {
-    "id": "f0147797.0feb88",
-    "type": "comment",
-    "name": "Presence  via IFTTT/Tasker/etc. -------------------------------------------------------------------------------------------------------------------------------",
-    "info": "",
-    "x": 466,
-    "y": 337.4998779296875,
-    "z": "95f60c40.6a09f",
-    "wires": []
-  },
-  {
-    "id": "ce6d66f1.319298",
-    "type": "http in",
-    "name": "",
-    "url": "/red/presence",
-    "method": "post",
-    "swaggerDoc": "",
-    "x": 146,
-    "y": 384.4998779296875,
-    "z": "95f60c40.6a09f",
-    "wires": [
-      [
-        "c2e20c4f.3d1df"
-      ]
-    ]
-  },
-  {
-    "id": "c2e20c4f.3d1df",
-    "type": "function",
-    "name": "Update Presence entry",
-    "func": "pr_msg={};\npr_msg.payload={old_value:context.global.checkPresence()}\nif (msg.payload.iftttkey==context.global.IFTTT_TOKEN)\n{\n    if (typeof(context.global.Presence) === 'undefined'){\n    context.global.Presence = {}  \n    }\n    if (msg.payload.name !=='undefined'){\n        if (!context.global.Presence[msg.payload.name]) context.global.Presence[msg.payload.name]={}\n            context.global.Presence[msg.payload.name].home=msg.payload.home\n        }\n    msg.res.StatusCode=200;\n    pr_msg.payload.new_value=context.global.checkPresence();\n}\nelse {\n    node.warn(\"presense, bad request\")\n     msg.res.StatusCode=403;\n     pr_msg.payload.new_value='ERROR';\n}\nreturn [msg,pr_msg];",
-    "outputs": "2",
-    "noerr": 0,
-    "x": 382,
-    "y": 385.4998779296875,
-    "z": "95f60c40.6a09f",
-    "wires": [
-      [
-        "c1e6b679.3e1948"
-      ],
-      [
-        "6a71ee92.958e1"
-      ]
-    ]
-  },
-  {
-    "id": "c1e6b679.3e1948",
-    "type": "http response",
-    "name": "",
-    "x": 812.9999847412109,
-    "y": 378.4998779296875,
-    "z": "95f60c40.6a09f",
-    "wires": []
-  },
-  {
-    "id": "6a71ee92.958e1",
-    "type": "function",
-    "name": "",
-    "func": "if (msg.payload.new_value!=='ERROR' && msg.payload.new_value!==msg.payload.old_value){\n    var scene_name=(msg.payload.new_value ? 'PRESENCE' : 'NO PRESENCE');\n    for (var key in context.global.winkState.scenes){\n        if ( context.global.winkState.scenes[key].name.toUpperCase()==scene_name)\n        {\n            var newMsg ={\n            \"url\":\"https://winkapi.quirky.com/scenes/\"+context.global.winkState.scenes[key].object_id+\"/activate\",\n            \"method\": \"POST\",\n            headers: {\n                \"Authorization\":\"Bearer \"+context.global.WinkToken,\n                \"Content-Type\":\"application/json\"\n                }\n            }\n        node.send(newMsg)\n        return;\n        }\n    }\n}\nreturn;",
-    "outputs": 1,
-    "noerr": 0,
-    "x": 593.8957977294922,
-    "y": 429.72216796875,
-    "z": "95f60c40.6a09f",
-    "wires": [
-      [
-        "d7e660d0.2819a"
-      ]
-    ]
-  },
-  {
-    "id": "d7e660d0.2819a",
+    "id": "14b8d208.eb472e",
     "type": "http request",
     "name": "",
     "method": "use",
     "ret": "obj",
     "url": "",
-    "x": 800.8957977294922,
-    "y": 429.833251953125,
-    "z": "95f60c40.6a09f",
+    "x": 456.89581298828125,
+    "y": 271.8888854980469,
+    "z": "54c33433.ab3ccc",
+    "wires": [
+      [
+        "3f6de779.c09218"
+      ]
+    ]
+  },
+  {
+    "id": "3f6de779.c09218",
+    "type": "function",
+    "name": "",
+    "func": "context.global.winkState.winkAPI = \"\";\nwinkAPI=\"\";\n        for(j = 0; j<msg.payload.metrics[0].data.length; j++)\n        {\n            winkAPI = msg.payload.metrics[0].data[j].value;\n        }\ncontext.global.winkState.winkAPI=winkAPI;\nvar newMsg={\n    payload:\"Wink Apdex is currently: \"+context.global.winkState.winkAPI\n};\nreturn newMsg;",
+    "outputs": 1,
+    "noerr": 0,
+    "x": 739.8958129882812,
+    "y": 271.8888854980469,
+    "z": "54c33433.ab3ccc",
+    "wires": [
+      [
+        "778d56c1.8872a8"
+      ]
+    ]
+  },
+  {
+    "id": "1a75e44d.e58a1c",
+    "type": "comment",
+    "name": "DromCam/NestCam Integration-------------------------------------------------------------------------------------------------------------------------------",
+    "info": "",
+    "x": 523.8958129882812,
+    "y": 331.3888244628906,
+    "z": "54c33433.ab3ccc",
+    "wires": []
+  },
+  {
+    "id": "9f8c58ba.6073a8",
+    "type": "comment",
+    "name": "Presence  via IFTTT/Tasker/etc. -------------------------------------------------------------------------------------------------------------------------------",
+    "info": "",
+    "x": 523.3958129882812,
+    "y": 432.3888244628906,
+    "z": "54c33433.ab3ccc",
+    "wires": []
+  },
+  {
+    "id": "dd6f8513.229078",
+    "type": "http in",
+    "name": "",
+    "url": "/red/presence",
+    "method": "post",
+    "swaggerDoc": "",
+    "x": 203.39581298828125,
+    "y": 479.3888244628906,
+    "z": "54c33433.ab3ccc",
+    "wires": [
+      [
+        "ab9676d8.546988"
+      ]
+    ]
+  },
+  {
+    "id": "ab9676d8.546988",
+    "type": "function",
+    "name": "Update Presence entry",
+    "func": "pr_msg={};\n//if (typeof context.global.PresenceHistory === 'undefined') context.global.PresenceHistory=[]\npr_msg.payload={old_value:context.global.checkPresence()}\nif (msg.payload.iftttkey==context.global.IFTTT_TOKEN)\n{\n    node.warn(msg.payload.name+' '+msg.payload.home)\n    if (typeof(context.global.Presence) === 'undefined'){\n    context.global.Presence = {}\n    } else pr_msg.payload.old_presence=context.global.Presence;\n    if (msg.payload.name !=='undefined'){\n        if (!context.global.Presence[msg.payload.name]) context.global.Presence[msg.payload.name]={}\n            context.global.Presence[msg.payload.name].home=msg.payload.home\n        }\n    msg.res.StatusCode=200;\n    pr_msg.payload.new_value=context.global.checkPresence();\n}\nelse {\n    node.warn(\"presense, bad request\")\n     msg.res.StatusCode=403;\n     pr_msg.payload.new_value='ERROR';\n}\nreturn [msg,pr_msg];",
+    "outputs": "2",
+    "noerr": 0,
+    "x": 439.39581298828125,
+    "y": 480.3888244628906,
+    "z": "54c33433.ab3ccc",
+    "wires": [
+      [
+        "fb5f89a9.04a078"
+      ],
+      [
+        "2c06c95b.d3f936"
+      ]
+    ]
+  },
+  {
+    "id": "fb5f89a9.04a078",
+    "type": "http response",
+    "name": "",
+    "x": 870.3957977294922,
+    "y": 473.3888244628906,
+    "z": "54c33433.ab3ccc",
+    "wires": []
+  },
+  {
+    "id": "2c06c95b.d3f936",
+    "type": "function",
+    "name": "",
+    "func": "var currDate= new Date();\ncurr_presence=context.global.checkPresence()\nif (msg.payload.new_value!=='ERROR' && msg.payload.new_value!==msg.payload.old_value){\n    if('old_presence' in  msg.payload){\n        var HistP={}\n        HistP.timestamp=new Date();\n        HistP.offset=context.global.Weather.Offset\n        HistP.details=msg.payload.old_presence\n        node.warn(HistP)\n        context.global.PresenceHistory.splice(0,0,HistP)\n    }\n    if (context.global.PresenceHistory.length > 15) context.global.PresenceHistory.pop();\n    var scene_name=(msg.payload.new_value ? 'PRESENCE' : 'NO PRESENCE');\n    for (var key in context.global.winkState.scenes){\n        if ( context.global.winkState.scenes[key].name.toUpperCase()==scene_name)\n        {\n            var newMsg ={\n            \"url\":\"https://winkapi.quirky.com/scenes/\"+context.global.winkState.scenes[key].object_id+\"/activate\",\n            \"method\": \"POST\",\n            headers: {\n                \"Authorization\":\"Bearer \"+context.global.WinkToken,\n                \"Content-Type\":\"application/json\"\n                }\n            }\n        node.send(newMsg)\n        return;\n        }\n    }\n}\nreturn;",
+    "outputs": 1,
+    "noerr": 0,
+    "x": 651.2916107177734,
+    "y": 524.6111145019531,
+    "z": "54c33433.ab3ccc",
+    "wires": [
+      [
+        "d3bc13fa.2c43f"
+      ]
+    ]
+  },
+  {
+    "id": "d3bc13fa.2c43f",
+    "type": "http request",
+    "name": "",
+    "method": "use",
+    "ret": "obj",
+    "url": "",
+    "x": 858.2916107177734,
+    "y": 524.7221984863281,
+    "z": "54c33433.ab3ccc",
     "wires": [
       []
     ]
   },
   {
-    "id": "b25b6076.4da4a",
+    "id": "6ee44320.911bbc",
     "type": "function",
     "name": "",
     "func": "msg.payload={\n    \"thermostats\":context.global.EcobeeThermostats,\n    \"sensor_pods\":context.global.EcobeeSensors\n};\nif (typeof context.global.winkState.thermostats=='undefined'){ context.global.winkState.thermostats = new Object(); }\nfor (var name in msg.payload.thermostats)\n{\n//    node.warn(\"Importing: \"+name+\" thermostat\");\n    context.global.winkState.thermostats[name]={\n        \"name\":name,\n        \"object_type\": msg.payload.thermostats[name].object_type,\n        \"object_id\": msg.payload.thermostats[name].object_id,\n        \"freeboard\": 0,\n        \"connection\": msg.payload.thermostats[name].connection,\n        \"min_set_point\": (msg.payload.thermostats[name].min_set_point-32)*(5/9),\n        \"max_set_point\": (msg.payload.thermostats[name].max_set_point-32)*(5/9),\n        \"mode\": msg.payload.thermostats[name].mode,\n        \"temperature\": (msg.payload.thermostats[name].temperature-32)*(5/9),\n        \"humidity\": msg.payload.thermostats[name].humidity,\n        \"users_away\":false\n    };\n}\n//node.warn(\"Ecobee Thermostat import finished\");\n\nfor (var name in msg.payload.sensor_pods)\n{\n//    node.warn(\"Importing: \"+name+\" sensor pod\");\n    context.global.winkState.sensor_pods[name]={\n        \"name\":name,\n        \"object_type\":msg.payload.sensor_pods[name].object_type,\n        \"object_id\":msg.payload.sensor_pods[name].object_id,\n        \"freeboard\":0,\n    }\n    if (msg.payload.sensor_pods[name].motion==\"true\"){context.global.winkState.sensor_pods[name].motion=true}\n    else if (msg.payload.sensor_pods[name].motion==\"false\"){context.global.winkState.sensor_pods[name].motion=false}\n    context.global.winkDevCap[name]={\n        \"sensor_types\":[{}]\n    }\n    context.global.winkDevCap[name].sensor_types=[{\n            \"field\":\"motion\",\n            \"type\":\"boolean\"\n        }]\n    }\n//node.warn(\"Ecobee Remote Sensor import finished\");\nvar newMsg={\n    \"payload\":\"Ecobee Thermostat and Remote Sensor Data imported successfully\"\n};\nreturn newMsg;",
     "outputs": 1,
     "noerr": 0,
-    "x": 266.50000381469727,
-    "y": 513.7500076293945,
-    "z": "95f60c40.6a09f",
+    "x": 323.8958168029785,
+    "y": 608.6389541625977,
+    "z": "54c33433.ab3ccc",
     "wires": [
       [
-        "dba5e086.245a2"
+        "96926a4a.696d98"
       ]
     ]
   },
   {
-    "id": "8e0615bc.71f9e8",
+    "id": "38389365.c7c76c",
     "type": "inject",
     "name": "",
     "topic": "",
@@ -346,35 +276,92 @@
     "repeat": "",
     "crontab": "",
     "once": false,
-    "x": 117,
-    "y": 514,
-    "z": "95f60c40.6a09f",
+    "x": 174.39581298828125,
+    "y": 608.8889465332031,
+    "z": "54c33433.ab3ccc",
     "wires": [
       [
-        "b25b6076.4da4a"
+        "6ee44320.911bbc"
       ]
     ]
   },
   {
-    "id": "dba5e086.245a2",
+    "id": "96926a4a.696d98",
     "type": "debug",
     "name": "",
     "active": true,
     "console": "false",
     "complete": "false",
-    "x": 439.25001525878906,
-    "y": 513.7500076293945,
-    "z": "95f60c40.6a09f",
+    "x": 496.6458282470703,
+    "y": 608.6389541625977,
+    "z": "54c33433.ab3ccc",
     "wires": []
   },
   {
-    "id": "a915c55f.56ea38",
+    "id": "ae338b7f.51cc78",
     "type": "comment",
     "name": "Integration with Ecobee Node Red ---------------------------------------------------------------------------------------",
     "info": "",
-    "x": 369,
-    "y": 474,
-    "z": "95f60c40.6a09f",
+    "x": 426.39581298828125,
+    "y": 568.8889465332031,
+    "z": "54c33433.ab3ccc",
+    "wires": []
+  },
+  {
+    "id": "253cc7c8.dac338",
+    "type": "http in",
+    "name": "",
+    "url": "/freeboard/camera",
+    "method": "get",
+    "swaggerDoc": "",
+    "x": 228.8957977294922,
+    "y": 376.888916015625,
+    "z": "54c33433.ab3ccc",
+    "wires": [
+      [
+        "7351cb12.8cae34"
+      ]
+    ]
+  },
+  {
+    "id": "7351cb12.8cae34",
+    "type": "function",
+    "name": "",
+    "func": "if (msg.payload.token==context.global.FREEBOARD_TOKEN)\n{\n   if(typeof msg.payload.model ==='undefined' || msg.payload.model=='dropcam' || msg.payload.model=='dropcam_pro'){\n   if (typeof msg.payload.cuepoint ==='undefined'){\n   msg.url=\"https://winkapi.quirky.com/cameras/\"+msg.payload.id+\"/image\"\n   msg.method=\"GET\"\n    msg.headers= {\n        \"Authorization\":\"Bearer \"+context.global.WinkToken,\n        \"User-Agent\":\"Manufacturer/Darwin node/0.10.30 Wink/3.6.0\"\n    }\n} else\n{\n    msg.url=\"https://winkapi.quirky.com/cameras/\"+msg.payload.id+\"/cuepoints/\"+msg.payload.cuepoint+\"/image\"\n   msg.method=\"GET\"\n    msg.headers= {\n        \"Authorization\":\"Bearer \"+context.global.WinkToken,\n        \"User-Agent\":\"Manufacturer/Darwin node/0.10.30 Wink/3.6.0\"\n}\n}\nreturn msg;\n}\n}\nif (typeof msg.payload.model!=='undefined' && msg.payload.model=='foscam'){\n//http://timothyr.no-ip.org:1882/videostream.cgi?uid=admin&pwd=Dfdbkjy5\nfor (var k in context.global.FosCam){\n    if (context.global.FosCam[k].Parameters.id.value==msg.payload.id){\n     msg.method=\"GET\"\n     msg.url=\"http://\"+context.global.FosCam[k].hostname+\"/videostream.cgi?user=\"+context.global.FosCam[k].uid+\"&pwd=\"+context.global.FosCam[k].pwd\n     node.warn(msg.url);\n    return msg;\n    }\n}\n}\nelse {\n    msg.res.send(400,\"Bad Request darling\");\n}\n",
+    "outputs": 1,
+    "noerr": 0,
+    "x": 482.8957977294922,
+    "y": 378.888916015625,
+    "z": "54c33433.ab3ccc",
+    "wires": [
+      [
+        "bd0cdb14.42f328"
+      ]
+    ]
+  },
+  {
+    "id": "bd0cdb14.42f328",
+    "type": "http request",
+    "name": "",
+    "method": "use",
+    "ret": "bin",
+    "url": "",
+    "x": 652.8957977294922,
+    "y": 377.888916015625,
+    "z": "54c33433.ab3ccc",
+    "wires": [
+      [
+        "a2e18dc1.5d1e7"
+      ]
+    ]
+  },
+  {
+    "id": "a2e18dc1.5d1e7",
+    "type": "http response",
+    "name": "",
+    "x": 817.8957977294922,
+    "y": 378.888916015625,
+    "z": "54c33433.ab3ccc",
     "wires": []
   }
 ]
