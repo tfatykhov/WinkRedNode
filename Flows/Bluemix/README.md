@@ -1,7 +1,7 @@
 == UPDATE ==
 9/4/2015
 ----------------
-Added support for [Samsung Smart Cameras](http://www.amazon.com/s/ref=nb_sb_noss_1?url=search-alias%3Daps&field-keywords=samsung+smartcam&rh=i%3Aaps%2Ck%3Asamsung+smartcam)
+Added support for [Samsung Smart Cameras](http://www.amazon.com/s/ref=nb_sb_noss_2?url=search-alias%3Daps&field-keywords=samsung+SNH&rh=i%3Aaps%2Ck%3Asamsung+SNH)
 Tested on Samsung SNH-E6440BN.
 
 Several changes required for this camera to work properly<br>
