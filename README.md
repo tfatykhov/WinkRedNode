@@ -1,4 +1,7 @@
 # WinkRedNode
+Updates
+=========================
+Please check [Flows/Bluemix/README.md](Flows/Bluemix/README.md) for latest updates.
 
 This repository explains how to use [Node-RED](http://nodered.org/) and [Freeboard](http://freeboard.io/)
 with the [Wink API](http://docs.wink.apiary.io/) in order to enhance your home automation experience.
