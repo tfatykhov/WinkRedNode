@@ -1,4 +1,25 @@
 == UPDATE ==
+9/4/2015
+----------------
+Added support for [Samsung Smart Cameras](http://www.amazon.com/s/ref=nb_sb_noss_1?url=search-alias%3Daps&field-keywords=samsung+smartcam&rh=i%3Aaps%2Ck%3Asamsung+smartcam)
+Tested on Samsung SNH-E6440BN.
+
+Several changes required for this camera to work properly<br>
+* we need to add "crypto" module to bluemix-setting.json. First you need to add following line to the top section of the file: var crp = require("crypto");<br><br>
+So your first 3 lines in the file  should look like this:<br>
+	<b>var crp = require("crypto");</b><br>
+	var path = require("path");<br>
+	var when = require("when");<rb>
+
+	
+* You also need to update functionGlobalContext section and add following lines<br>
+	,SamsungCam: {<br>
+		"your cam name" : {"hostname":"your external ip:port","private_key":"your samsung cam private key"}<br>
+	             }<br>
+	,CRYPTO: crp<br>
+* open flow editor, add a new tab and import [smartCams.json](smartCams.json)
+* restart your app. You should be able to see your camera feed in all auto-generated dashboards
+
 8/25/2015 (part 2)
 ----------------
 Added support for Foscam FI98XXX cameras (tested on FI9821W V2.1)
