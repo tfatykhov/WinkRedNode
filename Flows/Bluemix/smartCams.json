@@ -1,0 +1,131 @@
+[
+  {
+    "id": "24fb029a.db04fe",
+    "type": "inject",
+    "name": "",
+    "topic": "",
+    "payload": "",
+    "payloadType": "date",
+    "repeat": "86400",
+    "crontab": "",
+    "once": true,
+    "x": 145.89581298828125,
+    "y": 148.88888549804688,
+    "z": "e5f6f0e3.1a091",
+    "wires": [
+      [
+        "f110b7cd.0eef48"
+      ]
+    ]
+  },
+  {
+    "id": "c51e390d.3ae1c8",
+    "type": "function",
+    "name": "generate samsung request url ",
+    "func": "function delay(ms) {\n        var cur_d = new Date();\n        var cur_ticks = cur_d.getTime();\n        var ms_passed = 0;\n        while(ms_passed < ms) {\n            var d = new Date();\n            var ticks = d.getTime();\n            ms_passed = ticks - cur_ticks;\n         }\n    }\n\nif (typeof(context.global.SamsungCam)!=='undefined'){\n for (var key in context.global.SamsungCam)\n {\n    var camera=context.global.SamsungCam[key]\n    newMsg={}\n    newMsg.topic=key\n    newMsg.model='Samsung'\n    newMsg.url='http://'+camera.hostname+'/cgi-bin/video.cgi?msubmenu=jpg&resolution=5'\n    newMsg.method=\"GET\"\n    node.send(newMsg)\n    node.warn(key);\n    delay(5000);\n }\n}",
+    "outputs": 1,
+    "noerr": 0,
+    "x": 561.8956756591797,
+    "y": 148.88888549804688,
+    "z": "e5f6f0e3.1a091",
+    "wires": [
+      [
+        "2b1ad343.d4e52c"
+      ]
+    ]
+  },
+  {
+    "id": "f110b7cd.0eef48",
+    "type": "delay",
+    "name": "",
+    "pauseType": "delay",
+    "timeout": "30",
+    "timeoutUnits": "seconds",
+    "rate": "1",
+    "rateUnits": "second",
+    "randomFirst": "1",
+    "randomLast": "5",
+    "randomUnits": "seconds",
+    "drop": false,
+    "x": 315.8957061767578,
+    "y": 148.88888549804688,
+    "z": "e5f6f0e3.1a091",
+    "wires": [
+      [
+        "c51e390d.3ae1c8"
+      ]
+    ]
+  },
+  {
+    "id": "2b1ad343.d4e52c",
+    "type": "http request",
+    "name": "",
+    "method": "use",
+    "ret": "txt",
+    "url": "",
+    "x": 799.8957977294922,
+    "y": 148.88888549804688,
+    "z": "e5f6f0e3.1a091",
+    "wires": [
+      [
+        "ba7e655f.458198"
+      ]
+    ]
+  },
+  {
+    "id": "e37ebe29.1c814",
+    "type": "function",
+    "name": "Initialize Samsung",
+    "func": "if (msg.statusCode=='200' && msg.headers[\"content-type\"]=='image/jpeg'){\nvar cam_name=msg.topic;\nif(typeof(context.global.winkState.cameras)==='undefined') context.global.winkState.cameras={}\ncontext.global.winkState.cameras[cam_name]={\n \"name\": cam_name,\n\"object_type\": \"cameras\",\n\"object_id\": cam_name.replace(\" \",\"\"),\n\"freeboard\": 0,\n\"manufacturer_device_model\": \"samsung\",\n\"connection\": true,\n\"capturing_audio\": true,\n\"capturing_video\": true,\n\"url\": CamUrl=\"Http://admin:\"+context.global.SamsungCam[cam_name].private_key+\"@\"+context.global.SamsungCam[cam_name].hostname+\"/cgi-bin/video.cgi?msubmenu=mjpg\",\n\"refresh_time\":600,\n\"motion\": \"N/A\"\n}\n}\nreturn;",
+    "outputs": 1,
+    "noerr": 0,
+    "x": 1376.8959197998047,
+    "y": 148.888916015625,
+    "z": "e5f6f0e3.1a091",
+    "wires": [
+      []
+    ]
+  },
+  {
+    "id": "ba7e655f.458198",
+    "type": "function",
+    "name": "check digest auth",
+    "func": "var Auth=msg.headers['www-authenticate'];\nvar AuthArr = Auth.split(',');\nvar AuthJ={}\nfor (var i=0;i<AuthArr.length;i++){\n    var item=AuthArr[i].split('=');\n    AuthJ[item[0].trim()]=item[1].replace('\\\"','').replace('\\\"','')\n}\n\nvar ha1_str=\"admin:\"+AuthJ[\"Digest realm\"]+\":\"+context.global.SamsungCam[msg.topic].private_key;\n//node.warn(ha1_str);\nvar HA1=context.global.CRYPTO.createHash(\"md5\").update(ha1_str,\"utf8\").digest(\"hex\");\nvar HA2=context.global.CRYPTO.createHash(\"md5\").update(\"GET:/cgi-bin/video.cgi?msubmenu=jpg&resolution=5\",\"utf8\").digest(\"hex\");\nvar cnonce=context.global.CRYPTO.randomBytes(8).toString('hex');\nvar nc=\"00001\";\n//node.warn(AuthJ);\nvar str_resp=HA1+\":\"+AuthJ.nonce+\":\"+nc+\":\"+cnonce+\":\"+\"auth\"+\":\"+HA2;\n//node.warn(str_resp);\nvar response = context.global.CRYPTO.createHash(\"md5\").update(str_resp,\"utf8\").digest(\"hex\");\n//node.warn(response);\nvar eol=\" \";\nvar Digest='Digest username=\"admin\",' + eol +\n           'realm=\"' + AuthJ[\"Digest realm\"].trim() + '\",' + eol +\n           'qop=\"' + AuthJ.qop.trim() + '\",' + eol +\n           'algorithm=\"MD5\",' + eol +\n           'uri=\"/cgi-bin/video.cgi?msubmenu=jpg&resolution=5\"'+ ',' +  eol +\n           'nonce=\"' + AuthJ.nonce.trim() + '\",' + eol +\n           'cnonce=\"' + cnonce.trim() + '\",'.trim() + eol +\n           'opaque=\"\",' + eol +\n           'nc=\"' + nc + '\",' + eol +\n           'response=\"' + response + '\"';\n//node.warn(Digest);\ndelete msg.headers\ndelete msg.statusCode;\ndelete msg.payload;\nmsg.headers={}\nmsg.headers.Authorization=Digest;\nreturn msg;",
+    "outputs": 1,
+    "noerr": 0,
+    "x": 985.8959808349609,
+    "y": 148.88888549804688,
+    "z": "e5f6f0e3.1a091",
+    "wires": [
+      [
+        "d19fb65c.2e6048"
+      ]
+    ]
+  },
+  {
+    "id": "d19fb65c.2e6048",
+    "type": "http request",
+    "name": "",
+    "method": "use",
+    "ret": "txt",
+    "url": "",
+    "x": 1169.8959197998047,
+    "y": 148.88888549804688,
+    "z": "e5f6f0e3.1a091",
+    "wires": [
+      [
+        "e37ebe29.1c814"
+      ]
+    ]
+  },
+  {
+    "id": "d9c3d688.263c28",
+    "type": "comment",
+    "name": "------------------------------- Samsung smartcam----------------------------------------------",
+    "info": "",
+    "x": 311.8958282470703,
+    "y": 72.88888549804688,
+    "z": "e5f6f0e3.1a091",
+    "wires": []
+  }
+]
