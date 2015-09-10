@@ -46,20 +46,14 @@ Then click on the "Deploy" button.
 
 ====UPDATE====
 
-[Flows/Bluemix/Bluemix-monitoring.json](Flows/Bluemix/Bluemix-monitoring.json):
+[Flows/Bluemix](Flows/Bluemix/):
 
-works perfectly locally and in the cloud. For local version all you need - port forwarding so your instance can be accessed from outside. This is best option to start with. Other flows below are just starting points that shows you how to use the system.
+All these flows works perfectly locally and in the cloud. For local version all you need - port forwarding so your instance can be accessed from outside. This is best option to start with. Other flows below are just starting points that shows you how to use the system.
 Brian created schedule flow that works with blue mix monitoring - check it here:[Flows/BMeissen Sample Flows](Flows/BMeissen Sample Flows)
 
-1. [Flows/InitializeWinkApi.txt](Flows/InitializeWinkApi.txt):
-this set of flows requests an authorization token from Wink.
-You need to edit GetOAuthTocken function and add your credentials and Wink API key.
-Inject node is configured to run every 24 hours.
-You need to manually start it by clicking on the "start" button of inject node first.
-
-2. [Flows/SampleWebServices.txt](Flows/SampleWebServices.txt):
-this set of flows gives you an example of how other applications communicate with your Node-RED app via Wink's REST API.
-It has a comments node with more details.
+1. [Flows/Bluemix/winkCore.json](Flows/Bluemix/winkCore.json) - core flow that performs initial calls to wink servers in order to get access tocken, list of devices and subscribe itself for status updates from wink as well as other services. It also creates connection to weather api, ifttt, initialstate.com api bassed on your configuration settings. 
+2. [Flows/Bluemix/winkIntegration.json](Flows/Bluemix/winkIntegration.json) - creates entry points for IFTTT/tasker/etc.. 
+3. [Flows/Bluemix/winkFreeboards.json](Flows/Bluemix/winkFreeboards.json) - set of flows to generate freeboard dashboards)
 
 
 ### ... or in the Cloud
