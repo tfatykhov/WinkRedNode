@@ -1,8 +1,3 @@
-# UPDATE
-
-added integration for thermostats that can be switched between 'home' and 'away' modes:
-check section about bluemix-settings.json 
-
 # How to create a cloud instance for Node-RED and Freeboard in the IBM Bluemix cloud
 
 In the text that follows,
