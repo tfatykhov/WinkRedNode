@@ -188,6 +188,7 @@ and replace it with these lines:
                                  }
             , FREEBOARD_TOKEN  : "pseudo-random-string"
             , IFTTT_TOKEN: "your IFTTT secret key"
+            , motionAdjustTstat: true
         },
 
 > Notes: To get an API key for `forecast.io` go [here](https://developer.forecast.io)
