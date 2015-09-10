@@ -218,16 +218,13 @@ If you haven't logged in yet, you will be prompted to enter the username and pas
 
 Once in the editor, click on the three bars in the upper-right hand corner to get the menu,
 select "Import > Clipboard",
-copy the contents of [Flows/Bluemix/Bluemix-Monitoring.json](Flows/Bluemix/Bluemix-Monitoring.json)
+copy the contents of [Flows/Bluemix/winkCore.json](https://github.com/tfatykhov/WinkRedNode/blob/master/Flows/Bluemix/winkCore.json)
 into the pop-up window, and click "OK".
 
 You'll now see the flow hovering where your cursor is -- move your cursor up to the top left corner and then click your mouse - the flow will "deposit" where your cursor is. 
 
-For local install, we have one minior change to make. Scroll down to the "Weather" flow and look for the node "Get Current Weather" -- Double click this node so the editor opens. Around line #6, you should see `context.global.Weather.Offset=` - change it so it equals 0. Since the Weather is being pulled on your local machine, you will get your local time so we do not need to accomodate for the time offset. Your line should now look like this:
-
-> context.global.Weather.Offset=0;
+ Create new tabs using the + symbol, then repeat for [winkFreeboard.json](https://github.com/tfatykhov/WinkRedNode/blob/master/Flows/Bluemix/winkFreeboards.json) and [winkIntegration.json](https://github.com/tfatykhov/WinkRedNode/blob/master/Flows/Bluemix/winkIntegration.json)
 
 Click on "Deploy", then click the "Debug" tab on the right bar. You will see your device names flowing past in the debug window on right side of the screen. You now have Node Red syncronized with your Wink account! 
 
-To start using Freeboard, go to [http://localhost:1880/freeboard](http://localhost:1880/freeboard/),
-and take a look at [README-Freeboard.md](README-Freeboard.md).
+To start using Winkboard, browse to [http://localhost:1880/freeboard/Winkboard](http://localhost:1880/freeboard/Winkboard)
