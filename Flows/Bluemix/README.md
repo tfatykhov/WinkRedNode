@@ -1,4 +1,13 @@
 == UPDATE ==
+9/11/2015
+----------------
+Added support for CloundantDB for bluemix based instances. Planning to store camera images, presence history in case of restarts.
+Required changes:
+* Update bluemix-settings.js and add following line to functionGlobalContext section: <br>
+	,VCAP_SERVICES: JSON.parse(process.env.VCAP_SERVICES)
+* Import updated [winkIntegration.json](winkIntegration.json)
+That is all
+
 9/4/2015
 ----------------
 Added support for [Samsung Smart Cameras](http://www.amazon.com/s/ref=nb_sb_noss_2?url=search-alias%3Daps&field-keywords=samsung+SNH&rh=i%3Aaps%2Ck%3Asamsung+SNH)
