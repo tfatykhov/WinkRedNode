@@ -37,6 +37,7 @@ and finally last line - if you have Foscam Fi89X camera models they also can rep
 * if you have Samsung smartcam - Import  updated [smartCams.json](smartCams.json)
 
 * Resrtat application and test your motion sensors.
+* you can access history by opening freeboard dashboard: <your app name>.mybluemix.net/freeboard/camerahistory
 
 
 
