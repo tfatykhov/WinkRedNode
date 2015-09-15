@@ -1,142 +1,142 @@
 [
   {
-    "id": "57bc09e0.a843f8",
+    "id": "cc6809c.f3397f8",
     "type": "comment",
     "name": "Dynamic freeboard-------------------------------------------------------------------------------------------------------------------------------",
     "info": "",
-    "x": 408,
-    "y": 20,
-    "z": "a6ad1804.5952e8",
+    "x": 431.89581298828125,
+    "y": 45.888885498046875,
+    "z": "a5bd9a7f.5a4268",
     "wires": []
   },
   {
-    "id": "1b428eb4.e4bd71",
+    "id": "d4909d9b.2b6f6",
     "type": "http in",
     "name": "",
     "url": "/red/getFreeboardJson",
     "method": "get",
-    "x": 119,
-    "y": 65,
-    "z": "a6ad1804.5952e8",
+    "x": 142.89581298828125,
+    "y": 90.88888549804688,
+    "z": "a5bd9a7f.5a4268",
     "wires": [
       [
-        "a071487b.5f8eb8"
+        "177cb012.e8835"
       ]
     ]
   },
   {
-    "id": "da7fcd66.25803",
+    "id": "b9631d1f.469ce",
     "type": "http response",
     "name": "",
-    "x": 796.0000152587891,
-    "y": 60,
-    "z": "a6ad1804.5952e8",
+    "x": 766.8958129882812,
+    "y": 91.88888549804688,
+    "z": "a5bd9a7f.5a4268",
     "wires": []
   },
   {
-    "id": "a411ef55.5bee1",
+    "id": "f504ba9f.0afb48",
     "type": "json",
     "name": "",
-    "x": 641.0000152587891,
-    "y": 60,
-    "z": "a6ad1804.5952e8",
+    "x": 599.8958129882812,
+    "y": 90.88888549804688,
+    "z": "a5bd9a7f.5a4268",
     "wires": [
       [
-        "da7fcd66.25803"
+        "b9631d1f.469ce"
       ]
     ]
   },
   {
-    "id": "616a6dba.9e9594",
+    "id": "92b80ba4.6d47f8",
     "type": "template",
     "name": "",
     "field": "",
     "format": "handlebars",
     "template": "<!DOCTYPE html>\n<html>\n<head>\n    <meta charset=\"UTF-8\">\n    <title>Winkboard by Groups</title>\n\t<meta name=\"mobile-web-app-capable\" content=\"yes\">\n    <meta name=\"apple-mobile-web-app-capable\" content=\"yes\" />\n    <meta name=\"apple-mobile-web-app-status-bar-style\" content=\"black\" />\n    <meta name=\"viewport\" content = \"width = device-width, initial-scale = 0.75, user-scalable = yes\" />\n    <link href=\"css/freeboard.min.css\" rel=\"stylesheet\" />\n    <script src=\"js/freeboard.thirdparty.min.js\"></script>\n\t\n    <script type=\"text/javascript\">\n        head.js(\"js/freeboard.js\",\"js/freeboard.plugins.min.js\",\"../freeboard_api/datasources\",\n                \"lib/js/thirdparty/wink.js\",\n\n                // *** Load more plugins here ***\n                function(){\n                    $(function()\n                    { //DOM Ready\n                        freeboard.initialize(true);\n\n                        //var hash = window.location.hash;\n                        //if (hash !== null) {\n                            $.get({{context.global.BlueMixUrlBase}}\"/red/getFreeboardJson?auth={{payload.pwd_str}}\", function(data) {\n\t\t\t\t\t\t\t\tvar datap=JSON.parse(data);\n\t\t\t\t\t\t\t\tif (!datap.empty){\n\t\t\t\t\t\t\t\t\tfreeboard.loadDashboard(datap, function() {\n\t\t\t\t\t\t\t\t\t\tfreeboard.setEditing(false);\n\t\t\t\t\t\t\t\t\t});\n\t\t\t\t\t\t\t\t}\n                            });\n                        //}\n\n                    });\n                });\n    </script>\n</head>\n<body>\n<div id=\"board-content\">\n    <img id=\"dash-logo\" data-bind=\"attr:{src: header_image}, visible:header_image()\">\n    <div class=\"gridster responsive-column-width\">\n        <ul data-bind=\"grid: true\">\n        </ul>\n    </div>\n</div>\n<header id=\"main-header\" data-bind=\"if:allow_edit\">\n    <div id=\"admin-bar\">\n        <div id=\"admin-menu\">\n            <div id=\"board-tools\">\n                <h1 id=\"board-logo\" class=\"title bordered\">freeboard</h1>\n                <div id=\"board-actions\">\n                    <ul class=\"board-toolbar vertical\">\n                        <!--<li data-bind=\"click: loadDashboardFromLocalFile\"><i id=\"full-screen-icon\" class=\"icon-folder-open icon-white\"></i><label id=\"full-screen\">Load Freeboard</label></li>-->\n                        <li data-bind=\"click: saveDashboard\"><i class=\"icon-download-alt icon-white\"></i><label>Save Freeboard</label></li>\n                        <li id=\"add-pane\" data-bind=\"click: createPane\"><i class=\"icon-plus icon-white\"></i><label>Add Pane</label></li>\n                    </ul>\n                </div>\n            </div>\n            <div id=\"datasources\">\n                <h2 class=\"title\">DATASOURCES</h2>\n\n                <div class=\"datasource-list-container\">\n                    <table class=\"table table-condensed sub-table\" id=\"datasources-list\" data-bind=\"if: datasources().length\">\n                        <thead>\n                        <tr>\n                            <th>Name</th>\n                            <th>Last Updated</th>\n                            <th>&nbsp;</th>\n                        </tr>\n                        </thead>\n                        <tbody data-bind=\"foreach: datasources\">\n                        <tr>\n                            <td>\n                                <span class=\"text-button datasource-name\" data-bind=\"text: name, pluginEditor: {operation: 'edit', type: 'datasource'}\"></span>\n                            </td>\n                            <td data-bind=\"text: last_updated\"></td>\n                            <td>\n                                <ul class=\"board-toolbar\">\n                                    <li data-bind=\"click: updateNow\"><i class=\"icon-refresh icon-white\"></i></li>\n                                    <li data-bind=\"pluginEditor: {operation: 'delete', type: 'datasource'}\">\n                                        <i class=\"icon-trash icon-white\"></i></li>\n                                </ul>\n                            </td>\n                        </tr>\n                        </tbody>\n                    </table>\n                </div>\n                <span class=\"text-button table-operation\" data-bind=\"pluginEditor: {operation: 'add', type: 'datasource'}\">ADD</span>\n            </div>\n        </div>\n    </div>\n\t<div id=\"column-tools\" class=\"responsive-column-width\">\n\t\t<ul class=\"board-toolbar left-columns\">\n\t\t\t<li class=\"column-tool add\" data-bind=\"click: addGridColumnLeft\"><span class=\"column-icon right\"></span><i class=\"icon-arrow-left icon-white\"></i></li>\n\t\t\t<li class=\"column-tool sub\" data-bind=\"click: subGridColumnLeft\"><span class=\"column-icon left\"></span><i class=\"icon-arrow-right icon-white\"></i></li>\n\t\t</ul>\n\t\t<ul class=\"board-toolbar right-columns\">\n\t\t\t<li class=\"column-tool sub\" data-bind=\"click: subGridColumnRight\"><span class=\"column-icon right\"></span><i class=\"icon-arrow-left icon-white\"></i></li>\n\t\t\t<li class=\"column-tool add\" data-bind=\"click: addGridColumnRight\"><span class=\"column-icon left\"></span><i class=\"icon-arrow-right icon-white\"></i></li>\n\t\t</ul>\n\t</div>\n    <div id=\"toggle-header\" data-bind=\"click: toggleEditing\">\n        <i id=\"toggle-header-icon\" class=\"icon-wrench icon-white\"></i></div>\n</header>\n\n<div style=\"display:hidden\">\n    <ul data-bind=\"template: { name: 'pane-template', foreach: panes}\">\n    </ul>\n</div>\n\n<script type=\"text/html\" id=\"pane-template\">\n    <li data-bind=\"pane: true\">\n        <header>\n            <h1 data-bind=\"text: title\"></h1>\n            <ul class=\"board-toolbar pane-tools\">\n                <li data-bind=\"pluginEditor: {operation: 'add', type: 'widget'}\">\n                    <i class=\"icon-plus icon-white\"></i>\n                </li>\n                <li data-bind=\"pluginEditor: {operation: 'edit', type: 'pane'}\">\n                    <i class=\"icon-wrench icon-white\"></i>\n                </li>\n                <li data-bind=\"pluginEditor: {operation: 'delete', type: 'pane'}\">\n                    <i class=\"icon-trash icon-white\"></i>\n                </li>\n            </ul>\n        </header>\n        <section data-bind=\"foreach: widgets\">\n            <div class=\"sub-section\" data-bind=\"css: 'sub-section-height-' + height()\">\n                <div class=\"widget\" data-bind=\"widget: true, css:{fillsize:fillSize}\"></div>\n                <div class=\"sub-section-tools\">\n                    <ul class=\"board-toolbar\">\n                        <!-- ko if:$parent.widgetCanMoveUp($data) -->\n                        <li data-bind=\"click:$parent.moveWidgetUp\"><i class=\"icon-chevron-up icon-white\"></i></li>\n                        <!-- /ko -->\n                        <!-- ko if:$parent.widgetCanMoveDown($data) -->\n                        <li data-bind=\"click:$parent.moveWidgetDown\"><i class=\"icon-chevron-down icon-white\"></i></li>\n                        <!-- /ko -->\n                        <li data-bind=\"pluginEditor: {operation: 'edit', type: 'widget'}\"><i class=\"icon-wrench icon-white\"></i></li>\n                        <li data-bind=\"pluginEditor: {operation: 'delete', type: 'widget'}\"><i class=\"icon-trash icon-white\"></i></li>\n                    </ul>\n                </div>\n            </div>\n        </section>\n    </li>\n</script>\n\n</body>\n</html>\n",
-    "x": 747.0000152587891,
-    "y": 127,
-    "z": "a6ad1804.5952e8",
+    "x": 770.8958282470703,
+    "y": 152.88888549804688,
+    "z": "a5bd9a7f.5a4268",
     "wires": [
       [
-        "f7ff8512.080078"
+        "fed662b.f0129a"
       ]
     ]
   },
   {
-    "id": "4af284c.fb50d7c",
+    "id": "9e786f8a.61879",
     "type": "http in",
     "name": "",
     "url": "/freeboard/winkboard",
     "method": "post",
     "swaggerDoc": "",
-    "x": 117,
-    "y": 125,
-    "z": "a6ad1804.5952e8",
+    "x": 140.89581298828125,
+    "y": 150.88888549804688,
+    "z": "a5bd9a7f.5a4268",
     "wires": [
       [
-        "5054e9f5.afab18"
+        "5c1399e0.a3ec68"
       ]
     ]
   },
   {
-    "id": "f7ff8512.080078",
+    "id": "fed662b.f0129a",
     "type": "http response",
     "name": "",
-    "x": 907.0000152587891,
-    "y": 127,
-    "z": "a6ad1804.5952e8",
+    "x": 930.8958282470703,
+    "y": 152.88888549804688,
+    "z": "a5bd9a7f.5a4268",
     "wires": []
   },
   {
-    "id": "4adbcb1d.b52434",
+    "id": "d16f568e.2e90a8",
     "type": "template",
     "name": "",
     "field": "payload",
     "format": "handlebars",
     "template": "<html>\n<head>\n  <meta charset=\"utf-8\">\n  <title>Login Form</title>\n  <meta name=\"viewport\" content=\"width=device-width, initial-scale=1\">\n</head>\n<body>\n    <div class=\"login\">\n      <h1>Login to see Wink Board</h1>\n      <form method=\"post\" action=\"/freeboard/winkboard\">\n        <p><input type=\"text\" name=\"uid\" value=\"\" placeholder=\"Enter Winkapp User name\"></p>\n        <p><input type=\"password\" name=\"pwd\" value=\"\" placeholder=\"Enter Winkapp Password\"></p>\n        <p class=\"submit\"><input type=\"submit\" name=\"commit\" value=\"Login\"></p>\n      </form>\n    </div>\n</body>\n</html>",
-    "x": 328.0000305175781,
-    "y": 193,
-    "z": "a6ad1804.5952e8",
+    "x": 351.8958435058594,
+    "y": 218.88888549804688,
+    "z": "a5bd9a7f.5a4268",
     "wires": [
       [
-        "bb4c4a3a.44b3b8"
+        "f87cafcc.07835"
       ]
     ]
   },
   {
-    "id": "5054e9f5.afab18",
+    "id": "5c1399e0.a3ec68",
     "type": "function",
     "name": "",
     "func": "if (msg.req.body.uid==context.global.WinkUser.uid && msg.req.body.pwd==context.global.WinkUser.pwd){\nmsg.res.statusCode=\"200\";\nmsg.payload={\"pwd_str\":context.global.FREEBOARD_TOKEN}\n} else {\nmsg.res.statusCode=\"403\";\n}\nreturn msg;",
     "outputs": 1,
     "noerr": 0,
-    "x": 326.0000305175781,
-    "y": 124,
-    "z": "a6ad1804.5952e8",
+    "x": 349.8958435058594,
+    "y": 149.88888549804688,
+    "z": "a5bd9a7f.5a4268",
     "wires": [
       [
-        "61b9828a.9e467c"
+        "f944e538.06bb18"
       ]
     ]
   },
   {
-    "id": "90b03810.6f4fc8",
+    "id": "fbc84db3.0437b",
     "type": "http in",
     "name": "",
     "url": "/freeboard/winkboard",
     "method": "get",
     "swaggerDoc": "",
-    "x": 113.5,
-    "y": 193,
-    "z": "a6ad1804.5952e8",
+    "x": 137.39581298828125,
+    "y": 218.88888549804688,
+    "z": "a5bd9a7f.5a4268",
     "wires": [
       [
-        "4adbcb1d.b52434"
+        "d16f568e.2e90a8"
       ]
     ]
   },
   {
-    "id": "61b9828a.9e467c",
+    "id": "f944e538.06bb18",
     "type": "switch",
     "name": "",
     "property": "res.statusCode",
@@ -152,253 +152,253 @@
     ],
     "checkall": "true",
     "outputs": 2,
-    "x": 488.00001525878906,
-    "y": 125,
-    "z": "a6ad1804.5952e8",
+    "x": 511.8958282470703,
+    "y": 150.88888549804688,
+    "z": "a5bd9a7f.5a4268",
     "wires": [
       [
-        "616a6dba.9e9594"
+        "92b80ba4.6d47f8"
       ],
       [
-        "20d3f994.df2c06"
+        "12762c4c.ed89d4"
       ]
     ]
   },
   {
-    "id": "bb4c4a3a.44b3b8",
+    "id": "f87cafcc.07835",
     "type": "http response",
     "name": "",
-    "x": 505.00001525878906,
-    "y": 194,
-    "z": "a6ad1804.5952e8",
+    "x": 528.8958282470703,
+    "y": 219.88888549804688,
+    "z": "a5bd9a7f.5a4268",
     "wires": []
   },
   {
-    "id": "5d8a5b6d.a275a4",
+    "id": "f1db5bf9.0e24a8",
     "type": "http response",
     "name": "",
-    "x": 911.0000152587891,
-    "y": 169,
-    "z": "a6ad1804.5952e8",
+    "x": 934.8958282470703,
+    "y": 194.88888549804688,
+    "z": "a5bd9a7f.5a4268",
     "wires": []
   },
   {
-    "id": "20d3f994.df2c06",
+    "id": "12762c4c.ed89d4",
     "type": "template",
     "name": "",
     "field": "payload",
     "format": "handlebars",
     "template": "<html>\n  <head>\n    <title>Invalid login</title>\n    <META http-equiv=\"refresh\" content=\"3;URL=/freeboard/winkboard\">\n  </head>\n <body bgcolor=\"#ffffff\">\n    <center>Invalid user Id or Password</a>\n    </center>\n  </body>\n\n</html>",
-    "x": 749.0000152587891,
-    "y": 169,
-    "z": "a6ad1804.5952e8",
+    "x": 772.8958282470703,
+    "y": 194.88888549804688,
+    "z": "a5bd9a7f.5a4268",
     "wires": [
       [
-        "5d8a5b6d.a275a4"
+        "f1db5bf9.0e24a8"
       ]
     ]
   },
   {
-    "id": "e666d146.19993",
+    "id": "753e1f0e.8ac1e",
     "type": "http response",
     "name": "",
-    "x": 899.5000152587891,
-    "y": 254.5,
-    "z": "a6ad1804.5952e8",
+    "x": 923.3958282470703,
+    "y": 280.3888854980469,
+    "z": "a5bd9a7f.5a4268",
     "wires": []
   },
   {
-    "id": "ecdbc27f.13244",
+    "id": "59b8b5bb.a6474c",
     "type": "template",
     "name": "",
     "field": "",
     "template": "<html>\n<head>\n<style>\n#wrapper { width: 1970px; height: 1080px; padding: 0; overflow: hidden; }\n#scaled-frame { width: 2800px; height: 2400px; border: 0px; color:black; }\n#scaled-frame {\n    zoom: 0.71;\n    -moz-transform: scale(0.71);\n    -moz-transform-origin: 0 0;\n    -o-transform: scale(0.71);\n    -o-transform-origin: 0 0;\n    -webkit-transform: scale(0.71);\n    -webkit-transform-origin: 0 0;\n}\n\n@media screen and (-webkit-min-device-pixel-ratio:0) {\n #scaled-frame  { zoom: 1;  }\n}\n</style>\n</head>\n<body>\n    <div id=\"wrapper\">\n    <iframe id=\"scaled-frame\" width=100% height=100% src=\"freeboard/winkboardautogroup\"> \n    </iframe>\n    </div>\n</body>\n</html>\n    ",
-    "x": 749.5000152587891,
-    "y": 254.5,
-    "z": "a6ad1804.5952e8",
+    "x": 773.3958282470703,
+    "y": 280.3888854980469,
+    "z": "a5bd9a7f.5a4268",
     "wires": [
       [
-        "e666d146.19993"
+        "753e1f0e.8ac1e"
       ]
     ]
   },
   {
-    "id": "e77cac24.18835",
+    "id": "fd51cb37.02ae38",
     "type": "http in",
     "name": "",
     "url": "/scaledwinkboard",
     "method": "get",
     "swaggerDoc": "",
-    "x": 548.5000152587891,
-    "y": 254.5,
-    "z": "a6ad1804.5952e8",
+    "x": 572.3958282470703,
+    "y": 280.3888854980469,
+    "z": "a5bd9a7f.5a4268",
     "wires": [
       [
-        "ecdbc27f.13244"
+        "59b8b5bb.a6474c"
       ]
     ]
   },
   {
-    "id": "a071487b.5f8eb8",
+    "id": "177cb012.e8835",
     "type": "function",
     "name": "Generate Freeboard",
     "func": "if (msg.payload.auth==context.global.FREEBOARD_TOKEN){\nvar pane_idx = {};\nvar freeboard = {}\nfreeboard.version=\"1\";\nfreeboard.allow_edit=false;\nfreeboard.panes=[];\nfreeboard.plugins= [];\nvar i=0;\n\nfreeboard.panes.push(  {\n                \"title\":\"Time\",\n                \"width\": 1,\n                \"row\": {\n                    \"3\": 1\n                },\n                \"col\": {\n                    \"3\": 1\n                },\n                \"col_width\": 1,\n                widgets:[]\n            });\n            pane_idx.time=i;\n            pane_id=i;\n            i++;\n\nfreeboard.panes[pane_id].widgets.push(\n        {\n          \"type\": \"text_widget\",\n          \"settings\": {\n            \"size\": \"regular\",\n            \"value\": \"datasources[\\\"My Clock\\\"][\\\"time_string_value\\\"]\",\n            \"animate\": true\n          }\n        })\nif (typeof context.global.Weather.SunsetHour !== 'undefined')\n{\n   freeboard.panes[pane_id].widgets.push(\n{\n    \"type\": \"text_widget\",\n    \"settings\": {\n        \"title\":\"Sunrise - Sunset\",\n        \"value\":\"datasources[\\\"Node-Red\\\"][\\\"WeatherData\\\"][\\\"SunriseHour\\\"] +\\\":\\\" +(datasources[\\\"Node-Red\\\"][\\\"WeatherData\\\"][\\\"SunriseMin\\\"] <10 ? \\\"0\\\"+ datasources[\\\"Node-Red\\\"][\\\"WeatherData\\\"][\\\"SunriseMin\\\"] : datasources[\\\"Node-Red\\\"][\\\"WeatherData\\\"][\\\"SunriseMin\\\"]) + \\\" AM - \\\" + (datasources[\\\"Node-Red\\\"][\\\"WeatherData\\\"][\\\"SunsetHour\\\"] <=12 ? datasources[\\\"Node-Red\\\"][\\\"WeatherData\\\"][\\\"SunsetHour\\\"] : datasources[\\\"Node-Red\\\"][\\\"WeatherData\\\"][\\\"SunsetHour\\\"]-12) + \\\":\\\"+(datasources[\\\"Node-Red\\\"][\\\"WeatherData\\\"][\\\"SunsetMin\\\"]<10 ? \\\"0\\\" + datasources[\\\"Node-Red\\\"][\\\"WeatherData\\\"][\\\"SunsetMin\\\"] : datasources[\\\"Node-Red\\\"][\\\"WeatherData\\\"][\\\"SunsetMin\\\"])+\\\" PM\\\"\",\n        \"size\":\"regular\",\n        \"animate\":\"true\"\n    }\n}) \n}\n\n\nif (typeof context.global.Weather.WeatherSummary!== 'undefined')\n{\nfreeboard.panes.push(  {\n                \"title\":\"Weather\",\n                \"width\": 1,\n                \"row\": {\n                    \"3\": 1\n                },\n                \"col\": {\n                    \"3\": 1\n                },\n                \"col_width\": 1,\n                widgets:[]\n            });\n            pane_idx.weather=i;\n            pane_id=i;\n            i++;\nfreeboard.panes[pane_id].widgets.push(\n{\n    \"type\": \"text_widget\",\n    \"settings\": {\n        \"title\":\"Current state\",\n        \"value\":\"datasources[\\\"Node-Red\\\"][\\\"WeatherData\\\"][\\\"WeatherSummary\\\"]\",\n        \"size\":\"regular\",\n        \"animate\":\"true\"\n    }\n})\nfreeboard.panes[pane_id].widgets.push(\n{\n    \"type\": \"text_widget\",\n    \"settings\": {\n        \"title\":\"Temperature\",\n        \"value\":\"Math.round((datasources[\\\"Node-Red\\\"][\\\"WeatherData\\\"][\\\"outsideTemp\\\"]-32)*5/9)+ \\\"C / \\\"+ Math.round(datasources[\\\"Node-Red\\\"][\\\"WeatherData\\\"][\\\"outsideTemp\\\"]) + \\\"F\\\"\",   \n        \"size\":\"regular\",\n        \"animate\":\"true\"\n    }\n})\nfreeboard.panes[pane_id].widgets.push(\n{\n    \"type\": \"text_widget\",\n    \"settings\": {\n        \"title\":\"Humidity\",\n        \"value\":\"Math.round(datasources[\\\"Node-Red\\\"][\\\"WeatherData\\\"][\\\"HumidityOutside\\\"]*100)+ \\\"%\\\"\",   \n        \"size\":\"regular\",\n        \"animate\":\"true\"\n    }\n})\nfreeboard.panes[pane_id].widgets.push(\n{\n    \"type\": \"text_widget\",\n    \"settings\": {\n        \"title\":\"Cloud Cover\",\n        \"value\":\"datasources[\\\"Node-Red\\\"][\\\"WeatherData\\\"][\\\"CloudCover\\\"]+ \\\"%\\\"\",   \n        \"size\":\"regular\",\n        \"animate\":\"true\"\n    }\n})\n}\n\n \n\nfor (var key in context.global.winkState.cameras){\n   if( typeof pane_idx.cameras !=='undefined') \n        {\n            pane_id=pane_idx.cameras; //motion\n        } else\n        {\n            freeboard.panes.push(  {\n                \"title\":\"Cameras\",\n                \"width\": 1,\n                \"row\": {\n                    \"3\": 1\n                },\n                \"col\": {\n                    \"3\": 1\n                },\n                \"col_width\": 1,\n                widgets:[]\n            });\n            pane_idx.cameras=i;\n            pane_id=i;\n            i++;\n        }\n                freeboard.panes[pane_id].widgets.push(\n                 {\n                     \"type\": \"indicator\",\n                     \"settings\": \n                      {\n                          \"title\":key ,\n                          \"value\":\"wink.indicator.value(datasources[\\\"Node-Red\\\"] && datasources[\\\"Node-Red\\\"][\\\"WinkData\\\"][\\\"cameras\\\"][\\\"\" + key + \"\\\"])\",\n                          \"on_text\":\"wink.indicator.on_text(datasources[\\\"Node-Red\\\"] && datasources[\\\"Node-Red\\\"][\\\"WinkData\\\"][\\\"cameras\\\"][\\\"\" + key + \"\\\"])\",\n                          \"off_text\":\"wink.indicator.off_text(datasources[\\\"Node-Red\\\"] && datasources[\\\"Node-Red\\\"][\\\"WinkData\\\"][\\\"cameras\\\"][\\\"\" + key + \"\\\"])\",\n                          \"style_element\":\"wink.indicator.style_element(datasources[\\\"Node-Red\\\"] && datasources[\\\"Node-Red\\\"][\\\"WinkData\\\"][\\\"cameras\\\"][\\\"\" + key + \"\\\"])\"\n                      }\n                 })\n     freeboard.panes[pane_id].widgets.push(             \n                {\n          \"type\": \"picture\",\n          \"settings\": {\n          \"src\": context.global.winkState.cameras[key].url,\n          \"refresh\": context.global.winkState.cameras[key].refresh_time\n          }\n        })\n    }\n\nfor (var key in context.global.winkState.sensor_pods)\n{\n    //  node.warn(key+\" \"+ context.global.winkDevCap[key].sensor_types)\n    //pane_id=4;\n    if (typeof context.global.winkState.sensor_pods[key].motion !== 'undefined') \n    { \n        if( typeof pane_idx.motion !=='undefined') \n        {\n            pane_id=pane_idx.motion; //motion\n        } else\n        {\n            freeboard.panes.push(  {\n                \"title\":\"Motion Sensors\",\n                \"width\": 1,\n                \"row\": {\n                    \"3\": 1\n                },\n                \"col\": {\n                    \"3\": 1\n                },\n                \"col_width\": 1,\n                widgets:[]\n            });\n            pane_idx.motion=i;\n            pane_id=i;\n            i++;\n        }\n    } else if (typeof context.global.winkState.sensor_pods[key].opened !== 'undefined') \n    {\n        if( typeof pane_idx.trippers !=='undefined') \n        {\n            pane_id=pane_idx.trippers; //motion\n        } else\n        {\n            freeboard.panes.push(  {\n                \"title\":\"Trippers\",\n                \"width\": 1,\n                \"row\": {\n                    \"3\": 1\n                },\n                \"col\": {\n                    \"3\": 1\n                },\n                \"col_width\": 1,\n                widgets:[]\n            });\n            pane_idx.trippers=i;\n            pane_id=i;\n            i++;\n        }\n\n    } else\n    {\n        //other sensors pane\n        if( typeof pane_idx.other !=='undefined') \n        {\n            pane_id=pane_idx.other; //motion\n        } else\n        {\n            freeboard.panes.push(  {\n                \"title\":\"Multi Sensors\",\n                \"width\": 1,\n                \"row\": {\n                    \"3\": 1\n                },\n                \"col\": {\n                    \"3\": 1\n                },\n                \"col_width\": 1,\n                widgets:[]\n            });\n            pane_idx.other=i;\n            pane_id=i;\n            i++;\n        }\n    }\n    if(context.global.winkDevCap[key].sensor_types)\n    {\n        for (s=0; s<context.global.winkDevCap[key].sensor_types.length;s++)\n        {\n            var field=context.global.winkDevCap[key].sensor_types[s].field\n            if( context.global.winkState.sensor_pods[key][field] !== null)\n            {\n                freeboard.panes[pane_id].widgets.push(\n                 {\n                     \"type\": \"indicator\",\n                     \"settings\": \n                      {\n                          \"title\":key + \" \" + field.replace(\"_\",\" \").replace(/opened|detected|motion|state/,\"\"),\n                          \"value\":\"wink.indicator.value(datasources[\\\"Node-Red\\\"] && datasources[\\\"Node-Red\\\"][\\\"WinkData\\\"][\\\"sensor_pods\\\"][\\\"\" + key + \"\\\"],\\\"\" + field +\"\\\")\",\n                          \"on_text\":\"wink.indicator.on_text(datasources[\\\"Node-Red\\\"] && datasources[\\\"Node-Red\\\"][\\\"WinkData\\\"][\\\"sensor_pods\\\"][\\\"\" + key + \"\\\"],\\\"\" + field +\"\\\")\",\n                          \"off_text\":\"wink.indicator.off_text(datasources[\\\"Node-Red\\\"] && datasources[\\\"Node-Red\\\"][\\\"WinkData\\\"][\\\"sensor_pods\\\"][\\\"\" + key + \"\\\"],\\\"\" + field +\"\\\")\",\n                          \"style_element\":\"wink.indicator.style_element(datasources[\\\"Node-Red\\\"] && datasources[\\\"Node-Red\\\"][\\\"WinkData\\\"][\\\"sensor_pods\\\"][\\\"\" + key + \"\\\"],\\\"\" + field +\"\\\")\"\n                      }\n                 })\n            }\n      }\n   }\n} //end sensor pods\n//i=0;\nfor (var key in context.global.winkState.binary_switches)\n{\n    if( typeof pane_idx.lights !=='undefined') \n    {\n        pane_id=pane_idx.lights; //motion\n    } else\n    {\n        freeboard.panes.push(  {\n            \"title\":\"Lights and Switches\",\n            \"width\": 1,\n            \"row\": {\n                \"3\": 1\n            },\n            \"col\": {\n                \"3\": 1\n            },\n            \"col_width\": 1,\n            widgets:[]\n        });\n        pane_idx.lights=i;\n        pane_id=i;\n        i++;\n    }\n  \n    freeboard.panes[pane_id].widgets.push(\n    {\n    \"type\": \"indicator\",\n    \"settings\": {\n        \"title\":key,\n        \"value\":\"wink.indicator.value(datasources[\\\"Node-Red\\\"] && datasources[\\\"Node-Red\\\"][\\\"WinkData\\\"][\\\"binary_switches\\\"][\\\"\" + key + \"\\\"])\",\n        \"on_text\":\"wink.indicator.on_text(datasources[\\\"Node-Red\\\"] && datasources[\\\"Node-Red\\\"][\\\"WinkData\\\"][\\\"binary_switches\\\"][\\\"\" + key + \"\\\"])\",\n        \"off_text\":\"wink.indicator.off_text(datasources[\\\"Node-Red\\\"] && datasources[\\\"Node-Red\\\"][\\\"WinkData\\\"][\\\"binary_switches\\\"][\\\"\" + key + \"\\\"])\",\n        \"style_element\":\"wink.indicator.style_element(datasources[\\\"Node-Red\\\"] && datasources[\\\"Node-Red\\\"][\\\"WinkData\\\"][\\\"binary_switches\\\"][\\\"\" + key + \"\\\"])\"\n    }\n})\n}// end bin switches\n\nfor (var key in context.global.winkState.light_bulbs)\n{\n    if( typeof pane_idx.lights !=='undefined') \n    {\n        pane_id=pane_idx.lights; //motion\n    } else\n    {\n        freeboard.panes.push(  {\n            \"title\":\"Lights and Switches\",\n            \"width\": 1,\n            \"row\": {\n                \"3\": 1\n            },\n            \"col\": {\n                \"3\": 1\n            },\n            \"col_width\": 1,\n            widgets:[]\n        });\n        pane_idx.lights=i;\n        pane_id=i;\n        i++;\n    }\n    freeboard.panes[pane_id].widgets.push(\n    {\n        \"type\": \"indicator\",\n        \"settings\": {\n            \"title\":key,\n            \"value\":\"wink.indicator.value(datasources[\\\"Node-Red\\\"] && datasources[\\\"Node-Red\\\"][\\\"WinkData\\\"][\\\"light_bulbs\\\"][\\\"\" + key + \"\\\"])\",\n            \"on_text\":\"wink.indicator.on_text(datasources[\\\"Node-Red\\\"] && datasources[\\\"Node-Red\\\"][\\\"WinkData\\\"][\\\"light_bulbs\\\"][\\\"\" + key + \"\\\"])\",\n            \"off_text\":\"wink.indicator.off_text(datasources[\\\"Node-Red\\\"] && datasources[\\\"Node-Red\\\"][\\\"WinkData\\\"][\\\"light_bulbs\\\"][\\\"\" + key + \"\\\"])\",\n            \"style_element\":\"wink.indicator.style_element(datasources[\\\"Node-Red\\\"] && datasources[\\\"Node-Red\\\"][\\\"WinkData\\\"][\\\"light_bulbs\\\"][\\\"\" + key + \"\\\"])\"\n        }\n    })\n} // end light bulbs\n\nfor (var key in context.global.winkState.powerstrips)\n{\n    if( typeof pane_idx.powerstrips !=='undefined') \n    {\n        pane_id=pane_idx.powerstrips; //motion\n    } else\n    {\n        freeboard.panes.push(  {\n            \"title\":\"Powerstrips\",\n            \"width\": 1,\n            \"row\": {\n                \"3\": 1\n            },\n            \"col\": {\n                \"3\": 1\n            },\n            \"col_width\": 1,\n            widgets:[]\n        });\n        pane_idx.powerstrips=i;\n        pane_id=i;\n        i++;\n    }\n    if (typeof context.global.winkState.powerstrips[key].powered !== 'undefined'){\n    freeboard.panes[pane_id].widgets.push(\n    {\n        \"type\": \"indicator\",\n        \"settings\": {\n            \"title\":key,\n            \"value\":\"wink.indicator.value(datasources[\\\"Node-Red\\\"] && datasources[\\\"Node-Red\\\"][\\\"WinkData\\\"][\\\"powerstrips\\\"][\\\"\" + key + \"\\\"])\",\n            \"on_text\":\"wink.indicator.on_text(datasources[\\\"Node-Red\\\"] && datasources[\\\"Node-Red\\\"][\\\"WinkData\\\"][\\\"powerstrips\\\"][\\\"\" + key + \"\\\"])\",\n            \"off_text\":\"wink.indicator.off_text(datasources[\\\"Node-Red\\\"] && datasources[\\\"Node-Red\\\"][\\\"WinkData\\\"][\\\"powerstrips\\\"][\\\"\" + key + \"\\\"])\",\n            \"style_element\":\"wink.indicator.style_element(datasources[\\\"Node-Red\\\"] && datasources[\\\"Node-Red\\\"][\\\"WinkData\\\"][\\\"powerstrips\\\"][\\\"\" + key + \"\\\"])\"\n        }\n    })\n    }\n} // end light bulbs\n\nfor (var key in context.global.winkState.locks)\n{\n    if( typeof pane_idx.locks !=='undefined') \n    {\n        pane_id=pane_idx.locks; //motion\n    } else\n    {\n        freeboard.panes.push(  {\n            \"title\":\"Locks\",\n            \"width\": 1,\n            \"row\": {\n                \"3\": 1\n            },\n            \"col\": {\n                \"3\": 1\n            },\n            \"col_width\": 1,\n            widgets:[]\n        });\n        pane_idx.locks=i;\n        pane_id=i;\n        i++;\n    }\n    freeboard.panes[pane_id].widgets.push(\n{\n    \"type\": \"indicator\",\n    \"settings\": {\n        \"title\":key,\n        \"value\":\"wink.indicator.value(datasources[\\\"Node-Red\\\"] && datasources[\\\"Node-Red\\\"][\\\"WinkData\\\"][\\\"locks\\\"][\\\"\" + key + \"\\\"])\",\n        \"on_text\":\"wink.indicator.on_text(datasources[\\\"Node-Red\\\"] && datasources[\\\"Node-Red\\\"][\\\"WinkData\\\"][\\\"locks\\\"][\\\"\" + key + \"\\\"])\",\n        \"off_text\":\"wink.indicator.off_text(datasources[\\\"Node-Red\\\"] && datasources[\\\"Node-Red\\\"][\\\"WinkData\\\"][\\\"locks\\\"][\\\"\" + key + \"\\\"])\",\n        \"style_element\":\"wink.indicator.style_element(datasources[\\\"Node-Red\\\"] && datasources[\\\"Node-Red\\\"][\\\"WinkData\\\"][\\\"locks\\\"][\\\"\" + key + \"\\\"])\"\n    }\n})\n    if (typeof context.global.winkState.locks[key].battery !== 'undefined')\n    {\n        freeboard.panes[pane_id].widgets.push(\n{\n    \"type\": \"indicator\",\n    \"settings\": {\n        \"title\":key + \" battery\",\n        \"value\":\"wink.indicator.value(datasources[\\\"Node-Red\\\"] && datasources[\\\"Node-Red\\\"][\\\"WinkData\\\"][\\\"locks\\\"][\\\"\" + key + \"\\\"],\\\"battery\\\")\",\n        \"on_text\":\"wink.indicator.on_text(datasources[\\\"Node-Red\\\"] && datasources[\\\"Node-Red\\\"][\\\"WinkData\\\"][\\\"locks\\\"][\\\"\" + key + \"\\\"],\\\"battery\\\")\",\n        \"off_text\":\"wink.indicator.off_text(datasources[\\\"Node-Red\\\"] && datasources[\\\"Node-Red\\\"][\\\"WinkData\\\"][\\\"locks\\\"][\\\"\" + key + \"\\\"],\\\"battery\\\")\",\n        \"style_element\":\"wink.indicator.style_element(datasources[\\\"Node-Red\\\"] && datasources[\\\"Node-Red\\\"][\\\"WinkData\\\"][\\\"locks\\\"][\\\"\" + key + \"\\\"],\\\"battery\\\")\"\n    }\n})\n}\n} //end locks\nfor (var key in context.global.winkState.smoke_detectors)\n{\n    if( typeof pane_idx.smoke !=='undefined') \n    {\n        pane_id=pane_idx.smoke; //motion\n    } else\n    {\n        freeboard.panes.push(  {\n            \"title\":\"Smoke Detectors\",\n            \"width\": 1,\n            \"row\": {\n                \"3\": 1\n            },\n            \"col\": {\n                \"3\": 1\n            },\n            \"col_width\": 1,\n            widgets:[]\n        });\n        pane_idx.smoke=i;\n        pane_id=i;\n        i++;\n    }\n    freeboard.panes[pane_id].widgets.push(\n{\n    \"type\": \"indicator\",\n    \"settings\": {\n        \"title\":key + (context.global.winkState.smoke_detectors[key].connection ? \" Smoke\" : \" Offline\"),\n        \"value\":\"wink.indicator.value(datasources[\\\"Node-Red\\\"] && datasources[\\\"Node-Red\\\"][\\\"WinkData\\\"][\\\"smoke_detectors\\\"][\\\"\" + key + \"\\\"],\\\"smoke_detected\\\")\",\n        \"on_text\":\"wink.indicator.on_text(datasources[\\\"Node-Red\\\"] && datasources[\\\"Node-Red\\\"][\\\"WinkData\\\"][\\\"smoke_detectors\\\"][\\\"\" + key + \"\\\"],\\\"smoke_detected\\\")\",\n        \"off_text\":\"wink.indicator.off_text(datasources[\\\"Node-Red\\\"] && datasources[\\\"Node-Red\\\"][\\\"WinkData\\\"][\\\"smoke_detectors\\\"][\\\"\" + key + \"\\\"],\\\"smoke_detected\\\")\",\n        \"style_element\":\"wink.indicator.style_element(datasources[\\\"Node-Red\\\"] && datasources[\\\"Node-Red\\\"][\\\"WinkData\\\"][\\\"smoke_detectors\\\"][\\\"\" + key + \"\\\"],\\\"smoke_detected\\\")\"\n    }\n})\n    \n    freeboard.panes[pane_id].widgets.push(\n{\n    \"type\": \"indicator\",\n    \"settings\": {\n        \"title\":key + (context.global.winkState.smoke_detectors[key].connection ? \" CO2\" : \" Offline\"),\n        \"value\":\"wink.indicator.value(datasources[\\\"Node-Red\\\"] && datasources[\\\"Node-Red\\\"][\\\"WinkData\\\"][\\\"smoke_detectors\\\"][\\\"\" + key + \"\\\"],\\\"co_detected\\\")\",\n        \"on_text\":\"wink.indicator.on_text(datasources[\\\"Node-Red\\\"] && datasources[\\\"Node-Red\\\"][\\\"WinkData\\\"][\\\"smoke_detectors\\\"][\\\"\" + key + \"\\\"],\\\"co_detected\\\")\",\n        \"off_text\":\"wink.indicator.off_text(datasources[\\\"Node-Red\\\"] && datasources[\\\"Node-Red\\\"][\\\"WinkData\\\"][\\\"smoke_detectors\\\"][\\\"\" + key + \"\\\"],\\\"co_detected\\\")\",\n        \"style_element\":\"wink.indicator.style_element(datasources[\\\"Node-Red\\\"] && datasources[\\\"Node-Red\\\"][\\\"WinkData\\\"][\\\"smoke_detectors\\\"][\\\"\" + key + \"\\\"],\\\"co_detected\\\")\"\n    }\n})\nif (typeof context.global.winkState.smoke_detectors[key].battery !== 'undefined')\n    {\n        freeboard.panes[pane_id].widgets.push(\n{\n    \"type\": \"indicator\",\n    \"settings\": {\n        \"title\":key + \" battery\",\n        \"value\":\"wink.indicator.value(datasources[\\\"Node-Red\\\"] && datasources[\\\"Node-Red\\\"][\\\"WinkData\\\"][\\\"smoke_detectors\\\"][\\\"\" + key + \"\\\"],\\\"battery\\\")\",\n        \"on_text\":\"wink.indicator.on_text(datasources[\\\"Node-Red\\\"] && datasources[\\\"Node-Red\\\"][\\\"WinkData\\\"][\\\"smoke_detectors\\\"][\\\"\" + key + \"\\\"],\\\"battery\\\")\",\n        \"off_text\":\"wink.indicator.off_text(datasources[\\\"Node-Red\\\"] && datasources[\\\"Node-Red\\\"][\\\"WinkData\\\"][\\\"smoke_detectors\\\"][\\\"\" + key + \"\\\"],\\\"battery\\\")\",\n        \"style_element\":\"wink.indicator.style_element(datasources[\\\"Node-Red\\\"] && datasources[\\\"Node-Red\\\"][\\\"WinkData\\\"][\\\"smoke_detectors\\\"][\\\"\" + key + \"\\\"],\\\"battery\\\")\"\n    }\n})\n}\n} //end smoke detectors\n\nfor (var key in context.global.winkState.thermostats)\n{\n    if( typeof pane_idx.tstats !=='undefined') \n    {\n        pane_id=pane_idx.tstats; //motion\n    } else\n    {\n        freeboard.panes.push(  {\n            \"title\":\"Thermostats\",\n            \"width\": 1,\n            \"row\": {\n                \"3\": 1\n            },\n            \"col\": {\n                \"3\": 1\n            },\n            \"col_width\": 1,\n            widgets:[]\n        });\n        pane_idx.tstats=i;\n        pane_id=i;\n        i++;\n    }\n    if (context.global.winkState.thermostats[key].max_set_point>0){\n    freeboard.panes[pane_id].widgets.push(\n{\n    \"type\": \"indicator\",\n    \"settings\": {\n        \"title\":key,\n        \"value\":\"wink.indicator.value(datasources[\\\"Node-Red\\\"] && datasources[\\\"Node-Red\\\"][\\\"WinkData\\\"][\\\"thermostats\\\"][\\\"\" + key + \"\\\"],\\\"mode\\\")\",\n        \"on_text\":\"wink.indicator.on_text(datasources[\\\"Node-Red\\\"] && datasources[\\\"Node-Red\\\"][\\\"WinkData\\\"][\\\"thermostats\\\"][\\\"\" + key + \"\\\"],\\\"mode\\\")\",\n        \"off_text\":\"wink.indicator.off_text(datasources[\\\"Node-Red\\\"] && datasources[\\\"Node-Red\\\"][\\\"WinkData\\\"][\\\"thermostats\\\"][\\\"\" + key + \"\\\"],\\\"mode\\\")\",\n        \"style_element\":\"wink.indicator.style_element(datasources[\\\"Node-Red\\\"] && datasources[\\\"Node-Red\\\"][\\\"WinkData\\\"][\\\"thermostats\\\"][\\\"\" + key + \"\\\"],\\\"mode\\\")\"\n    }\n})}\n\n//if (typeof context.global.winkState.thermostats[key].users_away !== 'undefined')\n//    {\nfreeboard.panes[pane_id].widgets.push(\n{\n    \"type\": \"indicator\",\n    \"settings\": {\n        \"title\":key+\" Current temperature\",\n        \"value\":\"wink.indicator.value(datasources[\\\"Node-Red\\\"] && datasources[\\\"Node-Red\\\"][\\\"WinkData\\\"][\\\"thermostats\\\"][\\\"\" + key + \"\\\"],\\\"temperature\\\")\",\n        \"on_text\":\"wink.indicator.on_text(datasources[\\\"Node-Red\\\"] && datasources[\\\"Node-Red\\\"][\\\"WinkData\\\"][\\\"thermostats\\\"][\\\"\" + key + \"\\\"],\\\"temperature\\\")\",\n        \"off_text\":\"wink.indicator.off_text(datasources[\\\"Node-Red\\\"] && datasources[\\\"Node-Red\\\"][\\\"WinkData\\\"][\\\"thermostats\\\"][\\\"\" + key + \"\\\"],\\\"temperature\\\")\",\n        \"style_element\":\"wink.indicator.style_element(datasources[\\\"Node-Red\\\"] && datasources[\\\"Node-Red\\\"][\\\"WinkData\\\"][\\\"thermostats\\\"][\\\"\" + key + \"\\\"],\\\"temperature\\\")\"\n    }\n})\n//}\n} //end thermostats\n\nfor (var key in context.global.winkState.air_conditioners)\n{\n    if( typeof pane_idx.air_con !=='undefined') \n    {\n        pane_id=pane_idx.air_con; //motion\n    } else\n    {\n        freeboard.panes.push(  {\n            \"title\":\"Air Conditioners\",\n            \"width\": 1,\n            \"row\": {\n                \"3\": 1\n            },\n            \"col\": {\n                \"3\": 1\n            },\n            \"col_width\": 1,\n            widgets:[]\n        });\n        pane_idx.air_con=i;\n        pane_id=i;\n        i++;\n    }\n    freeboard.panes[pane_id].widgets.push(\n{\n    \"type\": \"indicator\",\n    \"settings\": {\n        \"title\":key,\n        \"value\":\"wink.indicator.value(datasources[\\\"Node-Red\\\"] && datasources[\\\"Node-Red\\\"][\\\"WinkData\\\"][\\\"air_conditioners\\\"][\\\"\" + key + \"\\\"])\",\n        \"on_text\":\"wink.indicator.on_text(datasources[\\\"Node-Red\\\"] && datasources[\\\"Node-Red\\\"][\\\"WinkData\\\"][\\\"air_conditioners\\\"][\\\"\" + key + \"\\\"])\",\n        \"off_text\":\"wink.indicator.off_text(datasources[\\\"Node-Red\\\"] && datasources[\\\"Node-Red\\\"][\\\"WinkData\\\"][\\\"air_conditioners\\\"][\\\"\" + key + \"\\\"])\",\n        \"style_element\":\"wink.indicator.style_element(datasources[\\\"Node-Red\\\"] && datasources[\\\"Node-Red\\\"][\\\"WinkData\\\"][\\\"air_conditioners\\\"][\\\"\" + key + \"\\\"])\"\n    }\n})\nfreeboard.panes[pane_id].widgets.push(\n{\n    \"type\": \"indicator\",\n    \"settings\": {\n        \"title\":key+ ' temperature',\n        \"value\":\"wink.indicator.value(datasources[\\\"Node-Red\\\"] && datasources[\\\"Node-Red\\\"][\\\"WinkData\\\"][\\\"air_conditioners\\\"][\\\"\" + key + \"\\\"],\\\"temperature\\\")\",\n        \"on_text\":\"wink.indicator.on_text(datasources[\\\"Node-Red\\\"] && datasources[\\\"Node-Red\\\"][\\\"WinkData\\\"][\\\"air_conditioners\\\"][\\\"\" + key + \"\\\"],\\\"temperature\\\")\",\n        \"off_text\":\"wink.indicator.off_text(datasources[\\\"Node-Red\\\"] && datasources[\\\"Node-Red\\\"][\\\"WinkData\\\"][\\\"air_conditioners\\\"][\\\"\" + key + \"\\\"],\\\"temperature\\\")\",\n        \"style_element\":\"wink.indicator.style_element(datasources[\\\"Node-Red\\\"] && datasources[\\\"Node-Red\\\"][\\\"WinkData\\\"][\\\"air_conditioners\\\"][\\\"\" + key + \"\\\"],\\\"temperature\\\")\"\n    }\n\n})\n\n}\n\nfor (var key in context.global.winkState.propane_tanks)\n{\n    if( typeof pane_idx.prop_tnk !=='undefined') \n    {\n        pane_id=pane_idx.prop_tnk; //motion\n    } else\n    {\n        freeboard.panes.push(  {\n            \"title\":\"Propane Tanks\",\n            \"width\": 1,\n            \"row\": {\n                \"3\": 1\n            },\n            \"col\": {\n                \"3\": 1\n            },\n            \"col_width\": 1,\n            widgets:[]\n        });\n        pane_idx.prop_tnk=i;\n        pane_id=i;\n        i++;\n    }\n    freeboard.panes[pane_id].widgets.push(\n{\n    \"type\": \"indicator\",\n    \"settings\": {\n        \"title\":key,\n        \"value\":\"wink.indicator.value(datasources[\\\"Node-Red\\\"] && datasources[\\\"Node-Red\\\"][\\\"WinkData\\\"][\\\"propane_tanks\\\"][\\\"\" + key + \"\\\"])\",\n        \"on_text\":\"wink.indicator.on_text(datasources[\\\"Node-Red\\\"] && datasources[\\\"Node-Red\\\"][\\\"WinkData\\\"][\\\"propane_tanks\\\"][\\\"\" + key + \"\\\"],\\\"remaining\\\")\",\n        \"off_text\":\"wink.indicator.off_text(datasources[\\\"Node-Red\\\"] && datasources[\\\"Node-Red\\\"][\\\"WinkData\\\"][\\\"propane_tanks\\\"][\\\"\" + key + \"\\\"],\\\"remaining\\\")\",\n        \"style_element\":\"wink.indicator.style_element(datasources[\\\"Node-Red\\\"] && datasources[\\\"Node-Red\\\"][\\\"WinkData\\\"][\\\"propane_tanks\\\"][\\\"\" + key + \"\\\"])\"\n    }\n})\nfreeboard.panes[pane_id].widgets.push(\n{\n        \"type\": \"indicator\",\n         \"settings\": {\n        \"title\":key + ' Battery',\n        \"value\":\"wink.indicator.value(datasources[\\\"Node-Red\\\"] && datasources[\\\"Node-Red\\\"][\\\"WinkData\\\"][\\\"propane_tanks\\\"][\\\"\" + key + \"\\\"],\\\"battery\\\")\",\n        \"on_text\":\"wink.indicator.on_text(datasources[\\\"Node-Red\\\"] && datasources[\\\"Node-Red\\\"][\\\"WinkData\\\"][\\\"propane_tanks\\\"][\\\"\" + key + \"\\\"],\\\"battery\\\")\",\n        \"off_text\":\"wink.indicator.off_text(datasources[\\\"Node-Red\\\"] && datasources[\\\"Node-Red\\\"][\\\"WinkData\\\"][\\\"propane_tanks\\\"][\\\"\" + key + \"\\\"],\\\"battery\\\")\",\n        \"style_element\":\"wink.indicator.style_element(datasources[\\\"Node-Red\\\"] && datasources[\\\"Node-Red\\\"][\\\"WinkData\\\"][\\\"propane_tanks\\\"][\\\"\" + key + \"\\\"],\\\"battery\\\")\"\n         }\n})\n\n}\n\nfor (var key in context.global.winkState.garage_doors)\n{\n    if( typeof pane_idx.garage !=='undefined') \n    {\n        pane_id=pane_idx.garage; //motion\n    } else\n    {\n        freeboard.panes.push(  {\n            \"title\":\"Garage doors\",\n            \"width\": 1,\n            \"row\": {\n                \"3\": 1\n            },\n            \"col\": {\n                \"3\": 1\n            },\n            \"col_width\": 1,\n            widgets:[]\n        });\n        pane_idx.garage=i;\n        pane_id=i;\n        i++;\n    }\n    freeboard.panes[pane_id].widgets.push(\n{\n    \"type\": \"indicator\",\n    \"settings\": {\n        \"title\":key + (context.global.winkState.garage_doors[key].connection ? \" - Online\" : \" - Off\"),\n        \"value\":\"wink.indicator.value(datasources[\\\"Node-Red\\\"] && datasources[\\\"Node-Red\\\"][\\\"WinkData\\\"][\\\"garage_doors\\\"][\\\"\" + key + \"\\\"])\",\n        \"on_text\":\"wink.indicator.on_text(datasources[\\\"Node-Red\\\"] && datasources[\\\"Node-Red\\\"][\\\"WinkData\\\"][\\\"garage_doors\\\"][\\\"\" + key + \"\\\"])\",\n        \"off_text\":\"wink.indicator.off_text(datasources[\\\"Node-Red\\\"] && datasources[\\\"Node-Red\\\"][\\\"WinkData\\\"][\\\"garage_doors\\\"][\\\"\" + key + \"\\\"])\",\n        \"style_element\":\"wink.indicator.style_element(datasources[\\\"Node-Red\\\"] && datasources[\\\"Node-Red\\\"][\\\"WinkData\\\"][\\\"garage_doors\\\"][\\\"\" + key + \"\\\"])\"\n    }\n})\n    \n}\n\nfor (var key in context.global.winkState.piggy_banks)\n{\n    if( typeof pane_idx.porky !=='undefined') \n    {\n        pane_id=pane_idx.porky; //porky banko\n    } else\n    {\n        freeboard.panes.push(  {\n            \"title\":\"Piggy Banks\",\n            \"width\": 1,\n            \"row\": {\n                \"3\": 1\n            },\n            \"col\": {\n                \"3\": 1\n            },\n            \"col_width\": 1,\n            widgets:[]\n        });\n        pane_idx.porky=i;\n        pane_id=i;\n        i++;\n    }\n    freeboard.panes[pane_id].widgets.push(\n{\n    \"type\": \"indicator\",\n    \"settings\": {\n        \"title\":key,\n        \"value\":\"wink.indicator.value(datasources[\\\"Node-Red\\\"] && datasources[\\\"Node-Red\\\"][\\\"WinkData\\\"][\\\"piggy_banks\\\"][\\\"\" + key + \"\\\"])\",\n        \"on_text\":\"wink.indicator.on_text(datasources[\\\"Node-Red\\\"] && datasources[\\\"Node-Red\\\"][\\\"WinkData\\\"][\\\"piggy_banks\\\"][\\\"\" + key + \"\\\"])\",\n        \"off_text\":\"wink.indicator.off_text(datasources[\\\"Node-Red\\\"] && datasources[\\\"Node-Red\\\"][\\\"WinkData\\\"][\\\"piggy_banks\\\"][\\\"\" + key + \"\\\"])\",\n        \"style_element\":\"wink.indicator.style_element(datasources[\\\"Node-Red\\\"] && datasources[\\\"Node-Red\\\"][\\\"WinkData\\\"][\\\"piggy_banks\\\"][\\\"\" + key + \"\\\"])\"\n    }\n})\n    \n}\n\n\n\nfor (var key in context.global.winkState.hubs)\n{\n    if( typeof pane_idx.hubs !=='undefined') \n    {\n        pane_id=pane_idx.hubs; //motion\n    } else\n    {\n        freeboard.panes.push(  {\n            \"title\":\"Hubs\",\n            \"width\": 1,\n            \"row\": {\n                \"3\": 1\n            },\n            \"col\": {\n                \"3\": 1\n            },\n            \"col_width\": 1,\n            widgets:[]\n        });\n        pane_idx.hubs=i;\n        pane_id=i;\n        i++;\n    }\n    freeboard.panes[pane_id].widgets.push(\n{\n    \"type\": \"indicator\",\n    \"settings\": {\n        \"title\":key,\n        \"value\":\"wink.indicator.value(datasources[\\\"Node-Red\\\"] && datasources[\\\"Node-Red\\\"][\\\"WinkData\\\"][\\\"hubs\\\"][\\\"\" + key + \"\\\"])\",\n        \"on_text\":\"wink.indicator.on_text(datasources[\\\"Node-Red\\\"] && datasources[\\\"Node-Red\\\"][\\\"WinkData\\\"][\\\"hubs\\\"][\\\"\" + key + \"\\\"])\",\n        \"off_text\":\"wink.indicator.off_text(datasources[\\\"Node-Red\\\"] && datasources[\\\"Node-Red\\\"][\\\"WinkData\\\"][\\\"hubs\\\"][\\\"\" + key + \"\\\"])\",\n        \"style_element\":\"wink.indicator.style_element(datasources[\\\"Node-Red\\\"] && datasources[\\\"Node-Red\\\"][\\\"WinkData\\\"][\\\"hubs\\\"][\\\"\" + key + \"\\\"])\"\n    }\n}\n)\n\nif (context.global.winkState.hubs[key].firmware_version !== null)\n    {\nfreeboard.panes[pane_id].widgets.push(\n{\n    \"type\": \"text_widget\",\n    \"settings\": {\n        \"title\":\"Current firmware\",\n        \"value\":\"datasources[\\\"Node-Red\\\"][\\\"WinkData\\\"][\\\"hubs\\\"][\\\"\" + key + \"\\\"][\\\"firmware_version\\\"]\",\n        \"size\":\"regular\",\n        \"animate\":\"true\"\n    }\n})\n}\n}\nfreeboard.panes[pane_id].widgets.push(\n        {\n  \"type\": \"text_widget\",\n          \"settings\": {\n            \"title\": \"Wink API Index\",\n            \"size\": \"regular\",\n            \"value\": \"datasources[\\\"winkAPI\\\"][\\\"metrics\\\"][0][\\\"data\\\"][287][\\\"value\\\"]\",\n            \"sparkline\": true,\n            \"animate\": true\n          }\n        }\n)\n\n\nfor (var key in context.global.Presence){\n    if( typeof pane_idx.presence !=='undefined') \n        {\n            pane_id=pane_idx.presence; //motion\n        } else\n        {\n            freeboard.panes.push(  {\n                \"title\":\"Presence\",\n                \"width\": 1,\n                \"row\": {\n                    \"3\": 1\n                },\n                \"col\": {\n                    \"3\": 1\n                },\n                \"col_width\": 1,\n                widgets:[]\n            });\n            pane_idx.presence=i;\n            pane_id=i;\n            i++;\n        }\n}\nif( typeof pane_idx.presence !=='undefined'){\n                    freeboard.panes[pane_idx.presence].widgets.push(\n                 {\n                     \"type\": \"indicator\",\n                     \"settings\": \n                      {\n                          \"title\":\"\" ,\n                          \"value\":\"datasources[\\\"Node-Red\\\"][\\\"Presence\\\"]\",\n                          \"on_text\":\"Presence detected\",\n                          \"off_text\":\"None\"\n//                          \"style_element\":\"wink.indicator.style_element(datasources[\\\"Node-Red\\\"] && datasources[\\\"Node-Red\\\"][\\\"WinkData\\\"][\\\"cameras\\\"][\\\"\" + key + \"\\\"])\"\n                      }\n                 })\n}\n\n\n\nfreeboard.datasources =\n [\n    {\n        \"name\": \"Node-Red\",\n        \"type\": \"JSON\",\n        \"settings\": {\n            \"url\": context.global.BlueMixUrlBase+\"/red/getGlobalDataJson\",\n            \"use_thingproxy\": true,\n            \"refresh\": 2,\n            \"method\": \"GET\",\n            \"headers\": [\n              {\n                  \"name\": \"Authorization\",\n                  \"value\": \"Bearer \"+context.global.FREEBOARD_TOKEN\n              }\n            ],\n            \"name\":\"Node-Red\"\n        }\n    },\n    {\n      \"name\": \"My Clock\",\n      \"type\": \"clock\",\n      \"settings\": {\n        \"refresh\": 1,\n        \"name\": \"My Clock\"\n      }\n    },\n {\n      \"name\": \"winkAPI\",\n      \"type\": \"JSON\",\n      \"settings\": {\n        \"url\": \"https://status.winkapp.com/metrics-display/009ykpcmnm25/day.json\",\n        \"use_thingproxy\": true,\n        \"refresh\": 300,\n        \"method\": \"GET\"\n      }\n    }    \n ]\nfreeboard.columns=i;\nmsg.payload=freeboard;\n}\nelse\n{\n    msg.payload=\"Bad request darling\"\n}\nreturn msg;",
     "outputs": 1,
     "noerr": 0,
-    "x": 369.5,
-    "y": 65.5,
-    "z": "a6ad1804.5952e8",
+    "x": 393.39581298828125,
+    "y": 91.38888549804688,
+    "z": "a5bd9a7f.5a4268",
     "wires": [
       [
-        "a411ef55.5bee1"
+        "f504ba9f.0afb48"
       ]
     ]
   },
   {
-    "id": "163d4b8e.e9c2b4",
+    "id": "44f9ca04.bb0634",
     "type": "function",
     "name": "Generate Freeboard by Group",
     "func": "if (msg.payload.auth ==context.global.FREEBOARD_TOKEN){\nvar pane_idx = {};\nvar freeboard = {}\nvar bulbs = 0;\nfreeboard.version=\"1\";\nfreeboard.allow_edit=false;\nfreeboard.panes=[];\nfreeboard.plugins= [];\nvar i=0;\n\nfreeboard.panes.push(  {\n                \"title\":\"Time\",\n                \"width\": 1,\n                \"row\": {\n                    \"3\": 1\n                },\n                \"col\": {\n                    \"3\": 1\n                },\n                \"col_width\": 1,\n                widgets:[]\n            });\n            pane_idx.time=i;\n            pane_id=i;\n            i++;\n\nfreeboard.panes[pane_id].widgets.push(\n        {\n          \"type\": \"text_widget\",\n          \"settings\": {\n            \"size\": \"regular\",\n            \"value\": \"datasources[\\\"My Clock\\\"][\\\"time_string_value\\\"]\",\n            \"animate\": true\n          }\n        })\nif (typeof context.global.Weather.SunsetHour !== 'undefined')\n{\n   freeboard.panes[pane_id].widgets.push(\n{\n    \"type\": \"text_widget\",\n    \"settings\": {\n        \"title\":\"Sunrise - Sunset\",\n        \"value\":\"datasources[\\\"Node-Red\\\"][\\\"WeatherData\\\"][\\\"SunriseHour\\\"] +\\\":\\\" +(datasources[\\\"Node-Red\\\"][\\\"WeatherData\\\"][\\\"SunriseMin\\\"] <10 ? \\\"0\\\"+ datasources[\\\"Node-Red\\\"][\\\"WeatherData\\\"][\\\"SunriseMin\\\"] : datasources[\\\"Node-Red\\\"][\\\"WeatherData\\\"][\\\"SunriseMin\\\"]) + \\\" AM - \\\" + (datasources[\\\"Node-Red\\\"][\\\"WeatherData\\\"][\\\"SunsetHour\\\"] <=12 ? datasources[\\\"Node-Red\\\"][\\\"WeatherData\\\"][\\\"SunsetHour\\\"] : datasources[\\\"Node-Red\\\"][\\\"WeatherData\\\"][\\\"SunsetHour\\\"]-12) + \\\":\\\"+(datasources[\\\"Node-Red\\\"][\\\"WeatherData\\\"][\\\"SunsetMin\\\"]<10 ? \\\"0\\\" + datasources[\\\"Node-Red\\\"][\\\"WeatherData\\\"][\\\"SunsetMin\\\"] : datasources[\\\"Node-Red\\\"][\\\"WeatherData\\\"][\\\"SunsetMin\\\"])+\\\" PM\\\"\",\n        \"size\":\"regular\",\n        \"animate\":\"true\"\n    }\n}) \n}\n\n\nif (typeof context.global.Weather.WeatherSummary!== 'undefined')\n{\nfreeboard.panes.push(  {\n                \"title\":\"Weather\",\n                \"width\": 1,\n                \"row\": {\n                    \"3\": 1\n                },\n                \"col\": {\n                    \"3\": 1\n                },\n                \"col_width\": 1,\n                widgets:[]\n            });\n            pane_idx.weather=i;\n            pane_id=i;\n            i++;\nfreeboard.panes[pane_id].widgets.push(\n{\n    \"type\": \"text_widget\",\n    \"settings\": {\n        \"title\":\"Current state\",\n        \"value\":\"datasources[\\\"Node-Red\\\"][\\\"WeatherData\\\"][\\\"WeatherSummary\\\"]\",\n        \"size\":\"regular\",\n        \"animate\":\"true\"\n    }\n})\nfreeboard.panes[pane_id].widgets.push(\n{\n    \"type\": \"text_widget\",\n    \"settings\": {\n        \"title\":\"Temperature\",\n        \"value\":\"Math.round((datasources[\\\"Node-Red\\\"][\\\"WeatherData\\\"][\\\"outsideTemp\\\"]-32)*5/9)+ \\\"C / \\\"+ Math.round(datasources[\\\"Node-Red\\\"][\\\"WeatherData\\\"][\\\"outsideTemp\\\"]) + \\\"F\\\"\",   \n        \"size\":\"regular\",\n        \"animate\":\"true\"\n    }\n})\nfreeboard.panes[pane_id].widgets.push(\n{\n    \"type\": \"text_widget\",\n    \"settings\": {\n        \"title\":\"Humidity\",\n        \"value\":\"Math.round(datasources[\\\"Node-Red\\\"][\\\"WeatherData\\\"][\\\"HumidityOutside\\\"]*100)+ \\\"%\\\"\",   \n        \"size\":\"regular\",\n        \"animate\":\"true\"\n    }\n})\nfreeboard.panes[pane_id].widgets.push(\n{\n    \"type\": \"text_widget\",\n    \"settings\": {\n        \"title\":\"Cloud Cover\",\n        \"value\":\"datasources[\\\"Node-Red\\\"][\\\"WeatherData\\\"][\\\"CloudCover\\\"]+ \\\"%\\\"\",   \n        \"size\":\"regular\",\n        \"animate\":\"true\"\n    }\n})\n}\n\n\n\nfor (var key in context.global.winkState.cameras){\n   if( typeof pane_idx.cameras !=='undefined') \n        {\n            pane_id=pane_idx.cameras; //motion\n        } else\n        {\n            freeboard.panes.push(  {\n                \"title\":\"Cameras\",\n                \"width\": 1,\n                \"row\": {\n                    \"3\": 1\n                },\n                \"col\": {\n                    \"3\": 1\n                },\n                \"col_width\": 1,\n                widgets:[]\n            });\n            pane_idx.cameras=i;\n            pane_id=i;\n            i++;\n        }\n                freeboard.panes[pane_id].widgets.push(\n                 {\n                     \"type\": \"indicator\",\n                     \"settings\": \n                      {\n                          \"title\":key ,\n                          \"value\":\"wink.indicator.value(datasources[\\\"Node-Red\\\"] && datasources[\\\"Node-Red\\\"][\\\"WinkData\\\"][\\\"cameras\\\"][\\\"\" + key + \"\\\"])\",\n                          \"on_text\":\"wink.indicator.on_text(datasources[\\\"Node-Red\\\"] && datasources[\\\"Node-Red\\\"][\\\"WinkData\\\"][\\\"cameras\\\"][\\\"\" + key + \"\\\"])\",\n                          \"off_text\":\"wink.indicator.off_text(datasources[\\\"Node-Red\\\"] && datasources[\\\"Node-Red\\\"][\\\"WinkData\\\"][\\\"cameras\\\"][\\\"\" + key + \"\\\"])\",\n                          \"style_element\":\"wink.indicator.style_element(datasources[\\\"Node-Red\\\"] && datasources[\\\"Node-Red\\\"][\\\"WinkData\\\"][\\\"cameras\\\"][\\\"\" + key + \"\\\"])\"\n                      }\n                 })\n     freeboard.panes[pane_id].widgets.push(             \n                {\n          \"type\": \"picture\",\n          \"settings\": {\n          \"src\": context.global.winkState.cameras[key].url,\n          \"refresh\": context.global.winkState.cameras[key].refresh_time\n          }\n        })\n    }\n\n\nfor (var key in context.global.winkState.sensor_pods)\n{\n    //  node.warn(key+\" \"+ context.global.winkDevCap[key].sensor_types)\n    //pane_id=4;\n    if (typeof context.global.winkState.sensor_pods[key].motion !== 'undefined') \n    { \n        if( typeof pane_idx.motion !=='undefined') \n        {\n            pane_id=pane_idx.motion; //motion\n        } else\n        {\n            freeboard.panes.push(  {\n                \"title\":\"Motion Sensors\",\n                \"width\": 1,\n                \"row\": {\n                    \"3\": 1\n                },\n                \"col\": {\n                    \"3\": 1\n                },\n                \"col_width\": 1,\n                widgets:[]\n            });\n            pane_idx.motion=i;\n            pane_id=i;\n            i++;\n        }\n    } else if (typeof context.global.winkState.sensor_pods[key].opened !== 'undefined') \n    {\n        if( typeof pane_idx.trippers !=='undefined') \n        {\n            pane_id=pane_idx.trippers; //motion\n        } else\n        {\n            freeboard.panes.push(  {\n                \"title\":\"Trippers\",\n                \"width\": 1,\n                \"row\": {\n                    \"3\": 1\n                },\n                \"col\": {\n                    \"3\": 1\n                },\n                \"col_width\": 1,\n                widgets:[]\n            });\n            pane_idx.trippers=i;\n            pane_id=i;\n            i++;\n        }\n\n    } else\n    {\n        //other sensors pane\n        if( typeof pane_idx.other !=='undefined') \n        {\n            pane_id=pane_idx.other; //motion\n        } else\n        {\n            freeboard.panes.push(  {\n                \"title\":\"Multi Sensors\",\n                \"width\": 1,\n                \"row\": {\n                    \"3\": 1\n                },\n                \"col\": {\n                    \"3\": 1\n                },\n                \"col_width\": 1,\n                widgets:[]\n            });\n            pane_idx.other=i;\n            pane_id=i;\n            i++;\n        }\n    }\n    if(context.global.winkDevCap[key].sensor_types)\n    {\n        for (s=0; s<context.global.winkDevCap[key].sensor_types.length;s++)\n        {\n            var field=context.global.winkDevCap[key].sensor_types[s].field\n            if( context.global.winkState.sensor_pods[key][field] !== null)\n            {\n                freeboard.panes[pane_id].widgets.push(\n                 {\n                     \"type\": \"indicator\",\n                     \"settings\": \n                      {\n                          \"title\":key + \" \" + field.replace(\"_\",\" \").replace(/opened|detected|motion|state/,\"\"),\n                          \"value\":\"wink.indicator.value(datasources[\\\"Node-Red\\\"] && datasources[\\\"Node-Red\\\"][\\\"WinkData\\\"][\\\"sensor_pods\\\"][\\\"\" + key + \"\\\"],\\\"\" + field +\"\\\")\",\n                          \"on_text\":\"wink.indicator.on_text(datasources[\\\"Node-Red\\\"] && datasources[\\\"Node-Red\\\"][\\\"WinkData\\\"][\\\"sensor_pods\\\"][\\\"\" + key + \"\\\"],\\\"\" + field +\"\\\")\",\n                          \"off_text\":\"wink.indicator.off_text(datasources[\\\"Node-Red\\\"] && datasources[\\\"Node-Red\\\"][\\\"WinkData\\\"][\\\"sensor_pods\\\"][\\\"\" + key + \"\\\"],\\\"\" + field +\"\\\")\",\n                          \"style_element\":\"wink.indicator.style_element(datasources[\\\"Node-Red\\\"] && datasources[\\\"Node-Red\\\"][\\\"WinkData\\\"][\\\"sensor_pods\\\"][\\\"\" + key + \"\\\"],\\\"\" + field +\"\\\")\"\n                      }\n                 })\n            }\n      }\n   }\n} //end sensor pods\n//i=0;\n\nfor (var key in context.global.winkState.groups)\n{\n    if(key.substring(0,1)!==\".\" && key.substring(0,1)!==\"@\" && context.global.winkState.groups[key].members)\n    {\n        freeboard.panes.push(  {\n            \"title\":context.global.winkState.groups[key].name + \" -  Lights and Switches\",\n            \"width\": 1,\n            \"row\": {\n                \"3\": 1\n            },\n            \"col\": {\n                \"3\": 1\n            },\n            \"col_width\": 1,\n            widgets:[]\n        });\n        pane_idx.key=i;\n        pane_id=i;\n        i++;\n        \n        for (var light_bulbs in context.global.winkState.groups[key].members)\n        {\n            light_type=context.global.winkState.groups[key].members[light_bulbs].object_type\n            freeboard.panes[pane_id].widgets.push(\n            {\n                \"type\": \"indicator\",\n                \"settings\": {\n                \"title\":light_bulbs,\n                \"value\":\"wink.indicator.value(datasources[\\\"Node-Red\\\"] && datasources[\\\"Node-Red\\\"][\\\"WinkData\\\"][\\\"\"+light_type+\"\\\"][\\\"\" + light_bulbs + \"\\\"])\",\n                \"on_text\":\"wink.indicator.on_text(datasources[\\\"Node-Red\\\"] && datasources[\\\"Node-Red\\\"][\\\"WinkData\\\"][\\\"\"+light_type+\"\\\"][\\\"\" + light_bulbs + \"\\\"])\",\n                \"off_text\":\"wink.indicator.off_text(datasources[\\\"Node-Red\\\"] && datasources[\\\"Node-Red\\\"][\\\"WinkData\\\"][\\\"\"+light_type+\"\\\"][\\\"\" + light_bulbs + \"\\\"])\",\n                \"style_element\":\"wink.indicator.style_element(datasources[\\\"Node-Red\\\"] && datasources[\\\"Node-Red\\\"][\\\"WinkData\\\"][\\\"\"+light_type+\"\\\"][\\\"\" + light_bulbs + \"\\\"])\"\n                }\n            })\n            bulbs++;\n            context.global.winkState[light_type][light_bulbs].freeboard = 1;\n        }\n    }\n}\n\n\n\nfor (var key in context.global.winkState.binary_switches){\nif (context.global.winkState.binary_switches[key].freeboard && context.global.winkState.binary_switches[key].freeboard!=1)\n{\n    if( typeof pane_idx.lights !=='undefined') \n    {\n        pane_id=pane_idx.lights; //motion\n    } else\n    {\n        freeboard.panes.push(  {\n            \"title\":\"Switches\",\n            \"width\": 1,\n            \"row\": {\n                \"3\": 1\n            },\n            \"col\": {\n                \"3\": 1\n            },\n            \"col_width\": 1,\n            widgets:[]\n        });\n        pane_idx.lights=i;\n        pane_id=i;\n        i++;\n    }\n  \n    freeboard.panes[pane_id].widgets.push(\n    {\n    \"type\": \"indicator\",\n    \"settings\": {\n        \"title\":key,\n        \"value\":\"wink.indicator.value(datasources[\\\"Node-Red\\\"] && datasources[\\\"Node-Red\\\"][\\\"WinkData\\\"][\\\"binary_switches\\\"][\\\"\" + key + \"\\\"])\",\n        \"on_text\":\"wink.indicator.on_text(datasources[\\\"Node-Red\\\"] && datasources[\\\"Node-Red\\\"][\\\"WinkData\\\"][\\\"binary_switches\\\"][\\\"\" + key + \"\\\"])\",\n        \"off_text\":\"wink.indicator.off_text(datasources[\\\"Node-Red\\\"] && datasources[\\\"Node-Red\\\"][\\\"WinkData\\\"][\\\"binary_switches\\\"][\\\"\" + key + \"\\\"])\",\n        \"style_element\":\"wink.indicator.style_element(datasources[\\\"Node-Red\\\"] && datasources[\\\"Node-Red\\\"][\\\"WinkData\\\"][\\\"binary_switches\\\"][\\\"\" + key + \"\\\"])\"\n    }\n})\n}\n}// end bin switches\n\n\nfor (var key in context.global.winkState.light_bulbs){\nif (context.global.winkState.light_bulbs[key].freeboard && context.global.winkState.light_bulbs[key].freeboard!=1)\n{\n    if( typeof pane_idx.lights !=='undefined') \n    {\n        pane_id=pane_idx.lights; //motion\n    } else\n    {\n        freeboard.panes.push(  {\n            \"title\":\"Lights and Switches\",\n            \"width\": 1,\n            \"row\": {\n                \"3\": 1\n            },\n            \"col\": {\n                \"3\": 1\n            },\n            \"col_width\": 1,\n            widgets:[]\n        });\n        pane_idx.lights=i;\n        pane_id=i;\n        i++;\n    }\n    freeboard.panes[pane_id].widgets.push(\n    {\n        \"type\": \"indicator\",\n        \"settings\": {\n            \"title\":key,\n            \"value\":\"wink.indicator.value(datasources[\\\"Node-Red\\\"] && datasources[\\\"Node-Red\\\"][\\\"WinkData\\\"][\\\"light_bulbs\\\"][\\\"\" + key + \"\\\"])\",\n            \"on_text\":\"wink.indicator.on_text(datasources[\\\"Node-Red\\\"] && datasources[\\\"Node-Red\\\"][\\\"WinkData\\\"][\\\"light_bulbs\\\"][\\\"\" + key + \"\\\"])\",\n            \"off_text\":\"wink.indicator.off_text(datasources[\\\"Node-Red\\\"] && datasources[\\\"Node-Red\\\"][\\\"WinkData\\\"][\\\"light_bulbs\\\"][\\\"\" + key + \"\\\"])\",\n            \"style_element\":\"wink.indicator.style_element(datasources[\\\"Node-Red\\\"] && datasources[\\\"Node-Red\\\"][\\\"WinkData\\\"][\\\"light_bulbs\\\"][\\\"\" + key + \"\\\"])\"\n        }\n    })\n}\n} // end light bulbs\n\n\nfor (var key in context.global.winkState.powerstrips)\n{\n    if( typeof pane_idx.powerstrips !=='undefined') \n    {\n        pane_id=pane_idx.powerstrips; //motion\n    } else\n    {\n        freeboard.panes.push(  {\n            \"title\":\"Powerstrips\",\n            \"width\": 1,\n            \"row\": {\n                \"3\": 1\n            },\n            \"col\": {\n                \"3\": 1\n            },\n            \"col_width\": 1,\n            widgets:[]\n        });\n        pane_idx.powerstrips=i;\n        pane_id=i;\n        i++;\n    }\n    if (typeof context.global.winkState.powerstrips[key].powered !== 'undefined'){\n    freeboard.panes[pane_id].widgets.push(\n    {\n        \"type\": \"indicator\",\n        \"settings\": {\n            \"title\":key,\n            \"value\":\"wink.indicator.value(datasources[\\\"Node-Red\\\"] && datasources[\\\"Node-Red\\\"][\\\"WinkData\\\"][\\\"powerstrips\\\"][\\\"\" + key + \"\\\"])\",\n            \"on_text\":\"wink.indicator.on_text(datasources[\\\"Node-Red\\\"] && datasources[\\\"Node-Red\\\"][\\\"WinkData\\\"][\\\"powerstrips\\\"][\\\"\" + key + \"\\\"])\",\n            \"off_text\":\"wink.indicator.off_text(datasources[\\\"Node-Red\\\"] && datasources[\\\"Node-Red\\\"][\\\"WinkData\\\"][\\\"powerstrips\\\"][\\\"\" + key + \"\\\"])\",\n            \"style_element\":\"wink.indicator.style_element(datasources[\\\"Node-Red\\\"] && datasources[\\\"Node-Red\\\"][\\\"WinkData\\\"][\\\"powerstrips\\\"][\\\"\" + key + \"\\\"])\"\n        }\n    })\n    }\n} // end light bulbs\n\nfor (var key in context.global.winkState.locks)\n{\n    if( typeof pane_idx.locks !=='undefined') \n    {\n        pane_id=pane_idx.locks; //motion\n    } else\n    {\n        freeboard.panes.push(  {\n            \"title\":\"Locks\",\n            \"width\": 1,\n            \"row\": {\n                \"3\": 1\n            },\n            \"col\": {\n                \"3\": 1\n            },\n            \"col_width\": 1,\n            widgets:[]\n        });\n        pane_idx.locks=i;\n        pane_id=i;\n        i++;\n    }\n    freeboard.panes[pane_id].widgets.push(\n{\n    \"type\": \"indicator\",\n    \"settings\": {\n        \"title\":key,\n        \"value\":\"wink.indicator.value(datasources[\\\"Node-Red\\\"] && datasources[\\\"Node-Red\\\"][\\\"WinkData\\\"][\\\"locks\\\"][\\\"\" + key + \"\\\"])\",\n        \"on_text\":\"wink.indicator.on_text(datasources[\\\"Node-Red\\\"] && datasources[\\\"Node-Red\\\"][\\\"WinkData\\\"][\\\"locks\\\"][\\\"\" + key + \"\\\"])\",\n        \"off_text\":\"wink.indicator.off_text(datasources[\\\"Node-Red\\\"] && datasources[\\\"Node-Red\\\"][\\\"WinkData\\\"][\\\"locks\\\"][\\\"\" + key + \"\\\"])\",\n        \"style_element\":\"wink.indicator.style_element(datasources[\\\"Node-Red\\\"] && datasources[\\\"Node-Red\\\"][\\\"WinkData\\\"][\\\"locks\\\"][\\\"\" + key + \"\\\"])\"\n    }\n})\n    if (typeof context.global.winkState.locks[key].battery !== 'undefined')\n    {\n        freeboard.panes[pane_id].widgets.push(\n{\n    \"type\": \"indicator\",\n    \"settings\": {\n        \"title\":key + \" battery\",\n        \"value\":\"wink.indicator.value(datasources[\\\"Node-Red\\\"] && datasources[\\\"Node-Red\\\"][\\\"WinkData\\\"][\\\"locks\\\"][\\\"\" + key + \"\\\"],\\\"battery\\\")\",\n        \"on_text\":\"wink.indicator.on_text(datasources[\\\"Node-Red\\\"] && datasources[\\\"Node-Red\\\"][\\\"WinkData\\\"][\\\"locks\\\"][\\\"\" + key + \"\\\"],\\\"battery\\\")\",\n        \"off_text\":\"wink.indicator.off_text(datasources[\\\"Node-Red\\\"] && datasources[\\\"Node-Red\\\"][\\\"WinkData\\\"][\\\"locks\\\"][\\\"\" + key + \"\\\"],\\\"battery\\\")\",\n        \"style_element\":\"wink.indicator.style_element(datasources[\\\"Node-Red\\\"] && datasources[\\\"Node-Red\\\"][\\\"WinkData\\\"][\\\"locks\\\"][\\\"\" + key + \"\\\"],\\\"battery\\\")\"\n    }\n})\n}\n} //end locks\nfor (var key in context.global.winkState.smoke_detectors)\n{\n    if( typeof pane_idx.smoke !=='undefined') \n    {\n        pane_id=pane_idx.smoke; //motion\n    } else\n    {\n        freeboard.panes.push(  {\n            \"title\":\"Smoke Detectors\",\n            \"width\": 1,\n            \"row\": {\n                \"3\": 1\n            },\n            \"col\": {\n                \"3\": 1\n            },\n            \"col_width\": 1,\n            widgets:[]\n        });\n        pane_idx.smoke=i;\n        pane_id=i;\n        i++;\n    }\n    freeboard.panes[pane_id].widgets.push(\n{\n    \"type\": \"indicator\",\n    \"settings\": {\n        \"title\":key + (context.global.winkState.smoke_detectors[key].connection ? \" Smoke\" : \" Offline\"),\n        \"value\":\"wink.indicator.value(datasources[\\\"Node-Red\\\"] && datasources[\\\"Node-Red\\\"][\\\"WinkData\\\"][\\\"smoke_detectors\\\"][\\\"\" + key + \"\\\"],\\\"smoke_detected\\\")\",\n        \"on_text\":\"wink.indicator.on_text(datasources[\\\"Node-Red\\\"] && datasources[\\\"Node-Red\\\"][\\\"WinkData\\\"][\\\"smoke_detectors\\\"][\\\"\" + key + \"\\\"],\\\"smoke_detected\\\")\",\n        \"off_text\":\"wink.indicator.off_text(datasources[\\\"Node-Red\\\"] && datasources[\\\"Node-Red\\\"][\\\"WinkData\\\"][\\\"smoke_detectors\\\"][\\\"\" + key + \"\\\"],\\\"smoke_detected\\\")\",\n        \"style_element\":\"wink.indicator.style_element(datasources[\\\"Node-Red\\\"] && datasources[\\\"Node-Red\\\"][\\\"WinkData\\\"][\\\"smoke_detectors\\\"][\\\"\" + key + \"\\\"],\\\"smoke_detected\\\")\"\n    }\n})\n    \n    freeboard.panes[pane_id].widgets.push(\n{\n    \"type\": \"indicator\",\n    \"settings\": {\n        \"title\":key + (context.global.winkState.smoke_detectors[key].connection ? \" CO2\" : \" Offline\"),\n        \"value\":\"wink.indicator.value(datasources[\\\"Node-Red\\\"] && datasources[\\\"Node-Red\\\"][\\\"WinkData\\\"][\\\"smoke_detectors\\\"][\\\"\" + key + \"\\\"],\\\"co_detected\\\")\",\n        \"on_text\":\"wink.indicator.on_text(datasources[\\\"Node-Red\\\"] && datasources[\\\"Node-Red\\\"][\\\"WinkData\\\"][\\\"smoke_detectors\\\"][\\\"\" + key + \"\\\"],\\\"co_detected\\\")\",\n        \"off_text\":\"wink.indicator.off_text(datasources[\\\"Node-Red\\\"] && datasources[\\\"Node-Red\\\"][\\\"WinkData\\\"][\\\"smoke_detectors\\\"][\\\"\" + key + \"\\\"],\\\"co_detected\\\")\",\n        \"style_element\":\"wink.indicator.style_element(datasources[\\\"Node-Red\\\"] && datasources[\\\"Node-Red\\\"][\\\"WinkData\\\"][\\\"smoke_detectors\\\"][\\\"\" + key + \"\\\"],\\\"co_detected\\\")\"\n    }\n})\nif (typeof context.global.winkState.smoke_detectors[key].battery !== 'undefined')\n    {\n        freeboard.panes[pane_id].widgets.push(\n{\n    \"type\": \"indicator\",\n    \"settings\": {\n        \"title\":key + \" battery\",\n        \"value\":\"wink.indicator.value(datasources[\\\"Node-Red\\\"] && datasources[\\\"Node-Red\\\"][\\\"WinkData\\\"][\\\"smoke_detectors\\\"][\\\"\" + key + \"\\\"],\\\"battery\\\")\",\n        \"on_text\":\"wink.indicator.on_text(datasources[\\\"Node-Red\\\"] && datasources[\\\"Node-Red\\\"][\\\"WinkData\\\"][\\\"smoke_detectors\\\"][\\\"\" + key + \"\\\"],\\\"battery\\\")\",\n        \"off_text\":\"wink.indicator.off_text(datasources[\\\"Node-Red\\\"] && datasources[\\\"Node-Red\\\"][\\\"WinkData\\\"][\\\"smoke_detectors\\\"][\\\"\" + key + \"\\\"],\\\"battery\\\")\",\n        \"style_element\":\"wink.indicator.style_element(datasources[\\\"Node-Red\\\"] && datasources[\\\"Node-Red\\\"][\\\"WinkData\\\"][\\\"smoke_detectors\\\"][\\\"\" + key + \"\\\"],\\\"battery\\\")\"\n    }\n})\n}\n} //end smoke detectors\n\nfor (var key in context.global.winkState.thermostats)\n{\n    if( typeof pane_idx.tstats !=='undefined') \n    {\n        pane_id=pane_idx.tstats; //motion\n    } else\n    {\n        freeboard.panes.push(  {\n            \"title\":\"Thermostats\",\n            \"width\": 1,\n            \"row\": {\n                \"3\": 1\n            },\n            \"col\": {\n                \"3\": 1\n            },\n            \"col_width\": 1,\n            widgets:[]\n        });\n        pane_idx.tstats=i;\n        pane_id=i;\n        i++;\n    }\n\n//added so thermostats without max_set_point won't show [ecobee sensor compatibility]\nif (context.global.winkState.thermostats[key].max_set_point>0)\n{\n    freeboard.panes[pane_id].widgets.push(\n    {\n        \"type\": \"indicator\",\n        \"settings\": {\n            \"title\":key,\n            \"value\":\"wink.indicator.value(datasources[\\\"Node-Red\\\"] && datasources[\\\"Node-Red\\\"][\\\"WinkData\\\"][\\\"thermostats\\\"][\\\"\" + key + \"\\\"],\\\"mode\\\")\",\n            \"on_text\":\"wink.indicator.on_text(datasources[\\\"Node-Red\\\"] && datasources[\\\"Node-Red\\\"][\\\"WinkData\\\"][\\\"thermostats\\\"][\\\"\" + key + \"\\\"],\\\"mode\\\")\",\n            \"off_text\":\"wink.indicator.off_text(datasources[\\\"Node-Red\\\"] && datasources[\\\"Node-Red\\\"][\\\"WinkData\\\"][\\\"thermostats\\\"][\\\"\" + key + \"\\\"],\\\"mode\\\")\",\n            \"style_element\":\"wink.indicator.style_element(datasources[\\\"Node-Red\\\"] && datasources[\\\"Node-Red\\\"][\\\"WinkData\\\"][\\\"thermostats\\\"][\\\"\" + key + \"\\\"],\\\"mode\\\")\"\n        }\n    })\n}\n//if (typeof context.global.winkState.thermostats[key].users_away !== 'undefined')\n//    {\nfreeboard.panes[pane_id].widgets.push(\n{\n    \"type\": \"indicator\",\n    \"settings\": {\n        \"title\":key+\" Current temperature\",\n        \"value\":\"wink.indicator.value(datasources[\\\"Node-Red\\\"] && datasources[\\\"Node-Red\\\"][\\\"WinkData\\\"][\\\"thermostats\\\"][\\\"\" + key + \"\\\"],\\\"temperature\\\")\",\n        \"on_text\":\"wink.indicator.on_text(datasources[\\\"Node-Red\\\"] && datasources[\\\"Node-Red\\\"][\\\"WinkData\\\"][\\\"thermostats\\\"][\\\"\" + key + \"\\\"],\\\"temperature\\\")\",\n        \"off_text\":\"wink.indicator.off_text(datasources[\\\"Node-Red\\\"] && datasources[\\\"Node-Red\\\"][\\\"WinkData\\\"][\\\"thermostats\\\"][\\\"\" + key + \"\\\"],\\\"temperature\\\")\",\n        \"style_element\":\"wink.indicator.style_element(datasources[\\\"Node-Red\\\"] && datasources[\\\"Node-Red\\\"][\\\"WinkData\\\"][\\\"thermostats\\\"][\\\"\" + key + \"\\\"],\\\"temperature\\\")\"\n    }\n})\n//}\n} //end thermostats\n\nfor (var key in context.global.winkState.air_conditioners)\n{\n    if( typeof pane_idx.air_con !=='undefined') \n    {\n        pane_id=pane_idx.air_con; //motion\n    } else\n    {\n        freeboard.panes.push(  {\n            \"title\":\"Air Conditioners\",\n            \"width\": 1,\n            \"row\": {\n                \"3\": 1\n            },\n            \"col\": {\n                \"3\": 1\n            },\n            \"col_width\": 1,\n            widgets:[]\n        });\n        pane_idx.air_con=i;\n        pane_id=i;\n        i++;\n    }\n    freeboard.panes[pane_id].widgets.push(\n{\n    \"type\": \"indicator\",\n    \"settings\": {\n        \"title\":key,\n        \"value\":\"wink.indicator.value(datasources[\\\"Node-Red\\\"] && datasources[\\\"Node-Red\\\"][\\\"WinkData\\\"][\\\"air_conditioners\\\"][\\\"\" + key + \"\\\"])\",\n        \"on_text\":\"wink.indicator.on_text(datasources[\\\"Node-Red\\\"] && datasources[\\\"Node-Red\\\"][\\\"WinkData\\\"][\\\"air_conditioners\\\"][\\\"\" + key + \"\\\"])\",\n        \"off_text\":\"wink.indicator.off_text(datasources[\\\"Node-Red\\\"] && datasources[\\\"Node-Red\\\"][\\\"WinkData\\\"][\\\"air_conditioners\\\"][\\\"\" + key + \"\\\"])\",\n        \"style_element\":\"wink.indicator.style_element(datasources[\\\"Node-Red\\\"] && datasources[\\\"Node-Red\\\"][\\\"WinkData\\\"][\\\"air_conditioners\\\"][\\\"\" + key + \"\\\"])\"\n    }\n})\nfreeboard.panes[pane_id].widgets.push(\n{\n    \"type\": \"indicator\",\n    \"settings\": {\n        \"title\":key+ ' temperature',\n        \"value\":\"wink.indicator.value(datasources[\\\"Node-Red\\\"] && datasources[\\\"Node-Red\\\"][\\\"WinkData\\\"][\\\"air_conditioners\\\"][\\\"\" + key + \"\\\"],\\\"temperature\\\")\",\n        \"on_text\":\"wink.indicator.on_text(datasources[\\\"Node-Red\\\"] && datasources[\\\"Node-Red\\\"][\\\"WinkData\\\"][\\\"air_conditioners\\\"][\\\"\" + key + \"\\\"],\\\"temperature\\\")\",\n        \"off_text\":\"wink.indicator.off_text(datasources[\\\"Node-Red\\\"] && datasources[\\\"Node-Red\\\"][\\\"WinkData\\\"][\\\"air_conditioners\\\"][\\\"\" + key + \"\\\"],\\\"temperature\\\")\",\n        \"style_element\":\"wink.indicator.style_element(datasources[\\\"Node-Red\\\"] && datasources[\\\"Node-Red\\\"][\\\"WinkData\\\"][\\\"air_conditioners\\\"][\\\"\" + key + \"\\\"],\\\"temperature\\\")\"\n    }\n\n})\n\n}\n\nfor (var key in context.global.winkState.propane_tanks)\n{\n    if( typeof pane_idx.prop_tnk !=='undefined') \n    {\n        pane_id=pane_idx.prop_tnk; //motion\n    } else\n    {\n        freeboard.panes.push(  {\n            \"title\":\"Propane Tanks\",\n            \"width\": 1,\n            \"row\": {\n                \"3\": 1\n            },\n            \"col\": {\n                \"3\": 1\n            },\n            \"col_width\": 1,\n            widgets:[]\n        });\n        pane_idx.prop_tnk=i;\n        pane_id=i;\n        i++;\n    }\n    freeboard.panes[pane_id].widgets.push(\n{\n    \"type\": \"indicator\",\n    \"settings\": {\n        \"title\":key,\n        \"value\":\"wink.indicator.value(datasources[\\\"Node-Red\\\"] && datasources[\\\"Node-Red\\\"][\\\"WinkData\\\"][\\\"propane_tanks\\\"][\\\"\" + key + \"\\\"])\",\n        \"on_text\":\"wink.indicator.on_text(datasources[\\\"Node-Red\\\"] && datasources[\\\"Node-Red\\\"][\\\"WinkData\\\"][\\\"propane_tanks\\\"][\\\"\" + key + \"\\\"],\\\"remaining\\\")\",\n        \"off_text\":\"wink.indicator.off_text(datasources[\\\"Node-Red\\\"] && datasources[\\\"Node-Red\\\"][\\\"WinkData\\\"][\\\"propane_tanks\\\"][\\\"\" + key + \"\\\"],\\\"remaining\\\")\",\n        \"style_element\":\"wink.indicator.style_element(datasources[\\\"Node-Red\\\"] && datasources[\\\"Node-Red\\\"][\\\"WinkData\\\"][\\\"propane_tanks\\\"][\\\"\" + key + \"\\\"])\"\n    }\n})\nfreeboard.panes[pane_id].widgets.push(\n{\n        \"type\": \"indicator\",\n         \"settings\": {\n        \"title\":key + ' Battery',\n        \"value\":\"wink.indicator.value(datasources[\\\"Node-Red\\\"] && datasources[\\\"Node-Red\\\"][\\\"WinkData\\\"][\\\"propane_tanks\\\"][\\\"\" + key + \"\\\"],\\\"battery\\\")\",\n        \"on_text\":\"wink.indicator.on_text(datasources[\\\"Node-Red\\\"] && datasources[\\\"Node-Red\\\"][\\\"WinkData\\\"][\\\"propane_tanks\\\"][\\\"\" + key + \"\\\"],\\\"battery\\\")\",\n        \"off_text\":\"wink.indicator.off_text(datasources[\\\"Node-Red\\\"] && datasources[\\\"Node-Red\\\"][\\\"WinkData\\\"][\\\"propane_tanks\\\"][\\\"\" + key + \"\\\"],\\\"battery\\\")\",\n        \"style_element\":\"wink.indicator.style_element(datasources[\\\"Node-Red\\\"] && datasources[\\\"Node-Red\\\"][\\\"WinkData\\\"][\\\"propane_tanks\\\"][\\\"\" + key + \"\\\"],\\\"battery\\\")\"\n         }\n})\n\n}\n\nfor (var key in context.global.winkState.garage_doors)\n{\n    if( typeof pane_idx.garage !=='undefined') \n    {\n        pane_id=pane_idx.garage; //motion\n    } else\n    {\n        freeboard.panes.push(  {\n            \"title\":\"Garage doors\",\n            \"width\": 1,\n            \"row\": {\n                \"3\": 1\n            },\n            \"col\": {\n                \"3\": 1\n            },\n            \"col_width\": 1,\n            widgets:[]\n        });\n        pane_idx.garage=i;\n        pane_id=i;\n        i++;\n    }\n    freeboard.panes[pane_id].widgets.push(\n{\n    \"type\": \"indicator\",\n    \"settings\": {\n        \"title\":key + (context.global.winkState.garage_doors[key].connection ? \" - Online\" : \" - Off\"),\n        \"value\":\"wink.indicator.value(datasources[\\\"Node-Red\\\"] && datasources[\\\"Node-Red\\\"][\\\"WinkData\\\"][\\\"garage_doors\\\"][\\\"\" + key + \"\\\"])\",\n        \"on_text\":\"wink.indicator.on_text(datasources[\\\"Node-Red\\\"] && datasources[\\\"Node-Red\\\"][\\\"WinkData\\\"][\\\"garage_doors\\\"][\\\"\" + key + \"\\\"])\",\n        \"off_text\":\"wink.indicator.off_text(datasources[\\\"Node-Red\\\"] && datasources[\\\"Node-Red\\\"][\\\"WinkData\\\"][\\\"garage_doors\\\"][\\\"\" + key + \"\\\"])\",\n        \"style_element\":\"wink.indicator.style_element(datasources[\\\"Node-Red\\\"] && datasources[\\\"Node-Red\\\"][\\\"WinkData\\\"][\\\"garage_doors\\\"][\\\"\" + key + \"\\\"])\"\n    }\n})\n    \n}\n\nfor (var key in context.global.winkState.piggy_banks)\n{\n    if( typeof pane_idx.porky !=='undefined') \n    {\n        pane_id=pane_idx.porky; //porky banko\n    } else\n    {\n        freeboard.panes.push(  {\n            \"title\":\"Piggy Banks\",\n            \"width\": 1,\n            \"row\": {\n                \"3\": 1\n            },\n            \"col\": {\n                \"3\": 1\n            },\n            \"col_width\": 1,\n            widgets:[]\n        });\n        pane_idx.porky=i;\n        pane_id=i;\n        i++;\n    }\n    freeboard.panes[pane_id].widgets.push(\n{\n    \"type\": \"indicator\",\n    \"settings\": {\n        \"title\":key,\n        \"value\":\"wink.indicator.value(datasources[\\\"Node-Red\\\"] && datasources[\\\"Node-Red\\\"][\\\"WinkData\\\"][\\\"piggy_banks\\\"][\\\"\" + key + \"\\\"])\",\n        \"on_text\":\"wink.indicator.on_text(datasources[\\\"Node-Red\\\"] && datasources[\\\"Node-Red\\\"][\\\"WinkData\\\"][\\\"piggy_banks\\\"][\\\"\" + key + \"\\\"])\",\n        \"off_text\":\"wink.indicator.off_text(datasources[\\\"Node-Red\\\"] && datasources[\\\"Node-Red\\\"][\\\"WinkData\\\"][\\\"piggy_banks\\\"][\\\"\" + key + \"\\\"])\",\n        \"style_element\":\"wink.indicator.style_element(datasources[\\\"Node-Red\\\"] && datasources[\\\"Node-Red\\\"][\\\"WinkData\\\"][\\\"piggy_banks\\\"][\\\"\" + key + \"\\\"])\"\n    }\n})\n    \n}\n\n\n\nfor (var key in context.global.winkState.hubs)\n{\n    if( typeof pane_idx.hubs !=='undefined') \n    {\n        pane_id=pane_idx.hubs; //motion\n    } else\n    {\n        freeboard.panes.push(  {\n            \"title\":\"Hubs\",\n            \"width\": 1,\n            \"row\": {\n                \"3\": 1\n            },\n            \"col\": {\n                \"3\": 1\n            },\n            \"col_width\": 1,\n            widgets:[]\n        });\n        pane_idx.hubs=i;\n        pane_id=i;\n        i++;\n    }\n    freeboard.panes[pane_id].widgets.push(\n{\n    \"type\": \"indicator\",\n    \"settings\": {\n        \"title\":key,\n        \"value\":\"wink.indicator.value(datasources[\\\"Node-Red\\\"] && datasources[\\\"Node-Red\\\"][\\\"WinkData\\\"][\\\"hubs\\\"][\\\"\" + key + \"\\\"])\",\n        \"on_text\":\"wink.indicator.on_text(datasources[\\\"Node-Red\\\"] && datasources[\\\"Node-Red\\\"][\\\"WinkData\\\"][\\\"hubs\\\"][\\\"\" + key + \"\\\"])\",\n        \"off_text\":\"wink.indicator.off_text(datasources[\\\"Node-Red\\\"] && datasources[\\\"Node-Red\\\"][\\\"WinkData\\\"][\\\"hubs\\\"][\\\"\" + key + \"\\\"])\",\n        \"style_element\":\"wink.indicator.style_element(datasources[\\\"Node-Red\\\"] && datasources[\\\"Node-Red\\\"][\\\"WinkData\\\"][\\\"hubs\\\"][\\\"\" + key + \"\\\"])\"\n    }\n}\n)\n\nif (context.global.winkState.hubs[key].firmware_version !== null)\n    {\nfreeboard.panes[pane_id].widgets.push(\n{\n    \"type\": \"text_widget\",\n    \"settings\": {\n        \"title\":\"Current firmware\",\n        \"value\":\"datasources[\\\"Node-Red\\\"][\\\"WinkData\\\"][\\\"hubs\\\"][\\\"\" + key + \"\\\"][\\\"firmware_version\\\"]\",\n        \"size\":\"regular\",\n        \"animate\":\"true\"\n    }\n})\n}\n}\nfreeboard.panes[pane_id].widgets.push(\n        {\n  \"type\": \"text_widget\",\n          \"settings\": {\n            \"title\": \"Wink API Index\",\n            \"size\": \"regular\",\n            \"value\": \"datasources[\\\"winkAPI\\\"][\\\"metrics\\\"][0][\\\"data\\\"][287][\\\"value\\\"]\",\n            \"sparkline\": true,\n            \"animate\": true\n          }\n        }\n)\n\nfor (var key in context.global.Presence){\n    if( typeof pane_idx.presence !=='undefined') \n        {\n            pane_id=pane_idx.presence; //motion\n        } else\n        {\n            freeboard.panes.push(  {\n                \"title\":\"Presence\",\n                \"width\": 1,\n                \"row\": {\n                    \"3\": 1\n                },\n                \"col\": {\n                    \"3\": 1\n                },\n                \"col_width\": 1,\n                widgets:[]\n            });\n            pane_idx.presence=i;\n            pane_id=i;\n            i++;\n        }\n}\nif( typeof pane_idx.presence !=='undefined'){\n                    freeboard.panes[pane_idx.presence].widgets.push(\n                 {\n                     \"type\": \"indicator\",\n                     \"settings\": \n                      {\n                          \"title\":\"\" ,\n                          \"value\":\"datasources[\\\"Node-Red\\\"][\\\"Presence\\\"]\",\n                          \"on_text\":\"Presence detected\",\n                          \"off_text\":\"None\"\n//                          \"style_element\":\"wink.indicator.style_element(datasources[\\\"Node-Red\\\"] && datasources[\\\"Node-Red\\\"][\\\"WinkData\\\"][\\\"cameras\\\"][\\\"\" + key + \"\\\"])\"\n                      }\n                 })\n} \n\n\n\nfreeboard.datasources =\n [\n    {\n        \"name\": \"Node-Red\",\n        \"type\": \"JSON\",\n        \"settings\": {\n            \"url\": context.global.BlueMixUrlBase+\"/red/getGlobalDataJson\",\n            \"use_thingproxy\": true,\n            \"refresh\": 2,\n            \"method\": \"GET\",\n            \"headers\": [\n              {\n                  \"name\": \"Authorization\",\n                  \"value\": \"Bearer \"+context.global.FREEBOARD_TOKEN\n              }\n            ],\n            \"name\":\"Node-Red\"\n        }\n    },\n    {\n      \"name\": \"My Clock\",\n      \"type\": \"clock\",\n      \"settings\": {\n        \"refresh\": 1,\n        \"name\": \"My Clock\"\n      }\n    },\n {\n      \"name\": \"winkAPI\",\n      \"type\": \"JSON\",\n      \"settings\": {\n        \"url\": \"https://status.winkapp.com/metrics-display/009ykpcmnm25/day.json\",\n        \"use_thingproxy\": true,\n        \"refresh\": 300,\n        \"method\": \"GET\"\n      }\n    }    \n ]\nfreeboard.columns=i;\nmsg.payload=freeboard;\n}\nelse\n{\n    msg.payload=\"Bad request darling\"\n}\nreturn msg;",
     "outputs": 1,
     "noerr": 0,
-    "x": 457,
-    "y": 321.94451904296875,
-    "z": "a6ad1804.5952e8",
+    "x": 480.89581298828125,
+    "y": 347.8334045410156,
+    "z": "a5bd9a7f.5a4268",
     "wires": [
       [
-        "3f8101dd.c07efe"
+        "b87a5571.4785a8"
       ]
     ]
   },
   {
-    "id": "685a0621.97a5f8",
+    "id": "bf747ef6.408b8",
     "type": "http in",
     "name": "",
     "url": "/red/getFreeboardAutoGroupJson",
     "method": "get",
     "swaggerDoc": "",
-    "x": 153.5,
-    "y": 322.44451904296875,
-    "z": "a6ad1804.5952e8",
+    "x": 177.39581298828125,
+    "y": 348.3334045410156,
+    "z": "a5bd9a7f.5a4268",
     "wires": [
       [
-        "163d4b8e.e9c2b4"
+        "44f9ca04.bb0634"
       ]
     ]
   },
   {
-    "id": "78ca3e28.8735c",
+    "id": "ed1e4db.f12e1b",
     "type": "http response",
     "name": "",
-    "x": 878.5,
-    "y": 327.44451904296875,
-    "z": "a6ad1804.5952e8",
+    "x": 902.3958129882812,
+    "y": 353.3334045410156,
+    "z": "a5bd9a7f.5a4268",
     "wires": []
   },
   {
-    "id": "3f8101dd.c07efe",
+    "id": "b87a5571.4785a8",
     "type": "json",
     "name": "",
-    "x": 705.5,
-    "y": 326.44451904296875,
-    "z": "a6ad1804.5952e8",
+    "x": 729.3958129882812,
+    "y": 352.3334045410156,
+    "z": "a5bd9a7f.5a4268",
     "wires": [
       [
-        "78ca3e28.8735c"
+        "ed1e4db.f12e1b"
       ]
     ]
   },
   {
-    "id": "b0a936b5.4f56c8",
+    "id": "a47f1c72.5b80e",
     "type": "template",
     "name": "",
     "field": "",
     "format": "handlebars",
-    "template": "<!DOCTYPE html>\n<html>\n<head>\n    <meta charset=\"UTF-8\">\n    <title>Winkboard by Group</title>\n\t<meta name=\"mobile-web-app-capable\" content=\"yes\">\n    <meta name=\"apple-mobile-web-app-capable\" content=\"yes\" />\n    <meta name=\"apple-mobile-web-app-status-bar-style\" content=\"black\" />\n    <meta name=\"viewport\" content = \"width = device-width, initial-scale = 0.45, user-scalable = yes\" />\n    <link href=\"css/freeboard.min.css\" rel=\"stylesheet\" />\n    <script src=\"js/freeboard.thirdparty.min.js\"></script>\n\t\n    <script type=\"text/javascript\">\n        head.js(\"js/freeboard.js\",\"js/freeboard.plugins.min.js\",\"../freeboard_api/datasources\",\n                \"lib/js/thirdparty/wink.js\",\n\n                // *** Load more plugins here ***\n                function(){\n                    $(function()\n                    { //DOM Ready\n                        freeboard.initialize(true);\n\n                        //var hash = window.location.hash;\n                        //if (hash !== null) {\n                            $.get({{context.global.BlueMixUrlBase}}\"/red/getFreeboardAutoGroupJson?auth={{payload.pwd_str}}\", function(data) {\n\t\t\t\t\t\t\t\tvar datap=JSON.parse(data);\n\t\t\t\t\t\t\t\tif (!datap.empty){\n\t\t\t\t\t\t\t\t\tfreeboard.loadDashboard(datap, function() {\n\t\t\t\t\t\t\t\t\t\tfreeboard.setEditing(false);\n\t\t\t\t\t\t\t\t\t});\n\t\t\t\t\t\t\t\t}\n                            });\n                        //}\n\n                    });\n                });\n    </script>\n</head>\n<body>\n<div id=\"board-content\">\n    <img id=\"dash-logo\" data-bind=\"attr:{src: header_image}, visible:header_image()\">\n    <div class=\"gridster responsive-column-width\">\n        <ul data-bind=\"grid: true\">\n        </ul>\n    </div>\n</div>\n\n<header id=\"main-header\" data-bind=\"if:allow_edit\">\n    <div id=\"admin-bar\">\n        <div id=\"admin-menu\">\n            <div id=\"board-tools\">\n                <h1 id=\"board-logo\" class=\"title bordered\">freeboard</h1>\n                <div id=\"board-actions\">\n                    <ul class=\"board-toolbar vertical\">\n                        <!--<li data-bind=\"click: loadDashboardFromLocalFile\"><i id=\"full-screen-icon\" class=\"icon-folder-open icon-white\"></i><label id=\"full-screen\">Load Freeboard</label></li>-->\n                        <li data-bind=\"click: saveDashboard\"><i class=\"icon-download-alt icon-white\"></i><label>Save Freeboard</label></li>\n                        <li id=\"add-pane\" data-bind=\"click: createPane\"><i class=\"icon-plus icon-white\"></i><label>Add Pane</label></li>\n                    </ul>\n                </div>\n            </div>\n            <div id=\"datasources\">\n                <h2 class=\"title\">DATASOURCES</h2>\n\n                <div class=\"datasource-list-container\">\n                    <table class=\"table table-condensed sub-table\" id=\"datasources-list\" data-bind=\"if: datasources().length\">\n                        <thead>\n                        <tr>\n                            <th>Name</th>\n                            <th>Last Updated</th>\n                            <th>&nbsp;</th>\n                        </tr>\n                        </thead>\n                        <tbody data-bind=\"foreach: datasources\">\n                        <tr>\n                            <td>\n                                <span class=\"text-button datasource-name\" data-bind=\"text: name, pluginEditor: {operation: 'edit', type: 'datasource'}\"></span>\n                            </td>\n                            <td data-bind=\"text: last_updated\"></td>\n                            <td>\n                                <ul class=\"board-toolbar\">\n                                    <li data-bind=\"click: updateNow\"><i class=\"icon-refresh icon-white\"></i></li>\n                                    <li data-bind=\"pluginEditor: {operation: 'delete', type: 'datasource'}\">\n                                        <i class=\"icon-trash icon-white\"></i></li>\n                                </ul>\n                            </td>\n                        </tr>\n                        </tbody>\n                    </table>\n                </div>\n                <span class=\"text-button table-operation\" data-bind=\"pluginEditor: {operation: 'add', type: 'datasource'}\">ADD</span>\n            </div>\n        </div>\n    </div>\n\t<div id=\"column-tools\" class=\"responsive-column-width\">\n\t\t<ul class=\"board-toolbar left-columns\">\n\t\t\t<li class=\"column-tool add\" data-bind=\"click: addGridColumnLeft\"><span class=\"column-icon right\"></span><i class=\"icon-arrow-left icon-white\"></i></li>\n\t\t\t<li class=\"column-tool sub\" data-bind=\"click: subGridColumnLeft\"><span class=\"column-icon left\"></span><i class=\"icon-arrow-right icon-white\"></i></li>\n\t\t</ul>\n\t\t<ul class=\"board-toolbar right-columns\">\n\t\t\t<li class=\"column-tool sub\" data-bind=\"click: subGridColumnRight\"><span class=\"column-icon right\"></span><i class=\"icon-arrow-left icon-white\"></i></li>\n\t\t\t<li class=\"column-tool add\" data-bind=\"click: addGridColumnRight\"><span class=\"column-icon left\"></span><i class=\"icon-arrow-right icon-white\"></i></li>\n\t\t</ul>\n\t</div>\n    <div id=\"toggle-header\" data-bind=\"click: toggleEditing\">\n        <i id=\"toggle-header-icon\" class=\"icon-wrench icon-white\"></i></div>\n</header>\n\n<div style=\"display:hidden\">\n    <ul data-bind=\"template: { name: 'pane-template', foreach: panes}\">\n    </ul>\n</div>\n\n<script type=\"text/html\" id=\"pane-template\">\n    <li data-bind=\"pane: true\">\n        <header>\n            <h1 data-bind=\"text: title\"></h1>\n            <ul class=\"board-toolbar pane-tools\">\n                <li data-bind=\"pluginEditor: {operation: 'add', type: 'widget'}\">\n                    <i class=\"icon-plus icon-white\"></i>\n                </li>\n                <li data-bind=\"pluginEditor: {operation: 'edit', type: 'pane'}\">\n                    <i class=\"icon-wrench icon-white\"></i>\n                </li>\n                <li data-bind=\"pluginEditor: {operation: 'delete', type: 'pane'}\">\n                    <i class=\"icon-trash icon-white\"></i>\n                </li>\n            </ul>\n        </header>\n        <section data-bind=\"foreach: widgets\">\n            <div class=\"sub-section\" data-bind=\"css: 'sub-section-height-' + height()\">\n                <div class=\"widget\" data-bind=\"widget: true, css:{fillsize:fillSize}\"></div>\n                <div class=\"sub-section-tools\">\n                    <ul class=\"board-toolbar\">\n                        <!-- ko if:$parent.widgetCanMoveUp($data) -->\n                        <li data-bind=\"click:$parent.moveWidgetUp\"><i class=\"icon-chevron-up icon-white\"></i></li>\n                        <!-- /ko -->\n                        <!-- ko if:$parent.widgetCanMoveDown($data) -->\n                        <li data-bind=\"click:$parent.moveWidgetDown\"><i class=\"icon-chevron-down icon-white\"></i></li>\n                        <!-- /ko -->\n                        <li data-bind=\"pluginEditor: {operation: 'edit', type: 'widget'}\"><i class=\"icon-wrench icon-white\"></i></li>\n                        <li data-bind=\"pluginEditor: {operation: 'delete', type: 'widget'}\"><i class=\"icon-trash icon-white\"></i></li>\n                    </ul>\n                </div>\n            </div>\n        </section>\n    </li>\n</script>\n\n</body>\n</html>\n",
-    "x": 748.5,
-    "y": 394.44451904296875,
-    "z": "a6ad1804.5952e8",
+    "template": "<!DOCTYPE html>\n<html>\n<head>\n    <meta charset=\"UTF-8\">\n    <title>Winkboard by Group</title>\n\t<meta name=\"mobile-web-app-capable\" content=\"yes\">\n    <meta name=\"apple-mobile-web-app-capable\" content=\"yes\" />\n    <meta name=\"apple-mobile-web-app-status-bar-style\" content=\"black\" />\n    <meta name=\"viewport\" content = \"width = device-width, initial-scale = 0.7, user-scalable = yes\" />\n    <link href=\"css/freeboard.min.css\" rel=\"stylesheet\" />\n    <script src=\"js/freeboard.thirdparty.min.js\"></script>\n\t\n    <script type=\"text/javascript\">\n        head.js(\"js/freeboard.js\",\"js/freeboard.plugins.min.js\",\"../freeboard_api/datasources\",\n                \"lib/js/thirdparty/wink.js\",\n\n                // *** Load more plugins here ***\n                function(){\n                    $(function()\n                    { //DOM Ready\n                        freeboard.initialize(true);\n\n                        //var hash = window.location.hash;\n                        //if (hash !== null) {\n                            $.get({{context.global.BlueMixUrlBase}}\"/red/getFreeboardAutoGroupJson?auth={{payload.pwd_str}}\", function(data) {\n\t\t\t\t\t\t\t\tvar datap=JSON.parse(data);\n\t\t\t\t\t\t\t\tif (!datap.empty){\n\t\t\t\t\t\t\t\t\tfreeboard.loadDashboard(datap, function() {\n\t\t\t\t\t\t\t\t\t\tfreeboard.setEditing(false);\n\t\t\t\t\t\t\t\t\t});\n\t\t\t\t\t\t\t\t}\n                            });\n                        //}\n\n                    });\n                });\n    </script>\n</head>\n<body>\n<div id=\"board-content\">\n    <img id=\"dash-logo\" data-bind=\"attr:{src: header_image}, visible:header_image()\">\n    <div class=\"gridster responsive-column-width\">\n        <ul data-bind=\"grid: true\">\n        </ul>\n    </div>\n</div>\n\n<header id=\"main-header\" data-bind=\"if:allow_edit\">\n    <div id=\"admin-bar\">\n        <div id=\"admin-menu\">\n            <div id=\"board-tools\">\n                <h1 id=\"board-logo\" class=\"title bordered\">freeboard</h1>\n                <div id=\"board-actions\">\n                    <ul class=\"board-toolbar vertical\">\n                        <!--<li data-bind=\"click: loadDashboardFromLocalFile\"><i id=\"full-screen-icon\" class=\"icon-folder-open icon-white\"></i><label id=\"full-screen\">Load Freeboard</label></li>-->\n                        <li data-bind=\"click: saveDashboard\"><i class=\"icon-download-alt icon-white\"></i><label>Save Freeboard</label></li>\n                        <li id=\"add-pane\" data-bind=\"click: createPane\"><i class=\"icon-plus icon-white\"></i><label>Add Pane</label></li>\n                    </ul>\n                </div>\n            </div>\n            <div id=\"datasources\">\n                <h2 class=\"title\">DATASOURCES</h2>\n\n                <div class=\"datasource-list-container\">\n                    <table class=\"table table-condensed sub-table\" id=\"datasources-list\" data-bind=\"if: datasources().length\">\n                        <thead>\n                        <tr>\n                            <th>Name</th>\n                            <th>Last Updated</th>\n                            <th>&nbsp;</th>\n                        </tr>\n                        </thead>\n                        <tbody data-bind=\"foreach: datasources\">\n                        <tr>\n                            <td>\n                                <span class=\"text-button datasource-name\" data-bind=\"text: name, pluginEditor: {operation: 'edit', type: 'datasource'}\"></span>\n                            </td>\n                            <td data-bind=\"text: last_updated\"></td>\n                            <td>\n                                <ul class=\"board-toolbar\">\n                                    <li data-bind=\"click: updateNow\"><i class=\"icon-refresh icon-white\"></i></li>\n                                    <li data-bind=\"pluginEditor: {operation: 'delete', type: 'datasource'}\">\n                                        <i class=\"icon-trash icon-white\"></i></li>\n                                </ul>\n                            </td>\n                        </tr>\n                        </tbody>\n                    </table>\n                </div>\n                <span class=\"text-button table-operation\" data-bind=\"pluginEditor: {operation: 'add', type: 'datasource'}\">ADD</span>\n            </div>\n        </div>\n    </div>\n\t<div id=\"column-tools\" class=\"responsive-column-width\">\n\t\t<ul class=\"board-toolbar left-columns\">\n\t\t\t<li class=\"column-tool add\" data-bind=\"click: addGridColumnLeft\"><span class=\"column-icon right\"></span><i class=\"icon-arrow-left icon-white\"></i></li>\n\t\t\t<li class=\"column-tool sub\" data-bind=\"click: subGridColumnLeft\"><span class=\"column-icon left\"></span><i class=\"icon-arrow-right icon-white\"></i></li>\n\t\t</ul>\n\t\t<ul class=\"board-toolbar right-columns\">\n\t\t\t<li class=\"column-tool sub\" data-bind=\"click: subGridColumnRight\"><span class=\"column-icon right\"></span><i class=\"icon-arrow-left icon-white\"></i></li>\n\t\t\t<li class=\"column-tool add\" data-bind=\"click: addGridColumnRight\"><span class=\"column-icon left\"></span><i class=\"icon-arrow-right icon-white\"></i></li>\n\t\t</ul>\n\t</div>\n    <div id=\"toggle-header\" data-bind=\"click: toggleEditing\">\n        <i id=\"toggle-header-icon\" class=\"icon-wrench icon-white\"></i></div>\n</header>\n\n<div style=\"display:hidden\">\n    <ul data-bind=\"template: { name: 'pane-template', foreach: panes}\">\n    </ul>\n</div>\n\n<script type=\"text/html\" id=\"pane-template\">\n    <li data-bind=\"pane: true\">\n        <header>\n            <h1 data-bind=\"text: title\"></h1>\n            <ul class=\"board-toolbar pane-tools\">\n                <li data-bind=\"pluginEditor: {operation: 'add', type: 'widget'}\">\n                    <i class=\"icon-plus icon-white\"></i>\n                </li>\n                <li data-bind=\"pluginEditor: {operation: 'edit', type: 'pane'}\">\n                    <i class=\"icon-wrench icon-white\"></i>\n                </li>\n                <li data-bind=\"pluginEditor: {operation: 'delete', type: 'pane'}\">\n                    <i class=\"icon-trash icon-white\"></i>\n                </li>\n            </ul>\n        </header>\n        <section data-bind=\"foreach: widgets\">\n            <div class=\"sub-section\" data-bind=\"css: 'sub-section-height-' + height()\">\n                <div class=\"widget\" data-bind=\"widget: true, css:{fillsize:fillSize}\"></div>\n                <div class=\"sub-section-tools\">\n                    <ul class=\"board-toolbar\">\n                        <!-- ko if:$parent.widgetCanMoveUp($data) -->\n                        <li data-bind=\"click:$parent.moveWidgetUp\"><i class=\"icon-chevron-up icon-white\"></i></li>\n                        <!-- /ko -->\n                        <!-- ko if:$parent.widgetCanMoveDown($data) -->\n                        <li data-bind=\"click:$parent.moveWidgetDown\"><i class=\"icon-chevron-down icon-white\"></i></li>\n                        <!-- /ko -->\n                        <li data-bind=\"pluginEditor: {operation: 'edit', type: 'widget'}\"><i class=\"icon-wrench icon-white\"></i></li>\n                        <li data-bind=\"pluginEditor: {operation: 'delete', type: 'widget'}\"><i class=\"icon-trash icon-white\"></i></li>\n                    </ul>\n                </div>\n            </div>\n        </section>\n    </li>\n</script>\n\n</body>\n</html>\n",
+    "x": 772.3958129882812,
+    "y": 420.3334045410156,
+    "z": "a5bd9a7f.5a4268",
     "wires": [
       [
-        "de0e8636.21f178"
+        "567dce88.a9823"
       ]
     ]
   },
   {
-    "id": "3016414a.cfe9be",
+    "id": "9b52faf5.64ad08",
     "type": "http in",
     "name": "",
     "url": "/freeboard/winkboardautogroup",
     "method": "post",
     "swaggerDoc": "",
-    "x": 149.5,
-    "y": 392.44451904296875,
-    "z": "a6ad1804.5952e8",
+    "x": 173.39581298828125,
+    "y": 418.3334045410156,
+    "z": "a5bd9a7f.5a4268",
     "wires": [
       [
-        "85bb623f.7a44a"
+        "a591399.f5a6ec8"
       ]
     ]
   },
   {
-    "id": "de0e8636.21f178",
+    "id": "567dce88.a9823",
     "type": "http response",
     "name": "",
-    "x": 908.5,
-    "y": 394.44451904296875,
-    "z": "a6ad1804.5952e8",
+    "x": 932.3958129882812,
+    "y": 420.3334045410156,
+    "z": "a5bd9a7f.5a4268",
     "wires": []
   },
   {
-    "id": "4b3e90fa.b4c17",
+    "id": "8271c358.7d8e4",
     "type": "template",
     "name": "",
     "field": "payload",
     "format": "handlebars",
     "template": "<html>\n<head>\n  <meta charset=\"utf-8\">\n  <title>Login Form</title>\n</head>\n<body>\n    <div class=\"login\">\n      <h1>Login to see Wink Board by groups</h1>\n      <form method=\"post\" action=\"/freeboard/winkboardautogroup\">\n        <p><input type=\"text\" name=\"uid\" value=\"\" placeholder=\"Enter Winkapp User name\"></p>\n        <p><input type=\"password\" name=\"pwd\" value=\"\" placeholder=\"Enter Winkapp Password\"></p>\n        <p class=\"submit\"><input type=\"submit\" name=\"commit\" value=\"Login\"></p>\n      </form>\n    </div>\n</body>\n</html>",
-    "x": 361.5,
-    "y": 460.44451904296875,
-    "z": "a6ad1804.5952e8",
+    "x": 385.39581298828125,
+    "y": 486.3334045410156,
+    "z": "a5bd9a7f.5a4268",
     "wires": [
       [
-        "9cdcff8a.6323"
+        "798aed91.867514"
       ]
     ]
   },
   {
-    "id": "85bb623f.7a44a",
+    "id": "a591399.f5a6ec8",
     "type": "function",
     "name": "",
     "func": "if (msg.req.body.uid==context.global.WinkUser.uid && msg.req.body.pwd==context.global.WinkUser.pwd){\nmsg.res.statusCode=\"200\";\nmsg.payload={\"pwd_str\":context.global.FREEBOARD_TOKEN}\n} else {\nmsg.res.statusCode=\"403\";\n}\nreturn msg;",
     "outputs": 1,
     "noerr": 0,
-    "x": 376.5,
-    "y": 392.44451904296875,
-    "z": "a6ad1804.5952e8",
+    "x": 400.39581298828125,
+    "y": 418.3334045410156,
+    "z": "a5bd9a7f.5a4268",
     "wires": [
       [
-        "e603da3.f19fc28"
+        "7f067db9.80f984"
       ]
     ]
   },
   {
-    "id": "ad0d0d9f.52f2f",
+    "id": "ec2187f3.13de78",
     "type": "http in",
     "name": "",
     "url": "/freeboard/winkboardautogroup",
     "method": "get",
     "swaggerDoc": "",
-    "x": 146,
-    "y": 460.44451904296875,
-    "z": "a6ad1804.5952e8",
+    "x": 169.89581298828125,
+    "y": 486.3334045410156,
+    "z": "a5bd9a7f.5a4268",
     "wires": [
       [
-        "4b3e90fa.b4c17"
+        "8271c358.7d8e4"
       ]
     ]
   },
   {
-    "id": "e603da3.f19fc28",
+    "id": "7f067db9.80f984",
     "type": "switch",
     "name": "",
     "property": "res.statusCode",
@@ -414,140 +414,140 @@
     ],
     "checkall": "true",
     "outputs": 2,
-    "x": 523.5,
-    "y": 392.44451904296875,
-    "z": "a6ad1804.5952e8",
+    "x": 547.3958129882812,
+    "y": 418.3334045410156,
+    "z": "a5bd9a7f.5a4268",
     "wires": [
       [
-        "b0a936b5.4f56c8"
+        "a47f1c72.5b80e"
       ],
       [
-        "46f78b4.fb90874"
+        "80140e07.7febf"
       ]
     ]
   },
   {
-    "id": "9cdcff8a.6323",
+    "id": "798aed91.867514",
     "type": "http response",
     "name": "",
-    "x": 506.5,
-    "y": 461.44451904296875,
-    "z": "a6ad1804.5952e8",
+    "x": 530.3958129882812,
+    "y": 487.3334045410156,
+    "z": "a5bd9a7f.5a4268",
     "wires": []
   },
   {
-    "id": "927c925e.6d837",
+    "id": "183e4764.e7c1b9",
     "type": "http response",
     "name": "",
-    "x": 912.5,
-    "y": 436.44451904296875,
-    "z": "a6ad1804.5952e8",
+    "x": 936.3958129882812,
+    "y": 462.3334045410156,
+    "z": "a5bd9a7f.5a4268",
     "wires": []
   },
   {
-    "id": "46f78b4.fb90874",
+    "id": "80140e07.7febf",
     "type": "template",
     "name": "",
     "field": "payload",
     "format": "handlebars",
     "template": "<html>\n  <head>\n    <title>Invalid login</title>\n    <META http-equiv=\"refresh\" content=\"3;URL=/freeboard/winkboard\">\n  </head>\n <body bgcolor=\"#ffffff\">\n    <center>Invalid user Id or Password</a>\n    </center>\n  </body>\n\n</html>",
-    "x": 750.5,
-    "y": 436.44451904296875,
-    "z": "a6ad1804.5952e8",
+    "x": 774.3958129882812,
+    "y": 462.3334045410156,
+    "z": "a5bd9a7f.5a4268",
     "wires": [
       [
-        "927c925e.6d837"
+        "183e4764.e7c1b9"
       ]
     ]
   },
   {
-    "id": "69ff1465.9600ec",
+    "id": "8743d925.78bc28",
     "type": "http in",
     "name": "",
     "url": "/red/freeboardcamHistJson",
     "method": "get",
     "swaggerDoc": "",
-    "x": 132,
-    "y": 576.3333740234375,
-    "z": "a6ad1804.5952e8",
+    "x": 155.89581298828125,
+    "y": 602.2222595214844,
+    "z": "a5bd9a7f.5a4268",
     "wires": [
       [
-        "46ca7184.b9359"
+        "9406e816.6bf918"
       ]
     ]
   },
   {
-    "id": "46ca7184.b9359",
+    "id": "9406e816.6bf918",
     "type": "function",
     "name": "Generate Cameras History Feed",
-    "func": "var pane_idx = {};\nvar freeboard = {}\nfreeboard.version=\"1\";\nfreeboard.allow_edit=false;\nfreeboard.panes=[];\nfreeboard.plugins= [];\nvar i=0;\n\nfor (var key in context.global.winkState.cameras){\n\n    if (typeof(context.global.winkState.cameras[key].activities) !=='undefined'){\n    var cam_act=context.global.winkState.cameras[key].activities;\n    for (var j=0; j<cam_act.length; j++){\n        var datetime=new Date(cam_act[j].cuepoint_id*1000+context.global.Weather.Offset*60*60*1000);\n            freeboard.panes.push(  {\n                \"title\":key+' Time: '+datetime.toLocaleString(),\n                \"width\": 1,\n                \"row\": {\n                    \"3\": 1\n                },\n                \"col\": {\n                    \"3\": 1\n                },\n                \"col_width\": 1,\n                widgets:[]\n            });\n            pane_id=i;\n            i++;\n     freeboard.panes[pane_id].widgets.push(             \n                {\n          \"type\": \"picture\",\n          \"settings\": {\n            \"src\": context.global.BlueMixUrlBase+\"/freeboard/camera?token=\"+context.global.FREEBOARD_TOKEN+\"&id=\"+context.global.winkState.cameras[key].object_id+\"&cuepoint=\"+cam_act[j].cuepoint_id,\n            \"refresh\": 0\n          }\n        })\n        \n     freeboard.panes[pane_id].widgets.push(             \n                {\n          \"type\": \"html\",\n          \"settings\": {\n            \"html\":\"<br><p><a target=\\\"_blank\\\" href=\\\"\"+cam_act[j].media_url+\"\\\">Click here to see the video</a></p>\",\n            \"height\": 1\n          }\n        })\n     }\n    }\n}\n\nfreeboard.datasources =[]\nfreeboard.columns=i;\nmsg.payload=freeboard;\nreturn msg;",
+    "func": "var pane_idx = {};\nvar freeboard = {}\nfreeboard.version=\"1\";\nfreeboard.allow_edit=false;\nfreeboard.panes=[];\nfreeboard.plugins= [];\nvar i=0;\n\nfor (var key in context.global.winkState.cameras){\n\n    if (typeof(context.global.winkState.cameras[key].activities) !=='undefined'){\n    var cam_act=context.global.winkState.cameras[key].activities;\n    for (var j=0; j<cam_act.length; j++){\n        if (cam_act[j].category=='cuepoint'){\n        var datetime=new Date(cam_act[j].cuepoint_id*1000+context.global.Weather.Offset*60*60*1000);\n            freeboard.panes.push(  {\n                \"title\":key+' Time: '+datetime.toLocaleString(),\n                \"width\": 1,\n                \"row\": {\n                    \"3\": 1\n                },\n                \"col\": {\n                    \"3\": 1\n                },\n                \"col_width\": 1,\n                widgets:[]\n            });\n            pane_id=i;\n            i++;\n     freeboard.panes[pane_id].widgets.push(             \n                {\n          \"type\": \"picture\",\n          \"settings\": {\n            \"src\": encodeURI(cam_act[j].snapshot_url),\n//            context.global.BlueMixUrlBase+\"/freeboard/camera?token=\"+context.global.FREEBOARD_TOKEN+\"&id=\"+context.global.winkState.cameras[key].object_id+\"&cuepoint=\"+cam_act[j].cuepoint_id,\n            \"refresh\": 0\n          }\n        })\n    if('media_url' in cam_act[j]){\n     freeboard.panes[pane_id].widgets.push(             \n                {\n          \"type\": \"html\",\n          \"settings\": {\n            \"html\":\"<br><p><a target=\\\"_blank\\\" href=\\\"\"+cam_act[j].media_url+\"\\\">Click here to see the video</a></p>\",\n            \"height\": 1\n          }\n        })\n       }\n      }\n     }\n    }\n}\n\nfreeboard.datasources =[]\nfreeboard.columns=i;\nmsg.payload=freeboard;\nreturn msg;",
     "outputs": 1,
     "noerr": 0,
-    "x": 441.50001525878906,
-    "y": 576.3333740234375,
-    "z": "a6ad1804.5952e8",
+    "x": 554.3957977294922,
+    "y": 549.2223205566406,
+    "z": "a5bd9a7f.5a4268",
     "wires": [
       [
-        "c3f5daa5.3c0a28"
+        "63ca0b83.9c35f4"
       ]
     ]
   },
   {
-    "id": "c3f5daa5.3c0a28",
+    "id": "63ca0b83.9c35f4",
     "type": "json",
     "name": "",
-    "x": 663.5000152587891,
-    "y": 576.3333740234375,
-    "z": "a6ad1804.5952e8",
+    "x": 786.3957977294922,
+    "y": 548.2223205566406,
+    "z": "a5bd9a7f.5a4268",
     "wires": [
       [
-        "44bfbdb5.bb4044"
+        "4585eba7.ba7a14"
       ]
     ]
   },
   {
-    "id": "44bfbdb5.bb4044",
+    "id": "4585eba7.ba7a14",
     "type": "http response",
     "name": "",
-    "x": 798.5000152587891,
-    "y": 577.3333740234375,
-    "z": "a6ad1804.5952e8",
+    "x": 942.3957977294922,
+    "y": 547.2223205566406,
+    "z": "a5bd9a7f.5a4268",
     "wires": []
   },
   {
-    "id": "f9fb1a93.0604e8",
+    "id": "589a9dfd.a76564",
     "type": "http in",
     "name": "",
     "url": "/freeboard/cameraHistory",
     "method": "post",
     "swaggerDoc": "",
-    "x": 130.5,
-    "y": 679.3333740234375,
-    "z": "a6ad1804.5952e8",
+    "x": 154.39581298828125,
+    "y": 678.2222900390625,
+    "z": "a5bd9a7f.5a4268",
     "wires": [
       [
-        "1ec3014f.e13cff"
+        "414ca1b3.beb36"
       ]
     ]
   },
   {
-    "id": "1ec3014f.e13cff",
+    "id": "414ca1b3.beb36",
     "type": "function",
     "name": "",
     "func": "if (msg.req.body.uid==context.global.WinkUser.uid && msg.req.body.pwd==context.global.WinkUser.pwd){\nmsg.res.statusCode=\"200\";\nmsg.payload={\"pwd_str\":context.global.FREEBOARD_TOKEN}\n} else {\nmsg.res.statusCode=\"403\";\n}\nreturn msg;",
     "outputs": 1,
     "noerr": 0,
-    "x": 385.50001525878906,
-    "y": 679.3333435058594,
-    "z": "a6ad1804.5952e8",
+    "x": 409.3958282470703,
+    "y": 678.2222595214844,
+    "z": "a5bd9a7f.5a4268",
     "wires": [
       [
-        "ce900865.316ff8"
+        "ef085b8a.10f7a8"
       ]
     ]
   },
   {
-    "id": "ce900865.316ff8",
+    "id": "ef085b8a.10f7a8",
     "type": "switch",
     "name": "",
     "property": "res.statusCode",
@@ -563,106 +563,106 @@
     ],
     "checkall": "true",
     "outputs": 2,
-    "x": 529.5,
-    "y": 678.3333740234375,
-    "z": "a6ad1804.5952e8",
+    "x": 553.3958129882812,
+    "y": 677.2222900390625,
+    "z": "a5bd9a7f.5a4268",
     "wires": [
       [
-        "2a56422a.d5a9be"
+        "f76686d1.089978"
       ],
       [
-        "edc8c7f6.123738"
+        "73960f5c.8c69f"
       ]
     ]
   },
   {
-    "id": "2a56422a.d5a9be",
+    "id": "f76686d1.089978",
     "type": "template",
     "name": "",
     "field": "",
     "format": "handlebars",
     "template": "<!DOCTYPE html>\n<html>\n<head>\n    <meta charset=\"UTF-8\">\n    <title>freeboard</title>\n\t<meta name=\"mobile-web-app-capable\" content=\"yes\">\n    <meta name=\"apple-mobile-web-app-capable\" content=\"yes\" />\n    <meta name=\"apple-mobile-web-app-status-bar-style\" content=\"black\" />\n    <meta name=\"viewport\" content = \"width = device-width, initial-scale = 1, user-scalable = yes\" />\n    <link href=\"css/freeboard.min.css\" rel=\"stylesheet\" />\n    <script src=\"js/freeboard.thirdparty.min.js\"></script>\n\t\n    <script type=\"text/javascript\">\n        head.js(\"js/freeboard.js\",\"js/freeboard.plugins.min.js\",\"../freeboard_api/datasources\",\n                \"lib/js/thirdparty/wink.js\",\n\n                // *** Load more plugins here ***\n                function(){\n                    $(function()\n                    { //DOM Ready\n                        freeboard.initialize(true);\n\n                        //var hash = window.location.hash;\n                        //if (hash !== null) {\n                            $.get({{context.global.BlueMixUrlBase}}\"/red/freeboardcamHistJson?auth={{payload.pwd_str}}\", function(data) {\n\t\t\t\t\t\t\t\tvar datap=JSON.parse(data);\n\t\t\t\t\t\t\t\tif (!datap.empty){\n\t\t\t\t\t\t\t\t\tfreeboard.loadDashboard(datap, function() {\n\t\t\t\t\t\t\t\t\t\tfreeboard.setEditing(false);\n\t\t\t\t\t\t\t\t\t});\n\t\t\t\t\t\t\t\t}\n                            });\n                        //}\n\n                    });\n                });\n    </script>\n</head>\n<body>\n<div id=\"board-content\">\n    <img id=\"dash-logo\" data-bind=\"attr:{src: header_image}, visible:header_image()\">\n    <div class=\"gridster responsive-column-width\">\n        <ul data-bind=\"grid: true\">\n        </ul>\n    </div>\n</div>\n<header id=\"main-header\" data-bind=\"if:allow_edit\">\n    <div id=\"admin-bar\">\n        <div id=\"admin-menu\">\n            <div id=\"board-tools\">\n                <h1 id=\"board-logo\" class=\"title bordered\">freeboard</h1>\n                <div id=\"board-actions\">\n                    <ul class=\"board-toolbar vertical\">\n                        <!--<li data-bind=\"click: loadDashboardFromLocalFile\"><i id=\"full-screen-icon\" class=\"icon-folder-open icon-white\"></i><label id=\"full-screen\">Load Freeboard</label></li>-->\n                        <li data-bind=\"click: saveDashboard\"><i class=\"icon-download-alt icon-white\"></i><label>Save Freeboard</label></li>\n                        <li id=\"add-pane\" data-bind=\"click: createPane\"><i class=\"icon-plus icon-white\"></i><label>Add Pane</label></li>\n                    </ul>\n                </div>\n            </div>\n            <div id=\"datasources\">\n                <h2 class=\"title\">DATASOURCES</h2>\n\n                <div class=\"datasource-list-container\">\n                    <table class=\"table table-condensed sub-table\" id=\"datasources-list\" data-bind=\"if: datasources().length\">\n                        <thead>\n                        <tr>\n                            <th>Name</th>\n                            <th>Last Updated</th>\n                            <th>&nbsp;</th>\n                        </tr>\n                        </thead>\n                        <tbody data-bind=\"foreach: datasources\">\n                        <tr>\n                            <td>\n                                <span class=\"text-button datasource-name\" data-bind=\"text: name, pluginEditor: {operation: 'edit', type: 'datasource'}\"></span>\n                            </td>\n                            <td data-bind=\"text: last_updated\"></td>\n                            <td>\n                                <ul class=\"board-toolbar\">\n                                    <li data-bind=\"click: updateNow\"><i class=\"icon-refresh icon-white\"></i></li>\n                                    <li data-bind=\"pluginEditor: {operation: 'delete', type: 'datasource'}\">\n                                        <i class=\"icon-trash icon-white\"></i></li>\n                                </ul>\n                            </td>\n                        </tr>\n                        </tbody>\n                    </table>\n                </div>\n                <span class=\"text-button table-operation\" data-bind=\"pluginEditor: {operation: 'add', type: 'datasource'}\">ADD</span>\n            </div>\n        </div>\n    </div>\n\t<div id=\"column-tools\" class=\"responsive-column-width\">\n\t\t<ul class=\"board-toolbar left-columns\">\n\t\t\t<li class=\"column-tool add\" data-bind=\"click: addGridColumnLeft\"><span class=\"column-icon right\"></span><i class=\"icon-arrow-left icon-white\"></i></li>\n\t\t\t<li class=\"column-tool sub\" data-bind=\"click: subGridColumnLeft\"><span class=\"column-icon left\"></span><i class=\"icon-arrow-right icon-white\"></i></li>\n\t\t</ul>\n\t\t<ul class=\"board-toolbar right-columns\">\n\t\t\t<li class=\"column-tool sub\" data-bind=\"click: subGridColumnRight\"><span class=\"column-icon right\"></span><i class=\"icon-arrow-left icon-white\"></i></li>\n\t\t\t<li class=\"column-tool add\" data-bind=\"click: addGridColumnRight\"><span class=\"column-icon left\"></span><i class=\"icon-arrow-right icon-white\"></i></li>\n\t\t</ul>\n\t</div>\n    <div id=\"toggle-header\" data-bind=\"click: toggleEditing\">\n        <i id=\"toggle-header-icon\" class=\"icon-wrench icon-white\"></i></div>\n</header>\n\n<div style=\"display:hidden\">\n    <ul data-bind=\"template: { name: 'pane-template', foreach: panes}\">\n    </ul>\n</div>\n\n<script type=\"text/html\" id=\"pane-template\">\n    <li data-bind=\"pane: true\">\n        <header>\n            <h1 data-bind=\"text: title\"></h1>\n            <ul class=\"board-toolbar pane-tools\">\n                <li data-bind=\"pluginEditor: {operation: 'add', type: 'widget'}\">\n                    <i class=\"icon-plus icon-white\"></i>\n                </li>\n                <li data-bind=\"pluginEditor: {operation: 'edit', type: 'pane'}\">\n                    <i class=\"icon-wrench icon-white\"></i>\n                </li>\n                <li data-bind=\"pluginEditor: {operation: 'delete', type: 'pane'}\">\n                    <i class=\"icon-trash icon-white\"></i>\n                </li>\n            </ul>\n        </header>\n        <section data-bind=\"foreach: widgets\">\n            <div class=\"sub-section\" data-bind=\"css: 'sub-section-height-' + height()\">\n                <div class=\"widget\" data-bind=\"widget: true, css:{fillsize:fillSize}\"></div>\n                <div class=\"sub-section-tools\">\n                    <ul class=\"board-toolbar\">\n                        <!-- ko if:$parent.widgetCanMoveUp($data) -->\n                        <li data-bind=\"click:$parent.moveWidgetUp\"><i class=\"icon-chevron-up icon-white\"></i></li>\n                        <!-- /ko -->\n                        <!-- ko if:$parent.widgetCanMoveDown($data) -->\n                        <li data-bind=\"click:$parent.moveWidgetDown\"><i class=\"icon-chevron-down icon-white\"></i></li>\n                        <!-- /ko -->\n                        <li data-bind=\"pluginEditor: {operation: 'edit', type: 'widget'}\"><i class=\"icon-wrench icon-white\"></i></li>\n                        <li data-bind=\"pluginEditor: {operation: 'delete', type: 'widget'}\"><i class=\"icon-trash icon-white\"></i></li>\n                    </ul>\n                </div>\n            </div>\n        </section>\n    </li>\n</script>\n\n</body>\n</html>\n",
-    "x": 714.5,
-    "y": 671.3333740234375,
-    "z": "a6ad1804.5952e8",
+    "x": 738.3958129882812,
+    "y": 670.2222900390625,
+    "z": "a5bd9a7f.5a4268",
     "wires": [
       [
-        "e7958938.186a78"
+        "f28458c9.0d7ba8"
       ]
     ]
   },
   {
-    "id": "edc8c7f6.123738",
+    "id": "73960f5c.8c69f",
     "type": "template",
     "name": "",
     "field": "payload",
     "format": "handlebars",
     "template": "<html>\n  <head>\n    <title>Invalid login</title>\n    <META http-equiv=\"refresh\" content=\"3;URL=/freeboard/winkboard\">\n  </head>\n <body bgcolor=\"#ffffff\">\n    <center>Invalid user Id or Password</a>\n    </center>\n  </body>\n\n</html>",
-    "x": 711.5,
-    "y": 711.3333740234375,
-    "z": "a6ad1804.5952e8",
+    "x": 735.3958129882812,
+    "y": 710.2222900390625,
+    "z": "a5bd9a7f.5a4268",
     "wires": [
       [
-        "817038c4.7e8fc8"
+        "6c84831b.937b7c"
       ]
     ]
   },
   {
-    "id": "e7958938.186a78",
+    "id": "f28458c9.0d7ba8",
     "type": "http response",
     "name": "",
-    "x": 867.5,
-    "y": 672.3333740234375,
-    "z": "a6ad1804.5952e8",
+    "x": 891.3958129882812,
+    "y": 671.2222900390625,
+    "z": "a5bd9a7f.5a4268",
     "wires": []
   },
   {
-    "id": "817038c4.7e8fc8",
+    "id": "6c84831b.937b7c",
     "type": "http response",
     "name": "",
-    "x": 868.5,
-    "y": 711.3333740234375,
-    "z": "a6ad1804.5952e8",
+    "x": 892.3958129882812,
+    "y": 710.2222900390625,
+    "z": "a5bd9a7f.5a4268",
     "wires": []
   },
   {
-    "id": "7dd6d5cc.82292c",
+    "id": "fb702828.048fd8",
     "type": "http response",
     "name": "",
-    "x": 546.5000152587891,
-    "y": 768.3333435058594,
-    "z": "a6ad1804.5952e8",
+    "x": 570.3958282470703,
+    "y": 767.2222595214844,
+    "z": "a5bd9a7f.5a4268",
     "wires": []
   },
   {
-    "id": "b99090b1.466f7",
+    "id": "c7fa425d.3805c",
     "type": "template",
     "name": "",
     "field": "payload",
     "format": "handlebars",
     "template": "<html>\n<head>\n  <meta charset=\"utf-8\">\n  <title>Login Form</title>\n</head>\n<body>\n    <div class=\"login\">\n      <h1>Login to see Wink Board</h1>\n      <form method=\"post\" action=\"/freeboard/cameraHistory\">\n        <p><input type=\"text\" name=\"uid\" value=\"\" placeholder=\"Enter Winkapp User name\"></p>\n        <p><input type=\"password\" name=\"pwd\" value=\"\" placeholder=\"Enter Winkapp Password\"></p>\n        <p class=\"submit\"><input type=\"submit\" name=\"commit\" value=\"Login\"></p>\n      </form>\n    </div>\n</body>\n</html>",
-    "x": 369.50001525878906,
-    "y": 773.3333435058594,
-    "z": "a6ad1804.5952e8",
+    "x": 393.3958282470703,
+    "y": 772.2222595214844,
+    "z": "a5bd9a7f.5a4268",
     "wires": [
       [
-        "7dd6d5cc.82292c"
+        "fb702828.048fd8"
       ]
     ]
   },
   {
-    "id": "3e7e6133.c1819e",
+    "id": "8e989ecc.71676",
     "type": "http in",
     "name": "",
     "url": "/freeboard/cameraHistory",
     "method": "get",
     "swaggerDoc": "",
-    "x": 127,
-    "y": 773.3333740234375,
-    "z": "a6ad1804.5952e8",
+    "x": 150.89581298828125,
+    "y": 772.2222900390625,
+    "z": "a5bd9a7f.5a4268",
     "wires": [
       [
-        "b99090b1.466f7"
+        "c7fa425d.3805c"
       ]
     ]
   }
