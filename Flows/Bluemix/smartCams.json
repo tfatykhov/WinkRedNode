@@ -76,14 +76,16 @@
     "id": "e37ebe29.1c814",
     "type": "function",
     "name": "Initialize Samsung",
-    "func": "if (msg.statusCode=='200' && msg.headers[\"content-type\"]=='image/jpeg'){\nvar cam_name=msg.topic;\nif(typeof(context.global.winkState.cameras)==='undefined') context.global.winkState.cameras={}\ncontext.global.winkState.cameras[cam_name]={\n \"name\": cam_name,\n\"object_type\": \"cameras\",\n\"object_id\": cam_name.replace(\" \",\"\"),\n\"freeboard\": 0,\n\"manufacturer_device_model\": \"samsung\",\n\"connection\": true,\n\"capturing_audio\": true,\n\"capturing_video\": true,\n\"url\": CamUrl=\"Http://admin:\"+context.global.SamsungCam[cam_name].private_key+\"@\"+context.global.SamsungCam[cam_name].hostname+\"/cgi-bin/video.cgi?msubmenu=mjpg\",\n\"refresh_time\":600,\n\"motion\": \"N/A\"\n}\n}\nreturn;",
+    "func": "if (msg.statusCode=='200' && msg.headers[\"content-type\"]=='image/jpeg'){\nvar cam_name=msg.topic;\nif(typeof(context.global.winkState.cameras)==='undefined') context.global.winkState.cameras={}\ncontext.global.winkState.cameras[cam_name]={\n \"name\": cam_name,\n\"object_type\": \"cameras\",\n\"object_id\": cam_name.replace(\" \",\"\"),\n\"freeboard\": 0,\n\"manufacturer_device_model\": \"samsung\",\n\"connection\": true,\n\"capturing_audio\": true,\n\"capturing_video\": true,\n\"url\": CamUrl=\"Http://admin:\"+context.global.SamsungCam[cam_name].private_key+\"@\"+context.global.SamsungCam[cam_name].hostname+\"/cgi-bin/video.cgi?msubmenu=mjpg\",\n\"snap_url\":SnapUrl=context.global.BlueMixUrlBase+\"/red/get_snapshot?token=\"+context.global.FREEBOARD_TOKEN+\"&Cameraname=\"+cam_name,\n//\"http://admin:\"+context.global.SamsungCam[cam_name].private_key+\"@\"+context.global.SamsungCam[cam_name].hostname+\"/cgi-bin/video.cgi?msubmenu=jpg&resolution=3\",\n\"refresh_time\":600,\n\"motion\": \"N/A\"\n}\n            var msg ={\n                \"url\":context.global.BlueMixUrlBase+'/red/retrieve_activities?camera_name='+cam_name,\n                \"method\": \"GET\",\n                headers: {\n                    \"Authorization\":\"Bearer \"+context.global.FREEBOARD_TOKEN\n                }\n            }\n    node.send(msg)\n}\nreturn;",
     "outputs": 1,
     "noerr": 0,
     "x": 1376.8959197998047,
     "y": 148.888916015625,
     "z": "e5f6f0e3.1a091",
     "wires": [
-      []
+      [
+        "97b3925.f684c7"
+      ]
     ]
   },
   {
@@ -127,5 +129,108 @@
     "y": 72.88888549804688,
     "z": "e5f6f0e3.1a091",
     "wires": []
+  },
+  {
+    "id": "3e8631e7.c179ce",
+    "type": "http in",
+    "name": "",
+    "url": "/red/get_snapshot",
+    "method": "get",
+    "swaggerDoc": "",
+    "x": 148.99998474121094,
+    "y": 210,
+    "z": "e5f6f0e3.1a091",
+    "wires": [
+      [
+        "8fff970e.700068"
+      ]
+    ]
+  },
+  {
+    "id": "8fff970e.700068",
+    "type": "function",
+    "name": "",
+    "func": "if (msg.payload.token==context.global.FREEBOARD_TOKEN && typeof(msg.payload.Cameraname)!=='undefined'){\n    var cam=msg.payload.Cameraname;\n    if(cam in context.global.winkState.cameras){\n     var camera=context.global.SamsungCam[cam]\n     msg.topic=cam\n     msg.model='Samsung'\n     msg.url='http://'+camera.hostname+'/cgi-bin/video.cgi?msubmenu=jpg&resolution=5'\n     msg.method=\"GET\"\n     node.send(msg)\n//     msg.res.send(200,\"OK\");\n    } \n}\nreturn;",
+    "outputs": 1,
+    "noerr": 0,
+    "x": 355,
+    "y": 210,
+    "z": "e5f6f0e3.1a091",
+    "wires": [
+      [
+        "aac5f0e4.553a1"
+      ]
+    ]
+  },
+  {
+    "id": "aac5f0e4.553a1",
+    "type": "http request",
+    "name": "",
+    "method": "use",
+    "ret": "txt",
+    "url": "",
+    "x": 532,
+    "y": 210,
+    "z": "e5f6f0e3.1a091",
+    "wires": [
+      [
+        "664362b9.99bc9c"
+      ]
+    ]
+  },
+  {
+    "id": "664362b9.99bc9c",
+    "type": "function",
+    "name": "check digest auth",
+    "func": "var Auth=msg.headers['www-authenticate'];\nvar AuthArr = Auth.split(',');\nvar AuthJ={}\nfor (var i=0;i<AuthArr.length;i++){\n    var item=AuthArr[i].split('=');\n    AuthJ[item[0].trim()]=item[1].replace('\\\"','').replace('\\\"','')\n}\n\nvar ha1_str=\"admin:\"+AuthJ[\"Digest realm\"]+\":\"+context.global.SamsungCam[msg.topic].private_key;\n//node.warn(ha1_str);\nvar HA1=context.global.CRYPTO.createHash(\"md5\").update(ha1_str,\"utf8\").digest(\"hex\");\nvar HA2=context.global.CRYPTO.createHash(\"md5\").update(\"GET:/cgi-bin/video.cgi?msubmenu=jpg&resolution=5\",\"utf8\").digest(\"hex\");\nvar cnonce=context.global.CRYPTO.randomBytes(8).toString('hex');\nvar nc=\"00001\";\n//node.warn(AuthJ);\nvar str_resp=HA1+\":\"+AuthJ.nonce+\":\"+nc+\":\"+cnonce+\":\"+\"auth\"+\":\"+HA2;\n//node.warn(str_resp);\nvar response = context.global.CRYPTO.createHash(\"md5\").update(str_resp,\"utf8\").digest(\"hex\");\n//node.warn(response);\nvar eol=\" \";\nvar Digest='Digest username=\"admin\",' + eol +\n           'realm=\"' + AuthJ[\"Digest realm\"].trim() + '\",' + eol +\n           'qop=\"' + AuthJ.qop.trim() + '\",' + eol +\n           'algorithm=\"MD5\",' + eol +\n           'uri=\"/cgi-bin/video.cgi?msubmenu=jpg&resolution=5\"'+ ',' +  eol +\n           'nonce=\"' + AuthJ.nonce.trim() + '\",' + eol +\n           'cnonce=\"' + cnonce.trim() + '\",'.trim() + eol +\n           'opaque=\"\",' + eol +\n           'nc=\"' + nc + '\",' + eol +\n           'response=\"' + response + '\"';\n//node.warn(Digest);\ndelete msg.headers\ndelete msg.statusCode;\ndelete msg.payload;\nmsg.headers={}\nmsg.headers.Authorization=Digest;\nreturn msg;",
+    "outputs": 1,
+    "noerr": 0,
+    "x": 745.0001831054688,
+    "y": 210,
+    "z": "e5f6f0e3.1a091",
+    "wires": [
+      [
+        "71c515c4.8e3aec"
+      ]
+    ]
+  },
+  {
+    "id": "71c515c4.8e3aec",
+    "type": "http request",
+    "name": "",
+    "method": "use",
+    "ret": "bin",
+    "url": "",
+    "x": 960.0001220703125,
+    "y": 210,
+    "z": "e5f6f0e3.1a091",
+    "wires": [
+      [
+        "14850f89.eb7af"
+      ]
+    ]
+  },
+  {
+    "id": "14850f89.eb7af",
+    "type": "http response",
+    "name": "",
+    "x": 1132,
+    "y": 211,
+    "z": "e5f6f0e3.1a091",
+    "wires": []
+  },
+  {
+    "id": "97b3925.f684c7",
+    "type": "http request",
+    "name": "",
+    "method": "use",
+    "ret": "txt",
+    "url": "",
+    "x": 1574.8958282470703,
+    "y": 150.88888549804688,
+    "z": "e5f6f0e3.1a091",
+    "wires": [
+      []
+    ]
   }
 ]
