@@ -144,7 +144,7 @@
     "id": "3f6de779.c09218",
     "type": "function",
     "name": "",
-    "func": "context.global.winkState.winkAPI = \"\";\nwinkAPI=\"\";\n        for(j = 0; j<msg.payload.metrics[0].data.length; j++)\n        {\n            winkAPI = msg.payload.metrics[0].data[j].value;\n        }\ncontext.global.winkState.winkAPI=winkAPI;\nvar newMsg={\n    payload:\"Wink Apdex is currently: \"+context.global.winkState.winkAPI\n};\nreturn newMsg;",
+    "func": "if ('metrics' in msg.payload && msg.payload.metrics.length>0){\ncontext.global.winkState.winkAPI = \"\";\nwinkAPI=\"\";\n        for(j = 0; j<msg.payload.metrics[0].data.length; j++)\n        {\n            winkAPI = msg.payload.metrics[0].data[j].value;\n        }\ncontext.global.winkState.winkAPI=winkAPI;\nvar newMsg={\n    payload:\"Wink Apdex is currently: \"+context.global.winkState.winkAPI\n};\nreturn newMsg;\n}\n",
     "outputs": 1,
     "noerr": 0,
     "x": 685.8958129882812,
@@ -482,7 +482,7 @@
     "id": "80af3e0c.7f50c",
     "type": "function",
     "name": "Check response",
-    "func": "if (msg.statusCode=='201' || msg.statusCode=='412')\n{\n    node.warn('Database created or already exists, turning on backup');\n    context.global.CloudantBkUP=true;\n    msg.url=context.global.VCAP_SERVICES.cloudantNoSQLDB[0].credentials.url+\"/winkapp/winkPresence\"\n    msg.method=\"GET\"\n    node.send(msg)\n} else {\n    node.warn('issue with cloudant sercvice. backup disabled until next re-try');\n    context.global.CloudantBkUP=false;\n}\nreturn;",
+    "func": "if (msg.statusCode=='201' || msg.statusCode=='412')\n{\n    node.warn('Database created or already exists, turning on backup');\n    context.global.CloudantBkUP=true;\n    context.global.CloudantCamera=[];\n    msg.url=context.global.VCAP_SERVICES.cloudantNoSQLDB[0].credentials.url+\"/winkapp/winkPresence\"\n    msg.method=\"GET\"\n    node.send(msg)\n} else {\n    node.warn('issue with cloudant sercvice. backup disabled until next re-try');\n    context.global.CloudantBkUP=false;\n}\nreturn;",
     "outputs": 1,
     "noerr": 0,
     "x": 635.8958282470703,
@@ -513,7 +513,7 @@
   {
     "id": "51159670.aeea68",
     "type": "function",
-    "name": "",
+    "name": "restore from db",
     "func": "if (\"Presence\" in msg.payload){\n    node.warn('restoring presence from db backup')\n    context.global.Presence=msg.payload.Presence.Presence\n    context.global.PresenceHistory=msg.payload.Presence.PresenceHistory\n}\nreturn;",
     "outputs": 1,
     "noerr": 0,
@@ -531,6 +531,275 @@
     "info": "modfy bluemix-settings.json and add following line:\n\ncontext.global.InitialStateKey=\"<your initial state api key>\"",
     "x": 394.89581298828125,
     "y": 672.2222290039062,
+    "z": "54c33433.ab3ccc",
+    "wires": []
+  },
+  {
+    "id": "cc4467e9.33bb98",
+    "type": "function",
+    "name": "Save Snapshots to db",
+    "func": "function delay(ms) {\n        var cur_d = new Date();\n        var cur_ticks = cur_d.getTime();\n        var ms_passed = 0;\n        while(ms_passed < ms) {\n            var d = new Date();  // Possible memory leak?\n            var ticks = d.getTime();\n            ms_passed = ticks - cur_ticks;\n            // d = null;  // Prevent memory leak?\n        }\n    }\nif(msg.req.headers.authorization && msg.req.headers.authorization==\"Bearer \"+context.global.FREEBOARD_TOKEN){\nvar msg1=msg;\nvar trigger=msg.payload.object_name;\nvar cam_list=msg.payload.cam_list.split(',');\nmsg1.res.statusCode=\"200\";\nnode.send([msg1,null])\nvar date=new Date()\nfor (var i=0;i<cam_list.length;i++){\n//for (var cam in context.global.winkState.cameras){\n var camera=context.global.winkState.cameras[cam_list[i]]\n var cam=cam_list[i]\nif ('snap_url' in camera && camera.snap_url!=='undefined'){\n    var msg={}\n    msg.url=camera.snap_url\n    msg.method=\"GET\"\n    msg.date=date\n    msg.topic=cam\n    msg.trigger=trigger\n    node.send([null,msg]);\n    delay(400)\n}\n}\n\n} else msg.res.send(401,\"Bad request\");\nreturn;",
+    "outputs": "2",
+    "noerr": 0,
+    "x": 372.4999694824219,
+    "y": 854.2222290039062,
+    "z": "54c33433.ab3ccc",
+    "wires": [
+      [
+        "555f6b52.aaa094"
+      ],
+      [
+        "5fd3cecd.a02c3"
+      ]
+    ]
+  },
+  {
+    "id": "5fd3cecd.a02c3",
+    "type": "http request",
+    "name": "getPic",
+    "method": "use",
+    "ret": "bin",
+    "url": "",
+    "x": 596.4999847412109,
+    "y": 860.2222290039062,
+    "z": "54c33433.ab3ccc",
+    "wires": [
+      [
+        "16dc5cb2.e923a3"
+      ]
+    ]
+  },
+  {
+    "id": "16dc5cb2.e923a3",
+    "type": "function",
+    "name": "save picture",
+    "func": "if (typeof (context.global.ImageArchive)=== 'undefined') {\n    context.global.ImageArchive = {}\n}\n     for (var n in context.global.winkState.cameras){\n        if (!(n in context.global.ImageArchive)) context.global.ImageArchive[n]=[]\n    }\n\nnode.warn('Saving image from '+msg.topic)\n//node.warn(bitmap);\nvar DBmsg={\n         url:context.global.VCAP_SERVICES.cloudantNoSQLDB[0].credentials.url+\"/winkapp\",\n        topic:msg.trigger,\n        method:\"POST\",\n        headers: \n            {\n                \"Content-Type\":\"application/json\"\n            },\n        payload: {\n            \"_id\":msg.topic+'|'+msg.date.getTime()+'|'+msg.trigger,\n            \"key\":\"Snapshot\",\n            \"cameraName\":msg.topic,\n            \"timestamp\":msg.date.getTime(),\n            \"trigger\":msg.trigger,\n            \"fileName\":\"CameraImage.jpg\",\n           \"_attachments\":\n                {\n                    \"CameraImage.jpg\":\n                    {\n                        \"content_type\":\"image/jpeg\",\n                        \"data\":msg.payload.toString('base64')\n                    }\n                }        \n        } \n}\n\n//context.global.ImageArchive[msg.topic].splice(0,0,camObj);\n//if (context.global.ImageArchive[msg.topic].length>10) context.global.ImageArchive[msg.topic].pop()\nreturn DBmsg;",
+    "outputs": "1",
+    "noerr": 0,
+    "x": 753.4999847412109,
+    "y": 858.2222290039062,
+    "z": "54c33433.ab3ccc",
+    "wires": [
+      [
+        "14e599aa.eb1a66"
+      ]
+    ]
+  },
+  {
+    "id": "14e599aa.eb1a66",
+    "type": "http request",
+    "name": "",
+    "method": "use",
+    "ret": "obj",
+    "url": "",
+    "x": 928.3958587646484,
+    "y": 858.1111145019531,
+    "z": "54c33433.ab3ccc",
+    "wires": [
+      [
+        "d47aa02e.2b856"
+      ]
+    ]
+  },
+  {
+    "id": "9eb0db04.614f28",
+    "type": "http in",
+    "name": "",
+    "url": "/red/save_images",
+    "method": "get",
+    "swaggerDoc": "",
+    "x": 147,
+    "y": 854.1111145019531,
+    "z": "54c33433.ab3ccc",
+    "wires": [
+      [
+        "cc4467e9.33bb98"
+      ]
+    ]
+  },
+  {
+    "id": "555f6b52.aaa094",
+    "type": "http response",
+    "name": "",
+    "x": 600.3957672119141,
+    "y": 817.1111145019531,
+    "z": "54c33433.ab3ccc",
+    "wires": []
+  },
+  {
+    "id": "d47aa02e.2b856",
+    "type": "function",
+    "name": "cache results",
+    "func": "if ('ok' in msg.payload && msg.payload.ok){\n    var cameraname=msg.payload.id.split('|')[0];\n    var tstamp=msg.payload.id.split('|')[1];\n    node.warn('Camera - ' + cameraname)\n    if (typeof(context.global.winkState.cameras[cameraname].activities)==='undefined') context.global.winkState.cameras[cameraname].activities=[]\n    var cam_act={\n        id:msg.payload.rev,\n        cloudant_id:msg.payload.id,\n        category:\"cuepoint\",\n        cuepoint_id:Math.round(tstamp/1000),\n        trigger:msg.topic,\n        snapshot_url:context.global.BlueMixUrlBase+\"/red/camera_history?img_id=\"+msg.payload.id\n    }\n   context.global.winkState.cameras[cameraname].activities.splice(0,0,cam_act);\n   if (context.global.winkState.cameras[cameraname].activities.length>15){\n    for (var i=15; i<context.global.winkState.cameras[cameraname].activities.length;i++){\n    var doc_id=context.global.winkState.cameras[cameraname].activities[i].cloudant_id\n    var rev=context.global.winkState.cameras[cameraname].activities[i].id\n    if(typeof(doc_id)!=='undefined'){\n    var DBmsg={\n         topic:cameraname,\n         position:i,\n         url:context.global.VCAP_SERVICES.cloudantNoSQLDB[0].credentials.url+\"/winkapp/\"+doc_id+\"?rev=\"+rev,\n        method:\"DELETE\"\n    }\n    node.send(DBmsg);\n    }\n   }\n   }\n}\nreturn;",
+    "outputs": 1,
+    "noerr": 0,
+    "x": 1078.3958587646484,
+    "y": 858.1111145019531,
+    "z": "54c33433.ab3ccc",
+    "wires": [
+      [
+        "bfe8cf68.40173"
+      ]
+    ]
+  },
+  {
+    "id": "bfe8cf68.40173",
+    "type": "http request",
+    "name": "",
+    "method": "use",
+    "ret": "obj",
+    "url": "",
+    "x": 1231.3959197998047,
+    "y": 856.1111145019531,
+    "z": "54c33433.ab3ccc",
+    "wires": [
+      [
+        "2024ec03.dfdb14"
+      ]
+    ]
+  },
+  {
+    "id": "2024ec03.dfdb14",
+    "type": "function",
+    "name": "delete old pics",
+    "func": "if (('ok' in msg.payload && msg.payload.ok) ||('error' in msg.payload && msg.payload.error=='not_found') ){\n    node.warn('deleting '+msg.topic+' position '+ msg.position)\n    context.global.winkState.cameras[msg.topic].activities.splice(msg.position,1)\n}\nreturn;",
+    "outputs": 1,
+    "noerr": 0,
+    "x": 1399.3959197998047,
+    "y": 857.1111145019531,
+    "z": "54c33433.ab3ccc",
+    "wires": [
+      []
+    ]
+  },
+  {
+    "id": "dc44f23a.23bb1",
+    "type": "http in",
+    "name": "",
+    "url": "/red/camera_history",
+    "method": "get",
+    "swaggerDoc": "",
+    "x": 159.3958282470703,
+    "y": 912.1111145019531,
+    "z": "54c33433.ab3ccc",
+    "wires": [
+      [
+        "460f7eec.b9f08"
+      ]
+    ]
+  },
+  {
+    "id": "460f7eec.b9f08",
+    "type": "function",
+    "name": "gen CLD url",
+    "func": "if ('img_id' in msg.payload){\n    msg.url=context.global.VCAP_SERVICES.cloudantNoSQLDB[0].credentials.url+\"/winkapp/\"+msg.payload.img_id+\"/CameraImage.jpg\"\n    msg.method=\"GET\"\n}\nreturn msg;",
+    "outputs": 1,
+    "noerr": 0,
+    "x": 371.3957977294922,
+    "y": 912.1111145019531,
+    "z": "54c33433.ab3ccc",
+    "wires": [
+      [
+        "710b5770.8ef4a8"
+      ]
+    ]
+  },
+  {
+    "id": "710b5770.8ef4a8",
+    "type": "http request",
+    "name": "",
+    "method": "use",
+    "ret": "bin",
+    "url": "",
+    "x": 532.3957977294922,
+    "y": 914.1111145019531,
+    "z": "54c33433.ab3ccc",
+    "wires": [
+      [
+        "a8002489.57ffd8"
+      ]
+    ]
+  },
+  {
+    "id": "a8002489.57ffd8",
+    "type": "http response",
+    "name": "",
+    "x": 700.3957977294922,
+    "y": 914.1111145019531,
+    "z": "54c33433.ab3ccc",
+    "wires": []
+  },
+  {
+    "id": "4f193d84.b0e6c4",
+    "type": "http in",
+    "name": "",
+    "url": "/red/retrieve_activities",
+    "method": "get",
+    "swaggerDoc": "",
+    "x": 159,
+    "y": 1007.1111145019531,
+    "z": "54c33433.ab3ccc",
+    "wires": [
+      [
+        "f68fc0.ff09704"
+      ]
+    ]
+  },
+  {
+    "id": "f68fc0.ff09704",
+    "type": "function",
+    "name": "get activities from db",
+    "func": "if(msg.req.headers.authorization && msg.req.headers.authorization==\"Bearer \"+context.global.FREEBOARD_TOKEN){\nvar msg1=msg;\nmsg1.res.statusCode=\"200\";\nmsg.url=context.global.VCAP_SERVICES.cloudantNoSQLDB[0].credentials.url+\"/winkapp/_all_docs?descending=true\"\nmsg.method=\"GET\"\nmsg.topic=msg.payload.camera_name\nnode.send([msg1,msg])\n} else\n{\n    msg.res.statusCode=400\n    node.send([msg,null])\n}\nreturn;",
+    "outputs": "2",
+    "noerr": 0,
+    "x": 389.39573669433594,
+    "y": 1005.1111145019531,
+    "z": "54c33433.ab3ccc",
+    "wires": [
+      [
+        "12c90dd.fed36f2"
+      ],
+      [
+        "c3771873.3c88e8"
+      ]
+    ]
+  },
+  {
+    "id": "c3771873.3c88e8",
+    "type": "http request",
+    "name": "",
+    "method": "use",
+    "ret": "obj",
+    "url": "",
+    "x": 614.3957977294922,
+    "y": 1038.1111145019531,
+    "z": "54c33433.ab3ccc",
+    "wires": [
+      [
+        "87650842.789af8"
+      ]
+    ]
+  },
+  {
+    "id": "87650842.789af8",
+    "type": "function",
+    "name": "cache cam history",
+    "func": "if('total_rows' in msg.payload && msg.payload.total_rows>0){\n var db_rows=msg.payload.rows;\n context.global.winkState.cameras[msg.topic].activities=[]\n //db_rows.foreach(function(row){\n for(var i=0;i<db_rows.length;i++){\n     var row=db_rows[i];\n     if(row.id.indexOf(msg.topic)!=-1){\n      var tstamp=row.id.split('|')[1]\n      var cam_act={\n        id:row.value.rev,\n        cloudant_id:row.id,\n        category:\"cuepoint\",\n        cuepoint_id:Math.round(tstamp/1000),\n        trigger:row.id.split('|')[2],\n        snapshot_url:context.global.BlueMixUrlBase+\"/red/camera_history?img_id=\"+row.id\n      } \n      context.global.winkState.cameras[msg.topic].activities.push(cam_act)         \n     }\n }\n}\nreturn msg;",
+    "outputs": 1,
+    "noerr": 0,
+    "x": 792.3958129882812,
+    "y": 1038.111083984375,
+    "z": "54c33433.ab3ccc",
+    "wires": [
+      []
+    ]
+  },
+  {
+    "id": "12c90dd.fed36f2",
+    "type": "http response",
+    "name": "",
+    "x": 611.3957672119141,
+    "y": 990.1111145019531,
     "z": "54c33433.ab3ccc",
     "wires": []
   }
