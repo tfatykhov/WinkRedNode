@@ -1,4 +1,45 @@
 == UPDATE ==
+9/15/2015
+----------------
+Added ability to save motion based snapshots to Cloudant DB.
+
+Required changes:
+
+* Add following item to bluemix-settings.js into functionGlobalContext section:<br>
+ ,VCAP_SERVICES: JSON.parse(process.env.VCAP_SERVICES)<br>
+ ,camera_motion:{<br>
+	"wink motion sensor name" : ["camera1 name","camera2 name"]<br>
+	,"another wink motion sensor name" : ["camera1 name",...]<br>
+}<br>
+	then first id in quotes is motion sensor names as in WinkApp. In 		case of nest/drop cam 	camera it should be camera name as in Wink App. In my case it is "Nest Camera".<br>
+	then in square brakets put every camera name in quotes  you want  to have a screenshot from, when motion sensor detects 	motion. in case of multiple cameras put a colon as a delimiter
+
+ 
+Letst take following example:<br>
+    ,camera_motion: {<br>
+   		"Nest Camera" : ["Nest Camera"]<br>
+		,"Basement Sensor" : ["BasementCam"]<br>
+		,"Living room sensor" : ["Nest Camera","FosCam1"]<br>
+		,"foscam" : ["FosCam1"]<br>
+	}<br>
+in this case first line - "Nest Camera" is a nestcam name from my Wink App, and obviously it will save images from itself when it will detect motion.<br>
+Second line: "Basement Sensor" is a motion sensor name from my Wink App. It will activate foscam camera BasementCam as I defined it in same bluemix-settings.js [check this insructions](Bluemix#8212015).<br>
+third line: "Living room sensor" is motion sensor name from my Wink App. "Nest Camera" is my nestcam name from Wink App. FosCam1 is my foscam camera name as I defined it in bluemix-settings.js<br>
+and finally last line - if you have Foscam Fi89X camera models they also can report motion to node-red app as a motion sensor. Due to limitations they all report motion as one sensor which has name "foscam". In the last lane of the configuration I am defining that if motion comes from any Foscam F89X camera - save snapshot from camera "FosCam1"<br>
+
+* Import updated  updated [winkCore.json](winkCore.json)
+* Import updated [winkFreeboards.json](winkFreeboards.json)
+
+* Import  updated [winkIntegration.json](winkIntegration.json)
+
+
+* if you have foscam - Import  updated [FosCam.json](FosCam.json)
+* if you have Samsung smartcam - Import  updated [smartCams.json](smartCams.json)
+
+* Resrtat application and test your motion sensors.
+
+
+
 9/11/2015
 ----------------
 Added support for CloundantDB for bluemix based instances. Planning to store camera images, presence history in case of restarts.
