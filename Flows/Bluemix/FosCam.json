@@ -38,7 +38,7 @@
     "id": "ed3c034e.12c4",
     "type": "function",
     "name": "Initialize foscam",
-    "func": "if (msg.statusCode=='200'){\nvar cam_name=msg.topic;\ncontext.global.FosCam[cam_name].Parameters={}\nvar foscam_params=msg.payload.replace(';','').split('\\n');\nfor (var i=0;i<foscam_params.length;i++){\n     foscam_params[i]=foscam_params[i].replace('var ','').replace(';','').replace('\\'','').replace('\\'','')\n     var str=foscam_params[i].split('=');\n     context.global.FosCam[cam_name].Parameters[str[0]]={\"value\":str[1]}\n     \n}\nnode.warn('Camera info: id '+context.global.FosCam[cam_name].Parameters.id.value+' internal ip: '+context.global.FosCam[cam_name].Parameters.ip.value)\nif(typeof(context.global.winkState.cameras)==='undefined') context.global.winkState.cameras={}\ncontext.global.winkState.cameras[cam_name]={\n \"name\": cam_name,\n\"object_type\": \"cameras\",\n\"object_id\": context.global.FosCam[cam_name].Parameters.id.value,\n\"freeboard\": 0,\n\"manufacturer_device_model\": \"foscam\",\n\"connection\": true,\n\"capturing_audio\": true,\n\"capturing_video\": true,\n\"url\": CamUrl=\"http://\"+context.global.FosCam[cam_name].hostname+\"/videostream.cgi?user=\"+context.global.FosCam[cam_name].uid+\"&pwd=\"+context.global.FosCam[cam_name].pwd+\"&resolution=32&rate=0\",\n\"refresh_time\":600,\n\"motion\":(typeof(context.global.FosCam[cam_name].Parameters.alarm_http_url)==='undefined' ? \"N/A\" : false)\n}\nif (typeof(context.global.FosCam[cam_name].Parameters.alarm_http_url)!=='undefined'){\n var camera=context.global.FosCam[cam_name]\n var ArmMsg={\n     url : 'http://'+camera.hostname+'/set_alarm.cgi?motion_armed=1&motion_sensitivity=5&http=1&http_url='+context.global.BlueMixUrlBase.replace('https','http')+'/red/foscam&user='+camera.uid+'&pwd='+camera.pwd,\n     method : \"GET\"\n }\n    node.send(ArmMsg)\n  }    \n }\n\nreturn;",
+    "func": "if (msg.statusCode=='200'){\nvar cam_name=msg.topic;\ncontext.global.FosCam[cam_name].Parameters={}\nvar foscam_params=msg.payload.replace(';','').split('\\n');\nfor (var i=0;i<foscam_params.length;i++){\n     foscam_params[i]=foscam_params[i].replace('var ','').replace(';','').replace('\\'','').replace('\\'','')\n     var str=foscam_params[i].split('=');\n     context.global.FosCam[cam_name].Parameters[str[0]]={\"value\":str[1]}\n     \n}\nnode.warn('Camera info: id '+context.global.FosCam[cam_name].Parameters.id.value+' internal ip: '+context.global.FosCam[cam_name].Parameters.ip.value)\nif(typeof(context.global.winkState.cameras)==='undefined') context.global.winkState.cameras={}\ncontext.global.winkState.cameras[cam_name]={\n \"name\": cam_name,\n\"object_type\": \"cameras\",\n\"object_id\": context.global.FosCam[cam_name].Parameters.id.value,\n\"freeboard\": 0,\n\"manufacturer_device_model\": \"foscam\",\n\"connection\": true,\n\"capturing_audio\": true,\n\"capturing_video\": true,\n\"url\": CamUrl=\"http://\"+context.global.FosCam[cam_name].hostname+\"/videostream.cgi?user=\"+context.global.FosCam[cam_name].uid+\"&pwd=\"+context.global.FosCam[cam_name].pwd+\"&resolution=32&rate=0\",\n\"snap_url\": SnapUrl=\"http://\"+context.global.FosCam[cam_name].hostname+\"/snapshot.cgi?user=\"+context.global.FosCam[cam_name].uid+\"&pwd=\"+context.global.FosCam[cam_name].pwd,\n\"refresh_time\":600,\n\"motion\":(typeof(context.global.FosCam[cam_name].Parameters.alarm_http_url)==='undefined' ? \"N/A\" : false)\n}\nif (typeof(context.global.FosCam[cam_name].Parameters.alarm_http_url)!=='undefined'){\n var camera=context.global.FosCam[cam_name]\n var ArmMsg={\n     topic:msg.topic,\n     url : 'http://'+camera.hostname+'/set_alarm.cgi?motion_armed=1&motion_sensitivity=5&http=1&http_url='+context.global.BlueMixUrlBase.replace('https','http')+'/red/foscam&user='+camera.uid+'&pwd='+camera.pwd,\n     method : \"GET\"\n }\n    node.send(ArmMsg)\n  }    \n }\n\nreturn;",
     "outputs": 1,
     "noerr": 0,
     "x": 963.8957977294922,
@@ -71,7 +71,7 @@
     "type": "delay",
     "name": "",
     "pauseType": "delay",
-    "timeout": "1",
+    "timeout": "30",
     "timeoutUnits": "seconds",
     "rate": "1",
     "rateUnits": "second",
@@ -95,8 +95,8 @@
     "url": "/red/foscam",
     "method": "get",
     "swaggerDoc": "",
-    "x": 135.8959197998047,
-    "y": 315.8888854980469,
+    "x": 150.8959197998047,
+    "y": 285.8888854980469,
     "z": "a5a3f2af.5a5c1",
     "wires": [
       [
@@ -143,14 +143,16 @@
     "id": "e4a3923f.1b5c7",
     "type": "function",
     "name": "",
-    "func": "if ( msg.payload.indexOf('ok')!=-1 && typeof(context.global.winkState.sensor_pods.foscam)==='undefined')\n{\n    node.warn('adding foscam sensor')\n    if (typeof(context.global.winkState.sensor_pods)==='undefined') context.global.winkState.sensor_pods={}\n    context.global.winkState.sensor_pods.foscam=\n    {\n    \"name\": \"foscam\",\n    \"object_type\": \"sensor_pods\",\n    \"object_id\": \"Foscam01\",\n    \"freeboard\": 0,\n    \"connection\": true,\n    \"motion\": false\n    }\n    if(typeof(context.global.winkDevCap)==='undefined') context.global.winkDevCap={}\n    context.global.winkDevCap.foscam=\n    {\n \"sensor_types\":[\n        {\n        \"field\": \"motion\",\n        \"type\": \"boolean\"\n        }\n    ]\n  }\n}\nreturn msg;",
+    "func": "var cam_name=msg.topic\nif ( msg.payload.indexOf('ok')!=-1 && typeof(context.global.winkState.sensor_pods.foscam)==='undefined')\n{\n    node.warn('adding foscam sensor')\n    if (typeof(context.global.winkState.sensor_pods)==='undefined') context.global.winkState.sensor_pods={}\n    context.global.winkState.sensor_pods.foscam=\n    {\n    \"name\": \"foscam\",\n    \"object_type\": \"sensor_pods\",\n    \"object_id\": \"Foscam01\",\n    \"freeboard\": 0,\n    \"connection\": true,\n    \"motion\": false\n    }\n    if(typeof(context.global.winkDevCap)==='undefined') context.global.winkDevCap={}\n    context.global.winkDevCap.foscam=\n    {\n \"sensor_types\":[\n        {\n        \"field\": \"motion\",\n        \"type\": \"boolean\"\n        }\n    ]\n  }\n}\n            var msg ={\n                \"url\":context.global.BlueMixUrlBase+'/red/retrieve_activities?camera_name='+cam_name,\n                \"method\": \"GET\",\n                headers: {\n                    \"Authorization\":\"Bearer \"+context.global.FREEBOARD_TOKEN\n                }\n            }\nreturn msg;",
     "outputs": 1,
     "noerr": 0,
     "x": 1353.8959197998047,
     "y": 86.88888549804688,
     "z": "a5a3f2af.5a5c1",
     "wires": [
-      []
+      [
+        "4f87970d.b07868"
+      ]
     ]
   },
   {
@@ -174,8 +176,8 @@
     "method": "use",
     "ret": "txt",
     "url": "",
-    "x": 843.8957977294922,
-    "y": 350.8888854980469,
+    "x": 848.8958129882812,
+    "y": 352.8888854980469,
     "z": "a5a3f2af.5a5c1",
     "wires": [
       []
@@ -210,31 +212,12 @@
     "func": "msg.payload.last_reading.motion=false\nreturn msg;",
     "outputs": 1,
     "noerr": 0,
-    "x": 646.8957977294922,
-    "y": 350.8888854980469,
+    "x": 648.8958129882812,
+    "y": 351.8888854980469,
     "z": "a5a3f2af.5a5c1",
     "wires": [
       [
         "5c68e61c.a39718"
-      ]
-    ]
-  },
-  {
-    "id": "e779a66f.188658",
-    "type": "inject",
-    "name": "",
-    "topic": "",
-    "payload": "",
-    "payloadType": "date",
-    "repeat": "",
-    "crontab": "",
-    "once": false,
-    "x": 179.8958282470703,
-    "y": 420.8888854980469,
-    "z": "a5a3f2af.5a5c1",
-    "wires": [
-      [
-        "2d4b7db4.d2b482"
       ]
     ]
   },
@@ -302,7 +285,7 @@
     "id": "d34a7a8b.2cb588",
     "type": "function",
     "name": "Initialize Foscam HD",
-    "func": "var cam_name=msg.topic;\nvar cam_model=msg.model;\nif('CGI_Result' in msg.payload && msg.payload.CGI_Result.result[0]=='0'){\ncontext.global.FosCam[cam_name].Parameters={}    \ncontext.global.FosCam[cam_name].Parameters.model=cam_model;\ncontext.global.FosCam[cam_name].Parameters.id={\"value\":msg.payload.CGI_Result.mac[0]}\nnode.warn('Camera info: id '+context.global.FosCam[cam_name].Parameters.id.value)\nif(typeof(context.global.winkState.cameras)==='undefined') context.global.winkState.cameras={}\ncontext.global.winkState.cameras[cam_name]={\n \"name\": cam_name,\n\"object_type\": \"cameras\",\n\"object_id\": context.global.FosCam[cam_name].Parameters.id.value,\n\"freeboard\": 0,\n\"manufacturer_device_model\": \"foscam\",\n\"connection\": true,\n\"capturing_audio\": true,\n\"capturing_video\": true,\n\"motion\":\"N/A\",\n\"url\":\"http://\"+context.global.FosCam[cam_name].hostname+\"/cgi-bin/CGIStream.cgi?cmd=GetMJStream&stream=true&usr=\"+context.global.FosCam[cam_name].uid+\"&pwd=\"+context.global.FosCam[cam_name].pwd,\n\"refresh_time\":600,\n\"HD\":true\n//(typeof(context.global.FosCam[cam_name].Parameters.alarm_http_url)==='undefined' ? \"N/A\" : false)\n}\n var camera=context.global.FosCam[cam_name]\n var ArmMsg={\n     topic : cam_name,\n     url : 'http://'+camera.hostname+'/cgi-bin/CGIProxy.fcgi?usr='+camera.uid+'&pwd='+camera.pwd+'&cmd=setSubStreamFormat&format=1',\n     method : \"GET\"\n    }\n    node.send(ArmMsg)\n}\nelse{\n    node.warn('Camera: '+cam_name+' not responding.. removing')\n    if (cam_name in context.global.winkState.cameras) delete context.global.winkState.cameras[cam_name]\n}\nreturn;",
+    "func": "var cam_name=msg.topic;\nvar cam_model=msg.model;\nif('CGI_Result' in msg.payload && msg.payload.CGI_Result.result[0]=='0'){\ncontext.global.FosCam[cam_name].Parameters={}    \ncontext.global.FosCam[cam_name].Parameters.model=cam_model;\ncontext.global.FosCam[cam_name].Parameters.id={\"value\":msg.payload.CGI_Result.mac[0]}\nnode.warn('Camera info: id '+context.global.FosCam[cam_name].Parameters.id.value)\nif(typeof(context.global.winkState.cameras)==='undefined') context.global.winkState.cameras={}\ncontext.global.winkState.cameras[cam_name]={\n \"name\": cam_name,\n\"object_type\": \"cameras\",\n\"object_id\": context.global.FosCam[cam_name].Parameters.id.value,\n\"freeboard\": 0,\n\"manufacturer_device_model\": \"foscam\",\n\"connection\": true,\n\"capturing_audio\": true,\n\"capturing_video\": true,\n\"motion\":\"N/A\",\n\"url\":\"http://\"+context.global.FosCam[cam_name].hostname+\"/cgi-bin/CGIStream.cgi?cmd=GetMJStream&stream=true&usr=\"+context.global.FosCam[cam_name].uid+\"&pwd=\"+context.global.FosCam[cam_name].pwd,\n\"snap_url\":\"http://\"+context.global.FosCam[cam_name].hostname+\"/cgi-bin/CGIProxy.fcgi?cmd=snapPicture2&usr=\"+context.global.FosCam[cam_name].uid+\"&pwd=\"+context.global.FosCam[cam_name].pwd,\n\"refresh_time\":600,\n\"HD\":true\n//(typeof(context.global.FosCam[cam_name].Parameters.alarm_http_url)==='undefined' ? \"N/A\" : false)\n}\n var camera=context.global.FosCam[cam_name]\n var ArmMsg={\n     topic : cam_name,\n     url : 'http://'+camera.hostname+'/cgi-bin/CGIProxy.fcgi?usr='+camera.uid+'&pwd='+camera.pwd+'&cmd=setSubStreamFormat&format=1',\n     method : \"GET\"\n    }\n    node.send(ArmMsg)\n}\nelse{\n    node.warn('Camera: '+cam_name+' not responding.. removing')\n    if (cam_name in context.global.winkState.cameras) delete context.global.winkState.cameras[cam_name]\n}\nreturn;",
     "outputs": 1,
     "noerr": 0,
     "x": 1037.8960418701172,
@@ -349,11 +332,41 @@
     "id": "1103915b.eefc6f",
     "type": "function",
     "name": "",
-    "func": "var cam_name=msg.topic;\nif('CGI_Result' in msg.payload && msg.payload.CGI_Result.result[0]!=='0'){\nnode.warn('Unable to setup MJpeg feed - removing camera')\ndelete context.global.winkState.cameras[cam_name]\n} else node.warn(cam_name+': Mjpeg feed set, ready to go')\nreturn;",
+    "func": "var cam_name=msg.topic;\nif('CGI_Result' in msg.payload && msg.payload.CGI_Result.result[0]!=='0'){\nnode.warn('Unable to setup MJpeg feed - removing camera')\ndelete context.global.winkState.cameras[cam_name]\n} else {\n    node.warn(cam_name+': Mjpeg feed set, ready to go')\n                var msg ={\n                \"url\":context.global.BlueMixUrlBase+'/red/retrieve_activities?camera_name='+cam_name,\n                \"method\": \"GET\",\n                headers: {\n                    \"Authorization\":\"Bearer \"+context.global.FREEBOARD_TOKEN\n                }\n            }\n    node.send(msg)\n}\nreturn;",
     "outputs": 1,
     "noerr": 0,
     "x": 1484.8959197998047,
     "y": 253.88888549804688,
+    "z": "a5a3f2af.5a5c1",
+    "wires": [
+      [
+        "551b4670.aae4b8"
+      ]
+    ]
+  },
+  {
+    "id": "4f87970d.b07868",
+    "type": "http request",
+    "name": "",
+    "method": "use",
+    "ret": "txt",
+    "url": "",
+    "x": 1549.8958282470703,
+    "y": 81.88888549804688,
+    "z": "a5a3f2af.5a5c1",
+    "wires": [
+      []
+    ]
+  },
+  {
+    "id": "551b4670.aae4b8",
+    "type": "http request",
+    "name": "",
+    "method": "use",
+    "ret": "txt",
+    "url": "",
+    "x": 1644.2291727949075,
+    "y": 259.8888854980469,
     "z": "a5a3f2af.5a5c1",
     "wires": [
       []
