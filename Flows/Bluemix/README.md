@@ -24,7 +24,7 @@ Constract name of the request usiing following logic:<br>
 
 For example if I want to create IFTTT action when I press top (On) button I will put <i>z_Remote1_button_on_pressed</i> as event name.<br>
 
-Choose any channel and action for this.<br>
+Choose any channel and action for <b>this</b>.<br>
 Save your recipe
 
 I also added same functionality for motion sensors and trippers:<br>
