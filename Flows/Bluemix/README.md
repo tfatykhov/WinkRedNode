@@ -1,4 +1,51 @@
 == UPDATE ==
+9/18/2015
+----------------
+Added IFTTT support for new lutron zigbee remote.
+required changes:
+* Import updated  updated [winkCore.json](winkCore.json)
+ 
+
+How to use IFTTT:
+--------------------
+for example I added new zigbee remote to my wink app and named it <b>z Remote1</b>.</br>
+in IFTTT create new recipe ,select Maker channel as "this" and  choose "Receive web request".<br>
+
+Constract name of the request usiing following logic:<br>
+
+1. Name of your remote where all spaces are replaced by "_". in my case it will be <b>z_Remote1</b>
+2. add "_" 
+3. add one of the following actions:
+	- "button_on_pressed"
+	- "button_off_pressed"
+	- "button_up_pressed"
+	- "button_down_pressed"<br>
+
+For example if I want to create IFTTT action when I press top (On) button I will put <i>z_Remote1_button_on_pressed</i> as event name.<br>
+
+Choose any channel and action for this.<br>
+Save your recipe
+
+I also added same functionality for motion sensors and trippers:<br>
+same logic applies to sensor name (replace spaces with " _ ")<br>
+add "_" after name.<br>
+for motion sensor you can use following option:
+- motion_started
+- motion_ended
+<br>
+for trippers:<br>
+- opened
+- closed
+<br>
+
+Examples 
+- <i>Motion_sensor_motion_started</i>
+- <i>Tripper_sensor_closed</i>
+
+
+
+
+
 9/15/2015
 ----------------
 Added ability to save motion based snapshots to Cloudant DB.
