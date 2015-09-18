@@ -10,7 +10,7 @@ Required changes:<br>
 How to use IFTTT:
 --------------------
 for example I added new zigbee remote to my wink app and named it <b>z Remote1</b>.</br>
-in IFTTT create new recipe ,select Maker channel as "this" and  choose "Receive web request".<br>
+in IFTTT create new recipe ,select Maker channel as <b>this</b> and  choose "Receive web request".<br>
 
 Constract name of the request usiing following logic:<br>
 
@@ -24,7 +24,7 @@ Constract name of the request usiing following logic:<br>
 
 For example if I want to create IFTTT action when I press top (On) button I will put <i>z_Remote1_button_on_pressed</i> as event name.<br>
 
-Choose any channel and action for <b>this</b>.<br>
+Choose any channel and action for <b>that</b>.<br>
 Save your recipe
 
 I also added same functionality for motion sensors and trippers:<br>
