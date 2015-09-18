@@ -1,9 +1,10 @@
 == UPDATE ==
 9/18/2015
 ----------------
-Added IFTTT support for new lutron zigbee remote.
-required changes:
-* Import updated  updated [winkCore.json](winkCore.json)
+Added IFTTT support for new lutron zigbee remote, motion sensors, trippers.<br>
+
+Required changes:<br>
+* Import updated [winkCore.json](winkCore.json)
  
 
 How to use IFTTT:
@@ -33,6 +34,7 @@ for motion sensor you can use following option:
 - motion_started
 - motion_ended
 <br>
+
 for trippers:<br>
 - opened
 - closed
