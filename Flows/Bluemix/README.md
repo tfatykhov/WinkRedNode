@@ -12,7 +12,7 @@ How to use IFTTT:
 for example I added new zigbee remote to my wink app and named it <b>z Remote1</b>.</br>
 in IFTTT create new recipe ,select Maker channel as <b>this</b> and  choose "Receive web request".<br>
 
-Constract name of the request usiing following logic:<br>
+Create name of the request using following logic:<br>
 
 1. Name of your remote where all spaces are replaced by "_". in my case it will be <b>z_Remote1</b>
 2. add "_" 
