@@ -6,11 +6,11 @@
     "topic": "",
     "payload": "",
     "payloadType": "none",
-    "repeat": "82800",
+    "repeat": "",
     "crontab": "",
-    "once": true,
-    "x": 679.4999847412109,
-    "y": 392,
+    "once": false,
+    "x": 658.4999847412109,
+    "y": 366,
     "z": "8630683c.79cf98",
     "wires": [
       [
@@ -236,8 +236,8 @@
     "randomLast": "5",
     "randomUnits": "seconds",
     "drop": false,
-    "x": 818.4999847412109,
-    "y": 388,
+    "x": 812.4999847412109,
+    "y": 364,
     "z": "8630683c.79cf98",
     "wires": [
       [
@@ -252,8 +252,8 @@
     "func": "var baseUrl = \"https://winkapi.quirky.com/\";\nvar callbackUrl=context.global.BlueMixUrlBase+\"/red/wink/subscribtions\";\n   for (var winkDevice in context.global.winkState)\n    {\n        if (winkDevice!=\"linked_services\")\n        {\n            var deviceUrl=baseUrl+winkDevice;\n            for (var winkDeviceName in context.global.winkState[winkDevice])\n            {\n                deviceId=context.global.winkState[winkDevice][winkDeviceName].object_id;\n                node.warn(winkDeviceName+\" \"+deviceId);\n                var newMsg ={\n                    \"url\":baseUrl+\"/\"+winkDevice+\"/\"+deviceId+\"/subscriptions\",\n                    \"method\": \"POST\",\n                    headers: {\n                        \"Authorization\":\"Bearer \"+context.global.WinkToken,\n                        \"User-Agent\":\"Manufacturer/Darwin node/0.10.30 Wink/999.99.9\",\n                        \"Content-Type\":\"application/json\"\n                    },\n                    payload: {\n                        \"callback\": callbackUrl\n                    }\n                };\n                node.send(newMsg);\n            }\n        }\n    }\nreturn;",
     "outputs": 1,
     "noerr": 0,
-    "x": 1067.5001678466797,
-    "y": 354,
+    "x": 1069.500228881836,
+    "y": 363,
     "z": "8630683c.79cf98",
     "wires": [
       [
@@ -458,7 +458,8 @@
         "df8261f8.207da",
         "93422ecf.6cbdd",
         "76c41924.893be8",
-        "ca0185b6.35fe78"
+        "ca0185b6.35fe78",
+        "c8b8a896.374758"
       ]
     ]
   },
@@ -789,5 +790,49 @@
     "wires": [
       []
     ]
+  },
+  {
+    "id": "c8b8a896.374758",
+    "type": "function",
+    "name": "SendNamedBasedIfttt",
+    "func": "if ('IFTTT_TOKEN' in context.global && context.global.IFTTT_TOKEN!=='undefined'){\nif (msg.payload.object_type=='remote' || (msg.payload.object_type=='sensor_pod' && ('motion' in msg.payload.last_reading || 'opened' in msg.payload.last_reading)) ){\n    var winkEvent=''\n    var lr=msg.payload.last_reading;\n    var oName=msg.payload.name;\n    var oType=msg.payload.object_type\n//  node.warn(lr)\n//\"button_on_pressed\": false,\n//\"button_off_pressed\": null,\n//\"button_up_pressed\": false,\n//\"button_down_pressed\": null\n if (oType=='remote') winkEvent = (lr.button_on_pressed ? 'button_on_pressed' : lr.button_off_pressed ? 'button_off_pressed' : lr.button_up_pressed ? 'button_up_pressed' : lr.button_down_pressed ? 'button_down_pressed' :  '')\n else {\n if ('motion' in lr)  winkEvent = (lr.motion ? 'motion_started' : 'motion_ended')\n if ('opened' in lr) winkEvent =  (lr.opened ? 'opened' : 'closed')\n }\n \n if (winkEvent!==''){\n var WinkEvent=oName.replace(' ','_')+'_'+winkEvent;\n var newMsg ={\n                    \"url\":\"https://maker.ifttt.com/trigger/\"+WinkEvent+\"/with/key/\"+context.global.IFTTT_TOKEN,\n                    \"method\": \"POST\",\n                    headers: \n                    {\n                        \"Content-Type\":\"application/json\"\n                    }\n//                    ,payload: \n//                    {\"value1\":msg.payload.name,\"value2\":Event_desc,\"value3\":extra_param}\n            }\nnode.send(newMsg);\n}\n\n    \n    \n}\n\n}\nreturn;",
+    "outputs": 1,
+    "noerr": 0,
+    "x": 710.8957977294922,
+    "y": 703.1110534667969,
+    "z": "8630683c.79cf98",
+    "wires": [
+      [
+        "95583afa.6aa7c8"
+      ]
+    ]
+  },
+  {
+    "id": "95583afa.6aa7c8",
+    "type": "http request",
+    "name": "",
+    "method": "use",
+    "ret": "txt",
+    "url": "",
+    "x": 917.8957977294922,
+    "y": 704.8889465332031,
+    "z": "8630683c.79cf98",
+    "wires": [
+      [
+        "4fff0a78.b000f4"
+      ]
+    ]
+  },
+  {
+    "id": "4fff0a78.b000f4",
+    "type": "debug",
+    "name": "",
+    "active": true,
+    "console": "false",
+    "complete": "false",
+    "x": 1082.8958282470703,
+    "y": 701.8888854980469,
+    "z": "8630683c.79cf98",
+    "wires": []
   }
 ]
