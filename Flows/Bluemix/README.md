@@ -23,6 +23,8 @@ For bug fixes
 Now each camera in dashboards will have link to history (currently only works in cloud mode)<br>
 Also dlink cameras that suport status update for motion sensors will have virtual motion sensor in the system. Sensor name will be same as camera name. Can be used to trigger snapshot capture for other cameras as well as itself.
 
+Do not forget to re-start application.
+
 9/18/2015
 ----------------
 Added IFTTT support for new lutron zigbee remote, motion sensors, trippers.<br>
