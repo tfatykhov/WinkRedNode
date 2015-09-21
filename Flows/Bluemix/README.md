@@ -8,7 +8,7 @@ Following models should work <i>DCS-1100(L), DCS-1130(L), DCS-2102, DCS-2103, DC
 Required changes: <br>
 * For Dlink - add following  to blumix-settings.js into functionGlobalContext section:<br>
 ,DlinkCam: {</br>
-		"DCS942L" : {"hostname":"timothyr.no-ip.org:1884","uid":"user id","pwd":"password","model":"DCS-942L"}<br>
+		"DCS942L" : {"hostname":"your ip:port","uid":"user id","pwd":"password","model":"DCS-942L"}<br>
 	   }<br>
 Add more cameras if you have them in similar way inside DlinkCam section<br>
 * add new tab and import new [DlinkCam.json](DlinkCam.json) 
