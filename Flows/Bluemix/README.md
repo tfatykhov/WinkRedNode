@@ -20,8 +20,8 @@ For bug fixes
 * If you have supported Foscam, re-import [FosCam.json](FosCam.json)
 * If you have supported Samsung Smartcams re-import [smartCams.json](smartCams.json)
 
-Now each camera in dashboards will have link to history (currently only works in cloud mode)
-
+Now each camera in dashboards will have link to history (currently only works in cloud mode)<br>
+Also dlink cameras that suport status update for motion sensors will have virtual motion sensor in the system. Sensor name will be same as camera name. Can be used to trigger snapshot capture for other cameras as well as itself.
 
 9/18/2015
 ----------------
