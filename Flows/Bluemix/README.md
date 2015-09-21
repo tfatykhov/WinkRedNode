@@ -1,4 +1,28 @@
 == UPDATE ==
+9/21/2015
+-----------------
+1. New cameras support - Dlink NIPCA series.<br>
+Following models should work <i>DCS-1100(L), DCS-1130(L), DCS-2102, DCS-2103, DCS-2121, DCS-2130, DCS-2132L , DCS-2136L, DCS-2210, DCS-2230, DCS-2310L, DCS-2332L, DCS-3010, DCS-3112, DCS-3410, DCS-3411, DCS-3430, DCS-3710, DCS-3710 B1, DCS-3715, DCS-3716, DCS-5211L, DCS-5222L, DCS-5230L, DCS-5605, DCS-5635, DCS-6010L, DCS-6112(V), DCS-6113(V), DCS-6210, DCS-6314, DCS-6410, DCS-6510, DCS-6511, DCS-6513, DCS-6616, DCS-681x B1, DCS-6915, DCS-7010L, DCS-7110, DCS-7410, DCS-7413, DCS-7510, DCS-7513, DVS-310-1, DVS-V310-4, DCS-940L, DCS-942L</i><br>
+2. Bug fixes
+
+Required changes: <br>
+* For Dlink - add following  to blumix-settings.js into functionGlobalContext section:<br>
+,DlinkCam: {</br>
+		"DCS942L" : {"hostname":"timothyr.no-ip.org:1884","uid":"admin","pwd":"Dfdbkjy75","model":"DCS-942L"}<br>
+	   }<br>
+Add more cameras if you have them in similar way inside DlinkCam section<br>
+* add new tab and import new [DlinkCam.json](DlinkCam.json) 
+
+For bug fixes
+
+* re-import [winkCore.json](winkCore.json)
+* re-import [winkFreeboards.json](winkFreeboards.json)
+* If you have supported Foscam, re-import [FosCam.json](FosCam.json)
+* If you have supported Samsung Smartcams re-import [smartCams.json](smartCams.json)
+
+Now each camera in dashboards will have link to history (currently only works in cloud mode)
+
+
 9/18/2015
 ----------------
 Added IFTTT support for new lutron zigbee remote, motion sensors, trippers.<br>
