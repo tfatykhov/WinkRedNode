@@ -1,7 +1,7 @@
 == UPDATE ==
 9/23/2015
 -----------------
-1. Dlink MJPEG cameras support
+1. Dlink MJPEG cameras support (no motion detection reporting to dashboard)<br>
 Following models should work <i>'DCS-930L','DCS-930' , 'DCS-931L','DCS-931', 'DCS-932L','DCS-932', 'DCS-933L','DCS-933', 'DCS-5020L','DCS-934L'</i><br>
 
 
@@ -17,7 +17,7 @@ Make sure model is set exactly as one from the list above<br>
 
 9/21/2015
 -----------------
-1. New cameras support - Dlink NIPCA series.<br>
+1. New cameras support - Dlink NIPCA series. Most should be able to report motion detection to dashboard and be used as triggers for IFTTT and snapshot recording<br>
 Following models should work <i>DCS-1100(L), DCS-1130(L), DCS-2102, DCS-2103, DCS-2121, DCS-2130, DCS-2132L , DCS-2136L, DCS-2210, DCS-2230, DCS-2310L, DCS-2332L, DCS-3010, DCS-3112, DCS-3410, DCS-3411, DCS-3430, DCS-3710, DCS-3710 B1, DCS-3715, DCS-3716, DCS-5211L, DCS-5222L, DCS-5230L, DCS-5605, DCS-5635, DCS-6010L, DCS-6112(V), DCS-6113(V), DCS-6210, DCS-6314, DCS-6410, DCS-6510, DCS-6511, DCS-6513, DCS-6616, DCS-681x B1, DCS-6915, DCS-7010L, DCS-7110, DCS-7410, DCS-7413, DCS-7510, DCS-7513, DVS-310-1, DVS-V310-4, DCS-940L, DCS-942L</i><br>
 2. Bug fixes
 
