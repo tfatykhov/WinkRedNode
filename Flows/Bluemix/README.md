@@ -1,4 +1,19 @@
 == UPDATE ==
+9/23/2015
+1. Dlink MJPEG cameras support
+Following models should work <i>'DCS-930L','DCS-930' , 'DCS-931L','DCS-931', 'DCS-932L','DCS-932', 'DCS-933L','DCS-933', 'DCS-5020L','DCS-934L'</i><br>
+
+
+Required changes: <br>
+* For Dlink - add following  to blumix-settings.js into functionGlobalContext section:<br>
+,DlinkCam: {</br>
+		"DCS934L" : {"hostname":"your ip:port","uid":"user id","pwd":"password","model":"DCS-934L"}<br>
+	   }<br>
+Add more cameras if you have them in similar way inside DlinkCam section<br>
+Make sure model is set exactly as one from the list above<br>
+* add new tab and import new [DlinkCam.json](DlinkCam.json) 
+
+
 9/21/2015
 -----------------
 1. New cameras support - Dlink NIPCA series.<br>
@@ -11,6 +26,7 @@ Required changes: <br>
 		"DCS942L" : {"hostname":"your ip:port","uid":"user id","pwd":"password","model":"DCS-942L"}<br>
 	   }<br>
 Add more cameras if you have them in similar way inside DlinkCam section<br>
+Make sure model is set exactly as one from the list above<br>
 * add new tab and import new [DlinkCam.json](DlinkCam.json) 
 
 For bug fixes
