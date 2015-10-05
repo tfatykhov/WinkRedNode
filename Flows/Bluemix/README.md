@@ -1,4 +1,24 @@
 == UPDATE ==
+10/05/2015
+-----------------
+New "tablet friendly" dashboard with configurable buttons (can be assigned to activate wink shortcut)<br>
+
+Required changes: <br>
+* Import updated  updated [winkCore.json](winkCore.json)
+* Import updated [winkFreeboards.json](winkFreeboards.json)
+* Import  updated [winkIntegration.json](winkIntegration.json)
+
+Add following  to blumix-settings.js into functionGlobalContext section:<br>
+<p>
+<code>
+,"tab_ui_shortcuts":["wink shortcut name","wink shortcut name","wink shortcut name","wink shortcut name","wink shortcut name","wink shortcut name"]<br>
+</code>
+</p>
+replace <i>wink shortcut name</i> with actual shorcut names from wink app with same case. You can put 6 or less shorcuts.
+If you put less, then unused buttons will have "shorctut #" label without any action for now.<br>
+New tablet dashboard is accessible via:<br>
+<code> your_app_name.mybluemix.net/freeboard/ui</code>
+
 9/23/2015
 -----------------
 1. Dlink MJPEG cameras support (no motion detection reporting to dashboard)<br>
