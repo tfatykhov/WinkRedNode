@@ -1,9 +1,25 @@
 [
   {
+    "id": "7637f7c1.89c808",
+    "type": "function",
+    "name": "",
+    "func": "var avgtemp=0;\nvar avghumidity=0;\nvar numthermos=0;\nvar numhumidities=0;\nmsg.payload={\n    \"thermostats\":context.global.Ecobee.Thermostats,\n    \"sensor_pods\":context.global.Ecobee.Sensors\n};\nif (typeof context.global.winkState.thermostats=='undefined'){ context.global.winkState.thermostats = new Object(); }\nfor (var name in msg.payload.thermostats)\n{\n//    node.warn(\"Importing: \"+name+\" thermostat\");\n    context.global.winkState.thermostats[name]={\n        \"name\":name,\n        \"object_type\": msg.payload.thermostats[name].object_type,\n        \"object_id\": msg.payload.thermostats[name].object_id,\n        \"freeboard\": 0,\n        \"connection\": msg.payload.thermostats[name].connection,\n        \"min_set_point\": (msg.payload.thermostats[name].min_set_point-32)*(5/9),\n        \"max_set_point\": (msg.payload.thermostats[name].max_set_point-32)*(5/9),\n        \"mode\": msg.payload.thermostats[name].mode,\n        \"temperature\": (msg.payload.thermostats[name].temperature-32)*(5/9),\n        \"humidity\": msg.payload.thermostats[name].humidity,\n        \"users_away\":false\n    };\n    if (msg.payload.thermostats[name].temperature){ avgtemp+=(msg.payload.thermostats[name].temperature-32)*(5/9); numthermos++; }\n    if (msg.payload.thermostats[name].humidity){ avghumidity+=(msg.payload.thermostats[name].humidity); numhumidities++; }\n}\n\navgtemp=avgtemp/numthermos;\navghumidity=avghumidity/numhumidities;\n\nif (typeof context.global.winkState.groups[\".sensors\"].temperature=='undefined'){ context.global.winkState.groups[\".sensors\"].temperature = new Object(); }\nif (typeof context.global.winkState.groups[\".sensors\"].humidity=='undefined'){ context.global.winkState.groups[\".sensors\"].humidity = new Object(); }\ncontext.global.winkState.groups[\".sensors\"].temperature={\n    average:avgtemp\n};\ncontext.global.winkState.groups[\".sensors\"].humidity={\n    average:avghumidity\n};\n\n//node.warn(\"Ecobee Thermostat import finished\");\n\nfor (var name in msg.payload.sensor_pods)\n{\n//    node.warn(\"Importing: \"+name+\" sensor pod\");\n    context.global.winkState.sensor_pods[name]={\n        \"name\":name,\n        \"object_type\":msg.payload.sensor_pods[name].object_type,\n        \"object_id\":msg.payload.sensor_pods[name].object_id,\n        \"freeboard\":0,\n    }\n    if (msg.payload.sensor_pods[name].motion==\"true\"){context.global.winkState.sensor_pods[name].motion=true}\n    else if (msg.payload.sensor_pods[name].motion==\"false\"){context.global.winkState.sensor_pods[name].motion=false}\n    context.global.winkDevCap[name]={\n        \"sensor_types\":[{}]\n    }\n    context.global.winkDevCap[name].sensor_types=[{\n            \"field\":\"motion\",\n            \"type\":\"boolean\"\n        }]\n}\n\n//node.warn(\"Ecobee Remote Sensor import finished\");\nvar newMsg={\n    \"payload\":\"Ecobee Thermostat and Remote Sensor Data imported successfully\"\n};\nreturn newMsg;",
+    "outputs": 1,
+    "noerr": 0,
+    "x": 296.5,
+    "y": 598.9999694824219,
+    "z": "95f60c40.6a09f",
+    "wires": [
+      [
+        "d273a159.2d8c6"
+      ]
+    ]
+  },
+  {
     "id": "8b51cc7a.74ae3",
     "type": "function",
     "name": "",
-    "func": "var WinkCMDmsg=\"\";\nif (msg.payload.iftttkey==context.global.IFTTT_TOKEN || msg.payload.iftttkey==context.global.FREEBOARD_TOKEN)\n{\n    if (typeof msg.payload.ifttt !=='undefined')\n    {\n      context.global.ifttt=(msg.payload.ifttt.toLowerCase()==\"on\" ? true:false)\n      msg.res.StatusCode=200;\n    }\n    if (typeof msg.payload.winkName !=='undefined')\n    {\n//    node.warn(msg.payload.winkName)\n    if (msg.payload.level !=='undefined')\n    {\n        level=msg.payload.level\n    }  else level=100\n    if (msg.payload.cmd !=='undefined')\n    {\n        cmd=msg.payload.cmd\n    } else cmd=''   \n//    node.warn(level)\n    WinkCMDmsg = context.global.executeWinkCMD(msg.payload.winkName,msg.payload.type,msg.payload.cmd,level)\n    msg.res.StatusCode=200;\n    //node.warn(WinkCMDmsg.payload)\n    }\n}\nelse {\n    node.warn(\"ifttt messages bad request\")\n     msg.res.StatusCode=403;\n}\nif (WinkCMDmsg!==\"\")\n{\n    return [msg,WinkCMDmsg];\n}\nelse\n{\nreturn [msg];\n}",
+    "func": "var WinkCMDmsg=\"\";\nif (msg.payload.iftttkey==context.global.IFTTT_TOKEN || msg.payload.iftttkey==context.global.FREEBOARD_TOKEN)\n{\n    if (typeof msg.payload.ifttt !=='undefined')\n    {\n      context.global.ifttt=(msg.payload.ifttt.toLowerCase()==\"on\" ? true:false)\n      msg.res.StatusCode=200;\n    }\n    if (typeof msg.payload.winkName !=='undefined')\n    {\n//    node.warn(msg.payload.winkName)\n    if (msg.payload.level !=='undefined')\n    {\n        level=msg.payload.level\n    }  else level=100\n    if (msg.payload.cmd !=='undefined')\n    {\n        cmd=msg.payload.cmd\n    } else cmd=''   \n//    node.warn(level)\n    WinkCMDmsg = context.global.executeWinkCMD(msg.payload.winkName,msg.payload.type,msg.payload.cmd,level);\n    msg.res.StatusCode=200;\n//    node.warn(WinkCMDmsg)\n    }\n}\nelse {\n    node.warn(\"ifttt messages bad request\")\n     msg.res.StatusCode=403;\n}\nif (WinkCMDmsg!==\"\")\n{\n    return [msg,WinkCMDmsg];\n}\nelse\n{\nreturn [msg];\n}",
     "outputs": "2",
     "noerr": 0,
     "x": 342.5,
@@ -743,31 +759,15 @@
     "wires": []
   },
   {
-    "id": "7637f7c1.89c808",
-    "type": "function",
-    "name": "",
-    "func": "var avgtemp=0;\nvar avghumidity=0;\nvar numthermos=0;\nvar numhumidities=0;\nmsg.payload={\n    \"thermostats\":context.global.Ecobee.Thermostats,\n    \"sensor_pods\":context.global.Ecobee.Sensors\n};\nif (typeof context.global.winkState.thermostats=='undefined'){ context.global.winkState.thermostats = new Object(); }\nfor (var name in msg.payload.thermostats)\n{\n//    node.warn(\"Importing: \"+name+\" thermostat\");\n    context.global.winkState.thermostats[name]={\n        \"name\":name,\n        \"object_type\": msg.payload.thermostats[name].object_type,\n        \"object_id\": msg.payload.thermostats[name].object_id,\n        \"freeboard\": 0,\n        \"connection\": msg.payload.thermostats[name].connection,\n        \"min_set_point\": (msg.payload.thermostats[name].min_set_point-32)*(5/9),\n        \"max_set_point\": (msg.payload.thermostats[name].max_set_point-32)*(5/9),\n        \"mode\": msg.payload.thermostats[name].mode,\n        \"temperature\": (msg.payload.thermostats[name].temperature-32)*(5/9),\n        \"humidity\": msg.payload.thermostats[name].humidity,\n        \"users_away\":false\n    };\n    if (msg.payload.thermostats[name].temperature){ avgtemp+=(msg.payload.thermostats[name].temperature-32)*(5/9); numthermos++; }\n    if (msg.payload.thermostats[name].humidity){ avghumidity+=(msg.payload.thermostats[name].humidity); numhumidities++; }\n}\n\navgtemp=avgtemp/numthermos;\navghumidity=avghumidity/numhumidities;\n\nif (typeof context.global.winkState.groups[\".sensors\"].temperature=='undefined'){ context.global.winkState.groups[\".sensors\"].temperature = new Object(); }\nif (typeof context.global.winkState.groups[\".sensors\"].humidity=='undefined'){ context.global.winkState.groups[\".sensors\"].humidity = new Object(); }\ncontext.global.winkState.groups[\".sensors\"].temperature={\n    average:avgtemp\n};\ncontext.global.winkState.groups[\".sensors\"].humidity={\n    average:avghumidity\n};\n\n//node.warn(\"Ecobee Thermostat import finished\");\n\nfor (var name in msg.payload.sensor_pods)\n{\n//    node.warn(\"Importing: \"+name+\" sensor pod\");\n    context.global.winkState.sensor_pods[name]={\n        \"name\":name,\n        \"object_type\":msg.payload.sensor_pods[name].object_type,\n        \"object_id\":msg.payload.sensor_pods[name].object_id,\n        \"freeboard\":0,\n    }\n    if (msg.payload.sensor_pods[name].motion==\"true\"){context.global.winkState.sensor_pods[name].motion=true}\n    else if (msg.payload.sensor_pods[name].motion==\"false\"){context.global.winkState.sensor_pods[name].motion=false}\n    context.global.winkDevCap[name]={\n        \"sensor_types\":[{}]\n    }\n    context.global.winkDevCap[name].sensor_types=[{\n            \"field\":\"motion\",\n            \"type\":\"boolean\"\n        }]\n}\n\n//node.warn(\"Ecobee Remote Sensor import finished\");\nvar newMsg={\n    \"payload\":\"Ecobee Thermostat and Remote Sensor Data imported successfully\"\n};\nreturn newMsg;",
-    "outputs": 1,
-    "noerr": 0,
-    "x": 296.5,
-    "y": 598.9999694824219,
-    "z": "95f60c40.6a09f",
-    "wires": [
-      [
-        "d273a159.2d8c6"
-      ]
-    ]
-  },
-  {
     "id": "d841b5ff.27be48",
     "type": "inject",
     "name": "",
     "topic": "",
     "payload": "",
     "payloadType": "date",
-    "repeat": "",
+    "repeat": "300",
     "crontab": "",
-    "once": false,
+    "once": true,
     "x": 146.99999618530273,
     "y": 599.2499618530273,
     "z": "95f60c40.6a09f",
@@ -788,5 +788,94 @@
     "y": 598.9999694824219,
     "z": "95f60c40.6a09f",
     "wires": []
+  },
+  {
+    "id": "afad4317.5052c",
+    "type": "comment",
+    "name": "Integration with LIFX Bulbs ---------------------------------------------------------------------------------------",
+    "info": "",
+    "x": 358,
+    "y": 1087,
+    "z": "95f60c40.6a09f",
+    "wires": []
+  },
+  {
+    "id": "e2d5ded9.1d2a2",
+    "type": "inject",
+    "name": "",
+    "topic": "",
+    "payload": "",
+    "payloadType": "none",
+    "repeat": "",
+    "crontab": "",
+    "once": false,
+    "x": 95,
+    "y": 1127,
+    "z": "95f60c40.6a09f",
+    "wires": [
+      [
+        "e5da9cd9.1a256"
+      ]
+    ]
+  },
+  {
+    "id": "e5da9cd9.1a256",
+    "type": "function",
+    "name": "",
+    "func": "var newMsg ={\n    \"url\":\"https://api.lifx.com/v1beta1/lights/all\",\n    \"method\": \"GET\",\n    headers: {\n        \"Authorization\": \"Bearer \"+context.global.LIFX_TOKEN,\n        \"Content-Type\":\"application/json\"\n    }\n}\nreturn newMsg;",
+    "outputs": 1,
+    "noerr": 0,
+    "x": 247,
+    "y": 1127,
+    "z": "95f60c40.6a09f",
+    "wires": [
+      [
+        "5d66b520.a2994c"
+      ]
+    ]
+  },
+  {
+    "id": "9e13e2b6.61ec2",
+    "type": "debug",
+    "name": "",
+    "active": true,
+    "console": "false",
+    "complete": "payload",
+    "x": 736,
+    "y": 1126,
+    "z": "95f60c40.6a09f",
+    "wires": []
+  },
+  {
+    "id": "5d66b520.a2994c",
+    "type": "http request",
+    "name": "",
+    "method": "use",
+    "ret": "obj",
+    "url": "",
+    "x": 403,
+    "y": 1127,
+    "z": "95f60c40.6a09f",
+    "wires": [
+      [
+        "3151ca03.ceae36"
+      ]
+    ]
+  },
+  {
+    "id": "3151ca03.ceae36",
+    "type": "function",
+    "name": "",
+    "func": "for (var id in msg.payload)\n{\n    context.global.winkState.light_bulbs[msg.payload[id].label]={\n        name:msg.payload[id].label,\n        object_type:\"light_bulbs\",\n        object_id:msg.payload[id].id,\n        device_manufacturer:\"lifx\",\n        freeboard:0,\n        connection:msg.payload[id].connected,\n        powered:(msg.payload[id].power==\"on\" ? true:false),\n        brightness:msg.payload[id].brightness,\n        color_model:msg.payload[id].product_name,\n        color:\"\",\n        \"hue\":msg.payload[id].color.hue,\n        \"saturation\":msg.payload[id].color.saturation,\n        \"color_temperature\":msg.payload[id].color.kelvin\n    };\n    \n    var newMsg={\n        payload:\"Imported \"+msg.payload[id].label+\" successfully.\"\n    };\n    node.send(newMsg);\n}\nreturn;",
+    "outputs": 1,
+    "noerr": 0,
+    "x": 566,
+    "y": 1127,
+    "z": "95f60c40.6a09f",
+    "wires": [
+      [
+        "9e13e2b6.61ec2"
+      ]
+    ]
   }
 ]
