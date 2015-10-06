@@ -1,6 +1,11 @@
 == UPDATE ==
 10/05/2015
 -----------------
+* Import updated [winkFreeboards.json](winkFreeboards.json) 
+Now it has first draft of "controls" page.
+
+10/05/2015
+-----------------
 New "tablet friendly" dashboard with configurable buttons (can be assigned to activate wink shortcut)<br>
 
 Required changes: <br>
