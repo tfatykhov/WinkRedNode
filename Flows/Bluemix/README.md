@@ -1,6 +1,19 @@
 == UPDATE ==
 10/05/2015
 -----------------
+Updated with LIFX bulb support.<br>
+
+Required changes: <br>
+* Import updated [winkCore.json](winkCore.json)
+* Import updated [winkIntegration.json](winkIntegration.json)
+* Add the following to bluemix-settings.js into functionGlobalContext section:<br>
+<code>
+,"LIFX_TOKEN":"your LIFX token"
+</code>
+
+
+10/05/2015
+-----------------
 * Import updated [winkFreeboards.json](winkFreeboards.json) 
 Now it has first draft of "controls" page.
 
