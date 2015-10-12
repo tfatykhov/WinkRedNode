@@ -12,7 +12,7 @@ So your first 3 lines in the file  should look like this:<br>
 
 * You also need to update functionGlobalContext section and add following lines<br>
 	,CRYPTO: crp<br>
-* restart bluemix app
+* do CF push and restart the app.
 
 * Import updated [winkCore.json](winkCore.json)
 * Import updated [winkFreeboards.json](winkFreeboards.json) 
