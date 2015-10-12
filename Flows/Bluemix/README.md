@@ -1,4 +1,25 @@
 == UPDATE ==
+10/12/2015
+----------------
+Tablet UI with new controls tab.
+<img src="images/controls_tab.png">
+
+* add "crypto" module to bluemix-setting.json. First you need to add following line to the top section of the file: var crp = require("crypto");<br><br>
+So your first 3 lines in the file  should look like this:<br>
+	<b>var crp = require("crypto");</b><br>
+	var path = require("path");<br>
+	var when = require("when");<rb>
+
+* You also need to update functionGlobalContext section and add following lines<br>
+	,CRYPTO: crp<br>
+* restart bluemix app
+
+* Import updated [winkCore.json](winkCore.json)
+* Import updated [winkFreeboards.json](winkFreeboards.json) 
+* Create new tab in flow editor and import new [tabletUI.json](tabletUI.json)
+
+
+
 10/05/2015
 -----------------
 Updated with LIFX bulb support.<br>
