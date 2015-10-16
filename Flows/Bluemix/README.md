@@ -1,6 +1,18 @@
 == UPDATE ==
 10/12/2015
 ----------------
+Tablet UI updates:
+* new app icon. Please remove existing from home screen and add again.<br>
+<img src="images/NewIcon.png">
+* new cameras page.<br>
+<img src="images/CameraPage.png">
+<br>
+*  import updated [tabletUI.json](tabletUI.json)
+*  import updated [winkIntegration.json](winkIntegration.json)
+*  restart your app via git dashboard or cf push.
+
+10/12/2015
+----------------
 Tablet UI with new controls tab.
 <img src="images/controls_tab.png">
 
