@@ -1,0 +1,67 @@
+[
+  {
+    "id": "a9968221.56698",
+    "type": "inject",
+    "name": "",
+    "topic": "",
+    "payload": "",
+    "payloadType": "date",
+    "repeat": "10",
+    "crontab": "",
+    "once": true,
+    "x": 102,
+    "y": 68,
+    "z": "6c2869b9.93d798",
+    "wires": [
+      [
+        "352b2c.ffcad4d4"
+      ]
+    ]
+  },
+  {
+    "id": "352b2c.ffcad4d4",
+    "type": "function",
+    "name": "",
+    "func": "if ('LIFX_TOKEN' in context.global && context.global.LIFX_TOKEN !== 'undefined'){\nvar newMsg1 ={\n    \"url\":\"https://api.lifx.com/v1beta1/lights/all\",\n    \"method\": \"GET\",\n    headers: {\n        \"Authorization\":\"Bearer \"+context.global.LIFX_TOKEN\n    }\n}\nnode.send(newMsg1);\n}\nreturn;",
+    "outputs": 1,
+    "noerr": 0,
+    "x": 275,
+    "y": 68,
+    "z": "6c2869b9.93d798",
+    "wires": [
+      [
+        "c36ebe74.3c914"
+      ]
+    ]
+  },
+  {
+    "id": "c36ebe74.3c914",
+    "type": "http request",
+    "name": "",
+    "method": "use",
+    "ret": "obj",
+    "url": "",
+    "x": 429,
+    "y": 69,
+    "z": "6c2869b9.93d798",
+    "wires": [
+      [
+        "d5275ee.f2ad8a"
+      ]
+    ]
+  },
+  {
+    "id": "d5275ee.f2ad8a",
+    "type": "function",
+    "name": "",
+    "func": "var lifxLights=msg.payload;\nlifxLights.forEach(function (bulb) {\n  //  node.warn(bulb.label)\n if (context.global.winkState==='undefined') context.global.winkState={}\n if (context.global.winkState.light_bulbs==='undefined') context.global.winkState.light_bulbs={}\n context.global.winkState.light_bulbs[bulb.label]={\n    \"name\": bulb.label,\n    \"manufacturer_id\": \"lifx\",\n    \"device_manufacturer\":\"lifx\",\n    \"object_type\": \"light_bulbs\",\n    \"object_id\": bulb.id,\n    \"freeboard\": 0,\n    \"connection\": bulb.connected,\n    \"powered\": (bulb.power==\"on\" ? true : false),\n    \"brightness\": bulb.brightness,\n    \"color\" : bulb.color,\n    \"timestamp\": new Date()\n }\n context.global.winkDevCap[bulb.label]=bulb.capabilities\n //node.warn(bulb.label)\n  if (!('groups' in context.global.winkState)) context.global.winkState.groups={}\n if (!(bulb.group.name in context.global.winkState.groups)){\n context.global.winkState.groups[bulb.group.name]={\n     \"name\":bulb.group.name,\n     \"obejct_type\":\"groups\",\n     \"object_id\":bulb.group.id,\n      \"freeboard\": 0,\n      members:{}\n    }\n}\n  context.global.winkState.groups[bulb.group.name].members[bulb.label]={\n    \"name\": bulb.label,\n    \"object_id\": bulb.id,\n    \"object_type\": \"light_bulbs\"\n  }\n});\nreturn;\n\n\n",
+    "outputs": 1,
+    "noerr": 0,
+    "x": 594,
+    "y": 69,
+    "z": "6c2869b9.93d798",
+    "wires": [
+      []
+    ]
+  }
+]
