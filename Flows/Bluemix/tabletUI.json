@@ -1,21 +1,5 @@
 [
   {
-    "id": "dce00151.232",
-    "type": "template",
-    "name": "",
-    "field": "",
-    "format": "handlebars",
-    "template": "<!DOCTYPE html>\n<html lang=\"en\">\n<head>\n    <meta charset=\"utf-8\">\n\t<meta name=\"mobile-web-app-capable\" content=\"yes\">\n    <meta name=\"apple-mobile-web-app-capable\" content=\"yes\" />\n    <meta name=\"apple-mobile-web-app-status-bar-style\" content=\"black\" />\n    <meta name=\"viewport\" content = \"width = device-width, initial-scale = 1.0, user-scalable = yes\" />\n    <title>Cameras control</title>\n\n    <link rel=\"stylesheet\" type=\"text/css\" href=\"bootstrap/css/bootstrap.min.css\" />\n    <link rel=\"stylesheet\" type=\"text/css\" href=\"font-awesome/css/font-awesome.min.css\" />\n    <link rel=\"stylesheet\" type=\"text/css\" href=\"css/local.css\" />\n\n</head>\n<body>\n\n<div class=\"container\">\n    {{#payload.cameras}}\n    <div class=\"col-md-6 col-sm-9 col-xs-9\">\n     <div class=\"panel panel-primary panel-{{id}}\">\n  <!-- Default panel contents -->\n        <div class=\"panel-heading {{name}}\" id=\"Header {{name}}\">\n            <p class=\"text-nowrap\">\n            <span class=\"glyphicon glyphicon-camera\" aria-hidden=\"true\"></span>\n            <small>{{name}}</small>\n            <button type=\"button\" class=\"btn btn-success btn-sm pull-right\"  onclick=\"ShowCamHist('{{history_url}}','{{name}} History');\">{{name}} history</button>\n            </p>\n        </div>\n        <div class=\"panel-body panel-image panel-image-{{id}}\" id=\"{{id}}\" style=\"width: 100%; height: 380px; background-image: url({{url}});-webkit-background-size: cover; -moz-background-size: cover; -o-background-size: cover; background-size: cover;\">\n\n        </div>\n    </div>\n    </div>\n    {{/payload.cameras}}\n</div>\n\n<script type=\"text/javascript\" src=\"js/jquery-1.10.2.min.js\"></script>\n<script type=\"text/javascript\" src=\"bootstrap/js/bootstrap.min.js\" async></script>\n<!-- you need to include the shieldui css and js assets in order for the charts to work -->\n<script type=\"text/javascript\" src=\"https://www.prepbootstrap.com/Content/js/gridData.js\" async></script>\n<script type=\"text/javascript\" src=\"js/eModalBl.min.js\" async></script>\n\n<script>\n    \n    function ShowCamHist(hist_url,title){\n        var options = {\n            url: hist_url,\n            title:title,\n            size: eModal.size.lg,\n            buttons: [\n                {text: 'OK', style: 'success',   close: true}\n            ]\n        };\n        eModal.iframe(options);\n    }\n\n    $(document).ready(function() {\n        function updateImage()\n            {\n             for (var i=0;i<$('.panel-image').length;i++){\n                widget='.panel-image-'+ $('.panel-image')[i].id;\n                var imageURL = $(widget).css(\"background-image\");\n                imageURL = imageURL.replace(/.*\\s?url\\([\\'\\\"]?/, '').replace(/[\\'\\\"]?\\).*/, '')\n                var cacheBreakerURL = imageURL + (imageURL.indexOf(\"?\") == -1 ? \"?\" : \"&\") + Date.now();\n                 $(widget).css({\n                    \"background-image\" :  \"url(\" + cacheBreakerURL + \")\"\n                });\n             }\n            }\n \n    setInterval(updateImage, 30000);\n    });\n</script>\n</body>\n</html>\n<!-- data-angleOffset=-125 data-angleArc=250 -->",
-    "x": 552,
-    "y": 925,
-    "z": "811c60ec.7ee3a",
-    "wires": [
-      [
-        "69115595.96eeac"
-      ]
-    ]
-  },
-  {
     "id": "49e082af.b61f7c",
     "type": "function",
     "name": "",
@@ -697,6 +681,22 @@
     ]
   },
   {
+    "id": "dce00151.232",
+    "type": "template",
+    "name": "",
+    "field": "",
+    "format": "handlebars",
+    "template": "<!DOCTYPE html>\n<html lang=\"en\">\n<head>\n    <meta charset=\"utf-8\">\n\t<meta name=\"mobile-web-app-capable\" content=\"yes\">\n    <meta name=\"apple-mobile-web-app-capable\" content=\"yes\" />\n    <meta name=\"apple-mobile-web-app-status-bar-style\" content=\"black\" />\n    <meta name=\"viewport\" content = \"width = device-width, initial-scale = 1.0, user-scalable = yes\" />\n    <title>Cameras control</title>\n\n    <link rel=\"stylesheet\" type=\"text/css\" href=\"bootstrap/css/bootstrap.min.css\" />\n    <link rel=\"stylesheet\" type=\"text/css\" href=\"font-awesome/css/font-awesome.min.css\" />\n    <link rel=\"stylesheet\" type=\"text/css\" href=\"css/local.css\" />\n\n</head>\n<body>\n\n<div class=\"container\">\n    {{#payload.cameras}}\n    <div class=\"col-md-6 col-sm-9 col-xs-9\">\n     <div class=\"panel panel-primary panel-{{id}}\">\n  <!-- Default panel contents -->\n        <div class=\"panel-heading {{name}}\" id=\"Header {{name}}\">\n            <p class=\"text-nowrap\">\n            <span class=\"glyphicon glyphicon-camera\" aria-hidden=\"true\"></span>\n            <small>{{name}}</small>\n     <!--       <button type=\"button\" class=\"btn btn-success btn-sm pull-right\"  onclick=\"ShowCamHist('cam_history?token={{payload.pwd_str}}&camera_name={{name}}','{{name}} History');\">{{name}} history</button> -->\n                <button type=\"button\" class=\"btn btn-success btn-sm pull-right\"  onclick=\"ShowCamHist('cam_history?token={{payload.pwd_str}}&camera_name={{name}}','{{name}} History');\">{{name}} history</button>\n            </p>\n        </div>\n        <div class=\"panel-body panel-image panel-image-{{id}}\" id=\"{{id}}\" style=\"width: 100%; height: 380px; background-image: url({{url}});-webkit-background-size: cover; -moz-background-size: cover; -o-background-size: cover; background-size: cover;\">\n\n        </div>\n    </div>\n    </div>\n    {{/payload.cameras}}\n</div>\n\n<script type=\"text/javascript\" src=\"js/jquery-1.10.2.min.js\"></script>\n<script type=\"text/javascript\" src=\"bootstrap/js/bootstrap.min.js\" async></script>\n<!-- you need to include the shieldui css and js assets in order for the charts to work -->\n<script type=\"text/javascript\" src=\"https://www.prepbootstrap.com/Content/js/gridData.js\" async></script>\n<script type=\"text/javascript\" src=\"js/eModalBl.min.js\" async></script>\n\n<script>\n    \n    function ShowCamHist(hist_url,title){\n        var options = {\n            url: hist_url,\n            title:title,\n            size: eModal.size.lg,\n            buttons: [\n                {text: 'OK', style: 'success',   close: true}\n            ]\n        };\n        eModal.iframe(options);\n    }\n\n    $(document).ready(function() {\n        function updateImage()\n            {\n             for (var i=0;i<$('.panel-image').length;i++){\n                widget='.panel-image-'+ $('.panel-image')[i].id;\n                var imageURL = $(widget).css(\"background-image\");\n                imageURL = imageURL.replace(/.*\\s?url\\([\\'\\\"]?/, '').replace(/[\\'\\\"]?\\).*/, '')\n                var cacheBreakerURL = imageURL + (imageURL.indexOf(\"?\") == -1 ? \"?\" : \"&\") + Date.now();\n                 $(widget).css({\n                    \"background-image\" :  \"url(\" + cacheBreakerURL + \")\"\n                });\n             }\n            }\n \n    setInterval(updateImage, 30000);\n    });\n</script>\n</body>\n</html>\n<!-- data-angleOffset=-125 data-angleArc=250 -->",
+    "x": 552,
+    "y": 925,
+    "z": "811c60ec.7ee3a",
+    "wires": [
+      [
+        "69115595.96eeac"
+      ]
+    ]
+  },
+  {
     "id": "69115595.96eeac",
     "type": "http response",
     "name": "",
@@ -712,6 +712,63 @@
     "info": "",
     "x": 178.5,
     "y": 868,
+    "z": "811c60ec.7ee3a",
+    "wires": []
+  },
+  {
+    "id": "e6c36952.193c98",
+    "type": "http in",
+    "name": "",
+    "url": "/freeboard/cam_history",
+    "method": "get",
+    "swaggerDoc": "",
+    "x": 137,
+    "y": 993,
+    "z": "811c60ec.7ee3a",
+    "wires": [
+      [
+        "8e6e5398.7191b"
+      ]
+    ]
+  },
+  {
+    "id": "8e6e5398.7191b",
+    "type": "function",
+    "name": "",
+    "func": "if (msg.payload.token ==context.global.FREEBOARD_TOKEN){\n    msg.res.statusCode=\"200\";\n    var cam_array=[]\n    if ( 'camera_name' in msg.payload && msg.payload.camera_name!==''){\n        for (var i=0;i<context.global.winkState.cameras[msg.payload.camera_name].activities.length;i++){\n            var activity=context.global.winkState.cameras[msg.payload.camera_name].activities[i];\n             var datetime=new Date(activity.cuepoint_id*1000+context.global.Weather.Offset*60*60*1000);\n            cam_array.push({\n            position:i,\n            is_active:(i===0 ? true:false),\n            title_tm: datetime.toLocaleTimeString(),\n            title_dt: datetime.toLocaleDateString(),\n            //toString(\"dddd, MMMM dd, yyyy h:mm:ss tt\"),\n            img_url:activity.snapshot_url\n            });\n        }\n    msg.payload.cam_activities=cam_array;\n    } \n} else {\n    msg.res.statusCode=\"403\";   \n    }\nreturn msg;\n",
+    "outputs": 1,
+    "noerr": 0,
+    "x": 364,
+    "y": 990,
+    "z": "811c60ec.7ee3a",
+    "wires": [
+      [
+        "86c004c1.793ff8"
+      ]
+    ]
+  },
+  {
+    "id": "86c004c1.793ff8",
+    "type": "template",
+    "name": "",
+    "field": "",
+    "format": "handlebars",
+    "template": "<!DOCTYPE html>\n<html lang=\"en\">\n<head>\n  <title>Bootstrap Example</title>\n  <meta charset=\"utf-8\">\n  <meta name=\"viewport\" content=\"width=device-width, initial-scale=1\">\n    <link rel=\"stylesheet\" type=\"text/css\" href=\"bootstrap/css/bootstrap.min.css\" />\n    <link rel=\"stylesheet\" type=\"text/css\" href=\"font-awesome/css/font-awesome.min.css\" />\n    <link rel=\"stylesheet\" type=\"text/css\" href=\"css/local.css\" />\n    <script type=\"text/javascript\" src=\"js/jquery-1.10.2.min.js\"></script>\n    <script type=\"text/javascript\" src=\"bootstrap/js/bootstrap.min.js\" async></script>\n      <style>\n  .carousel-inner > .item > img,\n  .carousel-inner > .item > a > img {\n      width: 100%;\n      margin: auto;\n      height: 420px;\n  }\n  </style>\n</head>\n<body>\n<div class=\"container\">\n    <br>\n    <br>\n        <div id=\"myCarousel\" class=\"carousel slide carousel-fade col-md-12 col-lg-12 col-sm-12 col-xs-12 col-offset-2\" data-ride=\"carousel\">\n          <!-- Indicators -->\n          <ol class=\"carousel-indicators\">\n            {{#payload.cam_activities}}\n            <li data-target=\"#myCarousel\" data-slide-to=\"{{position}}\" {{#is_active}}class=\"active\"{{/is_active}}></li>\n            {{/payload.cam_activities}}\n          </ol>\n        \n          <!-- Wrapper for slides -->\n          <div class=\"carousel-inner\">\n            {{#payload.cam_activities}}\n            <div class=\"item{{#is_active}} active{{/is_active}}\">\n              <img src=\"{{img_url}}\" alt=\"{{title}}\" class=\"img-responsive\" >\n                <div class=\"carousel-caption\">\n                    <p>Date: {{title_dt}}</p>\n                    <p>Time: {{title_tm}}</p>\n                </div>\n            </div>\n            {{/payload.cam_activities}}\n          </div>\n        \n          <!-- Left and right controls -->\n          <a class=\"left carousel-control\" href=\"#myCarousel\" role=\"button\" data-slide=\"prev\">\n            <span class=\"glyphicon glyphicon-chevron-left\" aria-hidden=\"true\"></span>\n            <span class=\"sr-only\">Previous</span>\n          </a>\n          <a class=\"right carousel-control\" href=\"#myCarousel\" role=\"button\" data-slide=\"next\">\n            <span class=\"glyphicon glyphicon-chevron-right\" aria-hidden=\"true\"></span>\n            <span class=\"sr-only\">Next</span>\n          </a>\n        </div>\n\n</div>\n</body>\n</html>",
+    "x": 560,
+    "y": 985,
+    "z": "811c60ec.7ee3a",
+    "wires": [
+      [
+        "8dafb251.72505"
+      ]
+    ]
+  },
+  {
+    "id": "8dafb251.72505",
+    "type": "http response",
+    "name": "",
+    "x": 724,
+    "y": 993,
     "z": "811c60ec.7ee3a",
     "wires": []
   }
