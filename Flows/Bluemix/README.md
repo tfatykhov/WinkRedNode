@@ -1,4 +1,18 @@
 == UPDATE ==
+
+
+10/18/2015
+----------------
+Tablet UI updates:
+
+camera history shows in modal window and using carousel widget 
+<img src="images/cam_history.png">
+<br>
+required changes:<br>
+*  import updated [tabletUI.json](tabletUI.json)
+*  restart your app via git dashboard or cf push.
+
+
 10/12/2015
 ----------------
 Tablet UI updates:
