@@ -37,7 +37,7 @@
     "name": "",
     "field": "",
     "format": "handlebars",
-    "template": "<!DOCTYPE html>\n<html lang=\"en\">\n<head>\n    <meta charset=\"utf-8\">\n\t<meta name=\"mobile-web-app-capable\" content=\"yes\">\n    <meta name=\"apple-mobile-web-app-capable\" content=\"yes\" />\n    <meta name=\"apple-mobile-web-app-status-bar-style\" content=\"black\" />\n    <meta name=\"viewport\" content = \"width = device-width, initial-scale = 1.0, user-scalable = yes\" />\n    <title>Home Dashboard</title>\n\n    <link rel=\"stylesheet\" type=\"text/css\" href=\"bootstrap/css/bootstrap.min.css\" />\n    <link rel=\"stylesheet\" type=\"text/css\" href=\"font-awesome/css/font-awesome.min.css\" />\n    <link rel=\"stylesheet\" type=\"text/css\" href=\"css/local.css\" />\n    <link rel=\"shortcut icon\" href=\"assets/img/main_ico_02.png\">\n    <script type=\"text/javascript\" src=\"js/jquery-1.10.2.min.js\"></script>\n    <script type=\"text/javascript\" src=\"bootstrap/js/bootstrap.min.js\" async></script>\n    \n    <!-- you need to include the shieldui css and js assets in order for the charts to work -->\n    <script type=\"text/javascript\" src=\"https://www.prepbootstrap.com/Content/js/gridData.js\" async></script>\n</head>\n<body>\n     <div class=\"col-xs-12 col-md-12\" id=\"mainbody\">\n                    <header>\n                        <ul class=\"nav nav-tabs nav-justified\">\n                            <li class=\"active\">\n                                <a data-toggle=\"tab\" href=\"#Dashboard0\">Summary</a>\n                            </li>                            \n                            <li class=\"\">\n                                <a data-toggle=\"tab\" href=\"#Dashboard1\">Details</a>\n                            </li>\n                            {{#payload.cameras}}\n                            <li class=\"\">\n                                <a data-toggle=\"tab\" href=\"#Dashboard2\">Cameras</a>\n                            </li>\n                            {{/payload.cameras}}\n                              <li class=\"hidden-xs\">\n                                <a data-toggle=\"tab\" href=\"#Dashboard3\">Controls</a>\n                            </li>\n                        </ul>\n                    </header>\n                    <div class=\"body tab-content\">\n                        <div class=\"tab-pane fade active in\" id=\"Dashboard0\">\n                                <iframe frameBorder=\"0\" seamless=\"seamless\" id=\"Iframe0\" src=\"TopRow?token={{payload.freeboard_token}}\" width=\"100%\"></iframe>\n                                    {{#payload.ui_shortcuts}}\n                                        <div class=\"col-xs-2 col-md-2 hidden-xs\"> \n                                            <button id=\"{{name}}\" type=\"button\" class=\"btn btn-primary btn-lg btn-block\">{{name}}</button>\n                                       </div>\n                                     {{/payload.ui_shortcuts}}\n                        </div>\n                        <div class=\"tab-pane fade in\" id=\"Dashboard1\">\n                                <iframe frameBorder=\"0\" id=\"freeboard1\" src=\"winkautogroup?token={{payload.freeboard_token}}\"  width=\"100%\" seamless=\"seamless\"></iframe>\n                        </div>\n                        {{#payload.cameras}}\n                        <div class=\"tab-pane fade in\"  id=\"Dashboard2\">\n                            <iframe frameBorder=\"0\" id=\"freeboard2\" src=\"mycameras?token={{payload.freeboard_token}}\"  width=\"100%\" seamless=\"seamless\"></iframe>\n                        </div>\n                        {{/payload.cameras}}\n                         <div class=\"tab-pane fade in hidden-xs\" id=\"Dashboard3\">\n                            <iframe frameBorder=\"0\" id=\"freeboard3\" src=\"lightcontrols?token={{payload.freeboard_token}}\"  width=\"100%\" seamless=\"seamless\"></iframe>\n                        </div>\n            </div>\n    </div>\n    <!-- /#wrapper -->\n\n    <script type=\"text/javascript\">\n        jQuery(function ($) {\n            $(\"#Iframe0\").css('height', $( window ).height()-115);\n            $(\"#freeboard1\").css('height', $( window ).height()-75);\n            {{#payload.cameras}}\n            $(\"#freeboard2\").css('height', $( window ).height()-75);\n            {{/payload.cameras}}\n             $(\"#freeboard3\").css('height', $( window ).height()-75);\n             $(\"#mainbody\").css('background',\"#111\");\n        });        \n            $( window ).resize(function () {\n                //console.log('window got resized '+$( window ).height());\n                //console.log('freeboard height '+$( \"#freeboard2\" ).height());\n                $(\"#Iframe0\").css('height', $( window ).height()-115);\n                $(\"#Iframe0\").css('width',\"100%\");\n                $( \"#freeboard1\" ).css('height', $( window ).height()-75);\n                $( \"#freeboard1\" ).css('width', \"100%\");\n                {{#payload.cameras}}\n                $( \"#freeboard2\" ).css('height', $( window ).height()-75);\n                $( \"#freeboard2\" ).css('width', \"100%\");\n                {{/payload.cameras}}\n                $( \"#freeboard3\" ).css('height', $( window ).height()-75);\n                $( \"#freeboard3\" ).css('width', \"100%\");\n           });\n        $(\".btn.btn-primary.btn-lg.btn-block\").click(function(){\n            $.post( \"/red/ifttt\", {\"winkName\":this.id,\"type\":\"shortcut\",\"cmd\":\"\",\"level\":\"\" , \"iftttkey\" : \"{{payload.ifttt_token}}\"}) \n        });\n    </script>\n</body>\n</html>\n",
+    "template": "<!DOCTYPE html>\n<html lang=\"en\">\n<head>\n    <meta charset=\"utf-8\">\n\t<meta name=\"mobile-web-app-capable\" content=\"yes\">\n    <meta name=\"apple-mobile-web-app-capable\" content=\"yes\" />\n    <meta name=\"apple-mobile-web-app-status-bar-style\" content=\"black\" />\n    <meta name=\"viewport\" content = \"width = device-width, initial-scale = 1.0, user-scalable = yes\" />\n    <title>Home Dashboard</title>\n\n    <link rel=\"stylesheet\" type=\"text/css\" href=\"bootstrap/css/bootstrap.min.css\" />\n    <link rel=\"stylesheet\" type=\"text/css\" href=\"font-awesome/css/font-awesome.min.css\" />\n    <link rel=\"stylesheet\" type=\"text/css\" href=\"css/local.css\" />\n    <link rel=\"shortcut icon\" href=\"assets/img/main_ico_02.png\">\n    <script type=\"text/javascript\" src=\"js/jquery-1.10.2.min.js\"></script>\n    <script type=\"text/javascript\" src=\"bootstrap/js/bootstrap.min.js\" async></script>\n    \n    <!-- you need to include the shieldui css and js assets in order for the charts to work -->\n    <script type=\"text/javascript\" src=\"https://www.prepbootstrap.com/Content/js/gridData.js\" async></script>\n</head>\n<body>\n     <div class=\"col-xs-12 col-md-12\" id=\"mainbody\">\n                    <header>\n                        <ul class=\"nav nav-tabs nav-justified\">\n                            <li class=\"active\">\n                                <a data-toggle=\"tab\" href=\"#Dashboard0\">Summary</a>\n                            </li>                            \n                            <li class=\"\">\n                                <a data-toggle=\"tab\" href=\"#Dashboard1\">Details</a>\n                            </li>\n                            {{#payload.cameras}}\n                            <li class=\"\">\n                                <a data-toggle=\"tab\" href=\"#Dashboard2\">Cameras</a>\n                            </li>\n                            {{/payload.cameras}}\n                              <li class=\"hidden-xs\">\n                                <a data-toggle=\"tab\" href=\"#Dashboard3\">Controls</a>\n                            </li>\n                        </ul>\n                    </header>\n                    <div class=\"body tab-content\">\n                        <div class=\"tab-pane fade active in\" id=\"Dashboard0\">\n                                <iframe frameBorder=\"0\" seamless=\"seamless\" id=\"Iframe0\" src=\"TopRow?token={{payload.freeboard_token}}\" width=\"100%\"></iframe>\n                                    {{#payload.ui_shortcuts}}\n                                        <div class=\"col-xs-2 col-md-2 hidden-xs\"> \n                                            <button id=\"{{name}}\" type=\"button\" class=\"btn btn-primary btn-lg btn-block\">{{name}}</button>\n                                       </div>\n                                     {{/payload.ui_shortcuts}}\n                        </div>\n                        <div class=\"tab-pane fade in\" id=\"Dashboard1\">\n                                <iframe frameBorder=\"0\" id=\"freeboard1\" src=\"winkautogroup?token={{payload.freeboard_token}}\"  width=\"100%\" seamless=\"seamless\"></iframe>\n                        </div>\n                        {{#payload.cameras}}\n                        <div class=\"tab-pane fade in\"  id=\"Dashboard2\">\n                            <iframe frameBorder=\"0\" id=\"freeboard2\" src=\"mycameras?token={{payload.freeboard_token}}\"  width=\"100%\" seamless=\"seamless\"></iframe>\n                        </div>\n                        {{/payload.cameras}}\n                        <div class=\"tab-pane fade in hidden-xs\" id=\"Dashboard3\">\n                        <div class=\"col-xs-12\" style=\"height:4px;\"></div>\n                        <div class=\"container\">\n                        <div class=\"panel-group\" id=\"accordion\" role=\"tablist\" aria-multiselectable=\"true\">\n                          <div class=\"panel panel-primary\">\n                            <div class=\"panel-heading\" role=\"tab\" id=\"headingOne\">\n                              <h5 class=\"panel-title\">\n                                <a role=\"button\" data-toggle=\"collapse\" data-parent=\"#accordion\" href=\"#collapseOne\" aria-expanded=\"true\" aria-controls=\"collapseOne\">\n                                  <p class=\"text-nowrap\">\n                                    <span class=\"fa fa-lightbulb-o\" aria-hidden=\"true\"></span>\n                                    Lights and Switches\n                                  </p>\n                                </a>\n                              </h5>\n                            </div>\n                            <div id=\"collapseOne\" class=\"panel-collapse collapse in\" role=\"tabpanel\" aria-labelledby=\"headingOne\">\n                              <div class=\"panel-body\" clearfix style=\"border : 1px;\">     \n                             <iframe frameBorder=\"0\" id=\"freeboard3\" src=\"lightcontrols?token={{payload.freeboard_token}}\"  width=\"100%\" seamless=\"seamless\" style=\" border : 0; -webkit-background-size: cover; -moz-background-size: cover; -o-background-size: cover; background-size: cover\"></iframe>\n                             </div>\n                              </div> \n                             </div>\n                              <div class=\"panel panel-primary\" clearfix style=\"background:none;\">\n                                <div class=\"panel-heading\" role=\"tab\" id=\"headingTwo\">\n                                  <h5 class=\"panel-title\">\n                                    <a class=\"collapsed\" role=\"button\" data-toggle=\"collapse\" data-parent=\"#accordion\" href=\"#collapseTwo\" aria-expanded=\"false\" aria-controls=\"collapseTwo\">\n                                       <p class=\"text-nowrap\">\n                                        <span class=\"fa fa-lock\" aria-hidden=\"true\"></span>  \n                                        Locks\n                                      </p>\n                                    </a>\n                                  </h5>\n                                </div>\n                                <div id=\"collapseTwo\" class=\"panel-collapse collapse\" role=\"tabpanel\" aria-labelledby=\"headingTwo\">\n                                  <div class=\"panel-body\">\n                                   <iframe frameBorder=\"0\" id=\"freeboard3L\" src=\"lockcontrols?token={{payload.freeboard_token}}\"  width=\"100%\" seamless=\"seamless\" style=\" border : 0; -webkit-background-size: cover; -moz-background-size: cover; -o-background-size: cover; background-size: cover\"></iframe>\n                                  </div>\n                                </div>\n                              </div>\n                            </div>\n                         </div>\n                        </div>\n            </div>\n    </div>\n    <!-- /#wrapper -->\n\n    <script type=\"text/javascript\">\n        jQuery(function ($) {\n            $('.panel-collapse').css('background','black');\n            $(\"#Iframe0\").css('height', $( window ).height()-115);\n            $(\"#freeboard1\").css('height', $( window ).height()-75);\n            {{#payload.cameras}}\n            $(\"#freeboard2\").css('height', $( window ).height()-75);\n            {{/payload.cameras}}\n             $(\"#freeboard3\").css('height', $( window ).height()-215);\n             $(\"#freeboard3L\").css('height', $( window ).height()-235);\n             $(\"#mainbody\").css('background',\"#111\");\n        });        \n            $( window ).resize(function () {\n                //console.log('window got resized '+$( window ).height());\n                //console.log('freeboard height '+$( \"#freeboard2\" ).height());\n                $(\"#Iframe0\").css('height', $( window ).height()-115);\n                $(\"#Iframe0\").css('width',\"100%\");\n                $( \"#freeboard1\" ).css('height', $( window ).height()-75);\n                $( \"#freeboard1\" ).css('width', \"100%\");\n                {{#payload.cameras}}\n                $( \"#freeboard2\" ).css('height', $( window ).height()-75);\n                $( \"#freeboard2\" ).css('width', \"100%\");\n                {{/payload.cameras}}\n                $( \"#freeboard3\" ).css('height', $( window ).height()-215);\n                $(\"#freeboard3L\").css('height', $( window ).height()-235);\n                $( \"#freeboard3\" ).css('width', \"100%\");\n                $( \"#freeboard3L\" ).css('width', \"100%\");\n           });\n        $(\".btn.btn-primary.btn-lg.btn-block\").click(function(){\n            $.post( \"/red/ifttt\", {\"winkName\":this.id,\"type\":\"shortcut\",\"cmd\":\"\",\"level\":\"\" , \"iftttkey\" : \"{{payload.ifttt_token}}\"}) \n        });\n    </script>\n</body>\n</html>\n",
     "x": 812,
     "y": 59,
     "z": "811c60ec.7ee3a",
@@ -339,8 +339,8 @@
     "func": "if (msg.payload.auth ==context.global.FREEBOARD_TOKEN){\nvar pane_idx = {};\nvar freeboard = {}\nvar bulbs = 0;\nfreeboard.version=\"1\";\nfreeboard.allow_edit=false;\nfreeboard.panes=[];\nfreeboard.plugins= [];\nvar i=0;\n\nfor (var key in context.global.winkState.sensor_pods)\n{\n    //  node.warn(key+\" \"+ context.global.winkDevCap[key].sensor_types)\n    //pane_id=4;\n    if (typeof context.global.winkState.sensor_pods[key].motion !== 'undefined') \n    { \n        if( typeof pane_idx.motion !=='undefined') \n        {\n            pane_id=pane_idx.motion; //motion\n        } else\n        {\n            freeboard.panes.push(  {\n                \"title\":\"Motion Sensors\",\n                \"width\": 1,\n                \"row\": {\n                    \"3\": 1\n                },\n                \"col\": {\n                    \"3\": 1\n                },\n                \"col_width\": 1,\n                widgets:[]\n            });\n            pane_idx.motion=i;\n            pane_id=i;\n            i++;\n        }\n    } else if (typeof context.global.winkState.sensor_pods[key].opened !== 'undefined') \n    {\n        if( typeof pane_idx.trippers !=='undefined') \n        {\n            pane_id=pane_idx.trippers; //motion\n        } else\n        {\n            freeboard.panes.push(  {\n                \"title\":\"Trippers\",\n                \"width\": 1,\n                \"row\": {\n                    \"3\": 1\n                },\n                \"col\": {\n                    \"3\": 1\n                },\n                \"col_width\": 1,\n                widgets:[]\n            });\n            pane_idx.trippers=i;\n            pane_id=i;\n            i++;\n        }\n\n    } else\n    {\n        //other sensors pane\n        if( typeof pane_idx.other !=='undefined') \n        {\n            pane_id=pane_idx.other; //motion\n        } else\n        {\n            freeboard.panes.push(  {\n                \"title\":\"Multi Sensors\",\n                \"width\": 1,\n                \"row\": {\n                    \"3\": 1\n                },\n                \"col\": {\n                    \"3\": 1\n                },\n                \"col_width\": 1,\n                widgets:[]\n            });\n            pane_idx.other=i;\n            pane_id=i;\n            i++;\n        }\n    }\n    if(context.global.winkDevCap[key].sensor_types)\n    {\n        for (s=0; s<context.global.winkDevCap[key].sensor_types.length;s++)\n        {\n            var field=context.global.winkDevCap[key].sensor_types[s].field\n            if( context.global.winkState.sensor_pods[key][field] !== null)\n            {\n                freeboard.panes[pane_id].widgets.push(\n                 {\n                     \"type\": \"indicator\",\n                     \"settings\": \n                      {\n                          \"title\":key + \" \" + field.replace(\"_\",\" \").replace(/opened|detected|motion|state/,\"\"),\n                          \"value\":\"wink.indicator.value(datasources[\\\"Node-Red\\\"] && datasources[\\\"Node-Red\\\"][\\\"WinkData\\\"][\\\"sensor_pods\\\"][\\\"\" + key + \"\\\"],\\\"\" + field +\"\\\")\",\n                          \"on_text\":\"wink.indicator.on_text(datasources[\\\"Node-Red\\\"] && datasources[\\\"Node-Red\\\"][\\\"WinkData\\\"][\\\"sensor_pods\\\"][\\\"\" + key + \"\\\"],\\\"\" + field +\"\\\")\",\n                          \"off_text\":\"wink.indicator.off_text(datasources[\\\"Node-Red\\\"] && datasources[\\\"Node-Red\\\"][\\\"WinkData\\\"][\\\"sensor_pods\\\"][\\\"\" + key + \"\\\"],\\\"\" + field +\"\\\")\",\n                          \"style_element\":\"wink.indicator.style_element(datasources[\\\"Node-Red\\\"] && datasources[\\\"Node-Red\\\"][\\\"WinkData\\\"][\\\"sensor_pods\\\"][\\\"\" + key + \"\\\"],\\\"\" + field +\"\\\")\"\n                      }\n                 })\n            }\n      }\n   }\n} //end sensor pods\n//i=0;\n\nfor (var key in context.global.winkState.groups)\n{\n    if(key.substring(0,1)!==\".\" && key.substring(0,1)!==\"@\" && context.global.winkState.groups[key].members)\n    {\n        freeboard.panes.push(  {\n            \"title\":context.global.winkState.groups[key].name + \" -  Lights and Switches\",\n            \"width\": 1,\n            \"row\": {\n                \"3\": 1\n            },\n            \"col\": {\n                \"3\": 1\n            },\n            \"col_width\": 1,\n            widgets:[]\n        });\n        pane_idx.key=i;\n        pane_id=i;\n        i++;\n        \n        for (var light_bulbs in context.global.winkState.groups[key].members)\n        {\n            light_type=context.global.winkState.groups[key].members[light_bulbs].object_type\n            freeboard.panes[pane_id].widgets.push(\n            {\n                \"type\": \"indicator\",\n                \"settings\": {\n                \"title\":light_bulbs,\n                \"value\":\"wink.indicator.value(datasources[\\\"Node-Red\\\"] && datasources[\\\"Node-Red\\\"][\\\"WinkData\\\"][\\\"\"+light_type+\"\\\"][\\\"\" + light_bulbs + \"\\\"])\",\n                \"on_text\":\"wink.indicator.on_text(datasources[\\\"Node-Red\\\"] && datasources[\\\"Node-Red\\\"][\\\"WinkData\\\"][\\\"\"+light_type+\"\\\"][\\\"\" + light_bulbs + \"\\\"])\",\n                \"off_text\":\"wink.indicator.off_text(datasources[\\\"Node-Red\\\"] && datasources[\\\"Node-Red\\\"][\\\"WinkData\\\"][\\\"\"+light_type+\"\\\"][\\\"\" + light_bulbs + \"\\\"])\",\n                \"style_element\":\"wink.indicator.style_element(datasources[\\\"Node-Red\\\"] && datasources[\\\"Node-Red\\\"][\\\"WinkData\\\"][\\\"\"+light_type+\"\\\"][\\\"\" + light_bulbs + \"\\\"])\"\n                }\n            })\n            bulbs++;\n            context.global.winkState[light_type][light_bulbs].freeboard = 1;\n        }\n    }\n}\n\n\n\nfor (var key in context.global.winkState.binary_switches){\nif (context.global.winkState.binary_switches[key].freeboard && context.global.winkState.binary_switches[key].freeboard!=1)\n{\n    if( typeof pane_idx.lights !=='undefined') \n    {\n        pane_id=pane_idx.lights; //motion\n    } else\n    {\n        freeboard.panes.push(  {\n            \"title\":\"Switches\",\n            \"width\": 1,\n            \"row\": {\n                \"3\": 1\n            },\n            \"col\": {\n                \"3\": 1\n            },\n            \"col_width\": 1,\n            widgets:[]\n        });\n        pane_idx.lights=i;\n        pane_id=i;\n        i++;\n    }\n  \n    freeboard.panes[pane_id].widgets.push(\n    {\n    \"type\": \"indicator\",\n    \"settings\": {\n        \"title\":key,\n        \"value\":\"wink.indicator.value(datasources[\\\"Node-Red\\\"] && datasources[\\\"Node-Red\\\"][\\\"WinkData\\\"][\\\"binary_switches\\\"][\\\"\" + key + \"\\\"])\",\n        \"on_text\":\"wink.indicator.on_text(datasources[\\\"Node-Red\\\"] && datasources[\\\"Node-Red\\\"][\\\"WinkData\\\"][\\\"binary_switches\\\"][\\\"\" + key + \"\\\"])\",\n        \"off_text\":\"wink.indicator.off_text(datasources[\\\"Node-Red\\\"] && datasources[\\\"Node-Red\\\"][\\\"WinkData\\\"][\\\"binary_switches\\\"][\\\"\" + key + \"\\\"])\",\n        \"style_element\":\"wink.indicator.style_element(datasources[\\\"Node-Red\\\"] && datasources[\\\"Node-Red\\\"][\\\"WinkData\\\"][\\\"binary_switches\\\"][\\\"\" + key + \"\\\"])\"\n    }\n})\n}\n}// end bin switches\n\n\nfor (var key in context.global.winkState.light_bulbs){\nif (context.global.winkState.light_bulbs[key].freeboard && context.global.winkState.light_bulbs[key].freeboard!=1)\n{\n    if( typeof pane_idx.lights !=='undefined') \n    {\n        pane_id=pane_idx.lights; //motion\n    } else\n    {\n        freeboard.panes.push(  {\n            \"title\":\"Lights and Switches\",\n            \"width\": 1,\n            \"row\": {\n                \"3\": 1\n            },\n            \"col\": {\n                \"3\": 1\n            },\n            \"col_width\": 1,\n            widgets:[]\n        });\n        pane_idx.lights=i;\n        pane_id=i;\n        i++;\n    }\n    freeboard.panes[pane_id].widgets.push(\n    {\n        \"type\": \"indicator\",\n        \"settings\": {\n            \"title\":key,\n            \"value\":\"wink.indicator.value(datasources[\\\"Node-Red\\\"] && datasources[\\\"Node-Red\\\"][\\\"WinkData\\\"][\\\"light_bulbs\\\"][\\\"\" + key + \"\\\"])\",\n            \"on_text\":\"wink.indicator.on_text(datasources[\\\"Node-Red\\\"] && datasources[\\\"Node-Red\\\"][\\\"WinkData\\\"][\\\"light_bulbs\\\"][\\\"\" + key + \"\\\"])\",\n            \"off_text\":\"wink.indicator.off_text(datasources[\\\"Node-Red\\\"] && datasources[\\\"Node-Red\\\"][\\\"WinkData\\\"][\\\"light_bulbs\\\"][\\\"\" + key + \"\\\"])\",\n            \"style_element\":\"wink.indicator.style_element(datasources[\\\"Node-Red\\\"] && datasources[\\\"Node-Red\\\"][\\\"WinkData\\\"][\\\"light_bulbs\\\"][\\\"\" + key + \"\\\"])\"\n        }\n    })\n}\n} // end light bulbs\n\n\nfor (var key in context.global.winkState.powerstrips)\n{\n    if( typeof pane_idx.powerstrips !=='undefined') \n    {\n        pane_id=pane_idx.powerstrips; //motion\n    } else\n    {\n        freeboard.panes.push(  {\n            \"title\":\"Powerstrips\",\n            \"width\": 1,\n            \"row\": {\n                \"3\": 1\n            },\n            \"col\": {\n                \"3\": 1\n            },\n            \"col_width\": 1,\n            widgets:[]\n        });\n        pane_idx.powerstrips=i;\n        pane_id=i;\n        i++;\n    }\n    if (typeof context.global.winkState.powerstrips[key].powered !== 'undefined'){\n    freeboard.panes[pane_id].widgets.push(\n    {\n        \"type\": \"indicator\",\n        \"settings\": {\n            \"title\":key,\n            \"value\":\"wink.indicator.value(datasources[\\\"Node-Red\\\"] && datasources[\\\"Node-Red\\\"][\\\"WinkData\\\"][\\\"powerstrips\\\"][\\\"\" + key + \"\\\"])\",\n            \"on_text\":\"wink.indicator.on_text(datasources[\\\"Node-Red\\\"] && datasources[\\\"Node-Red\\\"][\\\"WinkData\\\"][\\\"powerstrips\\\"][\\\"\" + key + \"\\\"])\",\n            \"off_text\":\"wink.indicator.off_text(datasources[\\\"Node-Red\\\"] && datasources[\\\"Node-Red\\\"][\\\"WinkData\\\"][\\\"powerstrips\\\"][\\\"\" + key + \"\\\"])\",\n            \"style_element\":\"wink.indicator.style_element(datasources[\\\"Node-Red\\\"] && datasources[\\\"Node-Red\\\"][\\\"WinkData\\\"][\\\"powerstrips\\\"][\\\"\" + key + \"\\\"])\"\n        }\n    })\n    }\n} // end light bulbs\n\nfor (var key in context.global.winkState.locks)\n{\n    if( typeof pane_idx.locks !=='undefined') \n    {\n        pane_id=pane_idx.locks; //motion\n    } else\n    {\n        freeboard.panes.push(  {\n            \"title\":\"Locks\",\n            \"width\": 1,\n            \"row\": {\n                \"3\": 1\n            },\n            \"col\": {\n                \"3\": 1\n            },\n            \"col_width\": 1,\n            widgets:[]\n        });\n        pane_idx.locks=i;\n        pane_id=i;\n        i++;\n    }\n    freeboard.panes[pane_id].widgets.push(\n{\n    \"type\": \"indicator\",\n    \"settings\": {\n        \"title\":key,\n        \"value\":\"wink.indicator.value(datasources[\\\"Node-Red\\\"] && datasources[\\\"Node-Red\\\"][\\\"WinkData\\\"][\\\"locks\\\"][\\\"\" + key + \"\\\"])\",\n        \"on_text\":\"wink.indicator.on_text(datasources[\\\"Node-Red\\\"] && datasources[\\\"Node-Red\\\"][\\\"WinkData\\\"][\\\"locks\\\"][\\\"\" + key + \"\\\"])\",\n        \"off_text\":\"wink.indicator.off_text(datasources[\\\"Node-Red\\\"] && datasources[\\\"Node-Red\\\"][\\\"WinkData\\\"][\\\"locks\\\"][\\\"\" + key + \"\\\"])\",\n        \"style_element\":\"wink.indicator.style_element(datasources[\\\"Node-Red\\\"] && datasources[\\\"Node-Red\\\"][\\\"WinkData\\\"][\\\"locks\\\"][\\\"\" + key + \"\\\"])\"\n    }\n})\n    if (typeof context.global.winkState.locks[key].battery !== 'undefined')\n    {\n        freeboard.panes[pane_id].widgets.push(\n{\n    \"type\": \"indicator\",\n    \"settings\": {\n        \"title\":key + \" battery\",\n        \"value\":\"wink.indicator.value(datasources[\\\"Node-Red\\\"] && datasources[\\\"Node-Red\\\"][\\\"WinkData\\\"][\\\"locks\\\"][\\\"\" + key + \"\\\"],\\\"battery\\\")\",\n        \"on_text\":\"wink.indicator.on_text(datasources[\\\"Node-Red\\\"] && datasources[\\\"Node-Red\\\"][\\\"WinkData\\\"][\\\"locks\\\"][\\\"\" + key + \"\\\"],\\\"battery\\\")\",\n        \"off_text\":\"wink.indicator.off_text(datasources[\\\"Node-Red\\\"] && datasources[\\\"Node-Red\\\"][\\\"WinkData\\\"][\\\"locks\\\"][\\\"\" + key + \"\\\"],\\\"battery\\\")\",\n        \"style_element\":\"wink.indicator.style_element(datasources[\\\"Node-Red\\\"] && datasources[\\\"Node-Red\\\"][\\\"WinkData\\\"][\\\"locks\\\"][\\\"\" + key + \"\\\"],\\\"battery\\\")\"\n    }\n})\n}\n} //end locks\nfor (var key in context.global.winkState.smoke_detectors)\n{\n    if( typeof pane_idx.smoke !=='undefined') \n    {\n        pane_id=pane_idx.smoke; //motion\n    } else\n    {\n        freeboard.panes.push(  {\n            \"title\":\"Smoke Detectors\",\n            \"width\": 1,\n            \"row\": {\n                \"3\": 1\n            },\n            \"col\": {\n                \"3\": 1\n            },\n            \"col_width\": 1,\n            widgets:[]\n        });\n        pane_idx.smoke=i;\n        pane_id=i;\n        i++;\n    }\n    freeboard.panes[pane_id].widgets.push(\n{\n    \"type\": \"indicator\",\n    \"settings\": {\n        \"title\":key + (context.global.winkState.smoke_detectors[key].connection ? \" Smoke\" : \" Offline\"),\n        \"value\":\"wink.indicator.value(datasources[\\\"Node-Red\\\"] && datasources[\\\"Node-Red\\\"][\\\"WinkData\\\"][\\\"smoke_detectors\\\"][\\\"\" + key + \"\\\"],\\\"smoke_detected\\\")\",\n        \"on_text\":\"wink.indicator.on_text(datasources[\\\"Node-Red\\\"] && datasources[\\\"Node-Red\\\"][\\\"WinkData\\\"][\\\"smoke_detectors\\\"][\\\"\" + key + \"\\\"],\\\"smoke_detected\\\")\",\n        \"off_text\":\"wink.indicator.off_text(datasources[\\\"Node-Red\\\"] && datasources[\\\"Node-Red\\\"][\\\"WinkData\\\"][\\\"smoke_detectors\\\"][\\\"\" + key + \"\\\"],\\\"smoke_detected\\\")\",\n        \"style_element\":\"wink.indicator.style_element(datasources[\\\"Node-Red\\\"] && datasources[\\\"Node-Red\\\"][\\\"WinkData\\\"][\\\"smoke_detectors\\\"][\\\"\" + key + \"\\\"],\\\"smoke_detected\\\")\"\n    }\n})\n    \n    freeboard.panes[pane_id].widgets.push(\n{\n    \"type\": \"indicator\",\n    \"settings\": {\n        \"title\":key + (context.global.winkState.smoke_detectors[key].connection ? \" CO2\" : \" Offline\"),\n        \"value\":\"wink.indicator.value(datasources[\\\"Node-Red\\\"] && datasources[\\\"Node-Red\\\"][\\\"WinkData\\\"][\\\"smoke_detectors\\\"][\\\"\" + key + \"\\\"],\\\"co_detected\\\")\",\n        \"on_text\":\"wink.indicator.on_text(datasources[\\\"Node-Red\\\"] && datasources[\\\"Node-Red\\\"][\\\"WinkData\\\"][\\\"smoke_detectors\\\"][\\\"\" + key + \"\\\"],\\\"co_detected\\\")\",\n        \"off_text\":\"wink.indicator.off_text(datasources[\\\"Node-Red\\\"] && datasources[\\\"Node-Red\\\"][\\\"WinkData\\\"][\\\"smoke_detectors\\\"][\\\"\" + key + \"\\\"],\\\"co_detected\\\")\",\n        \"style_element\":\"wink.indicator.style_element(datasources[\\\"Node-Red\\\"] && datasources[\\\"Node-Red\\\"][\\\"WinkData\\\"][\\\"smoke_detectors\\\"][\\\"\" + key + \"\\\"],\\\"co_detected\\\")\"\n    }\n})\nif (typeof context.global.winkState.smoke_detectors[key].battery !== 'undefined')\n    {\n        freeboard.panes[pane_id].widgets.push(\n{\n    \"type\": \"indicator\",\n    \"settings\": {\n        \"title\":key + \" battery\",\n        \"value\":\"wink.indicator.value(datasources[\\\"Node-Red\\\"] && datasources[\\\"Node-Red\\\"][\\\"WinkData\\\"][\\\"smoke_detectors\\\"][\\\"\" + key + \"\\\"],\\\"battery\\\")\",\n        \"on_text\":\"wink.indicator.on_text(datasources[\\\"Node-Red\\\"] && datasources[\\\"Node-Red\\\"][\\\"WinkData\\\"][\\\"smoke_detectors\\\"][\\\"\" + key + \"\\\"],\\\"battery\\\")\",\n        \"off_text\":\"wink.indicator.off_text(datasources[\\\"Node-Red\\\"] && datasources[\\\"Node-Red\\\"][\\\"WinkData\\\"][\\\"smoke_detectors\\\"][\\\"\" + key + \"\\\"],\\\"battery\\\")\",\n        \"style_element\":\"wink.indicator.style_element(datasources[\\\"Node-Red\\\"] && datasources[\\\"Node-Red\\\"][\\\"WinkData\\\"][\\\"smoke_detectors\\\"][\\\"\" + key + \"\\\"],\\\"battery\\\")\"\n    }\n})\n}\n} //end smoke detectors\n\nfor (var key in context.global.winkState.thermostats)\n{\n    if( typeof pane_idx.tstats !=='undefined') \n    {\n        pane_id=pane_idx.tstats; //motion\n    } else\n    {\n        freeboard.panes.push(  {\n            \"title\":\"Thermostats\",\n            \"width\": 1,\n            \"row\": {\n                \"3\": 1\n            },\n            \"col\": {\n                \"3\": 1\n            },\n            \"col_width\": 1,\n            widgets:[]\n        });\n        pane_idx.tstats=i;\n        pane_id=i;\n        i++;\n    }\n\n//added so thermostats without max_set_point won't show [ecobee sensor compatibility]\nif (context.global.winkState.thermostats[key].max_set_point>0)\n{\n    freeboard.panes[pane_id].widgets.push(\n    {\n        \"type\": \"indicator\",\n        \"settings\": {\n            \"title\":key,\n            \"value\":\"wink.indicator.value(datasources[\\\"Node-Red\\\"] && datasources[\\\"Node-Red\\\"][\\\"WinkData\\\"][\\\"thermostats\\\"][\\\"\" + key + \"\\\"],\\\"mode\\\")\",\n            \"on_text\":\"wink.indicator.on_text(datasources[\\\"Node-Red\\\"] && datasources[\\\"Node-Red\\\"][\\\"WinkData\\\"][\\\"thermostats\\\"][\\\"\" + key + \"\\\"],\\\"mode\\\")\",\n            \"off_text\":\"wink.indicator.off_text(datasources[\\\"Node-Red\\\"] && datasources[\\\"Node-Red\\\"][\\\"WinkData\\\"][\\\"thermostats\\\"][\\\"\" + key + \"\\\"],\\\"mode\\\")\",\n            \"style_element\":\"wink.indicator.style_element(datasources[\\\"Node-Red\\\"] && datasources[\\\"Node-Red\\\"][\\\"WinkData\\\"][\\\"thermostats\\\"][\\\"\" + key + \"\\\"],\\\"mode\\\")\"\n        }\n    })\n}\n//if (typeof context.global.winkState.thermostats[key].users_away !== 'undefined')\n//    {\nfreeboard.panes[pane_id].widgets.push(\n{\n    \"type\": \"indicator\",\n    \"settings\": {\n        \"title\":key+\" Current temperature\",\n        \"value\":\"wink.indicator.value(datasources[\\\"Node-Red\\\"] && datasources[\\\"Node-Red\\\"][\\\"WinkData\\\"][\\\"thermostats\\\"][\\\"\" + key + \"\\\"],\\\"temperature\\\")\",\n        \"on_text\":\"wink.indicator.on_text(datasources[\\\"Node-Red\\\"] && datasources[\\\"Node-Red\\\"][\\\"WinkData\\\"][\\\"thermostats\\\"][\\\"\" + key + \"\\\"],\\\"temperature\\\")\",\n        \"off_text\":\"wink.indicator.off_text(datasources[\\\"Node-Red\\\"] && datasources[\\\"Node-Red\\\"][\\\"WinkData\\\"][\\\"thermostats\\\"][\\\"\" + key + \"\\\"],\\\"temperature\\\")\",\n        \"style_element\":\"wink.indicator.style_element(datasources[\\\"Node-Red\\\"] && datasources[\\\"Node-Red\\\"][\\\"WinkData\\\"][\\\"thermostats\\\"][\\\"\" + key + \"\\\"],\\\"temperature\\\")\"\n    }\n})\n//}\n} //end thermostats\n\nfor (var key in context.global.winkState.air_conditioners)\n{\n    if( typeof pane_idx.air_con !=='undefined') \n    {\n        pane_id=pane_idx.air_con; //motion\n    } else\n    {\n        freeboard.panes.push(  {\n            \"title\":\"Air Conditioners\",\n            \"width\": 1,\n            \"row\": {\n                \"3\": 1\n            },\n            \"col\": {\n                \"3\": 1\n            },\n            \"col_width\": 1,\n            widgets:[]\n        });\n        pane_idx.air_con=i;\n        pane_id=i;\n        i++;\n    }\n    freeboard.panes[pane_id].widgets.push(\n{\n    \"type\": \"indicator\",\n    \"settings\": {\n        \"title\":key,\n        \"value\":\"wink.indicator.value(datasources[\\\"Node-Red\\\"] && datasources[\\\"Node-Red\\\"][\\\"WinkData\\\"][\\\"air_conditioners\\\"][\\\"\" + key + \"\\\"])\",\n        \"on_text\":\"wink.indicator.on_text(datasources[\\\"Node-Red\\\"] && datasources[\\\"Node-Red\\\"][\\\"WinkData\\\"][\\\"air_conditioners\\\"][\\\"\" + key + \"\\\"])\",\n        \"off_text\":\"wink.indicator.off_text(datasources[\\\"Node-Red\\\"] && datasources[\\\"Node-Red\\\"][\\\"WinkData\\\"][\\\"air_conditioners\\\"][\\\"\" + key + \"\\\"])\",\n        \"style_element\":\"wink.indicator.style_element(datasources[\\\"Node-Red\\\"] && datasources[\\\"Node-Red\\\"][\\\"WinkData\\\"][\\\"air_conditioners\\\"][\\\"\" + key + \"\\\"])\"\n    }\n})\nfreeboard.panes[pane_id].widgets.push(\n{\n    \"type\": \"indicator\",\n    \"settings\": {\n        \"title\":key+ ' temperature',\n        \"value\":\"wink.indicator.value(datasources[\\\"Node-Red\\\"] && datasources[\\\"Node-Red\\\"][\\\"WinkData\\\"][\\\"air_conditioners\\\"][\\\"\" + key + \"\\\"],\\\"temperature\\\")\",\n        \"on_text\":\"wink.indicator.on_text(datasources[\\\"Node-Red\\\"] && datasources[\\\"Node-Red\\\"][\\\"WinkData\\\"][\\\"air_conditioners\\\"][\\\"\" + key + \"\\\"],\\\"temperature\\\")\",\n        \"off_text\":\"wink.indicator.off_text(datasources[\\\"Node-Red\\\"] && datasources[\\\"Node-Red\\\"][\\\"WinkData\\\"][\\\"air_conditioners\\\"][\\\"\" + key + \"\\\"],\\\"temperature\\\")\",\n        \"style_element\":\"wink.indicator.style_element(datasources[\\\"Node-Red\\\"] && datasources[\\\"Node-Red\\\"][\\\"WinkData\\\"][\\\"air_conditioners\\\"][\\\"\" + key + \"\\\"],\\\"temperature\\\")\"\n    }\n\n})\n\n}\n\nfor (var key in context.global.winkState.propane_tanks)\n{\n    if( typeof pane_idx.prop_tnk !=='undefined') \n    {\n        pane_id=pane_idx.prop_tnk; //motion\n    } else\n    {\n        freeboard.panes.push(  {\n            \"title\":\"Propane Tanks\",\n            \"width\": 1,\n            \"row\": {\n                \"3\": 1\n            },\n            \"col\": {\n                \"3\": 1\n            },\n            \"col_width\": 1,\n            widgets:[]\n        });\n        pane_idx.prop_tnk=i;\n        pane_id=i;\n        i++;\n    }\n    freeboard.panes[pane_id].widgets.push(\n{\n    \"type\": \"indicator\",\n    \"settings\": {\n        \"title\":key,\n        \"value\":\"wink.indicator.value(datasources[\\\"Node-Red\\\"] && datasources[\\\"Node-Red\\\"][\\\"WinkData\\\"][\\\"propane_tanks\\\"][\\\"\" + key + \"\\\"])\",\n        \"on_text\":\"wink.indicator.on_text(datasources[\\\"Node-Red\\\"] && datasources[\\\"Node-Red\\\"][\\\"WinkData\\\"][\\\"propane_tanks\\\"][\\\"\" + key + \"\\\"],\\\"remaining\\\")\",\n        \"off_text\":\"wink.indicator.off_text(datasources[\\\"Node-Red\\\"] && datasources[\\\"Node-Red\\\"][\\\"WinkData\\\"][\\\"propane_tanks\\\"][\\\"\" + key + \"\\\"],\\\"remaining\\\")\",\n        \"style_element\":\"wink.indicator.style_element(datasources[\\\"Node-Red\\\"] && datasources[\\\"Node-Red\\\"][\\\"WinkData\\\"][\\\"propane_tanks\\\"][\\\"\" + key + \"\\\"])\"\n    }\n})\nfreeboard.panes[pane_id].widgets.push(\n{\n        \"type\": \"indicator\",\n         \"settings\": {\n        \"title\":key + ' Battery',\n        \"value\":\"wink.indicator.value(datasources[\\\"Node-Red\\\"] && datasources[\\\"Node-Red\\\"][\\\"WinkData\\\"][\\\"propane_tanks\\\"][\\\"\" + key + \"\\\"],\\\"battery\\\")\",\n        \"on_text\":\"wink.indicator.on_text(datasources[\\\"Node-Red\\\"] && datasources[\\\"Node-Red\\\"][\\\"WinkData\\\"][\\\"propane_tanks\\\"][\\\"\" + key + \"\\\"],\\\"battery\\\")\",\n        \"off_text\":\"wink.indicator.off_text(datasources[\\\"Node-Red\\\"] && datasources[\\\"Node-Red\\\"][\\\"WinkData\\\"][\\\"propane_tanks\\\"][\\\"\" + key + \"\\\"],\\\"battery\\\")\",\n        \"style_element\":\"wink.indicator.style_element(datasources[\\\"Node-Red\\\"] && datasources[\\\"Node-Red\\\"][\\\"WinkData\\\"][\\\"propane_tanks\\\"][\\\"\" + key + \"\\\"],\\\"battery\\\")\"\n         }\n})\n\n}\n\nfor (var key in context.global.winkState.garage_doors)\n{\n    if( typeof pane_idx.garage !=='undefined') \n    {\n        pane_id=pane_idx.garage; //motion\n    } else\n    {\n        freeboard.panes.push(  {\n            \"title\":\"Garage doors\",\n            \"width\": 1,\n            \"row\": {\n                \"3\": 1\n            },\n            \"col\": {\n                \"3\": 1\n            },\n            \"col_width\": 1,\n            widgets:[]\n        });\n        pane_idx.garage=i;\n        pane_id=i;\n        i++;\n    }\n    freeboard.panes[pane_id].widgets.push(\n{\n    \"type\": \"indicator\",\n    \"settings\": {\n        \"title\":key + (context.global.winkState.garage_doors[key].connection ? \" - Online\" : \" - Off\"),\n        \"value\":\"wink.indicator.value(datasources[\\\"Node-Red\\\"] && datasources[\\\"Node-Red\\\"][\\\"WinkData\\\"][\\\"garage_doors\\\"][\\\"\" + key + \"\\\"])\",\n        \"on_text\":\"wink.indicator.on_text(datasources[\\\"Node-Red\\\"] && datasources[\\\"Node-Red\\\"][\\\"WinkData\\\"][\\\"garage_doors\\\"][\\\"\" + key + \"\\\"])\",\n        \"off_text\":\"wink.indicator.off_text(datasources[\\\"Node-Red\\\"] && datasources[\\\"Node-Red\\\"][\\\"WinkData\\\"][\\\"garage_doors\\\"][\\\"\" + key + \"\\\"])\",\n        \"style_element\":\"wink.indicator.style_element(datasources[\\\"Node-Red\\\"] && datasources[\\\"Node-Red\\\"][\\\"WinkData\\\"][\\\"garage_doors\\\"][\\\"\" + key + \"\\\"])\"\n    }\n})\n    \n}\n\nfor (var key in context.global.winkState.piggy_banks)\n{\n    if( typeof pane_idx.porky !=='undefined') \n    {\n        pane_id=pane_idx.porky; //porky banko\n    } else\n    {\n        freeboard.panes.push(  {\n            \"title\":\"Piggy Banks\",\n            \"width\": 1,\n            \"row\": {\n                \"3\": 1\n            },\n            \"col\": {\n                \"3\": 1\n            },\n            \"col_width\": 1,\n            widgets:[]\n        });\n        pane_idx.porky=i;\n        pane_id=i;\n        i++;\n    }\n    freeboard.panes[pane_id].widgets.push(\n{\n    \"type\": \"indicator\",\n    \"settings\": {\n        \"title\":key,\n        \"value\":\"wink.indicator.value(datasources[\\\"Node-Red\\\"] && datasources[\\\"Node-Red\\\"][\\\"WinkData\\\"][\\\"piggy_banks\\\"][\\\"\" + key + \"\\\"])\",\n        \"on_text\":\"wink.indicator.on_text(datasources[\\\"Node-Red\\\"] && datasources[\\\"Node-Red\\\"][\\\"WinkData\\\"][\\\"piggy_banks\\\"][\\\"\" + key + \"\\\"])\",\n        \"off_text\":\"wink.indicator.off_text(datasources[\\\"Node-Red\\\"] && datasources[\\\"Node-Red\\\"][\\\"WinkData\\\"][\\\"piggy_banks\\\"][\\\"\" + key + \"\\\"])\",\n        \"style_element\":\"wink.indicator.style_element(datasources[\\\"Node-Red\\\"] && datasources[\\\"Node-Red\\\"][\\\"WinkData\\\"][\\\"piggy_banks\\\"][\\\"\" + key + \"\\\"])\"\n    }\n})\n    \n}\n\n\n\nfor (var key in context.global.winkState.hubs)\n{\n    if( typeof pane_idx.hubs !=='undefined') \n    {\n        pane_id=pane_idx.hubs; //motion\n    } else\n    {\n        freeboard.panes.push(  {\n            \"title\":\"Hubs\",\n            \"width\": 1,\n            \"row\": {\n                \"3\": 1\n            },\n            \"col\": {\n                \"3\": 1\n            },\n            \"col_width\": 1,\n            widgets:[]\n        });\n        pane_idx.hubs=i;\n        pane_id=i;\n        i++;\n    }\n    freeboard.panes[pane_id].widgets.push(\n{\n    \"type\": \"indicator\",\n    \"settings\": {\n        \"title\":key,\n        \"value\":\"wink.indicator.value(datasources[\\\"Node-Red\\\"] && datasources[\\\"Node-Red\\\"][\\\"WinkData\\\"][\\\"hubs\\\"][\\\"\" + key + \"\\\"])\",\n        \"on_text\":\"wink.indicator.on_text(datasources[\\\"Node-Red\\\"] && datasources[\\\"Node-Red\\\"][\\\"WinkData\\\"][\\\"hubs\\\"][\\\"\" + key + \"\\\"])\",\n        \"off_text\":\"wink.indicator.off_text(datasources[\\\"Node-Red\\\"] && datasources[\\\"Node-Red\\\"][\\\"WinkData\\\"][\\\"hubs\\\"][\\\"\" + key + \"\\\"])\",\n        \"style_element\":\"wink.indicator.style_element(datasources[\\\"Node-Red\\\"] && datasources[\\\"Node-Red\\\"][\\\"WinkData\\\"][\\\"hubs\\\"][\\\"\" + key + \"\\\"])\"\n    }\n}\n)\n\nif (context.global.winkState.hubs[key].firmware_version !== null)\n    {\nfreeboard.panes[pane_id].widgets.push(\n{\n    \"type\": \"text_widget\",\n    \"settings\": {\n        \"title\":\"Current firmware\",\n        \"value\":\"datasources[\\\"Node-Red\\\"][\\\"WinkData\\\"][\\\"hubs\\\"][\\\"\" + key + \"\\\"][\\\"firmware_version\\\"]\",\n        \"size\":\"regular\",\n        \"animate\":\"true\"\n    }\n})\n}\n}\n\nfor (var key in context.global.Presence){\n    if( typeof pane_idx.presence !=='undefined') \n        {\n            pane_id=pane_idx.presence; //motion\n        } else\n        {\n            freeboard.panes.push(  {\n                \"title\":\"Presence\",\n                \"width\": 1,\n                \"row\": {\n                    \"3\": 1\n                },\n                \"col\": {\n                    \"3\": 1\n                },\n                \"col_width\": 1,\n                widgets:[]\n            });\n            pane_idx.presence=i;\n            pane_id=i;\n            i++;\n        }\n}\nif( typeof pane_idx.presence !=='undefined'){\n                    freeboard.panes[pane_idx.presence].widgets.push(\n                 {\n                     \"type\": \"indicator\",\n                     \"settings\": \n                      {\n                          \"title\":\"\" ,\n                          \"value\":\"datasources[\\\"Node-Red\\\"][\\\"Presence\\\"]\",\n                          \"on_text\":\"Presence detected\",\n                          \"off_text\":\"None\"\n                      }\n                 })\n} \n\n\n\nfreeboard.datasources =\n [\n    {\n        \"name\": \"Node-Red\",\n        \"type\": \"JSON\",\n        \"settings\": {\n            \"url\": context.global.BlueMixUrlBase+\"/red/getGlobalDataJson\",\n            \"use_thingproxy\": true,\n            \"refresh\": 2,\n            \"method\": \"GET\",\n            \"headers\": [\n              {\n                  \"name\": \"Authorization\",\n                  \"value\": \"Bearer \"+context.global.FREEBOARD_TOKEN\n              }\n            ],\n            \"name\":\"Node-Red\"\n        }\n    }   \n ]\nfreeboard.columns=i;\nmsg.payload=freeboard;\n}\nelse\n{\n    msg.payload=\"Bad request darling\"\n}\nreturn msg;",
     "outputs": 1,
     "noerr": 0,
-    "x": 436,
-    "y": 482,
+    "x": 459,
+    "y": 743,
     "z": "811c60ec.7ee3a",
     "wires": [
       [
@@ -355,8 +355,8 @@
     "url": "/red/getGroupsJson",
     "method": "get",
     "swaggerDoc": "",
-    "x": 118.5,
-    "y": 482.5,
+    "x": 141.5,
+    "y": 743.5,
     "z": "811c60ec.7ee3a",
     "wires": [
       [
@@ -368,8 +368,8 @@
     "id": "74c4f30d.8b3b0c",
     "type": "http response",
     "name": "",
-    "x": 826.5,
-    "y": 481.5,
+    "x": 849.5,
+    "y": 742.5,
     "z": "811c60ec.7ee3a",
     "wires": []
   },
@@ -377,8 +377,8 @@
     "id": "395216a.fc6adea",
     "type": "json",
     "name": "",
-    "x": 661.5,
-    "y": 482.5,
+    "x": 684.5,
+    "y": 743.5,
     "z": "811c60ec.7ee3a",
     "wires": [
       [
@@ -393,8 +393,8 @@
     "url": "/freeboard/LightControls",
     "method": "get",
     "swaggerDoc": "",
-    "x": 134,
-    "y": 733,
+    "x": 157,
+    "y": 994,
     "z": "811c60ec.7ee3a",
     "wires": [
       [
@@ -409,8 +409,8 @@
     "func": "//if(msg.req.headers.authorization && msg.req.headers.authorization==\"Bearer \"+context.global.FREEBOARD_TOKEN){\nif ((msg.req.body.uid==context.global.WinkUser.uid && msg.req.body.pwd==context.global.WinkUser.pwd) || msg.payload.token==context.global.FREEBOARD_TOKEN){\n//if (true){\nmsg.res.statusCode=\"200\";\nmsg.payload.pwd_str=context.global.FREEBOARD_TOKEN;\nmsg.payload.ifttt_token=context.global.FREEBOARD_TOKEN;\nmsg.payload.haveLights=false\nvar lights=[]\nif ('light_bulbs' in context.global.winkState){\n        for (var l_bulb in context.global.winkState.light_bulbs){\n            var bulb=context.global.winkState.light_bulbs[l_bulb];\n            lights.push({\n            name:bulb.name,\n            class_name:'dial '+bulb.object_id,\n            object_id:bulb.object_id,\n            powered:bulb.powered,\n            not_powered:!bulb.powered,\n            step:1,\n            brightness:Math.round(bulb.brightness*100)\n        });\n    }\n    msg.payload.haveLights=true\n}\nif ('binary_switches' in context.global.winkState){\n    for (var bswitch in context.global.winkState.binary_switches){\n        var bulb=context.global.winkState.binary_switches[bswitch];\n        lights.push({\n            name:bulb.name,\n            class_name:'dial '+bulb.object_id,\n            object_id:bulb.object_id,\n            powered:bulb.powered,\n            step:100,\n            brightness:(bulb.powered ? 100:0)\n        });\n}\n    msg.payload.haveLights=true\n}\n\nif ('powerstrips' in context.global.winkState){\n    for (var bswitch in context.global.winkState.powerstrips){\n        var bulb=context.global.winkState.powerstrips[bswitch];\n        if (bulb.object_type==='outlet'){\n        lights.push({\n            name:bulb.name,\n            class_name:'dial '+bulb.object_id,\n            object_id:bulb.object_id,\n            powered:bulb.powered,\n            step:100,\n            brightness:(bulb.powered ? 100:0)\n        });\n    }\n}\n    msg.payload.haveLights=true\n}\n\n\nmsg.payload.lights=lights;\n} else {\nmsg.res.statusCode=\"403\";\n}\nreturn msg;",
     "outputs": 1,
     "noerr": 0,
-    "x": 374,
-    "y": 732,
+    "x": 397,
+    "y": 993,
     "z": "811c60ec.7ee3a",
     "wires": [
       [
@@ -424,9 +424,9 @@
     "name": "",
     "field": "",
     "format": "handlebars",
-    "template": "<!DOCTYPE html>\n<html lang=\"en\">\n<head>\n    <meta charset=\"utf-8\">\n\t<meta name=\"mobile-web-app-capable\" content=\"yes\">\n    <meta name=\"apple-mobile-web-app-capable\" content=\"yes\" />\n    <meta name=\"apple-mobile-web-app-status-bar-style\" content=\"black\" />\n    <meta name=\"viewport\" content = \"width = device-width, initial-scale = 1.0, user-scalable = yes\" />\n    <title>light control</title>\n\n    <link rel=\"stylesheet\" type=\"text/css\" href=\"bootstrap/css/bootstrap.min.css\" />\n    <link rel=\"stylesheet\" type=\"text/css\" href=\"font-awesome/css/font-awesome.min.css\" />\n    <link rel=\"stylesheet\" type=\"text/css\" href=\"css/local.css\" />\n\n    <script type=\"text/javascript\" src=\"js/jquery-1.10.2.min.js\"></script>\n    <script type=\"text/javascript\" src=\"bootstrap/js/bootstrap.min.js\" async></script>\n    <script src=\"assets/js/jquery.knob.min.js\"></script>\n    <!-- you need to include the shieldui css and js assets in order for the charts to work -->\n    <script type=\"text/javascript\" src=\"https://www.prepbootstrap.com/Content/js/gridData.js\" async></script>\n</head>\n<body>\n\n<div class=\"container\">\n    {{#payload.lights}}\n    <div class=\"col-xs-3 col-md-3 col-sm-3\"> \n     <div class=\"panel panel-primary panel-{{object_id}}\">\n  <!-- Default panel contents -->\n        <div class=\"panel-heading {{name}}\" id=\"Header {{name}}\">\n            <p class=\"text-nowrap\">\n            <span class=\"glyphicon glyphicon-off\" aria-hidden=\"true\"></span>\n            <small>{{name}}</small>\n            </p>\n        </div>\n        <div class=\"panel-body\">\n            <div class=\"col-sm-8 col-md-8 hidden-xs\">\n                <input id=\"{{name}}\" data-angleOffset=-125 data-angleArc=250 data-linecap=round data-displayPrevious=\"true\" data-thickness=\".5\" data-step=\"{{step}}\" data-width=80 data-height=80 class=\"{{class_name}}\" value={{brightness}}>\n            </div>\n            <div class=\"col-xs-2 col-md-2 col-sm-2\">\n                <div id=\"btngrp {{name}}\" class=\"btn-group-vertical btn-md\" data-toggle=\"buttons\">\n                        <label class=\"btn btn-default btn-md\">\n                            <input type=\"radio\" data-toggle=\"radio-button\" name={{object_id}} id=\"{{name}}_On\" class=\"radio-popup-style radio-{{object_id}}-on{{#powered}} active{{/powered}}\"{{#powered}} checked{{/powered}}>On</input>\n                        </label>\n                        <label class=\"btn btn-default btn-md\">\n                            <input type=\"radio\" data-toggle=\"radio-button\" name={{object_id}} id=\"{{name}}_Of\" class=\"radio-popup-style radio-{{object_id}}-of{{#not_powered}} active{{/not_powered}}\"{{#not_powered}} checked{{/not_powered}}>Off</input>\n                        </label>\n                </div>\n            </div>\n        </div>\n    </div>\n    </div>\n    {{/payload.lights}}\n</div>\n\n<script>\n    $(\".dial\").knob({\n        'dynamicDraw' : true,\n        'release' : function (v) {\n             $.post( \"/red/ifttt\", {\"winkName\":this.$.attr('id'),\"type\":\"light\",\"cmd\":(v >0 ? 'on' : 'off' ),\"level\":(v<0 ? 0:v) , \"iftttkey\" : \"{{payload.ifttt_token}}\"}) \n           // console.log(this.$.attr('id'));\n            //console.log(v);\n            }\n    });\n    \n    $('input[type=radio]').change(function(){\n        //console.log(this.id);\n        var LName=this.id.substring(0,this.id.length-3);\n        var Wcmd;\n        var Wlevel=$('.dial.'+this.name)[0].value;\n        var l_id='.panel-'+this.name;\n        $(this).addClass(\"active\").siblings().removeAttr('checked').removeClass(\"active\").parent().removeClass('active');\n        (this.id.indexOf(\"_On\")!=-1 ?  Wcmd='on':  Wcmd='off');\n         $.post( \"/red/ifttt\", {\"winkName\":LName,\"type\":\"light\",\"cmd\":Wcmd,\"level\":Wlevel , \"iftttkey\" : \"{{payload.ifttt_token}}\"}); \n         (Wcmd=='on' ? $(l_id).removeClass('panel-primary').addClass('panel-warning') : $(l_id).removeClass('panel-warning').addClass('panel-primary'));\n    });\n    \n    function executeQuery() {\n        $.ajax({\n        url: 'lightcontrol',\n        method: 'GET',\n        ifModified:true,\n//        dataType: 'JSON',\n        headers: {\n        'Authorization':'Bearer {{payload.pwd_str}}',\n        'Content-Type':'application/json',\n        'If-None-Match':$eTag\n        },\n        success: function(data,status, xhr) {\n        if (xhr.status===200){\n        var wink_obj=data;// JSON.parse(data);\n        \n        $eTag=xhr.getResponseHeader('Etag');\n        // console.log(wink_obj.haveLights);\n         var lights=wink_obj.lights;\n         for(var i=0;i<lights.length;i++){\n          var l_id='.panel-'+lights[i].object_id;\n          var dial_name='.dial.'+lights[i].object_id;\n          var btn_id='.radio-'+lights[i].object_id;\n          if(lights[i].powered) \n              {\n                  $(l_id).removeClass('panel-primary').addClass('panel-warning');\n                  $(btn_id+'-on').prop('checked',true).parent().addClass('active').siblings().removeClass(\"active\").blur();\n                  $(btn_id+'-of').removeAttr('checked').prop('checked',false).parent().removeClass('active').blur();\n                  $(l_id).click();\n                  $(l_id).focus();\n              } else {\n                  $(l_id).removeClass('panel-warning').addClass('panel-primary');\n                  $(btn_id+'-of').prop('checked',true).parent().addClass('active').siblings().removeClass(\"active\").blur();\n                  $(btn_id+'-on').removeAttr('checked').prop('checked',false).parent().removeClass('active').blur();\n                  $(l_id).click();\n                  $(l_id).focus();\n              }\n          $(dial_name).val(lights[i].brightness).trigger(\"change\");\n         }\n        }\n    }\n    });\n    //setTimeout(executeQuery, 5000); // you could choose not to continue on failure...\n    }\n\n    $(document).ready(function() {\n    $eTag=\"sasd12312sdfsdf=\";\n    // run the first time; all subsequent calls will take care of themselves\n    setInterval(executeQuery, 3000);\n    });\n</script>\n</body>\n</html>\n<!-- data-angleOffset=-125 data-angleArc=250 -->",
-    "x": 553,
-    "y": 732,
+    "template": "<!DOCTYPE html>\n<html lang=\"en\">\n<head>\n    <meta charset=\"utf-8\">\n\t<meta name=\"mobile-web-app-capable\" content=\"yes\">\n    <meta name=\"apple-mobile-web-app-capable\" content=\"yes\" />\n    <meta name=\"apple-mobile-web-app-status-bar-style\" content=\"black\" />\n    <meta name=\"viewport\" content = \"width = device-width, initial-scale = 1.0, user-scalable = yes\" />\n    <title>light control</title>\n\n    <link rel=\"stylesheet\" type=\"text/css\" href=\"bootstrap/css/bootstrap.min.css\" />\n    <link rel=\"stylesheet\" type=\"text/css\" href=\"font-awesome/css/font-awesome.min.css\" />\n    <link rel=\"stylesheet\" type=\"text/css\" href=\"css/local.css\" />\n\n    <script type=\"text/javascript\" src=\"js/jquery-1.10.2.min.js\"></script>\n    <script type=\"text/javascript\" src=\"bootstrap/js/bootstrap.min.js\" async></script>\n    <script src=\"assets/js/jquery.knob.min.js\"></script>\n    <script src=\"//crypto-js.googlecode.com/svn/tags/3.1.2/build/rollups/aes.js\"></script>\n    <!-- you need to include the shieldui css and js assets in order for the charts to work -->\n    <script type=\"text/javascript\" src=\"https://www.prepbootstrap.com/Content/js/gridData.js\" async></script>\n</head>\n<body onload=\"wsConnect();\" onunload=\"ws.disconnect();\">\n\n<!--<div class=\"container\"> -->\n    {{#payload.lights}}\n    <div class=\"col-xs-3 col-md-3 col-sm-3\" style=\"background:none;\"> \n     <div class=\"panel panel-primary panel-{{object_id}}\">\n  <!-- Default panel contents -->\n        <div class=\"panel-heading {{name}}\" id=\"Header {{name}}\">\n            <p class=\"text-nowrap\">\n            <span class=\"glyphicon glyphicon-off\" aria-hidden=\"true\"></span>\n            <small>{{name}}</small>\n            </p>\n        </div>\n        <div class=\"panel-body\">\n            <div class=\"col-sm-8 col-md-8 hidden-xs\">\n                <input id=\"{{name}}\" data-angleOffset=-125 data-angleArc=250 data-linecap=round data-displayPrevious=\"true\" data-thickness=\".5\" data-step=\"{{step}}\" data-width=80 data-height=80 class=\"{{class_name}}\" value={{brightness}}>\n            </div>\n            <div class=\"col-xs-2 col-md-2 col-sm-2\">\n                <div id=\"btngrp {{name}}\" class=\"btn-group-vertical btn-md\" data-toggle=\"buttons\">\n                        <label class=\"btn btn-default btn-md\">\n                            <input type=\"radio\" data-toggle=\"radio-button\" name={{object_id}} id=\"{{name}}_On\" class=\"radio-popup-style radio-{{object_id}}-on{{#powered}} active{{/powered}}\"{{#powered}} checked{{/powered}}>On</input>\n                        </label>\n                        <label class=\"btn btn-default btn-md\">\n                            <input type=\"radio\" data-toggle=\"radio-button\" name={{object_id}} id=\"{{name}}_Of\" class=\"radio-popup-style radio-{{object_id}}-of{{#not_powered}} active{{/not_powered}}\"{{#not_powered}} checked{{/not_powered}}>Off</input>\n                        </label>\n                </div>\n            </div>\n        </div>\n    </div>\n    </div>\n    {{/payload.lights}}   \n<!--</div> -->\n\n<script type=\"text/javascript\">\n    $(\".dial\").knob({\n        'dynamicDraw' : true,\n        'release' : function (v) {\n             $.post( \"/red/ifttt\", {\"winkName\":this.$.attr('id'),\"type\":\"light\",\"cmd\":(v >0 ? 'on' : 'off' ),\"level\":(v<0 ? 0:v) , \"iftttkey\" : \"{{payload.ifttt_token}}\"}) \n            }\n    });\n    \n    $('input[type=radio]').change(function(){\n        //console.log(this.id);\n        var LName=this.id.substring(0,this.id.length-3);\n        var Wcmd;\n        var Wlevel=$('.dial.'+this.name)[0].value;\n        var l_id='.panel-'+this.name;\n        $(this).addClass(\"active\").siblings().removeAttr('checked').removeClass(\"active\").parent().removeClass('active');\n        (this.id.indexOf(\"_On\")!=-1 ?  Wcmd='on':  Wcmd='off');\n         $.post( \"/red/ifttt\", {\"winkName\":LName,\"type\":\"light\",\"cmd\":Wcmd,\"level\":Wlevel , \"iftttkey\" : \"{{payload.ifttt_token}}\"}); \n         (Wcmd=='on' ? $(l_id).removeClass('panel-primary').addClass('panel-warning') : $(l_id).removeClass('panel-warning').addClass('panel-primary'));\n    });\n    \n    function wsConnect() {\n        var ws;\n        var wsUri = \"ws:\";\n        var loc = window.location;\n        if (loc.protocol === \"https:\") { wsUri = \"wss:\"; }\n        wsUri += \"//\" + loc.host + \"/ws/winkStat\";\n            ws = new WebSocket(wsUri);\n            ws.onmessage = function(msg) {\n            var data = JSON.parse(msg.data);\n            var l_id='.panel-'+data.object_id;\n            var dial_name='.dial.'+data.object_id;\n            var btn_id='.radio-'+data.object_id;\n            if(data.powered) \n              {\n                  $(l_id).removeClass('panel-primary').addClass('panel-warning');\n                  $(btn_id+'-on').prop('checked',true).parent().addClass('active').siblings().removeClass(\"active\").blur();\n                  $(btn_id+'-of').removeAttr('checked').prop('checked',false).parent().removeClass('active').blur();\n                  $(l_id).click();\n                  $(l_id).focus();\n              } else {\n                  $(l_id).removeClass('panel-warning').addClass('panel-primary');\n                  $(btn_id+'-of').prop('checked',true).parent().addClass('active').siblings().removeClass(\"active\").blur();\n                  $(btn_id+'-on').removeAttr('checked').prop('checked',false).parent().removeClass('active').blur();\n                  $(l_id).click();\n                  $(l_id).focus();\n              }\n          $(dial_name).val(data.brightness).trigger(\"change\"); \n            }\n            ws.onopen = function() {\n                    console.log(\"connected\");\n            }\n            ws.onclose = function() {\n            //    console.log(\"re connecting\");\n                setTimeout(wsConnect,3000);\n            }\n        };\n    \n    \n    function executeQuery() {\n        $.ajax({\n        url: 'lightcontrol',\n        method: 'GET',\n        ifModified:true,\n//        dataType: 'JSON',\n        headers: {\n        'Authorization':'Bearer {{payload.pwd_str}}',\n        'Content-Type':'application/json',\n        'If-None-Match':$eTag\n        },\n        success: function(data,status, xhr) {\n        if (xhr.status===200){\n        var wink_obj=data;// JSON.parse(data);\n        \n        $eTag=xhr.getResponseHeader('Etag');\n        // console.log(wink_obj.haveLights);\n         var lights=wink_obj.lights;\n         for(var i=0;i<lights.length;i++){\n          var l_id='.panel-'+lights[i].object_id;\n          var dial_name='.dial.'+lights[i].object_id;\n          var btn_id='.radio-'+lights[i].object_id;\n          if(lights[i].powered) \n              {\n                  $(l_id).removeClass('panel-primary').addClass('panel-warning');\n                  $(btn_id+'-on').prop('checked',true).parent().addClass('active').siblings().removeClass(\"active\").blur();\n                  $(btn_id+'-of').removeAttr('checked').prop('checked',false).parent().removeClass('active').blur();\n                  $(l_id).click();\n                  $(l_id).focus();\n              } else {\n                  $(l_id).removeClass('panel-warning').addClass('panel-primary');\n                  $(btn_id+'-of').prop('checked',true).parent().addClass('active').siblings().removeClass(\"active\").blur();\n                  $(btn_id+'-on').removeAttr('checked').prop('checked',false).parent().removeClass('active').blur();\n                  $(l_id).click();\n                  $(l_id).focus();\n              }\n          $(dial_name).val(lights[i].brightness).trigger(\"change\");\n         }\n        }\n    }\n    });\n    //setTimeout(executeQuery, 5000); // you could choose not to continue on failure...\n    }\n\n    $(document).ready(function() {\n    $eTag=\"sasd12312sdfsdf=\";\n    // run the first time; all subsequent calls will take care of themselves\n    //setInterval(executeQuery, 3000);\n    executeQuery();\n    setInterval(executeQuery, 120000);\n    });\n</script>\n</body>\n</html>",
+    "x": 576,
+    "y": 993,
     "z": "811c60ec.7ee3a",
     "wires": [
       [
@@ -438,8 +438,8 @@
     "id": "1d46b99f.e2b946",
     "type": "http response",
     "name": "",
-    "x": 710,
-    "y": 731,
+    "x": 733,
+    "y": 992,
     "z": "811c60ec.7ee3a",
     "wires": []
   },
@@ -450,8 +450,8 @@
     "url": "/freeboard/LightControl",
     "method": "get",
     "swaggerDoc": "",
-    "x": 135,
-    "y": 793,
+    "x": 158,
+    "y": 1054,
     "z": "811c60ec.7ee3a",
     "wires": [
       [
@@ -466,8 +466,8 @@
     "func": "if(msg.req.headers.authorization && msg.req.headers.authorization==\"Bearer \"+context.global.FREEBOARD_TOKEN){\n//if ((msg.req.body.uid==context.global.WinkUser.uid && msg.req.body.pwd==context.global.WinkUser.pwd) || msg.payload.token==context.global.FREEBOARD_TOKEN){\n//if (true){\n//msg.payload.pwd_str=context.global.FREEBOARD_TOKEN;\nmsg.payload.haveLights=false\nvar lights=[]\nif ('light_bulbs' in context.global.winkState){\n        for (var l_bulb in context.global.winkState.light_bulbs){\n            var bulb=context.global.winkState.light_bulbs[l_bulb];\n            lights.push({\n            name:bulb.name,\n            object_id:bulb.object_id,\n            powered:bulb.powered,\n            brightness:Math.round(bulb.brightness*100)\n        });\n    }\n    msg.payload.haveLights=true\n} \n    \nif ('binary_switches' in context.global.winkState){\n    for (var bswitch in context.global.winkState.binary_switches){\n        var bulb=context.global.winkState.binary_switches[bswitch];\n        lights.push({\n            name:bulb.name,\n            object_id:bulb.object_id,\n            powered:bulb.powered,\n            brightness:(bulb.powered ? 100:0)\n        });\n}\n    msg.payload.haveLights=true;\n}\n\nif ('powerstrips' in context.global.winkState){\n    for (var bswitch in context.global.winkState.powerstrips){\n        var bulb=context.global.winkState.powerstrips[bswitch];\n        if (bulb.object_type==='outlet'){\n        lights.push({\n            name:bulb.name,\n            class_name:'dial '+bulb.object_id,\n            object_id:bulb.object_id,\n            powered:bulb.powered,\n            step:100,\n            brightness:(bulb.powered ? 100:0)\n        });\n    }\n}\n    msg.payload.haveLights=true\n}\n\nmsg.payload.lights=lights;\nmsg.res.statusCode=\"200\";\nvar Etag=\"\";\nif ('CRYPTO' in context.global) Etag=context.global.CRYPTO.createHash(\"md5\").update(JSON.stringify(lights),\"utf8\").digest(\"hex\");\nmsg.res.set({\n  'Content-Type': 'application/json',\n  'ETag': Etag\n})\n} else {\nmsg.res.statusCode=\"403\";\n}\nreturn msg;",
     "outputs": 1,
     "noerr": 0,
-    "x": 395,
-    "y": 795,
+    "x": 418,
+    "y": 1056,
     "z": "811c60ec.7ee3a",
     "wires": [
       [
@@ -479,8 +479,8 @@
     "id": "93f3aefc.6c0c5",
     "type": "json",
     "name": "",
-    "x": 553,
-    "y": 794,
+    "x": 576,
+    "y": 1055,
     "z": "811c60ec.7ee3a",
     "wires": [
       [
@@ -492,8 +492,8 @@
     "id": "49f30e6b.b60cf",
     "type": "http response",
     "name": "",
-    "x": 705,
-    "y": 794,
+    "x": 728,
+    "y": 1055,
     "z": "811c60ec.7ee3a",
     "wires": []
   },
@@ -514,8 +514,8 @@
     "field": "",
     "format": "handlebars",
     "template": "<!DOCTYPE html>\n<html>\n<head>\n    <meta charset=\"UTF-8\">\n    <title>freeboard</title>\n\t<meta name=\"mobile-web-app-capable\" content=\"yes\">\n    <meta name=\"apple-mobile-web-app-capable\" content=\"yes\" />\n    <meta name=\"apple-mobile-web-app-status-bar-style\" content=\"black\" />\n    <meta name=\"viewport\" content = \"width = device-width, initial-scale = 1.0, user-scalable = yes\" />\n    <link href=\"css/freeboard.min.css\" rel=\"stylesheet\" />\n    <script src=\"js/freeboard.thirdparty.min.js\"></script>\n    <script type=\"text/javascript\">\n        head.js(\"js/freeboard.js\",\"js/freeboard.plugins.min.js\",\"../freeboard_api/datasources\",\n                \"lib/js/thirdparty/wink.js\",\n\n                // *** Load more plugins here ***\n                function(){\n                    $(function()\n                    { //DOM Ready\n                        freeboard.initialize(true);\n\n                        //var hash = window.location.hash;\n                        //if (hash !== null) {\n                            $.get({{context.global.BlueMixUrlBase}}\"/red/getGroupsJson?auth={{payload.pwd_str}}\", function(data) {\n\t\t\t\t\t\t\t\tvar datap=JSON.parse(data);\n\t\t\t\t\t\t\t\tif (!datap.empty){\n\t\t\t\t\t\t\t\t\tfreeboard.loadDashboard(datap, function() {\n\t\t\t\t\t\t\t\t\t\tfreeboard.setEditing(false);\n\t\t\t\t\t\t\t\t\t});\n\t\t\t\t\t\t\t\t}\n                            });\n                        //}\n\n                    });\n                });\n    </script>\n</head>\n<body>\n<div id=\"board-content\">\n    <img id=\"dash-logo\" data-bind=\"attr:{src: header_image}, visible:header_image()\">\n    <div class=\"gridster responsive-column-width\">\n        <ul data-bind=\"grid: true\">\n        </ul>\n    </div>\n</div>\n<header id=\"main-header\" data-bind=\"if:allow_edit\">\n    <div id=\"admin-bar\">\n        <div id=\"admin-menu\">\n            <div id=\"board-tools\">\n                <h1 id=\"board-logo\" class=\"title bordered\">freeboard</h1>\n                <div id=\"board-actions\">\n                    <ul class=\"board-toolbar vertical\">\n                        <!--<li data-bind=\"click: loadDashboardFromLocalFile\"><i id=\"full-screen-icon\" class=\"icon-folder-open icon-white\"></i><label id=\"full-screen\">Load Freeboard</label></li>-->\n                        <li data-bind=\"click: saveDashboard\"><i class=\"icon-download-alt icon-white\"></i><label>Save Freeboard</label></li>\n                        <li id=\"add-pane\" data-bind=\"click: createPane\"><i class=\"icon-plus icon-white\"></i><label>Add Pane</label></li>\n                    </ul>\n                </div>\n            </div>\n            <div id=\"datasources\">\n                <h2 class=\"title\">DATASOURCES</h2>\n\n                <div class=\"datasource-list-container\">\n                    <table class=\"table table-condensed sub-table\" id=\"datasources-list\" data-bind=\"if: datasources().length\">\n                        <thead>\n                        <tr>\n                            <th>Name</th>\n                            <th>Last Updated</th>\n                            <th>&nbsp;</th>\n                        </tr>\n                        </thead>\n                        <tbody data-bind=\"foreach: datasources\">\n                        <tr>\n                            <td>\n                                <span class=\"text-button datasource-name\" data-bind=\"text: name, pluginEditor: {operation: 'edit', type: 'datasource'}\"></span>\n                            </td>\n                            <td data-bind=\"text: last_updated\"></td>\n                            <td>\n                                <ul class=\"board-toolbar\">\n                                    <li data-bind=\"click: updateNow\"><i class=\"icon-refresh icon-white\"></i></li>\n                                    <li data-bind=\"pluginEditor: {operation: 'delete', type: 'datasource'}\">\n                                        <i class=\"icon-trash icon-white\"></i></li>\n                                </ul>\n                            </td>\n                        </tr>\n                        </tbody>\n                    </table>\n                </div>\n                <span class=\"text-button table-operation\" data-bind=\"pluginEditor: {operation: 'add', type: 'datasource'}\">ADD</span>\n            </div>\n        </div>\n    </div>\n\t<div id=\"column-tools\" class=\"responsive-column-width\">\n\t\t<ul class=\"board-toolbar left-columns\">\n\t\t\t<li class=\"column-tool add\" data-bind=\"click: addGridColumnLeft\"><span class=\"column-icon right\"></span><i class=\"icon-arrow-left icon-white\"></i></li>\n\t\t\t<li class=\"column-tool sub\" data-bind=\"click: subGridColumnLeft\"><span class=\"column-icon left\"></span><i class=\"icon-arrow-right icon-white\"></i></li>\n\t\t</ul>\n\t\t<ul class=\"board-toolbar right-columns\">\n\t\t\t<li class=\"column-tool sub\" data-bind=\"click: subGridColumnRight\"><span class=\"column-icon right\"></span><i class=\"icon-arrow-left icon-white\"></i></li>\n\t\t\t<li class=\"column-tool add\" data-bind=\"click: addGridColumnRight\"><span class=\"column-icon left\"></span><i class=\"icon-arrow-right icon-white\"></i></li>\n\t\t</ul>\n\t</div>\n    <div id=\"toggle-header\" data-bind=\"click: toggleEditing\">\n        <i id=\"toggle-header-icon\" class=\"icon-wrench icon-white\"></i></div>\n</header>\n\n\n<div style=\"display:hidden\">\n    <ul data-bind=\"template: { name: 'pane-template', foreach: panes}\">\n    </ul>\n</div>\n\n<script type=\"text/html\" id=\"pane-template\">\n    <li data-bind=\"pane: true\">\n        <header>\n            <h1 data-bind=\"text: title\"></h1>\n            <ul class=\"board-toolbar pane-tools\">\n                <li data-bind=\"pluginEditor: {operation: 'add', type: 'widget'}\">\n                    <i class=\"icon-plus icon-white\"></i>\n                </li>\n                <li data-bind=\"pluginEditor: {operation: 'edit', type: 'pane'}\">\n                    <i class=\"icon-wrench icon-white\"></i>\n                </li>\n                <li data-bind=\"pluginEditor: {operation: 'delete', type: 'pane'}\">\n                    <i class=\"icon-trash icon-white\"></i>\n                </li>\n            </ul>\n        </header>\n        <section data-bind=\"foreach: widgets\">\n            <div class=\"sub-section\" data-bind=\"css: 'sub-section-height-' + height()\">\n                <div class=\"widget\" data-bind=\"widget: true, css:{fillsize:fillSize}\"></div>\n                <div class=\"sub-section-tools\">\n                    <ul class=\"board-toolbar\">\n                        <!-- ko if:$parent.widgetCanMoveUp($data) -->\n                        <li data-bind=\"click:$parent.moveWidgetUp\"><i class=\"icon-chevron-up icon-white\"></i></li>\n                        <!-- /ko -->\n                        <!-- ko if:$parent.widgetCanMoveDown($data) -->\n                        <li data-bind=\"click:$parent.moveWidgetDown\"><i class=\"icon-chevron-down icon-white\"></i></li>\n                        <!-- /ko -->\n                        <li data-bind=\"pluginEditor: {operation: 'edit', type: 'widget'}\"><i class=\"icon-wrench icon-white\"></i></li>\n                        <li data-bind=\"pluginEditor: {operation: 'delete', type: 'widget'}\"><i class=\"icon-trash icon-white\"></i></li>\n                    </ul>\n                </div>\n            </div>\n        </section>\n    </li>\n</script>\n\n</body>\n</html>\n",
-    "x": 741.5,
-    "y": 551,
+    "x": 764.5,
+    "y": 812,
     "z": "811c60ec.7ee3a",
     "wires": [
       [
@@ -527,8 +527,8 @@
     "id": "e680d564.197f28",
     "type": "http response",
     "name": "",
-    "x": 901.5,
-    "y": 551,
+    "x": 924.5,
+    "y": 812,
     "z": "811c60ec.7ee3a",
     "wires": []
   },
@@ -539,8 +539,8 @@
     "func": "if ((msg.req.body.uid==context.global.WinkUser.uid && msg.req.body.pwd==context.global.WinkUser.pwd) || msg.payload.token==context.global.FREEBOARD_TOKEN){\nmsg.res.statusCode=\"200\";\nmsg.payload={\"pwd_str\":context.global.FREEBOARD_TOKEN}\n} else {\nmsg.res.statusCode=\"403\";\n}\nreturn msg;",
     "outputs": 1,
     "noerr": 0,
-    "x": 369.5,
-    "y": 549,
+    "x": 392.5,
+    "y": 810,
     "z": "811c60ec.7ee3a",
     "wires": [
       [
@@ -555,8 +555,8 @@
     "url": "/freeboard/winkautogroup",
     "method": "get",
     "swaggerDoc": "",
-    "x": 131,
-    "y": 545,
+    "x": 154,
+    "y": 806,
     "z": "811c60ec.7ee3a",
     "wires": [
       [
@@ -581,8 +581,8 @@
     ],
     "checkall": "true",
     "outputs": 2,
-    "x": 516.5,
-    "y": 549,
+    "x": 539.5,
+    "y": 810,
     "z": "811c60ec.7ee3a",
     "wires": [
       [
@@ -597,8 +597,8 @@
     "id": "406f8f79.bf907",
     "type": "http response",
     "name": "",
-    "x": 905.5,
-    "y": 593,
+    "x": 928.5,
+    "y": 854,
     "z": "811c60ec.7ee3a",
     "wires": []
   },
@@ -609,8 +609,8 @@
     "field": "payload",
     "format": "handlebars",
     "template": "<html>\n  <head>\n    <title>Invalid login</title>\n    <META http-equiv=\"refresh\" content=\"3;URL=/freeboard/winkboardautogroup\">\n  </head>\n <body bgcolor=\"#ffffff\">\n    <center>Invalid user Id or Password</a>\n    </center>\n  </body>\n\n</html>",
-    "x": 743.5,
-    "y": 593,
+    "x": 766.5,
+    "y": 854,
     "z": "811c60ec.7ee3a",
     "wires": [
       [
@@ -633,18 +633,18 @@
     "type": "comment",
     "name": "details page---------------------------------------",
     "info": "",
-    "x": 170,
-    "y": 431,
+    "x": 193,
+    "y": 692,
     "z": "811c60ec.7ee3a",
     "wires": []
   },
   {
     "id": "d18ae201.2e752",
     "type": "comment",
-    "name": "Light control page---------------------------------------",
+    "name": "Controls page---------------------------------------",
     "info": "",
-    "x": 185,
-    "y": 676,
+    "x": 208,
+    "y": 937,
     "z": "811c60ec.7ee3a",
     "wires": []
   },
@@ -655,8 +655,8 @@
     "url": "/freeboard/MyCameras",
     "method": "get",
     "swaggerDoc": "",
-    "x": 133,
-    "y": 926,
+    "x": 158,
+    "y": 1358,
     "z": "811c60ec.7ee3a",
     "wires": [
       [
@@ -671,8 +671,8 @@
     "func": "//if(msg.req.headers.authorization && msg.req.headers.authorization==\"Bearer \"+context.global.FREEBOARD_TOKEN){\nif ((msg.req.body.uid==context.global.WinkUser.uid && msg.req.body.pwd==context.global.WinkUser.pwd) || msg.payload.token==context.global.FREEBOARD_TOKEN){\n//if (true){\nmsg.res.statusCode=\"200\";\nmsg.payload.pwd_str=context.global.FREEBOARD_TOKEN;\nmsg.payload.ifttt_token=context.global.FREEBOARD_TOKEN;\ncameras=[]\nfor (var cam in context.global.winkState.cameras){\n    var camera=context.global.winkState.cameras[cam];\n    cameras.push({\n        name:camera.name,\n        id:camera.object_id,\n        connection:camera.connection,\n        url:camera.snap_url,\n        history_url:camera.history_url,\n        refresh_interval:30\n    });\n}\nmsg.payload.cameras=cameras;\nmsg.res.statusCode=\"200\";\n} else {\nmsg.res.statusCode=\"403\";\n}\nreturn msg;",
     "outputs": 1,
     "noerr": 0,
-    "x": 373,
-    "y": 925,
+    "x": 398,
+    "y": 1357,
     "z": "811c60ec.7ee3a",
     "wires": [
       [
@@ -687,8 +687,8 @@
     "field": "",
     "format": "handlebars",
     "template": "<!DOCTYPE html>\n<html lang=\"en\">\n<head>\n    <meta charset=\"utf-8\">\n\t<meta name=\"mobile-web-app-capable\" content=\"yes\">\n    <meta name=\"apple-mobile-web-app-capable\" content=\"yes\" />\n    <meta name=\"apple-mobile-web-app-status-bar-style\" content=\"black\" />\n    <meta name=\"viewport\" content = \"width = device-width, initial-scale = 1.0, user-scalable = yes\" />\n    <title>Cameras control</title>\n\n    <link rel=\"stylesheet\" type=\"text/css\" href=\"bootstrap/css/bootstrap.min.css\" />\n    <link rel=\"stylesheet\" type=\"text/css\" href=\"font-awesome/css/font-awesome.min.css\" />\n    <link rel=\"stylesheet\" type=\"text/css\" href=\"css/local.css\" />\n\n</head>\n<body>\n\n<div class=\"container\">\n    {{#payload.cameras}}\n    <div class=\"col-md-6 col-sm-9 col-xs-9\">\n     <div class=\"panel panel-primary panel-{{id}}\">\n  <!-- Default panel contents -->\n        <div class=\"panel-heading {{name}}\" id=\"Header {{name}}\">\n            <p class=\"text-nowrap\">\n            <span class=\"glyphicon glyphicon-camera\" aria-hidden=\"true\"></span>\n            <small>{{name}}</small>\n     <!--       <button type=\"button\" class=\"btn btn-success btn-sm pull-right\"  onclick=\"ShowCamHist('cam_history?token={{payload.pwd_str}}&camera_name={{name}}','{{name}} History');\">{{name}} history</button> -->\n                <button type=\"button\" class=\"btn btn-success btn-sm pull-right\"  onclick=\"ShowCamHist('cam_history?token={{payload.pwd_str}}&camera_name={{name}}','{{name}} History');\">{{name}} history</button>\n            </p>\n        </div>\n        <div class=\"panel-body panel-image panel-image-{{id}}\" id=\"{{id}}\" style=\"width: 100%; height: 380px; background-image: url({{url}});-webkit-background-size: cover; -moz-background-size: cover; -o-background-size: cover; background-size: cover;\">\n\n        </div>\n    </div>\n    </div>\n    {{/payload.cameras}}\n</div>\n\n<script type=\"text/javascript\" src=\"js/jquery-1.10.2.min.js\"></script>\n<script type=\"text/javascript\" src=\"bootstrap/js/bootstrap.min.js\" async></script>\n<!-- you need to include the shieldui css and js assets in order for the charts to work -->\n<script type=\"text/javascript\" src=\"https://www.prepbootstrap.com/Content/js/gridData.js\" async></script>\n<script type=\"text/javascript\" src=\"js/eModalBl.min.js\" async></script>\n\n<script>\n    \n    function ShowCamHist(hist_url,title){\n        var options = {\n            url: hist_url,\n            title:title,\n            size: eModal.size.lg,\n            buttons: [\n                {text: 'OK', style: 'success',   close: true}\n            ]\n        };\n        eModal.iframe(options);\n    }\n\n    $(document).ready(function() {\n        function updateImage()\n            {\n             for (var i=0;i<$('.panel-image').length;i++){\n                widget='.panel-image-'+ $('.panel-image')[i].id;\n                var imageURL = $(widget).css(\"background-image\");\n                imageURL = imageURL.replace(/.*\\s?url\\([\\'\\\"]?/, '').replace(/[\\'\\\"]?\\).*/, '')\n                var cacheBreakerURL = imageURL + (imageURL.indexOf(\"?\") == -1 ? \"?\" : \"&\") + Date.now();\n                 $(widget).css({\n                    \"background-image\" :  \"url(\" + cacheBreakerURL + \")\"\n                });\n             }\n            }\n \n    setInterval(updateImage, 30000);\n    });\n</script>\n</body>\n</html>\n<!-- data-angleOffset=-125 data-angleArc=250 -->",
-    "x": 552,
-    "y": 925,
+    "x": 577,
+    "y": 1357,
     "z": "811c60ec.7ee3a",
     "wires": [
       [
@@ -700,8 +700,8 @@
     "id": "69115595.96eeac",
     "type": "http response",
     "name": "",
-    "x": 709,
-    "y": 924,
+    "x": 734,
+    "y": 1356,
     "z": "811c60ec.7ee3a",
     "wires": []
   },
@@ -710,8 +710,8 @@
     "type": "comment",
     "name": "Cameras page---------------------------------------",
     "info": "",
-    "x": 178.5,
-    "y": 868,
+    "x": 203.5,
+    "y": 1300,
     "z": "811c60ec.7ee3a",
     "wires": []
   },
@@ -722,8 +722,8 @@
     "url": "/freeboard/cam_history",
     "method": "get",
     "swaggerDoc": "",
-    "x": 137,
-    "y": 993,
+    "x": 162,
+    "y": 1425,
     "z": "811c60ec.7ee3a",
     "wires": [
       [
@@ -738,8 +738,8 @@
     "func": "if (msg.payload.token ==context.global.FREEBOARD_TOKEN){\n    msg.res.statusCode=\"200\";\n    var cam_array=[]\n    if ( 'camera_name' in msg.payload && msg.payload.camera_name!==''){\n        for (var i=0;i<context.global.winkState.cameras[msg.payload.camera_name].activities.length;i++){\n            var activity=context.global.winkState.cameras[msg.payload.camera_name].activities[i];\n             var datetime=new Date(activity.cuepoint_id*1000+context.global.Weather.Offset*60*60*1000);\n            cam_array.push({\n            position:i,\n            is_active:(i===0 ? true:false),\n            title_tm: datetime.toLocaleTimeString(),\n            title_dt: datetime.toLocaleDateString(),\n            //toString(\"dddd, MMMM dd, yyyy h:mm:ss tt\"),\n            img_url:activity.snapshot_url\n            });\n        }\n    msg.payload.cam_activities=cam_array;\n    } \n} else {\n    msg.res.statusCode=\"403\";   \n    }\nreturn msg;\n",
     "outputs": 1,
     "noerr": 0,
-    "x": 364,
-    "y": 990,
+    "x": 389,
+    "y": 1422,
     "z": "811c60ec.7ee3a",
     "wires": [
       [
@@ -753,9 +753,9 @@
     "name": "",
     "field": "",
     "format": "handlebars",
-    "template": "<!DOCTYPE html>\n<html lang=\"en\">\n<head>\n  <title>Bootstrap Example</title>\n  <meta charset=\"utf-8\">\n  <meta name=\"viewport\" content=\"width=device-width, initial-scale=1\">\n    <link rel=\"stylesheet\" type=\"text/css\" href=\"bootstrap/css/bootstrap.min.css\" />\n    <link rel=\"stylesheet\" type=\"text/css\" href=\"font-awesome/css/font-awesome.min.css\" />\n    <link rel=\"stylesheet\" type=\"text/css\" href=\"css/local.css\" />\n    <script type=\"text/javascript\" src=\"js/jquery-1.10.2.min.js\"></script>\n    <script type=\"text/javascript\" src=\"bootstrap/js/bootstrap.min.js\" async></script>\n      <style>\n  .carousel-inner > .item > img,\n  .carousel-inner > .item > a > img {\n      width: 100%;\n      margin: auto;\n      height: 420px;\n  }\n  </style>\n</head>\n<body>\n<div class=\"container\">\n    <br>\n    <br>\n        <div id=\"myCarousel\" class=\"carousel slide carousel-fade col-md-12 col-lg-12 col-sm-12 col-xs-12 col-offset-2\" data-ride=\"carousel\">\n          <!-- Indicators -->\n          <ol class=\"carousel-indicators\">\n            {{#payload.cam_activities}}\n            <li data-target=\"#myCarousel\" data-slide-to=\"{{position}}\" {{#is_active}}class=\"active\"{{/is_active}}></li>\n            {{/payload.cam_activities}}\n          </ol>\n        \n          <!-- Wrapper for slides -->\n          <div class=\"carousel-inner\">\n            {{#payload.cam_activities}}\n            <div class=\"item{{#is_active}} active{{/is_active}}\">\n              <img src=\"{{img_url}}\" alt=\"{{title}}\" class=\"img-responsive\" >\n                <div class=\"carousel-caption\">\n                    <p>Date: {{title_dt}}</p>\n                    <p>Time: {{title_tm}}</p>\n                </div>\n            </div>\n            {{/payload.cam_activities}}\n          </div>\n        \n          <!-- Left and right controls -->\n          <a class=\"left carousel-control\" href=\"#myCarousel\" role=\"button\" data-slide=\"prev\">\n            <span class=\"glyphicon glyphicon-chevron-left\" aria-hidden=\"true\"></span>\n            <span class=\"sr-only\">Previous</span>\n          </a>\n          <a class=\"right carousel-control\" href=\"#myCarousel\" role=\"button\" data-slide=\"next\">\n            <span class=\"glyphicon glyphicon-chevron-right\" aria-hidden=\"true\"></span>\n            <span class=\"sr-only\">Next</span>\n          </a>\n        </div>\n\n</div>\n</body>\n</html>",
-    "x": 560,
-    "y": 985,
+    "template": "<!DOCTYPE html>\n<html lang=\"en\">\n<head>\n  <meta charset=\"utf-8\">\n  <meta name=\"viewport\" content=\"width=device-width, initial-scale=1\">\n    <link rel=\"stylesheet\" type=\"text/css\" href=\"bootstrap/css/bootstrap.min.css\" />\n    <link rel=\"stylesheet\" type=\"text/css\" href=\"font-awesome/css/font-awesome.min.css\" />\n    <link rel=\"stylesheet\" type=\"text/css\" href=\"css/local.css\" />\n    <script type=\"text/javascript\" src=\"js/jquery-1.10.2.min.js\"></script>\n    <script type=\"text/javascript\" src=\"bootstrap/js/bootstrap.min.js\" async></script>\n      <style>\n  .carousel-inner > .item > img,\n  .carousel-inner > .item > a > img {\n      width: 100%;\n      margin: auto;\n      height: 420px;\n  }\n  .carousel-fade .carousel-inner .item {\n  opacity: 0;\n  -webkit-transition-property: left;\n  -moz-transition-property: left;\n  -o-transition-property: left;\n  transition-property: left;\n}\n.carousel-fade .carousel-inner .active {\n  opacity: 1;\n}\n.carousel-fade .carousel-inner .active.left,\n.carousel-fade .carousel-inner .active.right {\n  left: 0;\n  opacity: 0;\n  z-index: 14;\n}\n.carousel-fade .carousel-inner .next.left,\n.carousel-fade .carousel-inner .prev.right {\n  opacity: 1;\n}\n.carousel-fade .carousel-control {\n  z-index: 14;\n}\n  </style>\n</head>\n<body>\n<div class=\"container\">\n    <br>\n    <br>\n        <div id=\"myCarousel\" class=\"carousel slide carousel-fade col-md-12 col-lg-12 col-sm-12 col-xs-12 col-offset-2\" data-ride=\"carousel\">\n          <!-- Indicators -->\n          <ol class=\"carousel-indicators\">\n            {{#payload.cam_activities}}\n            <li data-target=\"#myCarousel\" data-slide-to=\"{{position}}\" {{#is_active}}class=\"active\"{{/is_active}}></li>\n            {{/payload.cam_activities}}\n          </ol>\n        \n          <!-- Wrapper for slides -->\n          <div class=\"carousel-inner\">\n            {{#payload.cam_activities}}\n            <div class=\"item{{#is_active}} active{{/is_active}}\">\n              <img src=\"{{img_url}}\" alt=\"{{title}}\" class=\"img-responsive\" >\n                <div class=\"carousel-caption\">\n                    <p>Date: {{title_dt}}</p>\n                    <p>Time: {{title_tm}}</p>\n                </div>\n            </div>\n            {{/payload.cam_activities}}\n          </div>\n        \n          <!-- Left and right controls -->\n          <a class=\"left carousel-control\" href=\"#myCarousel\" role=\"button\" data-slide=\"prev\">\n            <span class=\"glyphicon glyphicon-chevron-left\" aria-hidden=\"true\"></span>\n            <span class=\"sr-only\">Previous</span>\n          </a>\n          <a class=\"right carousel-control\" href=\"#myCarousel\" role=\"button\" data-slide=\"next\">\n            <span class=\"glyphicon glyphicon-chevron-right\" aria-hidden=\"true\"></span>\n            <span class=\"sr-only\">Next</span>\n          </a>\n        </div>\n\n</div>\n</body>\n</html>",
+    "x": 585,
+    "y": 1417,
     "z": "811c60ec.7ee3a",
     "wires": [
       [
@@ -767,8 +767,201 @@
     "id": "8dafb251.72505",
     "type": "http response",
     "name": "",
-    "x": 724,
-    "y": 993,
+    "x": 749,
+    "y": 1425,
+    "z": "811c60ec.7ee3a",
+    "wires": []
+  },
+  {
+    "id": "b0020669.4ffdf8",
+    "type": "catch",
+    "name": "",
+    "x": 98,
+    "y": 1526,
+    "z": "811c60ec.7ee3a",
+    "wires": [
+      [
+        "5e4ff70d.a1b008"
+      ]
+    ]
+  },
+  {
+    "id": "5e4ff70d.a1b008",
+    "type": "debug",
+    "name": "",
+    "active": true,
+    "console": "false",
+    "complete": "error",
+    "x": 298,
+    "y": 1526,
+    "z": "811c60ec.7ee3a",
+    "wires": []
+  },
+  {
+    "id": "761decd4.89e214",
+    "type": "http in",
+    "name": "",
+    "url": "/freeboard/MySummary",
+    "method": "get",
+    "swaggerDoc": "",
+    "x": 175,
+    "y": 490,
+    "z": "811c60ec.7ee3a",
+    "wires": [
+      [
+        "db3f8e5b.24c07"
+      ]
+    ]
+  },
+  {
+    "id": "db3f8e5b.24c07",
+    "type": "function",
+    "name": "GenSummary",
+    "func": "//if(msg.req.headers.authorization && msg.req.headers.authorization==\"Bearer \"+context.global.FREEBOARD_TOKEN){\nif ((msg.req.body.uid==context.global.WinkUser.uid && msg.req.body.pwd==context.global.WinkUser.pwd) || msg.payload.token==context.global.FREEBOARD_TOKEN){\n//if (true){\nmsg.res.statusCode=\"200\";\nmsg.payload.pwd_str=context.global.FREEBOARD_TOKEN;\nmsg.payload.ifttt_token=context.global.FREEBOARD_TOKEN;\ncameras=[]\nfor (var cam in context.global.winkState.cameras){\n    var camera=context.global.winkState.cameras[cam];\n    cameras.push({\n        name:camera.name,\n        id:camera.object_id,\n        connection:camera.connection,\n        url:camera.snap_url,\n        history_url:camera.history_url,\n        refresh_interval:30\n    });\n}\nmsg.payload.cameras=cameras;\nmsg.res.statusCode=\"200\";\n} else {\nmsg.res.statusCode=\"403\";\n}\nreturn msg;",
+    "outputs": 1,
+    "noerr": 0,
+    "x": 415,
+    "y": 489,
+    "z": "811c60ec.7ee3a",
+    "wires": [
+      [
+        "8f9018eb.706fe8"
+      ]
+    ]
+  },
+  {
+    "id": "8f9018eb.706fe8",
+    "type": "template",
+    "name": "",
+    "field": "",
+    "format": "handlebars",
+    "template": "<!DOCTYPE html>\n<html lang=\"en\">\n<head>\n    <meta charset=\"utf-8\">\n\t<meta name=\"mobile-web-app-capable\" content=\"yes\">\n    <meta name=\"apple-mobile-web-app-capable\" content=\"yes\" />\n    <meta name=\"apple-mobile-web-app-status-bar-style\" content=\"black\" />\n    <meta name=\"viewport\" content = \"width = device-width, initial-scale = 1.0, user-scalable = yes\" />\n    <title>Cameras control</title>\n\n    <link rel=\"stylesheet\" type=\"text/css\" href=\"bootstrap/css/bootstrap.min.css\" />\n    <link rel=\"stylesheet\" type=\"text/css\" href=\"font-awesome/css/font-awesome.min.css\" />\n    <link rel=\"stylesheet\" type=\"text/css\" href=\"css/local.css\" />\n\n</head>\n<body>\n\n<div class=\"container\">\n    {{#payload.cameras}}\n    <div class=\"col-md-6 col-sm-9 col-xs-9\">\n     <div class=\"panel panel-primary panel-{{id}}\">\n  <!-- Default panel contents -->\n        <div class=\"panel-heading {{name}}\" id=\"Header {{name}}\">\n            <p class=\"text-nowrap\">\n            <span class=\"glyphicon glyphicon-camera\" aria-hidden=\"true\"></span>\n            <small>{{name}}</small>\n     <!--       <button type=\"button\" class=\"btn btn-success btn-sm pull-right\"  onclick=\"ShowCamHist('cam_history?token={{payload.pwd_str}}&camera_name={{name}}','{{name}} History');\">{{name}} history</button> -->\n                <button type=\"button\" class=\"btn btn-success btn-sm pull-right\"  onclick=\"ShowCamHist('cam_history?token={{payload.pwd_str}}&camera_name={{name}}','{{name}} History');\">{{name}} history</button>\n            </p>\n        </div>\n        <div class=\"panel-body panel-image panel-image-{{id}}\" id=\"{{id}}\" style=\"width: 100%; height: 380px; background-image: url({{url}});-webkit-background-size: cover; -moz-background-size: cover; -o-background-size: cover; background-size: cover;\">\n\n        </div>\n    </div>\n    </div>\n    {{/payload.cameras}}\n</div>\n\n<script type=\"text/javascript\" src=\"js/jquery-1.10.2.min.js\"></script>\n<script type=\"text/javascript\" src=\"bootstrap/js/bootstrap.min.js\" async></script>\n<!-- you need to include the shieldui css and js assets in order for the charts to work -->\n<script type=\"text/javascript\" src=\"https://www.prepbootstrap.com/Content/js/gridData.js\" async></script>\n<script type=\"text/javascript\" src=\"js/eModalBl.min.js\" async></script>\n\n<script>\n    \n    function ShowCamHist(hist_url,title){\n        var options = {\n            url: hist_url,\n            title:title,\n            size: eModal.size.lg,\n            buttons: [\n                {text: 'OK', style: 'success',   close: true}\n            ]\n        };\n        eModal.iframe(options);\n    }\n\n    $(document).ready(function() {\n        function updateImage()\n            {\n             for (var i=0;i<$('.panel-image').length;i++){\n                widget='.panel-image-'+ $('.panel-image')[i].id;\n                var imageURL = $(widget).css(\"background-image\");\n                imageURL = imageURL.replace(/.*\\s?url\\([\\'\\\"]?/, '').replace(/[\\'\\\"]?\\).*/, '')\n                var cacheBreakerURL = imageURL + (imageURL.indexOf(\"?\") == -1 ? \"?\" : \"&\") + Date.now();\n                 $(widget).css({\n                    \"background-image\" :  \"url(\" + cacheBreakerURL + \")\"\n                });\n             }\n            }\n \n    setInterval(updateImage, 30000);\n    });\n</script>\n</body>\n</html>\n<!-- data-angleOffset=-125 data-angleArc=250 -->",
+    "x": 594,
+    "y": 489,
+    "z": "811c60ec.7ee3a",
+    "wires": [
+      [
+        "4c31b8b1.b3ce48"
+      ]
+    ]
+  },
+  {
+    "id": "4c31b8b1.b3ce48",
+    "type": "http response",
+    "name": "",
+    "x": 751,
+    "y": 488,
+    "z": "811c60ec.7ee3a",
+    "wires": []
+  },
+  {
+    "id": "8925a2b6.76da6",
+    "type": "http in",
+    "name": "",
+    "url": "/freeboard/LockControls",
+    "method": "get",
+    "swaggerDoc": "",
+    "x": 176,
+    "y": 1125,
+    "z": "811c60ec.7ee3a",
+    "wires": [
+      [
+        "f87243c.f078dc"
+      ]
+    ]
+  },
+  {
+    "id": "f87243c.f078dc",
+    "type": "function",
+    "name": "GenLocks",
+    "func": "//if(msg.req.headers.authorization && msg.req.headers.authorization==\"Bearer \"+context.global.FREEBOARD_TOKEN){\nif ((msg.req.body.uid==context.global.WinkUser.uid && msg.req.body.pwd==context.global.WinkUser.pwd) || msg.payload.token==context.global.FREEBOARD_TOKEN){\n//if (true){\nmsg.res.statusCode=\"200\";\nmsg.payload.pwd_str=context.global.FREEBOARD_TOKEN;\nmsg.payload.ifttt_token=context.global.FREEBOARD_TOKEN;\nmsg.payload.haveLLocks=false\nvar locks=[]\nif ('locks' in context.global.winkState){\n        for (var l_lock in context.global.winkState.locks){\n            var lock=context.global.winkState.locks[l_lock];\n            locks.push({\n            name:lock.name,\n            //class_name:'dial '+bulb.object_id,\n            object_id:lock.object_id,\n            locked:lock.locked,\n            not_locked:!lock.locked\n        });\n    }\n    msg.payload.haveLocks=true\n}\nmsg.payload.locks=locks;\n} else {\nmsg.res.statusCode=\"403\";\n}\nreturn msg;",
+    "outputs": 1,
+    "noerr": 0,
+    "x": 416,
+    "y": 1124,
+    "z": "811c60ec.7ee3a",
+    "wires": [
+      [
+        "bbbdf865.444208"
+      ]
+    ]
+  },
+  {
+    "id": "bbbdf865.444208",
+    "type": "template",
+    "name": "",
+    "field": "",
+    "format": "handlebars",
+    "template": "<!DOCTYPE html>\n<html lang=\"en\">\n<head>\n    <meta charset=\"utf-8\">\n\t<meta name=\"mobile-web-app-capable\" content=\"yes\">\n    <meta name=\"apple-mobile-web-app-capable\" content=\"yes\" />\n    <meta name=\"apple-mobile-web-app-status-bar-style\" content=\"black\" />\n    <meta name=\"viewport\" content = \"width = device-width, initial-scale = 1.0, user-scalable = yes\" />\n    <title>light control</title>\n\n    <link rel=\"stylesheet\" type=\"text/css\" href=\"bootstrap/css/bootstrap.min.css\" />\n    <link rel=\"stylesheet\" type=\"text/css\" href=\"bootstrap/css/bootstrap-toggle.min.css\" />\n    <link rel=\"stylesheet\" type=\"text/css\" href=\"font-awesome/css/font-awesome.min.css\" />\n    <link rel=\"stylesheet\" type=\"text/css\" href=\"css/local.css\" />\n\n    <script type=\"text/javascript\" src=\"js/jquery-1.10.2.min.js\"></script>\n    <script type=\"text/javascript\" src=\"bootstrap/js/bootstrap.min.js\" async></script>\n    <script type=\"text/javascript\" src=\"bootstrap/js/bootstrap-toggle.min.js\" async></script>\n    <script src=\"assets/js/jquery.knob.min.js\"></script>\n    <script src=\"//crypto-js.googlecode.com/svn/tags/3.1.2/build/rollups/aes.js\"></script>\n    <!-- you need to include the shieldui css and js assets in order for the charts to work -->\n <!--   <script type=\"text/javascript\" src=\"https://www.prepbootstrap.com/Content/js/gridData.js\" async></script> -->\n <style>\n  .slow .toggle-group { transition: left 0.7s; -webkit-transition: left 0.7s; }\n</style>\n</head>\n<body onload=\"wsConnect();\" onunload=\"ws.disconnect();\">\n\n<!--<div class=\"container\"> -->\n    {{#payload.locks}}\n    <div class=\"col-xs-3 col-md-3 col-sm-3\" style=\"background:none;\"> \n     <div class=\"panel panel-primary panel-{{object_id}}\">\n  <!-- Default panel contents -->\n        <div class=\"panel-heading {{name}}\" id=\"Header {{name}}\">\n            <p class=\"text-nowrap\">\n            <span class=\"glyphicon glyphicon-lock\" aria-hidden=\"true\"></span>\n            <small>{{name}}</small>\n            </p>\n        </div>\n        <div class=\"panel-body\">\n                <input type=\"checkbox\" class=\"lock-{{object_id}}\" id=\"{{name}}\" name=\"{{object_id}}\" {{#locked}}checked{{/locked}} data-style=\"slow\" data-toggle=\"toggle\" data-onstyle=\"success\" data-offstyle=\"warning\" data-on=\"<i class='fa fa-lock'></i> Locked\" data-off=\"<i class='fa fa-unlock'></i> Unlocked\" data-width=\"100%\" data-height=\"85\">\n        </div>\n    </div>\n    </div>\n    {{/payload.locks}}   \n<!--</div> -->\n\n<script type=\"text/javascript\">\n    \n    \n    $('input[type=checkbox]').change(function(){\n        //console.log(this.id);\n        var LName=this.id; //.substring(0,this.id.length-3);\n        var Wcmd;\n        var l_id='.panel-'+this.name;\n        Wcmd=($(this).prop('checked') ? 'lock' : 'unlock')\n        if($lock[this.name]==='undefined' || $lock[this.name]!==Wcmd){\n         $.post( \"/red/ifttt\", {\"winkName\":LName,\"type\":\"lock\",\"cmd\":Wcmd,\"level\":\"\" , \"iftttkey\" : \"{{payload.ifttt_token}}\"}); \n          $lock[this.name]=Wcmd;\n        }\n        // (Wcmd=='unlock' ? $(l_id).removeClass('panel-primary').addClass('panel-warning') : $(l_id).removeClass('panel-warning').addClass('panel-primary'));\n    });\n    \n    function wsConnect() {\n        var ws;\n        var wsUri = \"ws:\";\n        var loc = window.location;\n        if (loc.protocol === \"https:\") { wsUri = \"wss:\"; }\n        wsUri += \"//\" + loc.host + \"/ws/winkStat\";\n            ws = new WebSocket(wsUri);\n            ws.onmessage = function(msg) {\n            var data = JSON.parse(msg.data);\n            if('locked' in data){\n                var l_id='.panel-'+data.object_id;\n                var lock_id='.lock-'+data.object_id;\n                $lock[data.object_id]=(data.locked ? 'lock':'unlock');\n                if(!data.locked) \n                  {\n                      $(l_id).removeClass('panel-primary').addClass('panel-warning');\n                      $(lock_id).prop('checked', false).change()\n                       \n                  } else {\n                      $(l_id).removeClass('panel-warning').addClass('panel-primary');\n                      $(lock_id).prop('checked', true).change()\n                  }\n                }\n            }\n            ws.onopen = function() {\n                    console.log(\"connected\");\n            }\n            ws.onclose = function() {\n            //    console.log(\"re connecting\");\n                setTimeout(wsConnect,3000);\n            }\n        };\n    \n    \n    function executeQuery() {\n        $.ajax({\n        url: 'lockdata',\n        method: 'GET',\n        ifModified:true,\n//        dataType: 'JSON',\n        headers: {\n        'Authorization':'Bearer {{payload.pwd_str}}',\n        'Content-Type':'application/json',\n        'If-None-Match':$eTag\n        },\n        success: function(data,status, xhr) {\n        if (xhr.status===200){\n        var wink_obj=data;// JSON.parse(data);\n        \n        $eTag=xhr.getResponseHeader('Etag');\n        // console.log(wink_obj.haveLights);\n         var locks=wink_obj.locks;\n         for(var i=0;i<locks.length;i++){\n          var l_id='.panel-'+locks[i].object_id;\n          var lock_id='.lock-'+locks[i].object_id;\n          $lock[locks[i].object_id]=(locks[i].locked ? 'lock':'unlock');\n          if(locks[i].locked) \n              {\n                    $(l_id).removeClass('panel-warning').addClass('panel-primary');\n                    $(lock_id).prop('checked', true).change()\n              } else {\n                    $(l_id).removeClass('panel-primary').addClass('panel-warning');\n                    $(lock_id).prop('checked', false).change()\n              }\n         }\n        }\n    }\n    });\n    //setTimeout(executeQuery, 5000); // you could choose not to continue on failure...\n    }\n\n    $(document).ready(function() {\n    $lock=[]\n    $eTag=\"sasd12312sdfsdf=\";\n    // run the first time; all subsequent calls will take care of themselves\n    //setInterval(executeQuery, 3000);\n    executeQuery();\n    setInterval(executeQuery, 120000);\n    });\n</script>\n</body>\n</html>",
+    "x": 595,
+    "y": 1124,
+    "z": "811c60ec.7ee3a",
+    "wires": [
+      [
+        "5d7bc5dd.a2843c"
+      ]
+    ]
+  },
+  {
+    "id": "5d7bc5dd.a2843c",
+    "type": "http response",
+    "name": "",
+    "x": 752,
+    "y": 1123,
+    "z": "811c60ec.7ee3a",
+    "wires": []
+  },
+  {
+    "id": "65d1cfda.9a2e3",
+    "type": "http in",
+    "name": "",
+    "url": "/freeboard/LockData",
+    "method": "get",
+    "swaggerDoc": "",
+    "x": 163,
+    "y": 1178,
+    "z": "811c60ec.7ee3a",
+    "wires": [
+      [
+        "e7760fe3.1889f"
+      ]
+    ]
+  },
+  {
+    "id": "e7760fe3.1889f",
+    "type": "function",
+    "name": "GenLights",
+    "func": "if(msg.req.headers.authorization && msg.req.headers.authorization==\"Bearer \"+context.global.FREEBOARD_TOKEN){\n//if ((msg.req.body.uid==context.global.WinkUser.uid && msg.req.body.pwd==context.global.WinkUser.pwd) || msg.payload.token==context.global.FREEBOARD_TOKEN){\n//if (true){\n//msg.payload.pwd_str=context.global.FREEBOARD_TOKEN;\nmsg.payload.haveLights=false\nvar locks=[]\nif ('locks' in context.global.winkState){\n        for (var l_lock in context.global.winkState.locks){\n            var lock=context.global.winkState.locks[l_lock];\n            locks.push({\n            name:lock.name,\n            //class_name:'dial '+bulb.object_id,\n            object_id:lock.object_id,\n            locked:lock.locked,\n            not_locked:!lock.locked\n        });\n    }\n    msg.payload.haveLocks=true\n}\nmsg.payload.locks=locks;\nmsg.res.statusCode=\"200\";\nvar Etag=\"\";\nif ('CRYPTO' in context.global) Etag=context.global.CRYPTO.createHash(\"md5\").update(JSON.stringify(locks),\"utf8\").digest(\"hex\");\nmsg.res.set({\n  'Content-Type': 'application/json',\n  'ETag': Etag\n})\n} else {\nmsg.res.statusCode=\"403\";\n}\nreturn msg;",
+    "outputs": 1,
+    "noerr": 0,
+    "x": 444,
+    "y": 1176,
+    "z": "811c60ec.7ee3a",
+    "wires": [
+      [
+        "d4b6a95b.2b4958"
+      ]
+    ]
+  },
+  {
+    "id": "d4b6a95b.2b4958",
+    "type": "json",
+    "name": "",
+    "x": 602,
+    "y": 1175,
+    "z": "811c60ec.7ee3a",
+    "wires": [
+      [
+        "69e1af49.961e5"
+      ]
+    ]
+  },
+  {
+    "id": "69e1af49.961e5",
+    "type": "http response",
+    "name": "",
+    "x": 754,
+    "y": 1175,
     "z": "811c60ec.7ee3a",
     "wires": []
   }
