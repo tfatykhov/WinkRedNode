@@ -1,4 +1,17 @@
 == UPDATE ==
+10/23/2015
+----------------
+Tablet UI updates:<br>
+1. Locks  added to control tab:
+<img src="images/locks_panel.png">
+<br>
+2. data exchange moved to websockes to reduce network traffic. With this change server pushes updates for control tab vs continious http gets.
+<br>
+<br>
+Required changes:
+*  import updated [tabletUI.json](tabletUI.json)
+* Import updated [winkCore.json](winkCore.json)
+*  restart your app via git dashboard or cf push.
 
 
 10/18/2015
