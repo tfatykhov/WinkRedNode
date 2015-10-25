@@ -1,4 +1,10 @@
 == UPDATE ==
+10/25/2015
+Tablet UI updates:<br>
+1. Shortcut buttons spinning wheel:
+Required changes:
+*  import updated [tabletUI.json](tabletUI.json)
+
 10/23/2015
 ----------------
 Tablet UI updates:<br>
