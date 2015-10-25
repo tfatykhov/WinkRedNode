@@ -1,5 +1,6 @@
 == UPDATE ==
 10/25/2015
+------------------
 Tablet UI updates:<br>
 1. Shortcut buttons spinning wheel:
 Required changes:
