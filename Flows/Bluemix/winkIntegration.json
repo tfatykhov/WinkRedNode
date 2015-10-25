@@ -1,100 +1,102 @@
 [
   {
-    "id": "12c9efa7.ed361",
+    "id": "299fe37e.d6601c",
     "type": "function",
     "name": "",
     "func": "var avgtemp=0;\nvar avghumidity=0;\nvar numthermos=0;\nvar numhumidities=0;\nmsg.payload={\n    \"thermostats\":context.global.Ecobee.Thermostats,\n    \"sensor_pods\":context.global.Ecobee.Sensors\n};\nif (typeof context.global.winkState.thermostats=='undefined'){ context.global.winkState.thermostats = new Object(); }\nfor (var name in msg.payload.thermostats)\n{\n//    node.warn(\"Importing: \"+name+\" thermostat\");\n    context.global.winkState.thermostats[name]={\n        \"name\":name,\n        \"object_type\": msg.payload.thermostats[name].object_type,\n        \"object_id\": msg.payload.thermostats[name].object_id,\n        \"freeboard\": 0,\n        \"connection\": msg.payload.thermostats[name].connection,\n        \"min_set_point\": (msg.payload.thermostats[name].min_set_point-32)*(5/9),\n        \"max_set_point\": (msg.payload.thermostats[name].max_set_point-32)*(5/9),\n        \"mode\": msg.payload.thermostats[name].mode,\n        \"temperature\": (msg.payload.thermostats[name].temperature-32)*(5/9),\n        \"humidity\": msg.payload.thermostats[name].humidity,\n        \"users_away\":false\n    };\n    if (msg.payload.thermostats[name].temperature){ avgtemp+=(msg.payload.thermostats[name].temperature-32)*(5/9); numthermos++; }\n    if (msg.payload.thermostats[name].humidity){ avghumidity+=(msg.payload.thermostats[name].humidity); numhumidities++; }\n}\n\navgtemp=avgtemp/numthermos;\navghumidity=avghumidity/numhumidities;\n\nif (typeof context.global.winkState.groups[\".sensors\"].temperature=='undefined'){ context.global.winkState.groups[\".sensors\"].temperature = new Object(); }\nif (typeof context.global.winkState.groups[\".sensors\"].humidity=='undefined'){ context.global.winkState.groups[\".sensors\"].humidity = new Object(); }\ncontext.global.winkState.groups[\".sensors\"].temperature={\n    average:avgtemp\n};\ncontext.global.winkState.groups[\".sensors\"].humidity={\n    average:avghumidity\n};\n\n//node.warn(\"Ecobee Thermostat import finished\");\n\nfor (var name in msg.payload.sensor_pods)\n{\n//    node.warn(\"Importing: \"+name+\" sensor pod\");\n    context.global.winkState.sensor_pods[name]={\n        \"name\":name,\n        \"object_type\":msg.payload.sensor_pods[name].object_type,\n        \"object_id\":msg.payload.sensor_pods[name].object_id,\n        \"freeboard\":0,\n    }\n    if (msg.payload.sensor_pods[name].motion==\"true\"){context.global.winkState.sensor_pods[name].motion=true}\n    else if (msg.payload.sensor_pods[name].motion==\"false\"){context.global.winkState.sensor_pods[name].motion=false}\n    context.global.winkDevCap[name]={\n        \"sensor_types\":[{}]\n    }\n    context.global.winkDevCap[name].sensor_types=[{\n            \"field\":\"motion\",\n            \"type\":\"boolean\"\n        }]\n}\n\n//node.warn(\"Ecobee Remote Sensor import finished\");\nvar newMsg={\n    \"payload\":\"Ecobee Thermostat and Remote Sensor Data imported successfully\"\n};\nreturn newMsg;",
     "outputs": 1,
     "noerr": 0,
-    "x": 303.5,
-    "y": 800.9999694824219,
-    "z": "54c33433.ab3ccc",
+    "x": 309,
+    "y": 799.4999694824219,
+    "z": "17b3daf5.e84c25",
     "wires": [
       [
-        "1af4ceb3.e50b31"
+        "6bf8ef8b.94071"
       ]
     ]
   },
   {
-    "id": "4bd15ae1.b42ea4",
+    "id": "62d7aa31.9d2854",
     "type": "function",
     "name": "",
-    "func": "var WinkCMDmsg=\"\";\nif (msg.payload.iftttkey==context.global.IFTTT_TOKEN || msg.payload.iftttkey==context.global.FREEBOARD_TOKEN)\n{\n    if (typeof msg.payload.ifttt !=='undefined')\n    {\n      context.global.ifttt=(msg.payload.ifttt.toLowerCase()==\"on\" ? true:false)\n      msg.res.StatusCode=200;\n    }\n    if (typeof msg.payload.winkName !=='undefined')\n    {\n//    node.warn(msg.payload.winkName)\n    if (msg.payload.level !=='undefined')\n    {\n        level=msg.payload.level\n    }  else level=100\n    if (msg.payload.cmd !=='undefined')\n    {\n        cmd=msg.payload.cmd\n    } else cmd=''   \n//    node.warn(level)\n    WinkCMDmsg = context.global.executeWinkCMD(msg.payload.winkName,msg.payload.type,msg.payload.cmd,level);\n    msg.res.StatusCode=200;\n//    node.warn(WinkCMDmsg)\n    }\n}\nelse {\n    node.warn(\"ifttt messages bad request\")\n     msg.res.StatusCode=403;\n}\nif (WinkCMDmsg!==\"\")\n{\n    return [msg,WinkCMDmsg];\n}\nelse\n{\nreturn [msg];\n}",
+    "func": "var WinkCMDmsg={};\nif (msg.payload.iftttkey==context.global.IFTTT_TOKEN || msg.payload.iftttkey==context.global.FREEBOARD_TOKEN)\n{\n    if ('ifttt' in  msg.payload)\n    {\n      context.global.ifttt=(msg.payload.ifttt.toLowerCase()==\"on\" ? true:false)\n      msg.res.StatusCode=200;\n      return [msg];\n    }\n    if ('winkName' in msg.payload)\n    {\n//    node.warn('Name '+msg.payload.winkName)\n    if ('level' in msg.payload)\n    {\n        level=msg.payload.level\n    }  else level= (msg.payload.cmd.toLowerCase() =='on' ? 100 : 0)\n    if ('cmd' in msg.payload)\n    {\n        cmd=msg.payload.cmd\n    } else cmd=''   \n//    node.warn(level)\n    WinkCMDmsg = context.global.executeWinkCMD(msg.payload.winkName,msg.payload.type,msg.payload.cmd,level);\n    msg.res.StatusCode=200;\n//    node.warn('Message '+ JSON.stringify(WinkCMDmsg))\n    }\n}\nelse {\n    node.warn(\"ifttt messages bad request\")\n     msg.res.StatusCode=403;\n}\nif (WinkCMDmsg!==\"\")\n{\n    return [msg,WinkCMDmsg];\n}\nelse\n{\nreturn [msg];\n}",
     "outputs": "2",
     "noerr": 0,
-    "x": 349.5,
-    "y": 285.99993896484375,
-    "z": "54c33433.ab3ccc",
+    "x": 311,
+    "y": 236.49993896484375,
+    "z": "17b3daf5.e84c25",
     "wires": [
       [
-        "39d999e5.c62666"
+        "cab7eab6.354818"
       ],
       [
-        "7bdae64f.842518"
+        "2a7f62b5.d5809e"
       ]
     ]
   },
   {
-    "id": "bef95d79.4106a",
+    "id": "4dd5de6d.b22a2",
     "type": "http in",
     "name": "",
     "url": "/red/ifttt",
     "method": "post",
     "swaggerDoc": "",
-    "x": 122.5,
-    "y": 286,
-    "z": "54c33433.ab3ccc",
+    "x": 114,
+    "y": 237.5,
+    "z": "17b3daf5.e84c25",
     "wires": [
       [
-        "4bd15ae1.b42ea4"
+        "62d7aa31.9d2854"
       ]
     ]
   },
   {
-    "id": "39d999e5.c62666",
+    "id": "cab7eab6.354818",
     "type": "http response",
     "name": "",
-    "x": 558.4999847412109,
-    "y": 255.99993896484375,
-    "z": "54c33433.ab3ccc",
+    "x": 567,
+    "y": 218.49993896484375,
+    "z": "17b3daf5.e84c25",
     "wires": []
   },
   {
-    "id": "65c823a7.9a37dc",
+    "id": "3a0b221e.c5f4de",
     "type": "comment",
     "name": "IFTTT Integration-------------------------------------------------------------------------------------------------------------------------------",
     "info": "",
-    "x": 433.5,
-    "y": 223,
-    "z": "54c33433.ab3ccc",
+    "x": 432,
+    "y": 181.5,
+    "z": "17b3daf5.e84c25",
     "wires": []
   },
   {
-    "id": "7bdae64f.842518",
+    "id": "2a7f62b5.d5809e",
     "type": "http request",
     "name": "",
     "method": "use",
     "ret": "obj",
     "url": "",
-    "x": 585.5,
-    "y": 299.99993896484375,
-    "z": "54c33433.ab3ccc",
+    "x": 553,
+    "y": 264.49993896484375,
+    "z": "17b3daf5.e84c25",
     "wires": [
-      []
+      [
+        "a2cb4cf2.5d34b"
+      ]
     ]
   },
   {
-    "id": "efacfa83.105308",
+    "id": "c8a5f7c.f375a08",
     "type": "comment",
     "name": "Wink API Apdex-------------------------------------------------------------------------------------------------------------------------------",
     "info": "",
-    "x": 425.5,
-    "y": 338.99993896484375,
-    "z": "54c33433.ab3ccc",
+    "x": 431,
+    "y": 337.49993896484375,
+    "z": "17b3daf5.e84c25",
     "wires": []
   },
   {
-    "id": "25faf1a5.da050e",
+    "id": "2afd218a.d502de",
     "type": "inject",
     "name": "",
     "topic": "",
@@ -103,287 +105,287 @@
     "repeat": "600",
     "crontab": "",
     "once": true,
-    "x": 123.5,
-    "y": 378.9998779296875,
-    "z": "54c33433.ab3ccc",
+    "x": 129,
+    "y": 377.4998779296875,
+    "z": "17b3daf5.e84c25",
     "wires": [
       [
-        "ef5c79fd.10a388"
+        "aa299777.55d668"
       ]
     ]
   },
   {
-    "id": "ef5c79fd.10a388",
+    "id": "aa299777.55d668",
     "type": "function",
     "name": "",
     "func": "var newMsg ={\n    \"url\":\"http://status.winkapp.com/metrics-display/009ykpcmnm25/day.json\",\n    \"method\":\"GET\",\n    headers: {\n        \"Content-Type\":\"application/json\"\n    }\n};\nreturn newMsg;",
     "outputs": 1,
     "noerr": 0,
-    "x": 256.5,
-    "y": 379.99993896484375,
-    "z": "54c33433.ab3ccc",
+    "x": 262,
+    "y": 378.49993896484375,
+    "z": "17b3daf5.e84c25",
     "wires": [
       [
-        "bfae115.f4051f"
+        "5f7122ba.a08edc"
       ]
     ]
   },
   {
-    "id": "bfae115.f4051f",
+    "id": "5f7122ba.a08edc",
     "type": "http request",
     "name": "",
     "method": "use",
     "ret": "obj",
     "url": "",
-    "x": 408.5,
-    "y": 379.99993896484375,
-    "z": "54c33433.ab3ccc",
+    "x": 414,
+    "y": 378.49993896484375,
+    "z": "17b3daf5.e84c25",
     "wires": [
       [
-        "c346666d.3cb998"
+        "175e33bb.e8a1cc"
       ]
     ]
   },
   {
-    "id": "c346666d.3cb998",
+    "id": "175e33bb.e8a1cc",
     "type": "function",
     "name": "",
     "func": "if ('metrics' in msg.payload && msg.payload.metrics.length>0){\ncontext.global.winkState.winkAPI = \"\";\nwinkAPI=\"\";\n        for(j = 0; j<msg.payload.metrics[0].data.length; j++)\n        {\n            winkAPI = msg.payload.metrics[0].data[j].value;\n        }\ncontext.global.winkState.winkAPI=winkAPI;\nvar newMsg={\n    payload:\"Wink Apdex is currently: \"+context.global.winkState.winkAPI\n};\nreturn newMsg;\n}\n",
     "outputs": 1,
     "noerr": 0,
-    "x": 691.5,
-    "y": 379.99993896484375,
-    "z": "54c33433.ab3ccc",
+    "x": 697,
+    "y": 378.49993896484375,
+    "z": "17b3daf5.e84c25",
     "wires": [
       []
     ]
   },
   {
-    "id": "f5fd1ad.f0a02e8",
+    "id": "d8a67b4a.275988",
     "type": "comment",
     "name": "DromCam/NestCam Integration-------------------------------------------------------------------------------------------------------------------------------",
     "info": "",
-    "x": 475.5,
-    "y": 439.4998779296875,
-    "z": "54c33433.ab3ccc",
+    "x": 481,
+    "y": 437.9998779296875,
+    "z": "17b3daf5.e84c25",
     "wires": []
   },
   {
-    "id": "ca8b89bc.357478",
+    "id": "81c14e88.7e3eb",
     "type": "comment",
     "name": "Presence  via IFTTT/Tasker/etc. -------------------------------------------------------------------------------------------------------------------------------",
     "info": "",
-    "x": 475,
-    "y": 540.4998779296875,
-    "z": "54c33433.ab3ccc",
+    "x": 480.5,
+    "y": 538.9998779296875,
+    "z": "17b3daf5.e84c25",
     "wires": []
   },
   {
-    "id": "df4b463.f20b4b8",
+    "id": "c288fb54.3d7708",
     "type": "http in",
     "name": "",
     "url": "/red/presence",
     "method": "post",
     "swaggerDoc": "",
-    "x": 155,
-    "y": 587.4998779296875,
-    "z": "54c33433.ab3ccc",
+    "x": 160.5,
+    "y": 585.9998779296875,
+    "z": "17b3daf5.e84c25",
     "wires": [
       [
-        "ee91fa4d.116e08"
+        "ea2281c0.15dd8"
       ]
     ]
   },
   {
-    "id": "ee91fa4d.116e08",
+    "id": "ea2281c0.15dd8",
     "type": "function",
     "name": "Update Presence entry",
     "func": "pr_msg={};\n//if (typeof context.global.PresenceHistory === 'undefined') context.global.PresenceHistory=[]\npr_msg.payload={old_value:context.global.checkPresence()}\nif (msg.payload.iftttkey==context.global.IFTTT_TOKEN)\n{\n    node.warn(msg.payload.name+' '+msg.payload.home)\n    if (typeof(context.global.Presence) === 'undefined'){\n    context.global.Presence = {}\n    } else pr_msg.payload.old_presence=context.global.Presence;\n    if (msg.payload.name !=='undefined'){\n        if (!context.global.Presence[msg.payload.name]) context.global.Presence[msg.payload.name]={}\n            context.global.Presence[msg.payload.name].home=msg.payload.home\n        }\n    msg.res.StatusCode=200;\n    pr_msg.payload.new_value=context.global.checkPresence();\n}\nelse {\n    node.warn(\"presense, bad request\")\n     msg.res.StatusCode=403;\n     pr_msg.payload.new_value='ERROR';\n}\nreturn [msg,pr_msg];",
     "outputs": "2",
     "noerr": 0,
-    "x": 391,
-    "y": 588.4998779296875,
-    "z": "54c33433.ab3ccc",
+    "x": 396.5,
+    "y": 586.9998779296875,
+    "z": "17b3daf5.e84c25",
     "wires": [
       [
-        "2c245f56.d3dba",
-        "97b260d8.684da"
+        "1c20c586.e3df3a",
+        "918e061b.6e71f8"
       ],
       [
-        "111a0778.eee5f9"
+        "162aad27.e9d553"
       ]
     ]
   },
   {
-    "id": "2c245f56.d3dba",
+    "id": "1c20c586.e3df3a",
     "type": "http response",
     "name": "",
-    "x": 821.9999847412109,
-    "y": 581.4998779296875,
-    "z": "54c33433.ab3ccc",
+    "x": 827.4999847412109,
+    "y": 579.9998779296875,
+    "z": "17b3daf5.e84c25",
     "wires": []
   },
   {
-    "id": "111a0778.eee5f9",
+    "id": "162aad27.e9d553",
     "type": "function",
     "name": "",
     "func": "var currDate= new Date();\ncurr_presence=context.global.checkPresence()\nif (msg.payload.new_value!=='ERROR' && msg.payload.new_value!==msg.payload.old_value){\n    if('old_presence' in  msg.payload){\n        var HistP={}\n        HistP.timestamp=new Date();\n        HistP.offset=context.global.Weather.Offset\n        HistP.details=msg.payload.old_presence\n        node.warn(HistP)\n        context.global.PresenceHistory.unshift(HistP)\n    }\n    if (context.global.PresenceHistory.length > 15) context.global.PresenceHistory.pop();\n    var scene_name=(msg.payload.new_value ? 'PRESENCE' : 'NO PRESENCE');\n    for (var key in context.global.winkState.scenes){\n        if ( context.global.winkState.scenes[key].name.toUpperCase()==scene_name)\n        {\n            var newMsg ={\n            \"url\":\"https://winkapi.quirky.com/scenes/\"+context.global.winkState.scenes[key].object_id+\"/activate\",\n            \"method\": \"POST\",\n            headers: {\n                \"Authorization\":\"Bearer \"+context.global.WinkToken,\n                \"Content-Type\":\"application/json\"\n                }\n            }\n        node.send(newMsg)\n        return;\n        }\n    }\n}\nreturn;",
     "outputs": 1,
     "noerr": 0,
-    "x": 641.8957977294922,
-    "y": 631.72216796875,
-    "z": "54c33433.ab3ccc",
+    "x": 647.3957977294922,
+    "y": 630.22216796875,
+    "z": "17b3daf5.e84c25",
     "wires": [
       [
-        "8151c600.7eae38"
+        "9c9646b.f6369b8"
       ]
     ]
   },
   {
-    "id": "8151c600.7eae38",
+    "id": "9c9646b.f6369b8",
     "type": "http request",
     "name": "",
     "method": "use",
     "ret": "obj",
     "url": "",
-    "x": 867.8957977294922,
-    "y": 631.833251953125,
-    "z": "54c33433.ab3ccc",
+    "x": 873.3957977294922,
+    "y": 630.333251953125,
+    "z": "17b3daf5.e84c25",
     "wires": [
       []
     ]
   },
   {
-    "id": "bb823a36.447dc8",
+    "id": "3077c190.cf883e",
     "type": "comment",
     "name": "Integration with Ecobee Node Red ---------------------------------------------------------------------------------------",
     "info": "",
-    "x": 389,
-    "y": 743.9999694824219,
-    "z": "54c33433.ab3ccc",
+    "x": 394.5,
+    "y": 742.4999694824219,
+    "z": "17b3daf5.e84c25",
     "wires": []
   },
   {
-    "id": "416fafd7.be905",
+    "id": "5fd39cb5.a02c64",
     "type": "http in",
     "name": "",
     "url": "/freeboard/camera",
     "method": "get",
     "swaggerDoc": "",
-    "x": 180.49998474121094,
-    "y": 484.9999694824219,
-    "z": "54c33433.ab3ccc",
+    "x": 185.99998474121094,
+    "y": 483.4999694824219,
+    "z": "17b3daf5.e84c25",
     "wires": [
       [
-        "ab483005.54b7d"
+        "ebff836d.14008"
       ]
     ]
   },
   {
-    "id": "ab483005.54b7d",
+    "id": "ebff836d.14008",
     "type": "function",
     "name": "",
     "func": "if (msg.payload.token==context.global.FREEBOARD_TOKEN)\n{\n   if(typeof msg.payload.model ==='undefined' || msg.payload.model=='dropcam' || msg.payload.model=='dropcam_pro'){\n   if (typeof msg.payload.cuepoint ==='undefined'){\n   msg.url=\"https://winkapi.quirky.com/cameras/\"+msg.payload.id+\"/image\"\n   msg.method=\"GET\"\n    msg.headers= {\n        \"Authorization\":\"Bearer \"+context.global.WinkToken,\n        \"User-Agent\":\"Manufacturer/Darwin node/0.10.30 Wink/3.6.0\"\n    }\n} else\n{\n    msg.url=\"https://winkapi.quirky.com/cameras/\"+msg.payload.id+\"/cuepoints/\"+msg.payload.cuepoint+\"/image\"\n   msg.method=\"GET\"\n    msg.headers= {\n        \"Authorization\":\"Bearer \"+context.global.WinkToken,\n        \"User-Agent\":\"Manufacturer/Darwin node/0.10.30 Wink/3.6.0\"\n}\n}\nreturn msg;\n}\n}\nif (typeof msg.payload.model!=='undefined' && msg.payload.model=='foscam'){\n//http://timothyr.no-ip.org:1882/videostream.cgi?uid=admin&pwd=Dfdbkjy5\nfor (var k in context.global.FosCam){\n    if (context.global.FosCam[k].Parameters.id.value==msg.payload.id){\n     msg.method=\"GET\"\n     msg.url=\"http://\"+context.global.FosCam[k].hostname+\"/videostream.cgi?user=\"+context.global.FosCam[k].uid+\"&pwd=\"+context.global.FosCam[k].pwd\n     node.warn(msg.url);\n    return msg;\n    }\n}\n}\nelse {\n    msg.res.send(400,\"Bad Request darling\");\n}\n",
     "outputs": 1,
     "noerr": 0,
-    "x": 434.49998474121094,
-    "y": 486.9999694824219,
-    "z": "54c33433.ab3ccc",
+    "x": 439.99998474121094,
+    "y": 485.4999694824219,
+    "z": "17b3daf5.e84c25",
     "wires": [
       [
-        "5af0e53e.a50f1c"
+        "3bee901b.c4117"
       ]
     ]
   },
   {
-    "id": "5af0e53e.a50f1c",
+    "id": "3bee901b.c4117",
     "type": "http request",
     "name": "",
     "method": "use",
     "ret": "bin",
     "url": "",
-    "x": 604.4999847412109,
-    "y": 485.9999694824219,
-    "z": "54c33433.ab3ccc",
+    "x": 609.9999847412109,
+    "y": 484.4999694824219,
+    "z": "17b3daf5.e84c25",
     "wires": [
       [
-        "e23f0184.1dc1"
+        "15319536.eace6b"
       ]
     ]
   },
   {
-    "id": "e23f0184.1dc1",
+    "id": "15319536.eace6b",
     "type": "http response",
     "name": "",
-    "x": 769.4999847412109,
-    "y": 486.9999694824219,
-    "z": "54c33433.ab3ccc",
+    "x": 774.9999847412109,
+    "y": 485.4999694824219,
+    "z": "17b3daf5.e84c25",
     "wires": []
   },
   {
-    "id": "8a166075.75e9a",
+    "id": "918be470.6e7418",
     "type": "function",
     "name": "",
     "func": " var PresenceBkup={\n    Presence: context.global.Presence,\n    PresenceDetail: context.global.PresenceDetail,\n    PresenceHistory: context.global.PresenceHistory\n }\n    var DBMsg={\n        url:context.global.VCAP_SERVICES.cloudantNoSQLDB[0].credentials.url+\"/winkapp\",\n        method:\"POST\",\n        headers: \n            {\n                \"Content-Type\":\"application/json\"\n            },\n        payload: {\n            \"_id\":\"winkPresence\",\n            \"item\":\"Presence\",\n            \"Presence\":PresenceBkup\n        }\n    } \n \n \n //if (msg.payload.total_rows > 0  && msg.payload.rows.map(function(e) { return e.id; }).indexOf('winkPresence')!=-1){\n  if ('_rev' in msg.payload){   \n node.warn('record exists... updating');\n DBMsg.method=\"PUT\";\n DBMsg.url=DBMsg.url+\"/winkPresence\"\n DBMsg.payload._rev=msg.payload._rev;\n //msg.payload.rows.map(function(e) {if(e.id==\"winkPresence\") return e.value._rev; })[0];\n }\nreturn DBMsg;",
     "outputs": 1,
     "noerr": 0,
-    "x": 901.6041870117188,
-    "y": 694.1110534667969,
-    "z": "54c33433.ab3ccc",
+    "x": 907.1041870117188,
+    "y": 692.6110534667969,
+    "z": "17b3daf5.e84c25",
     "wires": [
       [
-        "73ba4e0a.8c45b"
+        "40f7ee2.fbf081"
       ]
     ]
   },
   {
-    "id": "97b260d8.684da",
+    "id": "918e061b.6e71f8",
     "type": "function",
     "name": "",
     "func": "if (context.global.CloudantBkUP) {\n    var msg={\n        url:context.global.VCAP_SERVICES.cloudantNoSQLDB[0].credentials.url+\"/winkapp/winkPresence\",\n        method:\"GET\"\n    }\n    node.send(msg); \n}\nreturn;",
     "outputs": 1,
     "noerr": 0,
-    "x": 577.6041870117188,
-    "y": 695.1110534667969,
-    "z": "54c33433.ab3ccc",
+    "x": 583.1041870117188,
+    "y": 693.6110534667969,
+    "z": "17b3daf5.e84c25",
     "wires": [
       [
-        "796f01.ff8691"
+        "870e31f0.78f1d"
       ]
     ]
   },
   {
-    "id": "796f01.ff8691",
+    "id": "870e31f0.78f1d",
     "type": "http request",
     "name": "",
     "method": "use",
     "ret": "obj",
     "url": "",
-    "x": 741.6041870117188,
-    "y": 695.1110534667969,
-    "z": "54c33433.ab3ccc",
+    "x": 747.1041870117188,
+    "y": 693.6110534667969,
+    "z": "17b3daf5.e84c25",
     "wires": [
       [
-        "8a166075.75e9a"
+        "918be470.6e7418"
       ]
     ]
   },
   {
-    "id": "73ba4e0a.8c45b",
+    "id": "40f7ee2.fbf081",
     "type": "http request",
     "name": "",
     "method": "use",
     "ret": "obj",
     "url": "",
-    "x": 1058.6041870117188,
-    "y": 693.1110534667969,
-    "z": "54c33433.ab3ccc",
+    "x": 1064.1041870117188,
+    "y": 691.6110534667969,
+    "z": "17b3daf5.e84c25",
     "wires": [
       []
     ]
   },
   {
-    "id": "960de0b8.69f22",
+    "id": "fd9a46dd.0265b8",
     "type": "inject",
     "name": "",
     "topic": "",
@@ -392,374 +394,374 @@
     "repeat": "82800",
     "crontab": "",
     "once": true,
-    "x": 116.50001525878906,
-    "y": 956.3332824707031,
-    "z": "54c33433.ab3ccc",
+    "x": 122.00001525878906,
+    "y": 954.8332824707031,
+    "z": "17b3daf5.e84c25",
     "wires": [
       [
-        "276cd77d.d89328"
+        "1549a838.eab658"
       ]
     ]
   },
   {
-    "id": "276cd77d.d89328",
+    "id": "1549a838.eab658",
     "type": "function",
     "name": "Try to create DB",
     "func": "if (typeof context.global.VCAP_SERVICES!=='undefined' && 'cloudantNoSQLDB' in context.global.VCAP_SERVICES){\n    var DBmsg={\n        url: context.global.VCAP_SERVICES.cloudantNoSQLDB[0].credentials.url+\"/winkapp\",\n        method:\"PUT\"\n    }\n    node.send(DBmsg);\n} else{\nnode.warn('Cloudant credentials are not present. DB backup will be disabled');\ncontext.global.CloudantBkUP=false;\n}\nreturn;",
     "outputs": 1,
     "noerr": 0,
-    "x": 303.50001525878906,
-    "y": 956.3332824707031,
-    "z": "54c33433.ab3ccc",
+    "x": 309.00001525878906,
+    "y": 954.8332824707031,
+    "z": "17b3daf5.e84c25",
     "wires": [
       [
-        "a1b03108.5e4fd"
+        "6123a6f1.9edc58"
       ]
     ]
   },
   {
-    "id": "a1b03108.5e4fd",
+    "id": "6123a6f1.9edc58",
     "type": "http request",
     "name": "db req",
     "method": "use",
     "ret": "obj",
     "url": "",
-    "x": 466.50001525878906,
-    "y": 956.3332824707031,
-    "z": "54c33433.ab3ccc",
+    "x": 472.00001525878906,
+    "y": 954.8332824707031,
+    "z": "17b3daf5.e84c25",
     "wires": [
       [
-        "a47815d7.5b87e8"
+        "54e567bd.ab1a98"
       ]
     ]
   },
   {
-    "id": "a47815d7.5b87e8",
+    "id": "54e567bd.ab1a98",
     "type": "function",
     "name": "Check response",
     "func": "if (msg.statusCode=='201' || msg.statusCode=='412')\n{\n    node.warn('Database created or already exists, turning on backup');\n    context.global.CloudantBkUP=true;\n    context.global.CloudantCamera=[];\n    msg.url=context.global.VCAP_SERVICES.cloudantNoSQLDB[0].credentials.url+\"/winkapp/winkPresence\"\n    msg.method=\"GET\"\n    node.send(msg)\n} else {\n    node.warn('issue with cloudant sercvice. backup disabled until next re-try');\n    context.global.CloudantBkUP=false;\n}\nreturn;",
     "outputs": 1,
     "noerr": 0,
-    "x": 641.5000152587891,
-    "y": 956.3332824707031,
-    "z": "54c33433.ab3ccc",
+    "x": 647.0000152587891,
+    "y": 954.8332824707031,
+    "z": "17b3daf5.e84c25",
     "wires": [
       [
-        "a80b00d8.57f5"
+        "331f3ab1.cce0c6"
       ]
     ]
   },
   {
-    "id": "a80b00d8.57f5",
+    "id": "331f3ab1.cce0c6",
     "type": "http request",
     "name": "",
     "method": "use",
     "ret": "obj",
     "url": "",
-    "x": 827.3958129882812,
-    "y": 955.22216796875,
-    "z": "54c33433.ab3ccc",
+    "x": 832.8958129882812,
+    "y": 953.72216796875,
+    "z": "17b3daf5.e84c25",
     "wires": [
       [
-        "63f9e4ea.9c061c"
+        "88addd1e.77522"
       ]
     ]
   },
   {
-    "id": "63f9e4ea.9c061c",
+    "id": "88addd1e.77522",
     "type": "function",
     "name": "restore from db",
     "func": "if (\"Presence\" in msg.payload){\n    node.warn('restoring presence from db backup')\n    context.global.Presence=msg.payload.Presence.Presence\n    context.global.PresenceHistory=msg.payload.Presence.PresenceHistory\n}\nreturn;",
     "outputs": 1,
     "noerr": 0,
-    "x": 995.3958129882812,
-    "y": 955.22216796875,
-    "z": "54c33433.ab3ccc",
+    "x": 1000.8958129882812,
+    "y": 953.72216796875,
+    "z": "17b3daf5.e84c25",
     "wires": [
       []
     ]
   },
   {
-    "id": "39398473.c6c67c",
+    "id": "1666b269.e9994e",
     "type": "comment",
     "name": "Cloundant DB -------------------------------------------------------------------------------------------------------------------------------",
     "info": "modfy bluemix-settings.json and add following line:\n\ncontext.global.InitialStateKey=\"<your initial state api key>\"",
-    "x": 400.5,
-    "y": 874.3332824707031,
-    "z": "54c33433.ab3ccc",
+    "x": 406,
+    "y": 872.8332824707031,
+    "z": "17b3daf5.e84c25",
     "wires": []
   },
   {
-    "id": "47ff844c.b8007c",
+    "id": "a96eb9cc.569148",
     "type": "function",
     "name": "Save Snapshots to db",
     "func": "function delay(ms) {\n        var cur_d = new Date();\n        var cur_ticks = cur_d.getTime();\n        var ms_passed = 0;\n        while(ms_passed < ms) {\n            var d = new Date();  // Possible memory leak?\n            var ticks = d.getTime();\n            ms_passed = ticks - cur_ticks;\n            // d = null;  // Prevent memory leak?\n        }\n    }\nif(msg.req.headers.authorization && msg.req.headers.authorization==\"Bearer \"+context.global.FREEBOARD_TOKEN){\nvar msg1=msg;\nvar trigger=msg.payload.object_name;\nvar cam_list=msg.payload.cam_list.split(',');\nmsg1.res.statusCode=\"200\";\nnode.send([msg1,null])\nvar date=new Date()\nfor (var i=0;i<cam_list.length;i++){\n//for (var cam in context.global.winkState.cameras){\n var camera=context.global.winkState.cameras[cam_list[i]]\n var cam=cam_list[i]\nif ('snap_url' in camera && camera.snap_url!=='undefined'){\n    var msg={}\n    msg.url=camera.snap_url\n    msg.method=\"GET\"\n    msg.date=date\n    msg.topic=cam\n    msg.trigger=trigger\n    node.send([null,msg]);\n    delay(400)\n}\n}\n\n} else msg.res.send(401,\"Bad request\");\nreturn;",
     "outputs": "2",
     "noerr": 0,
-    "x": 378.1041564941406,
-    "y": 1056.3332824707031,
-    "z": "54c33433.ab3ccc",
+    "x": 383.6041564941406,
+    "y": 1054.8332824707031,
+    "z": "17b3daf5.e84c25",
     "wires": [
       [
-        "9f858796.607a78"
+        "eceffdfc.131"
       ],
       [
-        "b9504de3.46afb"
+        "e76d5950.1892a8"
       ]
     ]
   },
   {
-    "id": "b9504de3.46afb",
+    "id": "e76d5950.1892a8",
     "type": "http request",
     "name": "getPic",
     "method": "use",
     "ret": "bin",
     "url": "",
-    "x": 602.1041717529297,
-    "y": 1062.3332824707031,
-    "z": "54c33433.ab3ccc",
+    "x": 607.6041717529297,
+    "y": 1060.8332824707031,
+    "z": "17b3daf5.e84c25",
     "wires": [
       [
-        "942eecbc.6bd11"
+        "6d720a9f.928df4"
       ]
     ]
   },
   {
-    "id": "942eecbc.6bd11",
+    "id": "6d720a9f.928df4",
     "type": "function",
     "name": "save picture",
     "func": "//if (typeof (context.global.ImageArchive)=== 'undefined') {\n//    context.global.ImageArchive = {}\n//}\n//     for (var n in context.global.winkState.cameras){\n//        if (!(n in context.global.ImageArchive)) context.global.ImageArchive[n]=[]\n//    }\n\nnode.warn('Saving image from '+msg.topic)\n//node.warn(bitmap);\nvar DBmsg={\n         url:context.global.VCAP_SERVICES.cloudantNoSQLDB[0].credentials.url+\"/winkapp\",\n        topic:msg.trigger,\n        method:\"POST\",\n        headers: \n            {\n                \"Content-Type\":\"application/json\"\n            },\n        payload: {\n            \"_id\":msg.topic+'|'+msg.date.getTime()+'|'+msg.trigger,\n            \"key\":\"Snapshot\",\n            \"cameraName\":msg.topic,\n            \"timestamp\":msg.date.getTime(),\n            \"trigger\":msg.trigger,\n            \"fileName\":\"CameraImage.jpg\",\n           \"_attachments\":\n                {\n                    \"CameraImage.jpg\":\n                    {\n                        \"content_type\":\"image/jpeg\",\n                        \"data\":msg.payload.toString('base64')\n                    }\n                }        \n        } \n}\n\n//context.global.ImageArchive[msg.topic].splice(0,0,camObj);\n//if (context.global.ImageArchive[msg.topic].length>10) context.global.ImageArchive[msg.topic].pop()\nreturn DBmsg;",
     "outputs": "1",
     "noerr": 0,
-    "x": 759.1041717529297,
-    "y": 1060.3332824707031,
-    "z": "54c33433.ab3ccc",
+    "x": 764.6041717529297,
+    "y": 1058.8332824707031,
+    "z": "17b3daf5.e84c25",
     "wires": [
       [
-        "72bf050b.8d40fc"
+        "72a7fd99.8d5804"
       ]
     ]
   },
   {
-    "id": "72bf050b.8d40fc",
+    "id": "72a7fd99.8d5804",
     "type": "http request",
     "name": "",
     "method": "use",
     "ret": "obj",
     "url": "",
-    "x": 934.0000457763672,
-    "y": 1060.22216796875,
-    "z": "54c33433.ab3ccc",
+    "x": 939.5000457763672,
+    "y": 1058.72216796875,
+    "z": "17b3daf5.e84c25",
     "wires": [
       [
-        "19cc6ccf.e63393"
+        "2bf5fae1.d40a06"
       ]
     ]
   },
   {
-    "id": "b0d6c70e.4f2938",
+    "id": "bde19be.f421e68",
     "type": "http in",
     "name": "",
     "url": "/red/save_images",
     "method": "get",
     "swaggerDoc": "",
-    "x": 152.60418701171875,
-    "y": 1056.22216796875,
-    "z": "54c33433.ab3ccc",
+    "x": 158.10418701171875,
+    "y": 1054.72216796875,
+    "z": "17b3daf5.e84c25",
     "wires": [
       [
-        "47ff844c.b8007c"
+        "a96eb9cc.569148"
       ]
     ]
   },
   {
-    "id": "9f858796.607a78",
+    "id": "eceffdfc.131",
     "type": "http response",
     "name": "",
-    "x": 605.9999542236328,
-    "y": 1019.22216796875,
-    "z": "54c33433.ab3ccc",
+    "x": 611.4999542236328,
+    "y": 1017.72216796875,
+    "z": "17b3daf5.e84c25",
     "wires": []
   },
   {
-    "id": "19cc6ccf.e63393",
+    "id": "2bf5fae1.d40a06",
     "type": "function",
     "name": "cache results",
     "func": "if ('ok' in msg.payload && msg.payload.ok){\n    var cameraname=msg.payload.id.split('|')[0];\n    var tstamp=msg.payload.id.split('|')[1];\n    node.warn('Camera - ' + cameraname)\n    if (typeof(context.global.winkState.cameras[cameraname].activities)==='undefined') context.global.winkState.cameras[cameraname].activities=[]\n    var cam_act={\n        id:msg.payload.rev,\n        cloudant_id:msg.payload.id,\n        category:\"cuepoint\",\n        cuepoint_id:Math.round(tstamp/1000),\n        trigger:msg.topic,\n        snapshot_url:context.global.BlueMixUrlBase+\"/red/camera_history?img_id=\"+msg.payload.id\n    }\n   context.global.winkState.cameras[cameraname].activities.splice(0,0,cam_act);\n   if (context.global.winkState.cameras[cameraname].activities.length>15){\n    for (var i=15; i<context.global.winkState.cameras[cameraname].activities.length;i++){\n    var doc_id=context.global.winkState.cameras[cameraname].activities[i].cloudant_id\n    var rev=context.global.winkState.cameras[cameraname].activities[i].id\n    if(typeof(doc_id)!=='undefined'){\n    var DBmsg={\n         topic:cameraname,\n         position:i,\n         url:context.global.VCAP_SERVICES.cloudantNoSQLDB[0].credentials.url+\"/winkapp/\"+doc_id+\"?rev=\"+rev,\n        method:\"DELETE\"\n    }\n    node.send(DBmsg);\n    }\n   }\n   }\n}\nreturn;",
     "outputs": 1,
     "noerr": 0,
-    "x": 1084.0000457763672,
-    "y": 1060.22216796875,
-    "z": "54c33433.ab3ccc",
+    "x": 1089.5000457763672,
+    "y": 1058.72216796875,
+    "z": "17b3daf5.e84c25",
     "wires": [
       [
-        "98b5d63.f674a28"
+        "2275058e.dd8afa"
       ]
     ]
   },
   {
-    "id": "98b5d63.f674a28",
+    "id": "2275058e.dd8afa",
     "type": "http request",
     "name": "",
     "method": "use",
     "ret": "obj",
     "url": "",
-    "x": 1237.0001068115234,
-    "y": 1058.22216796875,
-    "z": "54c33433.ab3ccc",
+    "x": 1242.5001068115234,
+    "y": 1056.72216796875,
+    "z": "17b3daf5.e84c25",
     "wires": [
       [
-        "22d33afc.dd2cc6"
+        "d85eb4c4.27a148"
       ]
     ]
   },
   {
-    "id": "22d33afc.dd2cc6",
+    "id": "d85eb4c4.27a148",
     "type": "function",
     "name": "delete old pics",
     "func": "if (('ok' in msg.payload && msg.payload.ok) ||('error' in msg.payload && msg.payload.error=='not_found') ){\n    node.warn('deleting '+msg.topic+' position '+ msg.position)\n    context.global.winkState.cameras[msg.topic].activities.splice(msg.position,1)\n}\nreturn;",
     "outputs": 1,
     "noerr": 0,
-    "x": 1405.0001068115234,
-    "y": 1059.22216796875,
-    "z": "54c33433.ab3ccc",
+    "x": 1410.5001068115234,
+    "y": 1057.72216796875,
+    "z": "17b3daf5.e84c25",
     "wires": [
       []
     ]
   },
   {
-    "id": "ab4a260a.54b5d8",
+    "id": "b5de6786.4a2198",
     "type": "http in",
     "name": "",
     "url": "/red/camera_history",
     "method": "get",
     "swaggerDoc": "",
-    "x": 165.00001525878906,
-    "y": 1114.22216796875,
-    "z": "54c33433.ab3ccc",
+    "x": 170.50001525878906,
+    "y": 1112.72216796875,
+    "z": "17b3daf5.e84c25",
     "wires": [
       [
-        "df605b60.209fa8"
+        "14ea3bee.eb15c4"
       ]
     ]
   },
   {
-    "id": "df605b60.209fa8",
+    "id": "14ea3bee.eb15c4",
     "type": "function",
     "name": "gen CLD url",
     "func": "if ('img_id' in msg.payload){\n    msg.url=context.global.VCAP_SERVICES.cloudantNoSQLDB[0].credentials.url+\"/winkapp/\"+msg.payload.img_id+\"/CameraImage.jpg\"\n    msg.method=\"GET\"\n}\nreturn msg;",
     "outputs": 1,
     "noerr": 0,
-    "x": 376.99998474121094,
-    "y": 1114.22216796875,
-    "z": "54c33433.ab3ccc",
+    "x": 382.49998474121094,
+    "y": 1112.72216796875,
+    "z": "17b3daf5.e84c25",
     "wires": [
       [
-        "6a5f8fd5.95a07"
+        "2a95af04.d56a5"
       ]
     ]
   },
   {
-    "id": "6a5f8fd5.95a07",
+    "id": "2a95af04.d56a5",
     "type": "http request",
     "name": "",
     "method": "use",
     "ret": "bin",
     "url": "",
-    "x": 537.9999847412109,
-    "y": 1116.22216796875,
-    "z": "54c33433.ab3ccc",
+    "x": 543.4999847412109,
+    "y": 1114.72216796875,
+    "z": "17b3daf5.e84c25",
     "wires": [
       [
-        "ec4601e8.13ba"
+        "fc72a72.f038d58"
       ]
     ]
   },
   {
-    "id": "ec4601e8.13ba",
+    "id": "fc72a72.f038d58",
     "type": "http response",
     "name": "",
-    "x": 705.9999847412109,
-    "y": 1116.22216796875,
-    "z": "54c33433.ab3ccc",
+    "x": 711.4999847412109,
+    "y": 1114.72216796875,
+    "z": "17b3daf5.e84c25",
     "wires": []
   },
   {
-    "id": "c757994b.38a868",
+    "id": "3d39eb7c.c2c614",
     "type": "http in",
     "name": "",
     "url": "/red/retrieve_activities",
     "method": "get",
     "swaggerDoc": "",
-    "x": 164.60418701171875,
-    "y": 1209.22216796875,
-    "z": "54c33433.ab3ccc",
+    "x": 170.10418701171875,
+    "y": 1207.72216796875,
+    "z": "17b3daf5.e84c25",
     "wires": [
       [
-        "b26210d6.4d9df"
+        "e8d56dcd.172a9"
       ]
     ]
   },
   {
-    "id": "b26210d6.4d9df",
+    "id": "e8d56dcd.172a9",
     "type": "function",
     "name": "get activities from db",
     "func": "if(msg.req.headers.authorization && msg.req.headers.authorization==\"Bearer \"+context.global.FREEBOARD_TOKEN){\nvar msg1=msg;\nmsg1.res.statusCode=\"200\";\nmsg.url=context.global.VCAP_SERVICES.cloudantNoSQLDB[0].credentials.url+\"/winkapp/_all_docs?descending=true\"\nmsg.method=\"GET\"\nmsg.topic=msg.payload.camera_name\nnode.send([msg1,msg])\n} else\n{\n    msg.res.statusCode=400\n    node.send([msg,null])\n}\nreturn;",
     "outputs": "2",
     "noerr": 0,
-    "x": 394.9999237060547,
-    "y": 1207.22216796875,
-    "z": "54c33433.ab3ccc",
+    "x": 400.4999237060547,
+    "y": 1205.72216796875,
+    "z": "17b3daf5.e84c25",
     "wires": [
       [
-        "ec31a58a.13ce58"
+        "e947a3a.f16b86"
       ],
       [
-        "a8f39e3f.570c6"
+        "5a5dddeb.a5a224"
       ]
     ]
   },
   {
-    "id": "a8f39e3f.570c6",
+    "id": "5a5dddeb.a5a224",
     "type": "http request",
     "name": "",
     "method": "use",
     "ret": "obj",
     "url": "",
-    "x": 619.9999847412109,
-    "y": 1240.22216796875,
-    "z": "54c33433.ab3ccc",
+    "x": 625.4999847412109,
+    "y": 1238.72216796875,
+    "z": "17b3daf5.e84c25",
     "wires": [
       [
-        "3b7d6156.c4829e"
+        "82047353.7dfb9"
       ]
     ]
   },
   {
-    "id": "3b7d6156.c4829e",
+    "id": "82047353.7dfb9",
     "type": "function",
     "name": "cache cam history",
     "func": "if('total_rows' in msg.payload && msg.payload.total_rows>0){\n var db_rows=msg.payload.rows;\n context.global.winkState.cameras[msg.topic].activities=[]\n //db_rows.foreach(function(row){\n for(var i=0;i<db_rows.length;i++){\n     var row=db_rows[i];\n     if(row.id.indexOf(msg.topic)!=-1){\n      var tstamp=row.id.split('|')[1]\n      var cam_act={\n        id:row.value.rev,\n        cloudant_id:row.id,\n        category:\"cuepoint\",\n        cuepoint_id:Math.round(tstamp/1000),\n        trigger:row.id.split('|')[2],\n        snapshot_url:context.global.BlueMixUrlBase+\"/red/camera_history?img_id=\"+row.id\n      } \n      context.global.winkState.cameras[msg.topic].activities.push(cam_act)         \n     }\n }\n}\nreturn msg;",
     "outputs": 1,
     "noerr": 0,
-    "x": 798,
-    "y": 1240.2221374511719,
-    "z": "54c33433.ab3ccc",
+    "x": 803.5,
+    "y": 1238.7221374511719,
+    "z": "17b3daf5.e84c25",
     "wires": [
       []
     ]
   },
   {
-    "id": "ec31a58a.13ce58",
+    "id": "e947a3a.f16b86",
     "type": "http response",
     "name": "",
-    "x": 616.9999542236328,
-    "y": 1192.22216796875,
-    "z": "54c33433.ab3ccc",
+    "x": 622.4999542236328,
+    "y": 1190.72216796875,
+    "z": "17b3daf5.e84c25",
     "wires": []
   },
   {
-    "id": "f36bbc82.0c944",
+    "id": "df5d02d8.20a3",
     "type": "inject",
     "name": "",
     "topic": "",
@@ -768,206 +770,245 @@
     "repeat": "",
     "crontab": "",
     "once": false,
-    "x": 153.99999618530273,
-    "y": 801.2499618530273,
-    "z": "54c33433.ab3ccc",
+    "x": 159.49999618530273,
+    "y": 799.7499618530273,
+    "z": "17b3daf5.e84c25",
     "wires": [
       [
-        "12c9efa7.ed361"
+        "299fe37e.d6601c"
       ]
     ]
   },
   {
-    "id": "1af4ceb3.e50b31",
+    "id": "6bf8ef8b.94071",
     "type": "debug",
     "name": "",
     "active": true,
     "console": "false",
     "complete": "false",
-    "x": 476.2500114440918,
-    "y": 800.9999694824219,
-    "z": "54c33433.ab3ccc",
+    "x": 481.7500114440918,
+    "y": 799.4999694824219,
+    "z": "17b3daf5.e84c25",
     "wires": []
   },
   {
-    "id": "8fd0e1c1.702f2",
+    "id": "7203719d.8dfc9",
     "type": "comment",
     "name": "Integration with LIFX Bulbs ---------------------------------------------------------------------------------------",
     "info": "",
-    "x": 365,
-    "y": 1289,
-    "z": "54c33433.ab3ccc",
+    "x": 370.5,
+    "y": 1287.5,
+    "z": "17b3daf5.e84c25",
     "wires": []
   },
   {
-    "id": "b2ca9cc2.4d356",
-    "type": "inject",
-    "name": "",
-    "topic": "",
-    "payload": "",
-    "payloadType": "none",
-    "repeat": "",
-    "crontab": "",
-    "once": false,
-    "x": 102,
-    "y": 1329,
-    "z": "54c33433.ab3ccc",
-    "wires": [
-      [
-        "365ceaeb.c9a316"
-      ]
-    ]
-  },
-  {
-    "id": "365ceaeb.c9a316",
-    "type": "function",
-    "name": "",
-    "func": "var newMsg ={\n    \"url\":\"https://api.lifx.com/v1beta1/lights/all\",\n    \"method\": \"GET\",\n    headers: {\n        \"Authorization\": \"Bearer \"+context.global.LIFX_TOKEN,\n        \"Content-Type\":\"application/json\"\n    }\n}\nreturn newMsg;",
-    "outputs": 1,
-    "noerr": 0,
-    "x": 254,
-    "y": 1329,
-    "z": "54c33433.ab3ccc",
-    "wires": [
-      [
-        "6048bd4.f9fb744"
-      ]
-    ]
-  },
-  {
-    "id": "b4b8e2d0.4b472",
-    "type": "debug",
-    "name": "",
-    "active": true,
-    "console": "false",
-    "complete": "payload",
-    "x": 743,
-    "y": 1328,
-    "z": "54c33433.ab3ccc",
-    "wires": []
-  },
-  {
-    "id": "6048bd4.f9fb744",
-    "type": "http request",
-    "name": "",
-    "method": "use",
-    "ret": "obj",
-    "url": "",
-    "x": 410,
-    "y": 1329,
-    "z": "54c33433.ab3ccc",
-    "wires": [
-      [
-        "df7019e6.208fe8"
-      ]
-    ]
-  },
-  {
-    "id": "df7019e6.208fe8",
-    "type": "function",
-    "name": "",
-    "func": "for (var id in msg.payload)\n{\n    context.global.winkState.light_bulbs[msg.payload[id].label]={\n        name:msg.payload[id].label,\n        object_type:\"light_bulbs\",\n        object_id:msg.payload[id].id,\n        device_manufacturer:\"lifx\",\n        freeboard:0,\n        connection:msg.payload[id].connected,\n        powered:(msg.payload[id].power==\"on\" ? true:false),\n        brightness:msg.payload[id].brightness,\n        color_model:msg.payload[id].product_name,\n        color:\"\",\n        \"hue\":msg.payload[id].color.hue,\n        \"saturation\":msg.payload[id].color.saturation,\n        \"color_temperature\":msg.payload[id].color.kelvin\n    };\n    \n    var newMsg={\n        payload:\"Imported \"+msg.payload[id].label+\" successfully.\"\n    };\n    node.send(newMsg);\n}\nreturn;",
-    "outputs": 1,
-    "noerr": 0,
-    "x": 573,
-    "y": 1329,
-    "z": "54c33433.ab3ccc",
-    "wires": [
-      [
-        "b4b8e2d0.4b472"
-      ]
-    ]
-  },
-  {
-    "id": "96479f2d.69b86",
+    "id": "2a371087.d5c8f",
     "type": "http in",
     "name": "",
     "url": "/red/getConfig",
     "method": "get",
     "swaggerDoc": "",
-    "x": 114,
-    "y": 72,
-    "z": "54c33433.ab3ccc",
+    "x": 119.5,
+    "y": 70.5,
+    "z": "17b3daf5.e84c25",
     "wires": [
       [
-        "2abfa4f4.d5405c"
+        "32c7c696.cd383a"
       ]
     ]
   },
   {
-    "id": "2abfa4f4.d5405c",
+    "id": "32c7c696.cd383a",
     "type": "function",
     "name": "Throw Config Data",
     "func": "if(msg.req.headers.authorization && msg.req.headers.authorization==\"Bearer \"+context.global.FREEBOARD_TOKEN){\n// text fields array\ntxt_fields=[]\ntxt_fields.push({forecastIoApiKey : context.global.forecastIoApiKey || \"\" });\ntxt_fields.push({FREEBOARD_TOKEN : context.global.FREEBOARD_TOKEN || \"\" });\ntxt_fields.push({IFTTT_TOKEN : context.global.IFTTT_TOKEN || \"\" });\ntxt_fields.push({LIFX_TOKEN : context.global.LIFX_TOKEN || \"\" });\ntxt_fields.push({motionAdjustTstat : context.global.motionAdjustTstat || false });\ntxt_fields.push({InitialStateKey : context.global.InitialStateKey ||\"\"});\nmsg.payload.txt_fields=txt_fields;\ntxt_area_fields=[]\n\ntxt_area_fields.push({FosCam : JSON.stringify(context.global.foscam || \"\")});\ntxt_area_fields.push({SamsungCam : JSON.stringify(context.global.SamsungCam || \"\")});\ntxt_area_fields.push({DlinkCam : JSON.stringify(context.global.DlinkCam || \"\")});\ntxt_area_fields.push({camera_motion : JSON.stringify(context.global.camera_motion || \"\")});\ntxt_area_fields.push({tab_ui_shortcuts : JSON.stringify(context.global.tab_ui_shortcuts || \"\")});\nmsg.payload.txt_area_fields=txt_area_fields\n\nmsg.res.statusCode=\"200\";\nreturn msg;\n}\nelse\n{\n    //msg.payload=\"Not Authorized\";\n   msg.res.send(\"403\",\"Forbidden\");\n  return;\n}\n",
     "outputs": 1,
     "noerr": 0,
-    "x": 391.4999694824219,
-    "y": 73,
-    "z": "54c33433.ab3ccc",
+    "x": 396.9999694824219,
+    "y": 71.5,
+    "z": "17b3daf5.e84c25",
     "wires": [
       [
-        "c16a41de.3e95c"
+        "471fdcd8.b8e024"
       ]
     ]
   },
   {
-    "id": "c16a41de.3e95c",
+    "id": "471fdcd8.b8e024",
     "type": "http response",
     "name": "",
-    "x": 616.5,
-    "y": 74,
-    "z": "54c33433.ab3ccc",
+    "x": 622,
+    "y": 72.5,
+    "z": "17b3daf5.e84c25",
     "wires": []
   },
   {
-    "id": "234e411b.dcb1be",
+    "id": "174a849d.e8b57b",
     "type": "comment",
     "name": "Section for web services---------------------------------------------------------------------------------------------------------------------------------",
     "info": "",
-    "x": 452,
-    "y": 30.5,
-    "z": "54c33433.ab3ccc",
+    "x": 457.5,
+    "y": 29,
+    "z": "17b3daf5.e84c25",
     "wires": []
   },
   {
-    "id": "5198ed2b.ae6714",
+    "id": "515d30f9.aea2d",
     "type": "http in",
     "name": "",
     "url": "/red/getCameras",
     "method": "get",
     "swaggerDoc": "",
-    "x": 115,
-    "y": 123,
-    "z": "54c33433.ab3ccc",
+    "x": 120.5,
+    "y": 121.5,
+    "z": "17b3daf5.e84c25",
     "wires": [
       [
-        "d1aadbf2.2e5528"
+        "6a5e70f0.95a19"
       ]
     ]
   },
   {
-    "id": "d1aadbf2.2e5528",
+    "id": "6a5e70f0.95a19",
     "type": "function",
     "name": "Throw Cameras Data",
     "func": "if(msg.req.headers.authorization && msg.req.headers.authorization==\"Bearer \"+context.global.FREEBOARD_TOKEN){\n// text fields array\ncameras=[]\nfor (var cam in context.global.winkState.cameras){\n    var camera=context.global.winkState.cameras[cam];\n    cameras.push({\n        name:camera.name,\n        id:camera.object_id,\n        connection:camera.connection,\n        url:camera.snap_url\n    });\n}\nmsg.payload.cameras=cameras;\nmsg.res.statusCode=\"200\";\nreturn msg;\n}\nelse\n{\n    //msg.payload=\"Not Authorized\";\n   msg.res.send(\"403\",\"Forbidden\");\n  return;\n}\n",
     "outputs": 1,
     "noerr": 0,
-    "x": 392.4999694824219,
-    "y": 126,
-    "z": "54c33433.ab3ccc",
+    "x": 397.9999694824219,
+    "y": 124.5,
+    "z": "17b3daf5.e84c25",
     "wires": [
       [
-        "a97edc0b.56812"
+        "7ec66e10.81399"
       ]
     ]
   },
   {
-    "id": "a97edc0b.56812",
+    "id": "7ec66e10.81399",
     "type": "http response",
     "name": "",
-    "x": 617.5,
-    "y": 127,
-    "z": "54c33433.ab3ccc",
+    "x": 623,
+    "y": 125.5,
+    "z": "17b3daf5.e84c25",
     "wires": []
+  },
+  {
+    "id": "e27e8365.1d818",
+    "type": "catch",
+    "name": "",
+    "x": 111,
+    "y": 1418,
+    "z": "17b3daf5.e84c25",
+    "wires": [
+      [
+        "ef79342f.1086c8"
+      ]
+    ]
+  },
+  {
+    "id": "ef79342f.1086c8",
+    "type": "debug",
+    "name": "",
+    "active": true,
+    "console": "false",
+    "complete": "error",
+    "x": 311,
+    "y": 1418,
+    "z": "17b3daf5.e84c25",
+    "wires": []
+  },
+  {
+    "id": "a2cb4cf2.5d34b",
+    "type": "debug",
+    "name": "",
+    "active": false,
+    "console": "false",
+    "complete": "true",
+    "x": 717,
+    "y": 265,
+    "z": "17b3daf5.e84c25",
+    "wires": []
+  },
+  {
+    "id": "1648f6e.fe9b709",
+    "type": "inject",
+    "name": "",
+    "topic": "",
+    "payload": "",
+    "payloadType": "date",
+    "repeat": "5",
+    "crontab": "",
+    "once": true,
+    "x": 139,
+    "y": 1330,
+    "z": "17b3daf5.e84c25",
+    "wires": [
+      [
+        "2b221b4f.d4dde4"
+      ]
+    ]
+  },
+  {
+    "id": "2b221b4f.d4dde4",
+    "type": "function",
+    "name": "",
+    "func": "if ('LIFX_TOKEN' in context.global && context.global.LIFX_TOKEN !== 'undefined'){\nvar newMsg1 ={\n    \"url\":\"https://api.lifx.com/v1/lights/all\",\n    \"method\": \"GET\",\n    headers: {\n        \"Authorization\":\"Bearer \"+context.global.LIFX_TOKEN\n    }\n}\nnode.send(newMsg1);\n}\nreturn;",
+    "outputs": 1,
+    "noerr": 0,
+    "x": 307,
+    "y": 1330,
+    "z": "17b3daf5.e84c25",
+    "wires": [
+      [
+        "d4fef450.2b0108"
+      ]
+    ]
+  },
+  {
+    "id": "d4fef450.2b0108",
+    "type": "http request",
+    "name": "",
+    "method": "use",
+    "ret": "obj",
+    "url": "",
+    "x": 482,
+    "y": 1329,
+    "z": "17b3daf5.e84c25",
+    "wires": [
+      [
+        "5014437.fafebbc"
+      ]
+    ]
+  },
+  {
+    "id": "5014437.fafebbc",
+    "type": "function",
+    "name": "",
+    "func": "var lifxLights=msg.payload;\nvar useLiveUpd=('CRYPTO' in context.global ? true:false);\nvar CurreTag=\"\";\nvar eTag;\nlifxLights.forEach(function (bulb) {\n  //  node.warn(bulb.label)\n if (context.global.winkState==='undefined') context.global.winkState={}\n if (context.global.winkState.light_bulbs==='undefined') context.global.winkState.light_bulbs={}\n if (bulb.label in context.global.winkState.light_bulbs && useLiveUpd) {\n      var WinkBulb={\n        \"connection\": context.global.winkState.light_bulbs[bulb.label].connection,\n        \"powered\": context.global.winkState.light_bulbs[bulb.label].powered,\n        \"brightness\": context.global.winkState.light_bulbs[bulb.label].brightness,\n        \"hue\" : context.global.winkState.light_bulbs[bulb.label].hue,\n        \"saturation\":context.global.winkState.light_bulbs[bulb.label].saturation,\n        \"temperature\":context.global.winkState.light_bulbs[bulb.label].temperature\n      }\n      CurreTag=context.global.CRYPTO.createHash(\"md5\").update(JSON.stringify(WinkBulb),\"utf8\").digest(\"hex\");\n }\n \n var OrigObject={\n    \"connection\": bulb.connected,\n    \"powered\": (bulb.connected && bulb.power==\"on\" ? true : false),\n    \"brightness\": bulb.brightness,\n    \"hue\" : bulb.color.hue,\n    \"saturation\":bulb.color.saturation,\n    \"temperature\":bulb.color.kelvin\n };\n if (useLiveUpd){\n var LifBulb={\n    \"name\": bulb.label,\n    \"manufacturer_id\": \"lifx\",\n    \"device_manufacturer\":\"lifx\",\n    \"object_type\": \"light_bulb\",\n    \"object_id\": bulb.id,\n    \"freeboard\": 0,\n    desired_state:{},\n    last_reading:{\n    \"connection\": bulb.connected,\n    \"powered\": (bulb.connected && bulb.power==\"on\" ? true : false),\n    \"brightness\": bulb.brightness,\n    \"hue\" : bulb.color.hue,\n    \"saturation\":bulb.color.saturation,\n    \"temperature\":bulb.color.kelvin\n    }\n };\n  eTag=context.global.CRYPTO.createHash(\"md5\").update(JSON.stringify(OrigObject),\"utf8\").digest(\"hex\");\n } else {\n\n  context.global.winkState.light_bulbs[bulb.label]=OrigObject;\n }\n //LifBulb\n \n context.global.winkDevCap[bulb.label]=bulb.capabilities\n //node.warn(bulb.label)\n  if (!('groups' in context.global.winkState)) context.global.winkState.groups={}\n if (!(bulb.group.name in context.global.winkState.groups)){\n context.global.winkState.groups[bulb.group.name]={\n     \"name\":bulb.group.name,\n     \"obejct_type\":\"groups\",\n     \"object_id\":bulb.group.id,\n      \"freeboard\": 0,\n      members:{}\n    }\n}\n  context.global.winkState.groups[bulb.group.name].members[bulb.label]={\n    \"name\": bulb.label,\n    \"object_id\": bulb.id,\n    \"object_type\": \"light_bulbs\"\n  }\n if (useLiveUpd && CurreTag!==eTag){\n    var postMsg={\n        url:context.global.BlueMixUrlBase+'/red/wink/subscribtions',\n        method:\"POST\",\n            headers: {\n            \"Content-Type\":\"application/json\"\n        },\n        payload:LifBulb \n    }\n node.send(postMsg);\n }\n});\nreturn;",
+    "outputs": 1,
+    "noerr": 0,
+    "x": 652,
+    "y": 1331,
+    "z": "17b3daf5.e84c25",
+    "wires": [
+      [
+        "c40f1478.3bf0e8"
+      ]
+    ]
+  },
+  {
+    "id": "c40f1478.3bf0e8",
+    "type": "http request",
+    "name": "",
+    "method": "use",
+    "ret": "txt",
+    "url": "",
+    "x": 803,
+    "y": 1332,
+    "z": "17b3daf5.e84c25",
+    "wires": [
+      []
+    ]
   }
 ]
