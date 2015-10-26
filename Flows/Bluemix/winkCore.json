@@ -1,11 +1,5 @@
 [
-  {
-    "id": "b25b93a7.4da47",
-    "type": "websocket-listener",
-    "path": "/ws/winkStat",
-    "wholemsg": "false"
-  },
-  {
+{
     "id": "786fe97a.879018",
     "type": "function",
     "name": "DefineGlobalObjects",
