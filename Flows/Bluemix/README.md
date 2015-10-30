@@ -1,4 +1,18 @@
 == UPDATE ==
+10/30/2015
+------------------
+Tablet UI notifications:<br>
+<img src="images/ui_notifications.png">
+Currently shows sensor info, battery info and more<br>
+3 level of messages:<br>
+1.	Alert - will stay until dismissed manually red box<br>
+2.	Warning will stay for 30 seconds yellow box<br>
+3.	Information will stau for 30 seconds blue box<br><br>
+Required changes:<br>
+* Import updated [winkCore.json](winkCore.json)
+*  import updated [tabletUI.json](tabletUI.json)
+*  import updated [winkIntegration.json](winkIntegration.json)
+
 10/25/2015
 ------------------
 Tablet UI updates:<br>
