@@ -12,6 +12,8 @@ Required changes:<br>
 * Import updated [winkCore.json](winkCore.json)
 *  import updated [tabletUI.json](tabletUI.json)
 *  import updated [winkIntegration.json](winkIntegration.json)
+*  restart your app via git dashboard or cf push.
+
 
 10/25/2015
 ------------------
