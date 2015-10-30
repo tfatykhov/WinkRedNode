@@ -1,5 +1,11 @@
 [
   {
+    "id": "b25b93a7.4da47",
+    "type": "websocket-listener",
+    "path": "/ws/winkStat",
+    "wholemsg": "false"
+  },
+  {
     "id": "299fe37e.d6601c",
     "type": "function",
     "name": "",
@@ -192,7 +198,8 @@
     "z": "17b3daf5.e84c25",
     "wires": [
       [
-        "ea2281c0.15dd8"
+        "ea2281c0.15dd8",
+        "7a43e199.85bc2"
       ]
     ]
   },
@@ -220,8 +227,8 @@
     "id": "1c20c586.e3df3a",
     "type": "http response",
     "name": "",
-    "x": 827.4999847412109,
-    "y": 579.9998779296875,
+    "x": 641.5,
+    "y": 571.9998779296875,
     "z": "17b3daf5.e84c25",
     "wires": []
   },
@@ -232,8 +239,8 @@
     "func": "var currDate= new Date();\ncurr_presence=context.global.checkPresence()\nif (msg.payload.new_value!=='ERROR' && msg.payload.new_value!==msg.payload.old_value){\n    if('old_presence' in  msg.payload){\n        var HistP={}\n        HistP.timestamp=new Date();\n        HistP.offset=context.global.Weather.Offset\n        HistP.details=msg.payload.old_presence\n        node.warn(HistP)\n        context.global.PresenceHistory.unshift(HistP)\n    }\n    if (context.global.PresenceHistory.length > 15) context.global.PresenceHistory.pop();\n    var scene_name=(msg.payload.new_value ? 'PRESENCE' : 'NO PRESENCE');\n    for (var key in context.global.winkState.scenes){\n        if ( context.global.winkState.scenes[key].name.toUpperCase()==scene_name)\n        {\n            var newMsg ={\n            \"url\":\"https://winkapi.quirky.com/scenes/\"+context.global.winkState.scenes[key].object_id+\"/activate\",\n            \"method\": \"POST\",\n            headers: {\n                \"Authorization\":\"Bearer \"+context.global.WinkToken,\n                \"Content-Type\":\"application/json\"\n                }\n            }\n        node.send(newMsg)\n        return;\n        }\n    }\n}\nreturn;",
     "outputs": 1,
     "noerr": 0,
-    "x": 647.3957977294922,
-    "y": 630.22216796875,
+    "x": 636.3958129882812,
+    "y": 658.22216796875,
     "z": "17b3daf5.e84c25",
     "wires": [
       [
@@ -248,8 +255,8 @@
     "method": "use",
     "ret": "obj",
     "url": "",
-    "x": 873.3957977294922,
-    "y": 630.333251953125,
+    "x": 835.3958129882812,
+    "y": 659.333251953125,
     "z": "17b3daf5.e84c25",
     "wires": [
       []
@@ -329,8 +336,8 @@
     "func": " var PresenceBkup={\n    Presence: context.global.Presence,\n    PresenceDetail: context.global.PresenceDetail,\n    PresenceHistory: context.global.PresenceHistory\n }\n    var DBMsg={\n        url:context.global.VCAP_SERVICES.cloudantNoSQLDB[0].credentials.url+\"/winkapp\",\n        method:\"POST\",\n        headers: \n            {\n                \"Content-Type\":\"application/json\"\n            },\n        payload: {\n            \"_id\":\"winkPresence\",\n            \"item\":\"Presence\",\n            \"Presence\":PresenceBkup\n        }\n    } \n \n \n //if (msg.payload.total_rows > 0  && msg.payload.rows.map(function(e) { return e.id; }).indexOf('winkPresence')!=-1){\n  if ('_rev' in msg.payload){   \n node.warn('record exists... updating');\n DBMsg.method=\"PUT\";\n DBMsg.url=DBMsg.url+\"/winkPresence\"\n DBMsg.payload._rev=msg.payload._rev;\n //msg.payload.rows.map(function(e) {if(e.id==\"winkPresence\") return e.value._rev; })[0];\n }\nreturn DBMsg;",
     "outputs": 1,
     "noerr": 0,
-    "x": 907.1041870117188,
-    "y": 692.6110534667969,
+    "x": 921.1041870117188,
+    "y": 617.611083984375,
     "z": "17b3daf5.e84c25",
     "wires": [
       [
@@ -345,8 +352,8 @@
     "func": "if (context.global.CloudantBkUP) {\n    var msg={\n        url:context.global.VCAP_SERVICES.cloudantNoSQLDB[0].credentials.url+\"/winkapp/winkPresence\",\n        method:\"GET\"\n    }\n    node.send(msg); \n}\nreturn;",
     "outputs": 1,
     "noerr": 0,
-    "x": 583.1041870117188,
-    "y": 693.6110534667969,
+    "x": 634.1041870117188,
+    "y": 613.611083984375,
     "z": "17b3daf5.e84c25",
     "wires": [
       [
@@ -361,8 +368,8 @@
     "method": "use",
     "ret": "obj",
     "url": "",
-    "x": 747.1041870117188,
-    "y": 693.6110534667969,
+    "x": 781.1041870117188,
+    "y": 617.611083984375,
     "z": "17b3daf5.e84c25",
     "wires": [
       [
@@ -377,8 +384,8 @@
     "method": "use",
     "ret": "obj",
     "url": "",
-    "x": 1064.1041870117188,
-    "y": 691.6110534667969,
+    "x": 1081.1041870117188,
+    "y": 616.611083984375,
     "z": "17b3daf5.e84c25",
     "wires": [
       []
@@ -786,8 +793,8 @@
     "active": true,
     "console": "false",
     "complete": "false",
-    "x": 481.7500114440918,
-    "y": 799.4999694824219,
+    "x": 470.75,
+    "y": 785.5,
     "z": "17b3daf5.e84c25",
     "wires": []
   },
@@ -897,8 +904,8 @@
     "id": "e27e8365.1d818",
     "type": "catch",
     "name": "",
-    "x": 111,
-    "y": 1418,
+    "x": 100,
+    "y": 1585,
     "z": "17b3daf5.e84c25",
     "wires": [
       [
@@ -913,8 +920,8 @@
     "active": true,
     "console": "false",
     "complete": "error",
-    "x": 311,
-    "y": 1418,
+    "x": 300,
+    "y": 1585,
     "z": "17b3daf5.e84c25",
     "wires": []
   },
@@ -1006,6 +1013,104 @@
     "url": "",
     "x": 803,
     "y": 1332,
+    "z": "17b3daf5.e84c25",
+    "wires": [
+      []
+    ]
+  },
+  {
+    "id": "8d555ab2.72aaa8",
+    "type": "http in",
+    "name": "",
+    "url": "/red/notifications",
+    "method": "post",
+    "swaggerDoc": "",
+    "x": 146,
+    "y": 1398,
+    "z": "17b3daf5.e84c25",
+    "wires": [
+      [
+        "9c1682b.f63e98"
+      ]
+    ]
+  },
+  {
+    "id": "9c1682b.f63e98",
+    "type": "function",
+    "name": "",
+    "func": "if(msg.req.headers.authorization && msg.req.headers.authorization==\"Bearer \"+context.global.FREEBOARD_TOKEN){\nvar newMsg={}    \nnewMsg.payload={\n    'alertType':msg.payload.type,\n    'message':msg.payload.message\n }\nmsg.res.statuCode=200;\nnode.send([msg, newMsg]);\n} else { \n    msg.res.statusCode=200\n    node.send([msg]);\n}",
+    "outputs": "2",
+    "noerr": 0,
+    "x": 359,
+    "y": 1397,
+    "z": "17b3daf5.e84c25",
+    "wires": [
+      [
+        "b20fca6f.4df038"
+      ],
+      [
+        "1dd01ccc.e22fe3",
+        "f0686dc4.0f979"
+      ]
+    ]
+  },
+  {
+    "id": "1dd01ccc.e22fe3",
+    "type": "websocket out",
+    "name": "",
+    "server": "b25b93a7.4da47",
+    "client": "",
+    "x": 580,
+    "y": 1465,
+    "z": "17b3daf5.e84c25",
+    "wires": []
+  },
+  {
+    "id": "b20fca6f.4df038",
+    "type": "http response",
+    "name": "",
+    "x": 612,
+    "y": 1423,
+    "z": "17b3daf5.e84c25",
+    "wires": []
+  },
+  {
+    "id": "f0686dc4.0f979",
+    "type": "debug",
+    "name": "",
+    "active": false,
+    "console": "false",
+    "complete": "false",
+    "x": 495,
+    "y": 1551,
+    "z": "17b3daf5.e84c25",
+    "wires": []
+  },
+  {
+    "id": "7a43e199.85bc2",
+    "type": "function",
+    "name": "",
+    "func": "function send_ui_note(n_type,n_timeout,n_message){\n    var newMsg={\n        url:context.global.BlueMixUrlBase+'/red/notifications',\n        \"method\": \"POST\",\n        headers: {\n            \"Authorization\":\"Bearer \"+context.global.FREEBOARD_TOKEN\n        },\n        payload:{\n            \"type\":n_type,\n            \"message\":n_message,\n            \"timeout\":n_timeout\n            }\n        };\n        node.send(newMsg);\n}\nvar note_msg=msg.payload.name+(msg.payload.home=='yes' ? ' is home' : ' has left');\nsend_ui_note('information',30000,note_msg)\nreturn;",
+    "outputs": 1,
+    "noerr": 0,
+    "x": 340,
+    "y": 668,
+    "z": "17b3daf5.e84c25",
+    "wires": [
+      [
+        "dcbcebd3.234318"
+      ]
+    ]
+  },
+  {
+    "id": "dcbcebd3.234318",
+    "type": "http request",
+    "name": "",
+    "method": "GET",
+    "ret": "txt",
+    "url": "",
+    "x": 482,
+    "y": 668,
     "z": "17b3daf5.e84c25",
     "wires": [
       []
