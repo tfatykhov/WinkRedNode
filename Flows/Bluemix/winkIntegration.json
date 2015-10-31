@@ -1106,7 +1106,7 @@
     "id": "dcbcebd3.234318",
     "type": "http request",
     "name": "",
-    "method": "GET",
+    "method": "use",
     "ret": "txt",
     "url": "",
     "x": 482,
