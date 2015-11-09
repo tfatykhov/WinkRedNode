@@ -1,4 +1,15 @@
 == UPDATE ==
+11/9/2015
+------------------
+Tablet UI summary page:<br>
+<img src="images/new_summary.png">
+New summary page with "dashboard" style :)<br>
+Required changes:<br>
+* Import updated [winkCore.json](winkCore.json)
+*  import updated [tabletUI.json](tabletUI.json)
+*  import updated [winkIntegration.json](winkIntegration.json)
+*  restart your app via git dashboard or cf push.
+
 10/30/2015
 ------------------
 Tablet UI notifications:<br>
