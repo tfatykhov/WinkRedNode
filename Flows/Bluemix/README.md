@@ -1,4 +1,8 @@
 == UPDATE ==
+11/14/2015
+------------------
+Found bug in tabletUI please import updated [tabletUI.json](tabletUI.json)
+
 11/13/2015
 ------------------
 Updated to Node-Red 0.12.X<br>
