@@ -1,4 +1,22 @@
 == UPDATE ==
+11/13/2015
+------------------
+Updated to Node-Red 0.12.X<br>
+Node red nad new release couple of days back and now it is version 0.12.x. and it introduced some changes to http nodes<br>
+in order to make sure that latest version is used please<br> 
+* copy contents of [package.json](package.json) and update same file in your configuration with it contents.
+* restart wink app via cf push or git dashboard
+<br>
+<br>
+After restart<br>
+*  Import updated [winkCore.json](winkCore.json)
+*  import updated [tabletUI.json](tabletUI.json)
+*  import updated [winkIntegration.json](winkIntegration.json)
+*  import updated [Freeboards](winkFreeboards.json)
+Tablet UI summary page - small cosmetic fixes and battery notification if any batteries in your system is below 25%:<br>
+<img src="images/updated_ui.png">
+
+
 11/9/2015
 ------------------
 Tablet UI summary page:<br>
