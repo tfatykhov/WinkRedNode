@@ -12,7 +12,7 @@ After restart<br>
 *  Import updated [winkCore.json](winkCore.json)
 *  import updated [tabletUI.json](tabletUI.json)
 *  import updated [winkIntegration.json](winkIntegration.json)
-*  import updated [Freeboards](winkFreeboards.json)
+*  import updated [Freeboards](winkFreeboards.json)<br>
 Tablet UI summary page - small cosmetic fixes and battery notification if any batteries in your system is below 25%:<br>
 <img src="images/updated_ui.png">
 
