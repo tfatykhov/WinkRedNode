@@ -6,7 +6,7 @@ Found bug in tabletUI please import updated [tabletUI.json](tabletUI.json)
 11/13/2015
 ------------------
 Updated to Node-Red 0.12.X<br>
-Node red nad new release couple of days back and now it is version 0.12.x. and it introduced some changes to http nodes<br>
+Node red had new release couple of days back and now it is version 0.12.x. and it introduced some changes to http nodes<br>
 in order to make sure that latest version is used please<br> 
 * copy contents of [package.json](package.json) and update same file in your configuration with it contents.
 * restart wink app via cf push or git dashboard
