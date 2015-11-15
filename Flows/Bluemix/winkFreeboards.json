@@ -92,7 +92,7 @@
     "type": "function",
     "z": "ba576445.45a898",
     "name": "",
-    "func": "if (msg.req.body.uid==context.global.WinkUser.uid && msg.req.body.pwd==context.global.WinkUser.pwd){\nmsg.statusCode=\"200\";\nmsg.payload={\"pwd_str\":context.global.FREEBOARD_TOKEN}\n} else {\nmsg.statusCode=\"403\";\n}\nreturn msg;",
+    "func": "if (msg.payload.uid==context.global.WinkUser.uid && msg.payload.pwd==context.global.WinkUser.pwd){\nmsg.statusCode=\"200\";\nmsg.payload={\"pwd_str\":context.global.FREEBOARD_TOKEN}\n} else {\nmsg.statusCode=\"403\";\n}\nreturn msg;",
     "outputs": 1,
     "noerr": 0,
     "x": 334.0000305175781,
@@ -124,7 +124,7 @@
     "type": "switch",
     "z": "ba576445.45a898",
     "name": "",
-    "property": "res.statusCode",
+    "property": "statusCode",
     "rules": [
       {
         "t": "eq",
@@ -329,7 +329,7 @@
     "type": "function",
     "z": "ba576445.45a898",
     "name": "",
-    "func": "if (msg.req.body.uid==context.global.WinkUser.uid && msg.req.body.pwd==context.global.WinkUser.pwd){\nmsg.statusCode=\"200\";\nmsg.payload={\"pwd_str\":context.global.FREEBOARD_TOKEN}\n} else {\nmsg.statusCode=\"403\";\n}\nreturn msg;",
+    "func": "if (msg.payload.uid==context.global.WinkUser.uid && msg.payload.pwd==context.global.WinkUser.pwd){\nmsg.statusCode=\"200\";\nmsg.payload={\"pwd_str\":context.global.FREEBOARD_TOKEN}\n} else {\nmsg.statusCode=\"403\";\n}\nreturn msg;",
     "outputs": 1,
     "noerr": 0,
     "x": 384.5,
@@ -361,7 +361,7 @@
     "type": "switch",
     "z": "ba576445.45a898",
     "name": "",
-    "property": "res.statusCode",
+    "property": "statusCode",
     "rules": [
       {
         "t": "eq",
@@ -485,7 +485,7 @@
     "type": "function",
     "z": "ba576445.45a898",
     "name": "",
-    "func": "if ((msg.req.body.uid==context.global.WinkUser.uid && msg.req.body.pwd==context.global.WinkUser.pwd) || msg.payload.token==context.global.FREEBOARD_TOKEN){\nmsg.statusCode=\"200\";\nmsg.payload.pwd_str=context.global.FREEBOARD_TOKEN\n//if ('camera_name' in msg.payload && msg.payload.camera_name!=='undefined') msg.payload.camera_name=msg.req.body.camera_name\n} else {\nmsg.statusCode=\"403\";\n}\nreturn msg;",
+    "func": "if ((msg.payload.uid==context.global.WinkUser.uid && msg.payload.pwd==context.global.WinkUser.pwd) || msg.payload.token==context.global.FREEBOARD_TOKEN){\nmsg.statusCode=\"200\";\nmsg.payload.pwd_str=context.global.FREEBOARD_TOKEN\n//if ('camera_name' in msg.payload && msg.payload.camera_name!=='undefined') msg.payload.camera_name=msg.req.body.camera_name\n} else {\nmsg.statusCode=\"403\";\n}\nreturn msg;",
     "outputs": 1,
     "noerr": 0,
     "x": 393.50001525878906,
@@ -501,7 +501,7 @@
     "type": "switch",
     "z": "ba576445.45a898",
     "name": "",
-    "property": "res.statusCode",
+    "property": "statusCode",
     "rules": [
       {
         "t": "eq",
@@ -691,7 +691,7 @@
     "type": "function",
     "z": "ba576445.45a898",
     "name": "",
-    "func": "if ((msg.req.body.uid==context.global.WinkUser.uid && msg.req.body.pwd==context.global.WinkUser.pwd) || msg.payload.token==context.global.FREEBOARD_TOKEN){\nmsg.statusCode=\"200\";\nmsg.payload={\"pwd_str\":context.global.FREEBOARD_TOKEN}\n} else {\nmsg.statusCode=\"403\";\n}\nreturn msg;",
+    "func": "if ((msg.payload.uid==context.global.WinkUser.uid && msg.payload.pwd==context.global.WinkUser.pwd) || msg.payload.token==context.global.FREEBOARD_TOKEN){\nmsg.statusCode=\"200\";\nmsg.payload={\"pwd_str\":context.global.FREEBOARD_TOKEN}\n} else {\nmsg.statusCode=\"403\";\n}\nreturn msg;",
     "outputs": 1,
     "noerr": 0,
     "x": 357.60418701171875,
@@ -723,7 +723,7 @@
     "type": "switch",
     "z": "ba576445.45a898",
     "name": "",
-    "property": "res.statusCode",
+    "property": "statusCode",
     "rules": [
       {
         "t": "eq",
