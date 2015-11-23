@@ -1,6 +1,17 @@
 == UPDATE ==
 11/14/2015
 ------------------
+Tablet UI config page, first drop:<br>
+<img src="images/cfg_panel.png">
+Required changes:<br>
+* Import updated [winkCore.json](winkCore.json)
+*  import updated [tabletUI.json](tabletUI.json)
+*  import updated [winkIntegration.json](winkIntegration.json)
+*  restart your app via git dashboard or cf push.<br>
+This is for bliue-mix cloud instances only. If you are using local installation you will need to implement your own database connector.
+
+11/14/2015
+------------------
 Found bug in tabletUI please import updated [tabletUI.json](tabletUI.json)
 
 11/13/2015
