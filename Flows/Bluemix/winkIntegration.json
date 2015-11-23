@@ -551,8 +551,8 @@
     "method": "use",
     "ret": "obj",
     "url": "",
-    "x": 929.5000610351562,
-    "y": 1112.72216796875,
+    "x": 916.5000610351562,
+    "y": 1113.72216796875,
     "wires": [
       [
         "2bf5fae1.d40a06"
@@ -803,22 +803,6 @@
     "wires": []
   },
   {
-    "id": "2a371087.d5c8f",
-    "type": "http in",
-    "z": "17b3daf5.e84c25",
-    "name": "",
-    "url": "/red/getConfig",
-    "method": "get",
-    "swaggerDoc": "",
-    "x": 119.5,
-    "y": 70.5,
-    "wires": [
-      [
-        "32c7c696.cd383a"
-      ]
-    ]
-  },
-  {
     "id": "32c7c696.cd383a",
     "type": "function",
     "z": "17b3daf5.e84c25",
@@ -1036,8 +1020,8 @@
     "method": "use",
     "ret": "txt",
     "url": "",
-    "x": 482,
-    "y": 668,
+    "x": 480,
+    "y": 667,
     "wires": [
       []
     ]
@@ -1088,11 +1072,11 @@
     "type": "function",
     "z": "17b3daf5.e84c25",
     "name": "try to refresh app_config data",
-    "func": "if (context.global.CloudantBkUP) {\n    var msg={\n        url:context.global.VCAP_SERVICES.cloudantNoSQLDB[0].credentials.url+\"/winkapp/app_data\",\n        method:\"GET\"\n    }\n    node.send(msg); \n}\nreturn;",
+    "func": "if (context.global.CloudantBkUP) {\n    msg.url=context.global.VCAP_SERVICES.cloudantNoSQLDB[0].credentials.url+\"/winkapp/app_data\";\n    msg.method=\"GET\";\n    node.send(msg); \n}\nreturn;",
     "outputs": 1,
     "noerr": 0,
-    "x": 560,
-    "y": 881,
+    "x": 527,
+    "y": 871,
     "wires": [
       [
         "741bb3a4.8be44c"
@@ -1120,7 +1104,7 @@
     "type": "function",
     "z": "17b3daf5.e84c25",
     "name": "create or update config ",
-    "func": "if (\"error\" in msg.payload && msg.payload.error=='not_found'){\n    node.warn('no app_data exists in cloudant DB, creating initial set from bluemix-settings.js')\n    var DBMsg={\n        url:context.global.VCAP_SERVICES.cloudantNoSQLDB[0].credentials.url+\"/winkapp\",\n        method:\"POST\",\n        headers: \n            {\n                \"Content-Type\":\"application/json\"\n            },\n        payload: {\n            \"_id\":\"app_data\",\n            \"item\":\"app_data\",\n            \"app_cfg\":{\n            motionAdjustTstat: context.global.motionAdjustTstat||false,\n            BlueMixUrlBase:context.global.BlueMixUrlBase,\n            HomeLocation:context.global.HomeLocation\n            }\n        }\n    }\n    \n\tif ('FosCam' in context.global) DBMsg.payload.app_cfg.FosCam=context.global.FosCam;\n\tif ('SamsungCam' in context.global) DBMsg.payload.app_cfg.SamsungCam=context.global.SamsungCam;\n\tif ('DlinkCam' in context.global) DBMsg.payload.app_cfg.DlinkCam=context.global.DlinkCam;\n    if ('camera_motion' in context.global) DBMsg.payload.app_cfg.camera_motion=context.global.camera_motion;\n    if ('tab_ui_shortcuts' in context.global) DBMsg.payload.app_cfg.tab_ui_shortcuts=context.global.tab_ui_shortcuts;\n    if ('netatmo' in context.global) DBMsg.payload.app_cfg.netatmo=context.global.netatmo;\nnode.send(DBMsg);    \n}\nelse {\n    node.warn('config data exists, restoring');\n    for (var key in msg.payload.app_cfg){\n        node.warn('Restoring '+key+' settings')\n        context.global[key]=msg.payload.app_cfg[key];\n    }\n}    \nreturn;",
+    "func": "if ((\"error\" in msg.payload && msg.payload.error=='not_found') || msg.db_mode=='update'){\n    node.warn('no app_data exists in cloudant DB or update oeration, saving globals to database')\n    var DBMsg={\n        url:context.global.VCAP_SERVICES.cloudantNoSQLDB[0].credentials.url+\"/winkapp\",\n        method:(msg.db_mode=='update' ? \"PUT\":\"POST\"),\n        headers: \n            {\n                \"Content-Type\":\"application/json\"\n            },\n        payload: {\n            \"_id\":\"app_data\",\n            \"item\":\"app_data\",\n            \"app_cfg\":{\n            motionAdjustTstat: context.global.motionAdjustTstat||false,\n            BlueMixUrlBase:context.global.BlueMixUrlBase,\n            HomeLocation:context.global.HomeLocation\n            }\n        }\n    }\n    if(msg.db_mode=='update'){\n    DBMsg.url=DBMsg.url+\"/app_data\"    \n    DBMsg.payload._rev=msg.payload._rev;\n    }\n\tif ('FosCam' in context.global) DBMsg.payload.app_cfg.FosCam=context.global.FosCam;\n\tif ('SamsungCam' in context.global) DBMsg.payload.app_cfg.SamsungCam=context.global.SamsungCam;\n\tif ('DlinkCam' in context.global) DBMsg.payload.app_cfg.DlinkCam=context.global.DlinkCam;\n    if ('camera_motion' in context.global) DBMsg.payload.app_cfg.camera_motion=context.global.camera_motion;\n    if ('tab_ui_shortcuts' in context.global) DBMsg.payload.app_cfg.tab_ui_shortcuts=context.global.tab_ui_shortcuts;\n    if ('netatmo' in context.global) DBMsg.payload.app_cfg.netatmo=context.global.netatmo;\nnode.send(DBMsg);    \n}\nelse {\n    node.warn('config data exists, restoring');\n    for (var key in msg.payload.app_cfg){\n        node.warn('Restoring '+key+' settings')\n        context.global[key]=msg.payload.app_cfg[key];\n    }\n}    \nreturn;",
     "outputs": 1,
     "noerr": 0,
     "x": 954,
@@ -1151,10 +1135,10 @@
     "z": "17b3daf5.e84c25",
     "name": "",
     "url": "/red/update_app_cfg",
-    "method": "get",
+    "method": "post",
     "swaggerDoc": "",
-    "x": 119,
-    "y": 942,
+    "x": 115.5,
+    "y": 937,
     "wires": [
       [
         "10f3f9a1.ef0c06"
@@ -1166,7 +1150,7 @@
     "type": "function",
     "z": "17b3daf5.e84c25",
     "name": "",
-    "func": "if(msg.req.headers.authorization && msg.req.headers.authorization==\"Bearer \"+context.global.FREEBOARD_TOKEN){\nmsg.statusCode=\"200\";\nvar msg1={}\nnode.send([msg1,msg])\n} else\n{\n    msg.statusCode=\"400\";\n    node.send([null,msg])\n}\nreturn;",
+    "func": "if(msg.req.headers.authorization && msg.req.headers.authorization==\"Bearer \"+context.global.FREEBOARD_TOKEN){\nmsg.statusCode=\"200\";\nvar msg1={}\nmsg1.db_mode=msg.payload.db_mode||\"read\";\nnode.send([msg1,msg])\n} else\n{\n    msg.statusCode=\"400\";\n    node.send([null,msg])\n}\nreturn;",
     "outputs": "2",
     "noerr": 0,
     "x": 306,
