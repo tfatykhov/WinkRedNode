@@ -7,25 +7,6 @@
     "wholemsg": "false"
   },
   {
-    "id": "4df15177.b20eb",
-    "type": "inject",
-    "z": "3cc9f29d.c3360e",
-    "name": "",
-    "topic": "",
-    "payload": "",
-    "payloadType": "none",
-    "repeat": "82800",
-    "crontab": "",
-    "once": true,
-    "x": 654.5,
-    "y": 339,
-    "wires": [
-      [
-        "e45ee480.1ba118"
-      ]
-    ]
-  },
-  {
     "id": "acfa619b.5305a",
     "type": "function",
     "z": "3cc9f29d.c3360e",
@@ -71,6 +52,25 @@
     "wires": [
       [
         "c0285d1b.3fd7a"
+      ]
+    ]
+  },
+  {
+    "id": "4df15177.b20eb",
+    "type": "inject",
+    "z": "3cc9f29d.c3360e",
+    "name": "",
+    "topic": "",
+    "payload": "",
+    "payloadType": "none",
+    "repeat": "86400",
+    "crontab": "",
+    "once": true,
+    "x": 654.5,
+    "y": 339,
+    "wires": [
+      [
+        "e45ee480.1ba118"
       ]
     ]
   },
@@ -433,7 +433,7 @@
     "type": "function",
     "z": "3cc9f29d.c3360e",
     "name": "GetDevices",
-    "func": "context.global.getWinkState(msg.payload);\ndelete context.global.winkState._msgid;\nif (\"cameras\" in context.global.winkState){\n    for (var key in context.global.winkState.cameras){\n        if (context.global.winkState.cameras[key].manufacturer_device_model =='dropcam' || context.global.winkState.cameras[key].manufacturer_device_model =='dropcam_pro'){\n            var newMsg1 ={\n                \"url\":context.global.BlueMixUrlBase+'/red/retrieve_activities?camera_name='+key,\n                \"method\": \"GET\",\n                headers: {\n                    \"Authorization\":\"Bearer \"+context.global.FREEBOARD_TOKEN\n                }\n            }\n            node.send(newMsg1);\n        }\n    }\n}\nnode.warn(\"Device import completed\");\nreturn;\n",
+    "func": "context.global.getWinkState(msg.payload);\ndelete context.global.winkState._msgid;\nif (\"cameras\" in context.global.winkState){\n    for (var key in context.global.winkState.cameras){\n        if (context.global.winkState.cameras[key].manufacturer_device_model.indexOf(\"dropcam\")!=-1){\n            var newMsg1 ={\n                \"url\":context.global.BlueMixUrlBase+'/red/retrieve_activities?camera_name='+key,\n                \"method\": \"GET\",\n                headers: {\n                    \"Authorization\":\"Bearer \"+context.global.FREEBOARD_TOKEN\n                }\n            }\n            node.send(newMsg1);\n        }\n    }\n}\nnode.warn(\"Device import completed\");\nreturn;\n",
     "outputs": 1,
     "noerr": 0,
     "x": 1577.5000457763672,
