@@ -1,5 +1,21 @@
 [
   {
+    "id": "ebff836d.14008",
+    "type": "function",
+    "z": "17b3daf5.e84c25",
+    "name": "",
+    "func": "if (msg.payload.token==context.global.FREEBOARD_TOKEN)\n{\n   if(typeof msg.payload.model ==='undefined' || msg.payload.model=='dropcam' || msg.payload.model=='dropcam_pro' || msg.payload.model.indexOf(\"dropcam\")!=-1){\n   if (typeof msg.payload.cuepoint ==='undefined'){\n   msg.url=\"https://winkapi.quirky.com/cameras/\"+msg.payload.id+\"/image\"\n   msg.method=\"GET\"\n    msg.headers= {\n        \"Authorization\":\"Bearer \"+context.global.WinkToken,\n        \"User-Agent\":\"Manufacturer/Darwin node/0.10.30 Wink/3.6.0\"\n    }\n} else\n{\n    msg.url=\"https://winkapi.quirky.com/cameras/\"+msg.payload.id+\"/cuepoints/\"+msg.payload.cuepoint+\"/image\"\n   msg.method=\"GET\"\n    msg.headers= {\n        \"Authorization\":\"Bearer \"+context.global.WinkToken,\n        \"User-Agent\":\"Manufacturer/Darwin node/0.10.30 Wink/3.6.0\"\n}\n}\nreturn msg;\n}\n}\nif (typeof msg.payload.model!=='undefined' && msg.payload.model=='foscam'){\n//http://timothyr.no-ip.org:1882/videostream.cgi?uid=admin&pwd=Dfdbkjy5\nfor (var k in context.global.FosCam){\n    if (context.global.FosCam[k].Parameters.id.value==msg.payload.id){\n     msg.method=\"GET\"\n     msg.url=\"http://\"+context.global.FosCam[k].hostname+\"/videostream.cgi?user=\"+context.global.FosCam[k].uid+\"&pwd=\"+context.global.FosCam[k].pwd\n     node.warn(msg.url);\n    return msg;\n    }\n}\n}\nelse {\n    msg.statusCode=\"403\";\n    node.send(msg);\n//    msg.res.send(400,\"Bad Request darling\");\n}\n",
+    "outputs": 1,
+    "noerr": 0,
+    "x": 441,
+    "y": 482.4999694824219,
+    "wires": [
+      [
+        "3bee901b.c4117"
+      ]
+    ]
+  },
+  {
     "id": "299fe37e.d6601c",
     "type": "function",
     "z": "17b3daf5.e84c25",
@@ -279,22 +295,6 @@
     "wires": [
       [
         "ebff836d.14008"
-      ]
-    ]
-  },
-  {
-    "id": "ebff836d.14008",
-    "type": "function",
-    "z": "17b3daf5.e84c25",
-    "name": "",
-    "func": "if (msg.payload.token==context.global.FREEBOARD_TOKEN)\n{\n   if(typeof msg.payload.model ==='undefined' || msg.payload.model=='dropcam' || msg.payload.model=='dropcam_pro'){\n   if (typeof msg.payload.cuepoint ==='undefined'){\n   msg.url=\"https://winkapi.quirky.com/cameras/\"+msg.payload.id+\"/image\"\n   msg.method=\"GET\"\n    msg.headers= {\n        \"Authorization\":\"Bearer \"+context.global.WinkToken,\n        \"User-Agent\":\"Manufacturer/Darwin node/0.10.30 Wink/3.6.0\"\n    }\n} else\n{\n    msg.url=\"https://winkapi.quirky.com/cameras/\"+msg.payload.id+\"/cuepoints/\"+msg.payload.cuepoint+\"/image\"\n   msg.method=\"GET\"\n    msg.headers= {\n        \"Authorization\":\"Bearer \"+context.global.WinkToken,\n        \"User-Agent\":\"Manufacturer/Darwin node/0.10.30 Wink/3.6.0\"\n}\n}\nreturn msg;\n}\n}\nif (typeof msg.payload.model!=='undefined' && msg.payload.model=='foscam'){\n//http://timothyr.no-ip.org:1882/videostream.cgi?uid=admin&pwd=Dfdbkjy5\nfor (var k in context.global.FosCam){\n    if (context.global.FosCam[k].Parameters.id.value==msg.payload.id){\n     msg.method=\"GET\"\n     msg.url=\"http://\"+context.global.FosCam[k].hostname+\"/videostream.cgi?user=\"+context.global.FosCam[k].uid+\"&pwd=\"+context.global.FosCam[k].pwd\n     node.warn(msg.url);\n    return msg;\n    }\n}\n}\nelse {\n    msg.statusCode=\"403\";\n    node.send(msg);\n//    msg.res.send(400,\"Bad Request darling\");\n}\n",
-    "outputs": 1,
-    "noerr": 0,
-    "x": 441,
-    "y": 482.4999694824219,
-    "wires": [
-      [
-        "3bee901b.c4117"
       ]
     ]
   },
