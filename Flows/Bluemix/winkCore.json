@@ -7,6 +7,25 @@
     "wholemsg": "false"
   },
   {
+    "id": "4df15177.b20eb",
+    "type": "inject",
+    "z": "3cc9f29d.c3360e",
+    "name": "",
+    "topic": "",
+    "payload": "",
+    "payloadType": "none",
+    "repeat": "82800",
+    "crontab": "",
+    "once": true,
+    "x": 654.5,
+    "y": 339,
+    "wires": [
+      [
+        "e45ee480.1ba118"
+      ]
+    ]
+  },
+  {
     "id": "acfa619b.5305a",
     "type": "function",
     "z": "3cc9f29d.c3360e",
@@ -52,25 +71,6 @@
     "wires": [
       [
         "c0285d1b.3fd7a"
-      ]
-    ]
-  },
-  {
-    "id": "4df15177.b20eb",
-    "type": "inject",
-    "z": "3cc9f29d.c3360e",
-    "name": "",
-    "topic": "",
-    "payload": "",
-    "payloadType": "none",
-    "repeat": "82800",
-    "crontab": "",
-    "once": true,
-    "x": 654.5,
-    "y": 339,
-    "wires": [
-      [
-        "e45ee480.1ba118"
       ]
     ]
   },
@@ -758,7 +758,7 @@
     "type": "function",
     "z": "3cc9f29d.c3360e",
     "name": "Snapshots",
-    "func": "if(context.global.CloudantBkUP && (msg.payload.object_type=='camera' || msg.payload.object_type=='sensor_pod') && ('motion' in msg.payload.last_reading && msg.payload.last_reading.motion===true) && msg.payload.name in context.global.camera_motion)\n{\n    var newMsg1 ={\n    \"url\":context.global.BlueMixUrlBase+'/red/save_images?cam_list='+context.global.camera_motion[msg.payload.name]+'&object_name='+msg.payload.name,\n    \"method\": \"GET\",\n    headers: {\n        \"Authorization\":\"Bearer \"+context.global.FREEBOARD_TOKEN\n    }\n    }\n    node.send(newMsg1);\n}\nreturn;",
+    "func": "if ('camera_motion' in context.global){\nif(context.global.CloudantBkUP && (msg.payload.object_type=='camera' || msg.payload.object_type=='sensor_pod') && ('motion' in msg.payload.last_reading && msg.payload.last_reading.motion===true) && msg.payload.name in context.global.camera_motion)\n{\n    var newMsg1 ={\n    \"url\":context.global.BlueMixUrlBase+'/red/save_images?cam_list='+context.global.camera_motion[msg.payload.name]+'&object_name='+msg.payload.name,\n    \"method\": \"GET\",\n    headers: {\n        \"Authorization\":\"Bearer \"+context.global.FREEBOARD_TOKEN\n    }\n    }\n    node.send(newMsg1);\n}\n}\nreturn;",
     "outputs": 1,
     "noerr": 0,
     "x": 684.8957977294922,
