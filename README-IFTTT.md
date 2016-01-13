@@ -57,7 +57,7 @@ Send WINK device CMD via IFTTT (new)
 Maker channel send web request parameters (used in THAT):
 
 url 
-<your node-red host>/red/ifttt
+(your node-red host)/red/ifttt
 
 method: POST
 
