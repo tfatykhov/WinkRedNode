@@ -1,4 +1,23 @@
 == UPDATE ==
+01/23/2016
+------------------
+Tablet UI config page, added clock format change:<br>
+<img src="images/updated_config.png">
+Robots activity are now displayed in the activity log:<br>
+<img src="images/time_and_robots.png">
+Robots status added to "detais" tab. If you have more than 10, robots will be splitted in the chunks of 10 to proper fill screen space:<br><br>
+<img src="images/robot_details.png"><br>
+Required changes:<br>
+* update package.json via git console of bluemix using [package.json](package.json)
+* Import updated [winkCore.json](winkCore.json)
+*  import updated [tabletUI.json](tabletUI.json)
+*  import updated [winkIntegration.json](winkIntegration.json)
+*  restart your app via git dashboard or cf push.<br>
+<br>
+For local setup, to change time display add following key to settings.js under functionGlobalContext section<br>
+,HoursFormat24:true (or false) based on your need.<br>
+
+
 11/14/2015
 ------------------
 Tablet UI config page, first drop:<br>
