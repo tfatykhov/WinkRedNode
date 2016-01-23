@@ -7,21 +7,18 @@
     "wholemsg": "false"
   },
   {
-    "id": "4df15177.b20eb",
-    "type": "inject",
+    "id": "df90fba.f206f08",
+    "type": "function",
     "z": "3cc9f29d.c3360e",
-    "name": "",
-    "topic": "",
-    "payload": "",
-    "payloadType": "none",
-    "repeat": "82800",
-    "crontab": "",
-    "once": true,
-    "x": 654.5,
-    "y": 339,
+    "name": "Prepare Wink devices subscription request",
+    "func": "var baseUrl = \"https://winkapi.quirky.com/\";\nvar callbackUrl=context.global.BlueMixUrlBase+\"/red/wink/subscribtions\";\n   for (var winkDevice in context.global.winkState)\n    {\n        if (winkDevice!=\"linked_services\")\n        {\n            var deviceUrl=baseUrl+winkDevice;\n            for (var winkDeviceName in context.global.winkState[winkDevice])\n            {\n                deviceId=context.global.winkState[winkDevice][winkDeviceName].object_id;\n                node.warn(winkDeviceName+\" \"+deviceId);\n                var newMsg ={\n                    \"url\":baseUrl+\"/\"+winkDevice+\"/\"+deviceId+\"/subscriptions\",\n                    \"method\": \"POST\",\n                    headers: {\n                        \"Authorization\":\"Bearer \"+context.global.WinkToken,\n                        \"User-Agent\":\"Manufacturer/Darwin node/0.10.30 Wink/999.99.9\",\n                        \"Content-Type\":\"application/json\"\n                    },\n                    payload: {\n                        \"callback\": callbackUrl\n                    }\n                };\n                node.send(newMsg);\n            }\n        }\n    }\nreturn;",
+    "outputs": 1,
+    "noerr": 0,
+    "x": 1067.5001678466797,
+    "y": 338,
     "wires": [
       [
-        "e45ee480.1ba118"
+        "55d29430.aa2d6c"
       ]
     ]
   },
@@ -30,7 +27,7 @@
     "type": "function",
     "z": "3cc9f29d.c3360e",
     "name": "DefineGlobalObjects",
-    "func": "//use this function to initialize global variables that can be used in any flow or function\n//and will keep their values while application is running\nif (typeof context.global.ifttt === 'undefined')\n{\n    context.global.ifttt=false;\n}\n\nif (typeof (context.global.PresenceHistory) === 'undefined') context.global.PresenceHistory=[];\n\nif (typeof(context.global.Presence) === 'undefined')\n{\n    context.global.Presence = {};  \n}\n\nif (typeof context.global.ignoreMotion === 'undefined')\n{\n    context.global.ignoreMotion=false;\n}\nif (typeof context.global.mediaPlaying==='undefined')\n{\n    context.global.mediaPlaying=false;\n}\nif (typeof context.global.Weather === 'undefined')\n{\n    context.global.Weather= {};\n}\nif (typeof context.global.winkState==='undefined' )\n{\n context.global.winkState = {};\n}\n\nif (typeof context.global.winkDevCap==='undefined' )\n{\n    context.global.winkDevCap = {};\n}\n\ncontext.global.checkPresence = function() {\n    var i=0;\n    if (typeof(context.global.Presence) ==='undefined') return false;\n    for (var key in context.global.Presence){\n        if (context.global.Presence[key].home==='yes' || context.global.Presence[key].home===true) i++;\n    }\n    return (i>0 ? true : false);\n};\n\ncontext.global.isHomeOccupied = function() {\n    if (typeof context.global.winkState.groups['.sensors'].motion!=='undefined'){ motionSensors = context.global.winkState.groups['.sensors'].motion.or; } else { motionSensors = false; }\n    if (typeof context.global.winkState.groups['.sensors'].occupied!=='undefined'){ occupancySensors = context.global.winkState.groups['.sensors'].occupied.or; } else { occupancySensors = false; }\n    return ((motionSensors || occupancySensors || context.global.checkPresence()) ? true : false);\n};\n\ncontext.global.getWinkState = function (body) {\n    var results, updateP;\n\n    updateP = !body.data;\n    results = updateP ? [body] : body.data;\n\n    results.forEach(function (result) {\n        var key, len, prop, readings, type,reading_aggregations, agg_prop, capabilities, capb, outlets, outl;\n        //node.warn(result.object_type+\" \"+ result.object_id+\" \"+result.name) //for debugging\n        type = result.object_type;\n        if (type) {\n        key = result.name;\n        if (type==\"binary_switch\") type=\"binary_switches\";\n        else type=type+\"s\";\n        }\n        else {\n            if (!result.linked_service_id || result._msgid) return;\n            type = 'linked_services';\n            key = result.service;\n            result.object_id = result.linked_service_id;\n        }\n        if (!context.global.winkState[type]) context.global.winkState[type] = {};\n\n        if ((!!context.global.winkState[type][key]) && (context.global.winkState[type][key].object_id != result.object_id)) {\n            key += ' (#' + result.object_id + ')';\n        }\n\n        if (!(key in context.global.winkState[type])) context.global.winkState[type][key] ={};\n        context.global.winkState[type][key].name=result.name || key;\n        context.global.winkState[type][key].object_type=type;\n        context.global.winkState[type][key].object_id=result.object_id;\n        context.global.winkState[type][key].device_manufacturer=result.device_manufacturer;\n        context.global.winkState[type][key].freeboard=0;\n        if (result.savings_goal){\n         context.global.winkState[type][key].savings_goal=result.savings_goal ;\n         context.global.winkState[type][key].nose_color=result.nose_color;\n        }\n        if (result.lat_lng) {\n            if ((result.lat_lng[0] === 0) && (result.lat_lng[1] === 0)) result.lat_lng = [null, null];\n            context.global.winkState[type][key].coordinates = result.lat_lng;\n        }\n        \n        // Add group membership\n        if (type==\"groups\" && result.name.substring(0,1)!==\".\" && result.name.substring(0,1)!==\"@\")\n        {\n            if (result.members && result.members.length>0) {\n                context.global.winkState[type][key].members = {};\n                for (i=0; i<result.members.length; i++) {\n                    var light_type= (result.members[i].object_type == 'binary_switch' ? 'binary_switches' : result.members[i].object_type+'s');\n                    for (var name in context.global.winkState[light_type])\n                    {\n                        if (context.global.winkState[light_type][name].object_id == result.members[i].object_id) \n                        {\n                            context.global.winkState[type][key].members[name] = { \n                                    name:name,\n                                    object_id:result.members[i].object_id,\n                                    object_type:light_type\n                                };\n                            }\n                        }\n                    }\n                }\n                \n        }\n\n        if (type=='cameras'){\n//        if (typeof(context.global.winkState[type][key].activities)==='undefined') context.global.winkState[type][key].activities=[]\n        context.global.winkState[type][key].manufacturer_device_model = result.manufacturer_device_model\n        context.global.winkState[type][key].url = context.global.BlueMixUrlBase+\"/freeboard/camera?token=\"+context.global.FREEBOARD_TOKEN+\"&id=\"+context.global.winkState.cameras[key].object_id+\"&model=\"+context.global.winkState.cameras[key].manufacturer_device_model\n        context.global.winkState[type][key].snap_url = context.global.BlueMixUrlBase+\"/freeboard/camera?token=\"+context.global.FREEBOARD_TOKEN+\"&id=\"+context.global.winkState.cameras[key].object_id+\"&model=\"+context.global.winkState.cameras[key].manufacturer_device_model\n        context.global.winkState[type][key].history_url = context.global.BlueMixUrlBase+\"/freeboard/cameraSnapshots?token=\"+context.global.FREEBOARD_TOKEN+\"&camera_name=\"+key,\n        context.global.winkState[type][key].refresh_time=30\n        }\n\n        readings = result.last_reading;\n        for (prop in readings) {\n            len = prop.length;\n            if ((prop.indexOf('desired_') === -1) && (prop.lastIndexOf('_at') !== (len - 3))) {\n                context.global.winkState[type][key][prop] = readings[prop];\n            }\n        }\n        \n        reading_aggregations = result.reading_aggregation;\n        for (agg_prop in reading_aggregations) {\n            context.global.winkState[type][key][agg_prop]=reading_aggregations[agg_prop];\n        }\n        \n        capabilities = result.capabilities;\n        for (capb in capabilities) {\n            if(!context.global.winkDevCap[key]) context.global.winkDevCap[key]={};\n            if(!context.global.winkDevCap[key][capb]) context.global.winkDevCap[key][capb]={};\n          context.global.winkDevCap[key][capb]=capabilities[capb];\n        }\n        \n        outlets = result.outlets;\n        for (outl in outlets) {\n         if (!context.global.winkState[type][outlets[outl].name]) context.global.winkState[type][outlets[outl].name] = {};\n        context.global.winkState[type][outlets[outl].name]=outlets[outl];\n        }\n        \n        \n        if (!!result.linked_service_id) context.global.winkState[type][key].connection = !result.invalidated_at;\n\n        if (!updateP) return;\n        if (!context.global.winkState.lastUpdates) context.global.winkState.lastUpdates = [];\n        if (type!=='groups'){\n        context.global.winkState[type][key].timestamp = new Date();\n        context.global.winkState.lastUpdates.splice(0, 0, context.global.winkState[type][key]);\n        if (context.global.winkState.lastUpdates.length > 15) context.global.winkState.lastUpdates.pop();\n        }\n        //addind special array for motion sensors to check how often they occur\n        if (type == \"sensor_pods\" && typeof (context.global.winkState[type][key].motion) !== 'undefined') {\n        context.global.winkState[type][key].timestamp= new Date();\n        if (!context.global.winkState.motionUpdates) context.global.winkState.motionUpdates=[];\n        context.global.winkState.motionUpdates.splice(0, 0, context.global.winkState[type][key]);\n        if (context.global.winkState.motionUpdates.length > 30) context.global.winkState.motionUpdates.pop();\n        }\n        \n    });\n};\n\n//global function to generate wink cmd message for various objects\n\ncontext.global.executeWinkCMD = function (winkName,type,cmd,level) {\nvar WinkCMDmsg;\n//node.warn(winkName+' '+type+' '+cmd)\nswitch (type.toLowerCase()) {\n\ncase 'lock':\nvar request=(cmd.toLowerCase() ==\"lock\" ? true:false);\nif (winkName in context.global.winkState.locks)\n{\n   WinkCMDmsg ={\n    \"url\":\"https://winkapi.quirky.com/locks/\"+context.global.winkState.locks[winkName].object_id,\n    \"method\": \"PUT\",\n    headers: {\n        \"Authorization\":\"Bearer \"+context.global.WinkToken,\n        \"Content-Type\":\"application/json\"\n    },\n    payload: {\n        \"desired_state\": {\n            \"locked\":(cmd.toLowerCase() ==\"lock\" ? true:false)\n        }\n    }\n};\n}\nbreak;\ncase 'light':\nif (winkName in context.global.winkState.light_bulbs){\n    if(context.global.winkState.light_bulbs[winkName].device_manufacturer==\"lifx\")\n    {\n        WinkCMDmsg ={\n            \"url\":\"https://api.lifx.com/v1/lights/id:\"+context.global.winkState.light_bulbs[winkName].object_id+\"/state\",\n            \"method\": \"PUT\",\n            headers: {\n                \"Authorization\": \"Bearer \"+context.global.LIFX_TOKEN,\n                \"Content-Type\":\"application/json\"\n            },\n            payload: {\n                power:(cmd.toLowerCase()==\"on\" ? \"on\":\"off\"),\n                brightness: level/100,\n                \"duration\": 1\n            }\n        }\n    }\n    else {\n WinkCMDmsg ={\n    \"url\":\"https://winkapi.quirky.com/light_bulbs/\"+context.global.winkState.light_bulbs[winkName].object_id,\n    \"method\": \"PUT\",\n    headers: {\n        \"Authorization\":\"Bearer \"+context.global.WinkToken,\n        \"Content-Type\":\"application/json\"\n    },\n    payload: {\n        \"desired_state\": {\n            \"powered\":(cmd.toLowerCase() ==\"on\" ? true:false),\n            \"brightness\": level/100\n        }\n    }\n };\n}   \n} else if(winkName in context.global.winkState.binary_switches){\n WinkCMDmsg ={\n    \"url\":\"https://winkapi.quirky.com/binary_switches/\"+context.global.winkState.binary_switches[winkName].object_id,\n    \"method\": \"PUT\",\n    headers: {\n        \"Authorization\":\"Bearer \"+context.global.WinkToken,\n        \"Content-Type\":\"application/json\"\n    },\n    payload: {\n        \"desired_state\": {\n            \"powered\":(cmd.toLowerCase() ==\"on\" ? true:false)\n        }\n    }\n};\n} else if(winkName in context.global.winkState.powerstrips && context.global.winkState.powerstrips[winkName].object_type==='outlet'){\n WinkCMDmsg ={\n    \"url\":\"https://winkapi.quirky.com/outlets/\"+context.global.winkState.powerstrips[winkName].object_id,\n    \"method\": \"PUT\",\n    headers: {\n        \"Authorization\":\"Bearer \"+context.global.WinkToken,\n        \"Content-Type\":\"application/json\"\n    },\n    payload: {\n        \"desired_state\": {\n            \"powered\":(cmd.toLowerCase() ==\"on\" ? true:false)\n        }\n    }\n};\n}\nbreak;\ncase 'group':\nif (winkName in context.global.winkState.groups){\nnode.warn(context.global.winkState.groups[winkName]);\n WinkCMDmsg ={\n    \"url\":\"https://winkapi.quirky.com/groups/\"+context.global.winkState.groups[winkName].object_id+\"/activate\",\n    \"method\": \"POST\",\n    headers: {\n        \"Authorization\":\"Bearer \"+context.global.WinkToken,\n        \"Content-Type\":\"application/json\"\n    },\n    payload: {\n        \"desired_state\": {\n            \"powered\":(cmd.toLowerCase() ==\"on\" ? true:false),\n            \"brightness\": level/100\n        }\n    }\n  };\n }\nbreak;\ncase 'shortcut':\nif (winkName in context.global.winkState.scenes){\n WinkCMDmsg ={\n    \"url\":\"https://winkapi.quirky.com/scenes/\"+context.global.winkState.scenes[winkName].object_id+\"/activate\",\n    \"method\": \"POST\",\n    headers: {\n        \"Authorization\":\"Bearer \"+context.global.WinkToken,\n        \"Content-Type\":\"application/json\"\n    }\n  };\n }\nbreak;\ndefault:\nWinkCMDmsg={url:'not defined'};\n}\n//node.warn(WinkCMDmsg.url);\nreturn WinkCMDmsg;\n};\n\n\ncontext.global.algorithm = 'aes-256-ctr',\n\ncontext.global.encrypt=function(text){\n  var cipher = context.global.CRYPTO.createCipher(context.global.algorithm,context.global.FREEBOARD_TOKEN);\n  var crypted = cipher.update(text,'utf8','hex');\n  crypted += cipher.final('hex');\n  return crypted;\n};\n \ncontext.global.decrypt=function(text){\n  var decipher = context.global.CRYPTO.createDecipher(context.global.algorithm,context.global.FREEBOARD_TOKEN);\n  var dec = decipher.update(text,'hex','utf8');\n  dec += decipher.final('utf8');\n  return dec;\n};\n\ncontext.global.getCookie=function(cname,req_cookies) {\n    var name = cname + \"=\";\n    var ca = req_cookies.split(';');\n    for(var i=0; i<ca.length; i++) {\n        var c = ca[i];\n        while (c.charAt(0)==' ') c = c.substring(1);\n        if (c.indexOf(name) === 0) return c.substring(name.length,c.length);\n    }\n};\nreturn msg;\n",
+    "func": "//use this function to initialize global variables that can be used in any flow or function\n//and will keep their values while application is running\nif (typeof context.global.ifttt === 'undefined')\n{\n    context.global.ifttt=false;\n}\n\nif (typeof (context.global.PresenceHistory) === 'undefined') context.global.PresenceHistory=[];\n\nif (typeof(context.global.Presence) === 'undefined')\n{\n    context.global.Presence = {};  \n}\n\nif (typeof context.global.ignoreMotion === 'undefined')\n{\n    context.global.ignoreMotion=false;\n}\nif (typeof context.global.mediaPlaying==='undefined')\n{\n    context.global.mediaPlaying=false;\n}\nif (typeof context.global.Weather === 'undefined')\n{\n    context.global.Weather= {};\n}\nif (typeof context.global.winkState==='undefined' )\n{\n context.global.winkState = {};\n}\n\nif (typeof context.global.winkDevCap==='undefined' )\n{\n    context.global.winkDevCap = {};\n}\n\ncontext.global.checkPresence = function() {\n    var i=0;\n    if (typeof(context.global.Presence) ==='undefined') return false;\n    for (var key in context.global.Presence){\n        if (context.global.Presence[key].home==='yes' || context.global.Presence[key].home===true) i++;\n    }\n    return (i>0 ? true : false);\n};\n\ncontext.global.isHomeOccupied = function() {\n    if (typeof context.global.winkState.groups['.sensors'].motion!=='undefined'){ motionSensors = context.global.winkState.groups['.sensors'].motion.or; } else { motionSensors = false; }\n    if (typeof context.global.winkState.groups['.sensors'].occupied!=='undefined'){ occupancySensors = context.global.winkState.groups['.sensors'].occupied.or; } else { occupancySensors = false; }\n    return ((motionSensors || occupancySensors || context.global.checkPresence()) ? true : false);\n};\n\ncontext.global.getWinkState = function (body) {\n    var results, updateP;\n\n    updateP = !body.data;\n    results = updateP ? [body] : body.data;\n\n    results.forEach(function (result) {\n        var key, len, prop, readings, type,reading_aggregations, agg_prop, capabilities, capb, outlets, outl;\n        //node.warn(result.object_type+\" \"+ result.object_id+\" \"+result.name) //for debugging\n        type = result.object_type;\n        if ('effects' in result && result.causes.length===0) return;\n        if (type) {\n        key = result.name;\n        if (type==\"binary_switch\") type=\"binary_switches\";\n        else type=type+\"s\";\n        }\n        else {\n            if (!result.robot_id || !result.linked_service_id || result._msgid) return;\n            if(result.linked_service_id){\n                type = 'linked_services';\n                key = result.service;\n                result.object_id = result.linked_service_id;\n            }\n            if (result.robot_id){\n                type= 'robots';\n                \n            }\n        }\n        if (!context.global.winkState[type]) context.global.winkState[type] = {};\n\n        if ((!!context.global.winkState[type][key]) && (context.global.winkState[type][key].object_id != result.object_id)) {\n            key += ' (#' + result.object_id + ')';\n        }\n\n        if (!(key in context.global.winkState[type])) context.global.winkState[type][key] ={};\n        context.global.winkState[type][key].name=result.name || key;\n        context.global.winkState[type][key].object_type=type;\n        context.global.winkState[type][key].object_id=result.object_id;\n        if (result.device_manufacturer) context.global.winkState[type][key].device_manufacturer=result.device_manufacturer;\n        context.global.winkState[type][key].freeboard=0;\n        if (result.savings_goal){\n         context.global.winkState[type][key].savings_goal=result.savings_goal ;\n         context.global.winkState[type][key].nose_color=result.nose_color;\n        }\n        if (result.lat_lng) {\n            if ((result.lat_lng[0] === 0) && (result.lat_lng[1] === 0)) result.lat_lng = [null, null];\n            context.global.winkState[type][key].coordinates = result.lat_lng;\n        }\n        if ('effects' in result && result.causes.length>0){\n           context.global.winkState[type][key].creating_actor_type=result.creating_actor_type;\n           context.global.winkState[type][key].automation_mode=result.automation_mode;\n           context.global.winkState[type][key].effects=result.effects;\n           context.global.winkState[type][key].causes=result.causes;\n           context.global.winkState[type][key].restrictions=result.restrictions;\n        }\n        \n        // Add group membership\n        if (type==\"groups\" && result.name.substring(0,1)!==\".\" && result.name.substring(0,1)!==\"@\")\n        {\n            if (result.members && result.members.length>0) {\n                context.global.winkState[type][key].members = {};\n                for (i=0; i<result.members.length; i++) {\n                    var light_type= (result.members[i].object_type == 'binary_switch' ? 'binary_switches' : result.members[i].object_type+'s');\n                    for (var name in context.global.winkState[light_type])\n                    {\n                        if (context.global.winkState[light_type][name].object_id == result.members[i].object_id) \n                        {\n                            context.global.winkState[type][key].members[name] = { \n                                    name:name,\n                                    object_id:result.members[i].object_id,\n                                    object_type:light_type\n                                };\n                            }\n                        }\n                    }\n                }\n                \n        }\n\n        if (type=='cameras'){\n//        if (typeof(context.global.winkState[type][key].activities)==='undefined') context.global.winkState[type][key].activities=[]\n        context.global.winkState[type][key].manufacturer_device_model = result.manufacturer_device_model\n        context.global.winkState[type][key].url = context.global.BlueMixUrlBase+\"/freeboard/camera?token=\"+context.global.FREEBOARD_TOKEN+\"&id=\"+context.global.winkState.cameras[key].object_id+\"&model=\"+context.global.winkState.cameras[key].manufacturer_device_model\n        context.global.winkState[type][key].snap_url = context.global.BlueMixUrlBase+\"/freeboard/camera?token=\"+context.global.FREEBOARD_TOKEN+\"&id=\"+context.global.winkState.cameras[key].object_id+\"&model=\"+context.global.winkState.cameras[key].manufacturer_device_model\n        context.global.winkState[type][key].history_url = context.global.BlueMixUrlBase+\"/freeboard/cameraSnapshots?token=\"+context.global.FREEBOARD_TOKEN+\"&camera_name=\"+key,\n        context.global.winkState[type][key].refresh_time=30\n        }\n\n        readings = result.last_reading;\n        for (prop in readings) {\n            len = prop.length;\n            if ((prop.indexOf('desired_') === -1) && (prop.lastIndexOf('_at') !== (len - 3))) {\n                context.global.winkState[type][key][prop] = readings[prop];\n            }\n        }\n        \n        reading_aggregations = result.reading_aggregation;\n        for (agg_prop in reading_aggregations) {\n            context.global.winkState[type][key][agg_prop]=reading_aggregations[agg_prop];\n        }\n        \n        capabilities = result.capabilities;\n        for (capb in capabilities) {\n            if(!context.global.winkDevCap[key]) context.global.winkDevCap[key]={};\n            if(!context.global.winkDevCap[key][capb]) context.global.winkDevCap[key][capb]={};\n          context.global.winkDevCap[key][capb]=capabilities[capb];\n        }\n        \n        outlets = result.outlets;\n        for (outl in outlets) {\n         if (!context.global.winkState[type][outlets[outl].name]) context.global.winkState[type][outlets[outl].name] = {};\n        context.global.winkState[type][outlets[outl].name]=outlets[outl];\n        }\n        \n        \n        if (!!result.linked_service_id) context.global.winkState[type][key].connection = !result.invalidated_at;\n\n        if (!updateP) return;\n        if (!context.global.winkState.lastUpdates) context.global.winkState.lastUpdates = [];\n        if (type!=='groups'){\n        context.global.winkState[type][key].timestamp = new Date();\n        context.global.winkState.lastUpdates.splice(0, 0, context.global.winkState[type][key]);\n        if (context.global.winkState.lastUpdates.length > 15) context.global.winkState.lastUpdates.pop();\n        }\n        //addind special array for motion sensors to check how often they occur\n        if (type == \"sensor_pods\" && typeof (context.global.winkState[type][key].motion) !== 'undefined') {\n        context.global.winkState[type][key].timestamp= new Date();\n        if (!context.global.winkState.motionUpdates) context.global.winkState.motionUpdates=[];\n        context.global.winkState.motionUpdates.splice(0, 0, context.global.winkState[type][key]);\n        if (context.global.winkState.motionUpdates.length > 30) context.global.winkState.motionUpdates.pop();\n        }\n        \n    });\n};\n\n//global function to generate wink cmd message for various objects\n\ncontext.global.executeWinkCMD = function (winkName,type,cmd,level) {\nvar WinkCMDmsg;\n//node.warn(winkName+' '+type+' '+cmd)\nswitch (type.toLowerCase()) {\n\ncase 'lock':\nvar request=(cmd.toLowerCase() ==\"lock\" ? true:false);\nif (winkName in context.global.winkState.locks)\n{\n   WinkCMDmsg ={\n    \"url\":\"https://winkapi.quirky.com/locks/\"+context.global.winkState.locks[winkName].object_id,\n    \"method\": \"PUT\",\n    headers: {\n        \"Authorization\":\"Bearer \"+context.global.WinkToken,\n        \"Content-Type\":\"application/json\"\n    },\n    payload: {\n        \"desired_state\": {\n            \"locked\":(cmd.toLowerCase() ==\"lock\" ? true:false)\n        }\n    }\n};\n}\nbreak;\ncase 'light':\nif (winkName in context.global.winkState.light_bulbs){\n    if(context.global.winkState.light_bulbs[winkName].device_manufacturer==\"lifx\")\n    {\n        WinkCMDmsg ={\n            \"url\":\"https://api.lifx.com/v1/lights/id:\"+context.global.winkState.light_bulbs[winkName].object_id+\"/state\",\n            \"method\": \"PUT\",\n            headers: {\n                \"Authorization\": \"Bearer \"+context.global.LIFX_TOKEN,\n                \"Content-Type\":\"application/json\"\n            },\n            payload: {\n                power:(cmd.toLowerCase()==\"on\" ? \"on\":\"off\"),\n                brightness: level/100,\n                \"duration\": 1\n            }\n        }\n    }\n    else {\n WinkCMDmsg ={\n    \"url\":\"https://winkapi.quirky.com/light_bulbs/\"+context.global.winkState.light_bulbs[winkName].object_id,\n    \"method\": \"PUT\",\n    headers: {\n        \"Authorization\":\"Bearer \"+context.global.WinkToken,\n        \"Content-Type\":\"application/json\"\n    },\n    payload: {\n        \"desired_state\": {\n            \"powered\":(cmd.toLowerCase() ==\"on\" ? true:false),\n            \"brightness\": level/100\n        }\n    }\n };\n}   \n} else if(winkName in context.global.winkState.binary_switches){\n WinkCMDmsg ={\n    \"url\":\"https://winkapi.quirky.com/binary_switches/\"+context.global.winkState.binary_switches[winkName].object_id,\n    \"method\": \"PUT\",\n    headers: {\n        \"Authorization\":\"Bearer \"+context.global.WinkToken,\n        \"Content-Type\":\"application/json\"\n    },\n    payload: {\n        \"desired_state\": {\n            \"powered\":(cmd.toLowerCase() ==\"on\" ? true:false)\n        }\n    }\n};\n} else if(winkName in context.global.winkState.powerstrips && context.global.winkState.powerstrips[winkName].object_type==='outlet'){\n WinkCMDmsg ={\n    \"url\":\"https://winkapi.quirky.com/outlets/\"+context.global.winkState.powerstrips[winkName].object_id,\n    \"method\": \"PUT\",\n    headers: {\n        \"Authorization\":\"Bearer \"+context.global.WinkToken,\n        \"Content-Type\":\"application/json\"\n    },\n    payload: {\n        \"desired_state\": {\n            \"powered\":(cmd.toLowerCase() ==\"on\" ? true:false)\n        }\n    }\n};\n}\nbreak;\ncase 'group':\nif (winkName in context.global.winkState.groups){\nnode.warn(context.global.winkState.groups[winkName]);\n WinkCMDmsg ={\n    \"url\":\"https://winkapi.quirky.com/groups/\"+context.global.winkState.groups[winkName].object_id+\"/activate\",\n    \"method\": \"POST\",\n    headers: {\n        \"Authorization\":\"Bearer \"+context.global.WinkToken,\n        \"Content-Type\":\"application/json\"\n    },\n    payload: {\n        \"desired_state\": {\n            \"powered\":(cmd.toLowerCase() ==\"on\" ? true:false),\n            \"brightness\": level/100\n        }\n    }\n  };\n }\nbreak;\ncase 'shortcut':\nif (winkName in context.global.winkState.scenes){\n WinkCMDmsg ={\n    \"url\":\"https://winkapi.quirky.com/scenes/\"+context.global.winkState.scenes[winkName].object_id+\"/activate\",\n    \"method\": \"POST\",\n    headers: {\n        \"Authorization\":\"Bearer \"+context.global.WinkToken,\n        \"Content-Type\":\"application/json\"\n    }\n  };\n }\nbreak;\ndefault:\nWinkCMDmsg={url:'not defined'};\n}\n//node.warn(WinkCMDmsg.url);\nreturn WinkCMDmsg;\n};\n\n\ncontext.global.algorithm = 'aes-256-ctr',\n\ncontext.global.encrypt=function(text){\n  var cipher = context.global.CRYPTO.createCipher(context.global.algorithm,context.global.FREEBOARD_TOKEN);\n  var crypted = cipher.update(text,'utf8','hex');\n  crypted += cipher.final('hex');\n  return crypted;\n};\n \ncontext.global.decrypt=function(text){\n  var decipher = context.global.CRYPTO.createDecipher(context.global.algorithm,context.global.FREEBOARD_TOKEN);\n  var dec = decipher.update(text,'hex','utf8');\n  dec += decipher.final('utf8');\n  return dec;\n};\n\ncontext.global.getCookie=function(cname,req_cookies) {\n    var name = cname + \"=\";\n    var ca = req_cookies.split(';');\n    for(var i=0; i<ca.length; i++) {\n        var c = ca[i];\n        while (c.charAt(0)==' ') c = c.substring(1);\n        if (c.indexOf(name) === 0) return c.substring(name.length,c.length);\n    }\n};\nreturn msg;\n",
     "outputs": 1,
     "noerr": 0,
     "x": 415.5,
@@ -71,6 +68,25 @@
     "wires": [
       [
         "c0285d1b.3fd7a"
+      ]
+    ]
+  },
+  {
+    "id": "4df15177.b20eb",
+    "type": "inject",
+    "z": "3cc9f29d.c3360e",
+    "name": "",
+    "topic": "",
+    "payload": "",
+    "payloadType": "str",
+    "repeat": "82800",
+    "crontab": "",
+    "once": true,
+    "x": 654.5,
+    "y": 339,
+    "wires": [
+      [
+        "e45ee480.1ba118"
       ]
     ]
   },
@@ -146,8 +162,8 @@
     "type": "function",
     "z": "3cc9f29d.c3360e",
     "name": "Prepare HTTPS requests by device type",
-    "func": "var newMsg1 ={\n    \"url\":\"https://winkapi.quirky.com/users/me/wink_devices\",\n    \"method\": \"GET\",\n    headers: {\n        \"Authorization\":\"Bearer \"+context.global.WinkToken,\n        \"User-Agent\":\"Manufacturer/Darwin node/0.10.30 Wink/999.99.9\"\n    }\n}\nvar newMsg2 ={\n    \"url\":\"https://winkapi.quirky.com/users/me/linked_services\",\n    \"method\": \"GET\",\n    headers: {\n        \"Authorization\":\"Bearer \"+context.global.WinkToken\n       // \"User-Agent\":\"Manufacturer/Darwin node/0.10.30 Wink/3.1.0\"\n }\n\n}\n\nvar newMsg3 ={\n    \"url\":\"https://winkapi.quirky.com/users/me/groups\",\n    \"method\": \"GET\",\n    headers: {\n        \"Authorization\":\"Bearer \"+context.global.WinkToken,\n        \"User-Agent\":\"Manufacturer/Darwin node/0.10.30 Wink/999.99.9\"\n }\n\n}\n\nvar newMsg4 ={\n    \"url\":\"https://winkapi.quirky.com/users/me/scenes\",\n    \"method\": \"GET\",\n    headers: {\n        \"Authorization\":\"Bearer \"+context.global.WinkToken,\n        \"User-Agent\":\"Manufacturer/Darwin node/0.10.30 Wink/999.99.9\"\n  }\n}\n\nreturn [newMsg1,newMsg2,newMsg3,newMsg4];\n//return [newMsg1,newMsg2,newMsg3,newMsg4,newMsg5,newMsg6,newMsg7,newMsg8,newMsg9,newMsg10,newMsg11];\n",
-    "outputs": "4",
+    "func": "var newMsg1 ={\n    \"url\":\"https://winkapi.quirky.com/users/me/wink_devices\",\n    \"method\": \"GET\",\n    headers: {\n        \"Authorization\":\"Bearer \"+context.global.WinkToken,\n        \"User-Agent\":\"Manufacturer/Darwin node/0.10.30 Wink/999.99.9\"\n    }\n}\nvar newMsg2 ={\n    \"url\":\"https://winkapi.quirky.com/users/me/linked_services\",\n    \"method\": \"GET\",\n    headers: {\n        \"Authorization\":\"Bearer \"+context.global.WinkToken\n       // \"User-Agent\":\"Manufacturer/Darwin node/0.10.30 Wink/3.1.0\"\n }\n\n}\n\nvar newMsg3 ={\n    \"url\":\"https://winkapi.quirky.com/users/me/groups\",\n    \"method\": \"GET\",\n    headers: {\n        \"Authorization\":\"Bearer \"+context.global.WinkToken,\n        \"User-Agent\":\"Manufacturer/Darwin node/0.10.30 Wink/999.99.9\"\n }\n\n}\n\nvar newMsg4 ={\n    \"url\":\"https://winkapi.quirky.com/users/me/scenes\",\n    \"method\": \"GET\",\n    headers: {\n        \"Authorization\":\"Bearer \"+context.global.WinkToken,\n        \"User-Agent\":\"Manufacturer/Darwin node/0.10.30 Wink/999.99.9\"\n  }\n}\n\nvar newMsg5 ={\n    \"url\":\"https://winkapi.quirky.com/users/me/robots\",\n    \"method\": \"GET\",\n    headers: {\n        \"Authorization\":\"Bearer \"+context.global.WinkToken,\n        \"User-Agent\":\"Manufacturer/Darwin node/0.10.30 Wink/999.99.9\"\n  }\n}\n\nreturn [newMsg1,newMsg2,newMsg3,newMsg4,newMsg5];\n//return [newMsg1,newMsg2,newMsg3,newMsg4,newMsg5,newMsg6,newMsg7,newMsg8,newMsg9,newMsg10,newMsg11];\n",
+    "outputs": "5",
     "noerr": 0,
     "x": 1040.5,
     "y": 93,
@@ -159,10 +175,13 @@
         "4b565cad.b4a9a4"
       ],
       [
-        "7ab4dcc3.854b24"
+        "73439c65.8cbc64"
       ],
       [
         "2ce46ae1.d31b96"
+      ],
+      [
+        "ef16d2e4.10e93"
       ]
     ]
   },
@@ -174,8 +193,8 @@
     "method": "use",
     "ret": "obj",
     "url": "",
-    "x": 1362.5,
-    "y": 45,
+    "x": 1404.5,
+    "y": 44,
     "wires": [
       [
         "ed3b1437.12c4e8"
@@ -286,22 +305,6 @@
     "wires": [
       [
         "df90fba.f206f08"
-      ]
-    ]
-  },
-  {
-    "id": "df90fba.f206f08",
-    "type": "function",
-    "z": "3cc9f29d.c3360e",
-    "name": "Prepare Wink devices subscription request",
-    "func": "var baseUrl = \"https://winkapi.quirky.com/\";\nvar callbackUrl=context.global.BlueMixUrlBase+\"/red/wink/subscribtions\";\n   for (var winkDevice in context.global.winkState)\n    {\n        if (winkDevice!=\"linked_services\")\n        {\n            var deviceUrl=baseUrl+winkDevice;\n            for (var winkDeviceName in context.global.winkState[winkDevice])\n            {\n                deviceId=context.global.winkState[winkDevice][winkDeviceName].object_id;\n                node.warn(winkDeviceName+\" \"+deviceId);\n                var newMsg ={\n                    \"url\":baseUrl+\"/\"+winkDevice+\"/\"+deviceId+\"/subscriptions\",\n                    \"method\": \"POST\",\n                    headers: {\n                        \"Authorization\":\"Bearer \"+context.global.WinkToken,\n                        \"User-Agent\":\"Manufacturer/Darwin node/0.10.30 Wink/999.99.9\",\n                        \"Content-Type\":\"application/json\"\n                    },\n                    payload: {\n                        \"callback\": callbackUrl\n                    }\n                };\n                node.send(newMsg);\n            }\n        }\n    }\nreturn;",
-    "outputs": 1,
-    "noerr": 0,
-    "x": 1067.5001678466797,
-    "y": 338,
-    "wires": [
-      [
-        "55d29430.aa2d6c"
       ]
     ]
   },
@@ -436,8 +439,8 @@
     "func": "context.global.getWinkState(msg.payload);\ndelete context.global.winkState._msgid;\nif (\"cameras\" in context.global.winkState){\n    for (var key in context.global.winkState.cameras){\n        if (context.global.winkState.cameras[key].manufacturer_device_model.indexOf(\"dropcam\")!=-1){\n            var newMsg1 ={\n                \"url\":context.global.BlueMixUrlBase+'/red/retrieve_activities?camera_name='+key,\n                \"method\": \"GET\",\n                headers: {\n                    \"Authorization\":\"Bearer \"+context.global.FREEBOARD_TOKEN\n                }\n            }\n            node.send(newMsg1);\n        }\n    }\n}\nnode.warn(\"Device import completed\");\nreturn;\n",
     "outputs": 1,
     "noerr": 0,
-    "x": 1577.5000457763672,
-    "y": 39.5,
+    "x": 1704.5000457763672,
+    "y": 35.5,
     "wires": [
       [
         "d91eb0aa.26e15"
@@ -452,8 +455,8 @@
     "method": "use",
     "ret": "obj",
     "url": "",
-    "x": 1366.5,
-    "y": 86.5,
+    "x": 1383.5,
+    "y": 85.5,
     "wires": [
       [
         "24385e5c.dbc7a2"
@@ -514,8 +517,8 @@
     "method": "use",
     "ret": "obj",
     "url": "",
-    "x": 1359.5,
-    "y": 128.5,
+    "x": 1541.5,
+    "y": 124.5,
     "wires": [
       [
         "1177b071.ee885"
@@ -529,8 +532,8 @@
     "name": "GetGroups",
     "func": "context.global.getWinkState(msg.payload);\ndelete context.global.winkState._msgid;\nreturn;\n",
     "outputs": 1,
-    "x": 1571.5000457763672,
-    "y": 128.5,
+    "x": 1766.5,
+    "y": 123.5,
     "wires": [
       []
     ]
@@ -543,8 +546,8 @@
     "method": "use",
     "ret": "obj",
     "url": "",
-    "x": 1357.5,
-    "y": 171.5,
+    "x": 1379.5,
+    "y": 169.5,
     "wires": [
       [
         "a6c6c9d1.593938"
@@ -791,8 +794,8 @@
     "method": "use",
     "ret": "obj",
     "url": "",
-    "x": 1740.5625,
-    "y": 40.888885498046875,
+    "x": 1867.5625,
+    "y": 36.888885498046875,
     "wires": [
       []
     ]
@@ -1032,7 +1035,7 @@
     "type": "function",
     "z": "3cc9f29d.c3360e",
     "name": "UI Notifications",
-    "func": "var pct = function(value) {\n    return ((value > 1.0 ? value : value * 100).toFixed(0) + '%');\n}\nfunction send_ui_note(n_type,n_timeout,n_message,obj_id){\n    var obj=obj_id||null;\n    var newMsg={\n        url:context.global.BlueMixUrlBase+'/red/notifications',\n        \"method\": \"POST\",\n        headers: {\n            \"Authorization\":\"Bearer \"+context.global.FREEBOARD_TOKEN\n        },\n        payload:{\n            \"id\":obj,\n            \"type\":n_type,\n            \"message\":n_message,\n            \"timeout\":n_timeout\n            }\n        };\n        node.send(newMsg);\n}\nif ('last_reading' in msg.payload){\n    var Obj_name=msg.payload.name;\n    var Obj_id=msg.payload.object_id;\n    var lr = msg.payload.last_reading;\n    if ('opened' in lr && lr.opened) send_ui_note('warning',30000,Obj_name+' opened',Obj_id);\n    if ('locked' in lr && !lr.locked) send_ui_note('warning',30000,Obj_name+' unlocked',Obj_id);\n    if ('motion' in lr && lr.motion)  send_ui_note('warning',30000,Obj_name+' motion detected',Obj_id);\n    if ('tamber_detected' in lr && lr.tamper_detected) send_ui_note('error',60000,Obj_name+' tamper detected!!!');\n    if ('battery' in lr && lr.battery!==null) ((lr.battery>=0.33 && lr.battery < 0.5) ? send_ui_note('information',30000,Obj_name+' battery level '+ pct(lr.battery)) : (lr.battery>= 0.1 && lr.battery <0.33) ? send_ui_note('warning',60000,Obj_name+' battery level '+ pct(lr.battery)) : lr.battery<0.1 ? send_ui_note('error',false,Obj_name+' battery level '+ pct(lr.battery)) : null);\n    if ('remaining' in lr) ((lr.remaining>=0.33 && lr.remaining < 0.5) ? send_ui_note('information',30000,Obj_name+' propane level '+ pct(lr.remaining)) : (lr.remaining>= 0.1 && lr.remaining <0.33) ? send_ui_note('warning',60000,Obj_name+' propane level '+ pct(lr.remaining)) : lr.remaining<0.1 ? send_ui_note('error',false,Obj_name+' propane level '+ pct(lr.remaining)) : null);\n    if ('liquid_detected' in lr && lr.liquid_detected) send_ui_note('error',false,Obj_name+' liquid detected!!!');\n    if ('smoke_detected' in lr && lr.smoke_detected) send_ui_note('error',false,Obj_name+' smoke detected!!!<br>Severity: '+pct(lr.co_severity));\n    if ('co_detected' in lr && lr.smoke_detected) send_ui_note('error',false,Obj_name+' smoke detected!!!<br>Severity: '+pct(lr.co_severity));\n    }\nreturn;",
+    "func": "var pct = function(value) {\n    return ((value > 1.0 ? value : value * 100).toFixed(0) + '%');\n}\nfunction send_ui_note(n_type,n_timeout,n_message,obj_id){\n    var obj=obj_id||null;\n    var newMsg={\n        url:context.global.BlueMixUrlBase+'/red/notifications',\n        \"method\": \"POST\",\n        headers: {\n            \"Authorization\":\"Bearer \"+context.global.FREEBOARD_TOKEN\n        },\n        payload:{\n            \"id\":obj,\n            \"type\":n_type,\n            \"message\":n_message,\n            \"timeout\":n_timeout\n            }\n        };\n        node.send(newMsg);\n}\nif ('last_reading' in msg.payload){\n    var Obj_name=msg.payload.name;\n    var Obj_id=msg.payload.object_id;\n    var lr = msg.payload.last_reading;\n    if ('opened' in lr && lr.opened) send_ui_note('warning',30000,Obj_name+' opened',Obj_id);\n    if ('locked' in lr && !lr.locked) send_ui_note('warning',30000,Obj_name+' unlocked',Obj_id);\n    if ('motion' in lr && lr.motion)  send_ui_note('warning',30000,Obj_name+' motion detected',Obj_id);\n    if ('tamber_detected' in lr && lr.tamper_detected) send_ui_note('error',60000,Obj_name+' tamper detected!!!');\n    if ('battery' in lr && lr.battery!==null) ((lr.battery>=0.33 && lr.battery < 0.5) ? send_ui_note('information',30000,Obj_name+' battery level '+ pct(lr.battery)) : (lr.battery>= 0.1 && lr.battery <0.33) ? send_ui_note('warning',60000,Obj_name+' battery level '+ pct(lr.battery)) : lr.battery<0.1 ? send_ui_note('error',false,Obj_name+' battery level '+ pct(lr.battery)) : null);\n    if ('remaining' in lr) ((lr.remaining>=0.33 && lr.remaining < 0.5) ? send_ui_note('information',30000,Obj_name+' propane level '+ pct(lr.remaining)) : (lr.remaining>= 0.1 && lr.remaining <0.33) ? send_ui_note('warning',60000,Obj_name+' propane level '+ pct(lr.remaining)) : lr.remaining<0.1 ? send_ui_note('error',false,Obj_name+' propane level '+ pct(lr.remaining)) : null);\n    if ('liquid_detected' in lr && lr.liquid_detected) send_ui_note('error',false,Obj_name+' liquid detected!!!');\n    if ('smoke_detected' in lr && lr.smoke_detected) send_ui_note('error',false,Obj_name+' smoke detected!!!<br>Severity: '+pct(lr.co_severity));\n    if ('co_detected' in lr && lr.smoke_detected) send_ui_note('error',false,Obj_name+' smoke detected!!!<br>Severity: '+pct(lr.co_severity));\n    if ('enabled' in lr) send_ui_note('warning',30000,'Robot \"'+Obj_name+(lr.enabled ? '\" enabled' : '\" disabled'),Obj_id);\n    if ('fired' in lr && lr.fired) send_ui_note('warning',30000,'Robot \"'+Obj_name+'\" fired',Obj_id);\n    }\nreturn;",
     "outputs": 1,
     "noerr": 0,
     "x": 686,
@@ -1199,6 +1202,58 @@
       [
         "40ccf9f6.bf3308"
       ]
+    ]
+  },
+  {
+    "id": "73439c65.8cbc64",
+    "type": "delay",
+    "z": "3cc9f29d.c3360e",
+    "name": "",
+    "pauseType": "delay",
+    "timeout": "15",
+    "timeoutUnits": "seconds",
+    "rate": "1",
+    "rateUnits": "second",
+    "randomFirst": "1",
+    "randomLast": "5",
+    "randomUnits": "seconds",
+    "drop": false,
+    "x": 1366,
+    "y": 129,
+    "wires": [
+      [
+        "7ab4dcc3.854b24"
+      ]
+    ]
+  },
+  {
+    "id": "ef16d2e4.10e93",
+    "type": "http request",
+    "z": "3cc9f29d.c3360e",
+    "name": "GetWRobots",
+    "method": "use",
+    "ret": "obj",
+    "url": "",
+    "x": 1453,
+    "y": 242,
+    "wires": [
+      [
+        "14d448d.feb2bb7"
+      ]
+    ]
+  },
+  {
+    "id": "14d448d.feb2bb7",
+    "type": "function",
+    "z": "3cc9f29d.c3360e",
+    "name": "GetScenes",
+    "func": "context.global.getWinkState(msg.payload);\ndelete context.global.winkState._msgid;\nreturn;\n",
+    "outputs": 1,
+    "noerr": 0,
+    "x": 1640.0000457763672,
+    "y": 243,
+    "wires": [
+      []
     ]
   }
 ]
