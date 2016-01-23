@@ -2,7 +2,7 @@
 01/23/2016
 ------------------
 Tablet UI config page, added clock format change:<br>
-<img src="images/updated_config.png">
+<img src="images/updated_config1.png">
 Robots activity are now displayed in the activity log:<br>
 <img src="images/time_and_robots.png">
 Robots status added to "detais" tab. If you have more than 10, robots will be splitted in the chunks of 10 to proper fill screen space:<br><br>
