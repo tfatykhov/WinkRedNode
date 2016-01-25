@@ -2,7 +2,7 @@
 01/25/2016
 ------------------
 Readme - how to import/update flows to node-red
-[https://github.com/tfatykhov/WinkRedNode/blob/master/README-ImportingUpdating%20Flows.md](Import/Update Flows)
+[../../README-ImportingUpdating%20Flows.md](Import/Update Flows)
 
 
 01/23/2016
