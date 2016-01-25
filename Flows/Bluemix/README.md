@@ -2,7 +2,7 @@
 01/25/2016
 ------------------
 Readme - how to import/update flows to node-red
-[../../../README-ImportingUpdating%20Flows.md](Import/Update Flows)
+[Import/Update Flows](../../README-ImportingUpdating%20Flows.md)
 
 
 01/23/2016
