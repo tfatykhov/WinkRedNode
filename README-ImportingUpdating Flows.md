@@ -33,6 +33,9 @@ Repeat steps 1 through 7 from `winkIntegration`, but instead using the flow from
 
 Repeat steps 1 through 7 from `winkIntegration`, but instead use the flow from [tabletUI.json](https://github.com/tfatykhov/WinkRedNode/blob/master/Flows/Bluemix/tabletUI.json)
 
+
+### Deploying Changes
+
 When all 4 tabs have been created and imported, click the down arrow for `Deploy` in the top right of Node Red, then select `Modified Nodes` - in my opinion, this is better than leaving   `Full` selected. Once `Modified Nodes` is selected, click the `Deploy` button.
 
 
