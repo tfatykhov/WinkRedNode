@@ -4,9 +4,11 @@
 Readme - how to use node-red and IFTT, how to config blue-iris to post to node-red<br>
 [HOWTO - IFTTT](../../README-IFTTT.md)<br>
 Added presence details to freeboards:<br>
+Added automatic selection of websockets or http(s) get in case websockets are not supported for any reason<br>
 *  import updated [tabletUI.json](tabletUI.json)
 *  import updated [winkIntegration.json](winkIntegration.json)
 *  import updated [Freeboards](winkFreeboards.json)<br><br><br>
+
 
 
 01/25/2016
