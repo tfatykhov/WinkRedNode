@@ -52,7 +52,7 @@ For the image URL, use Wink image --
 
 --------------------------------------------------------------
 Send WINK device CMD via IFTTT (new)
-
+-------------------------------------
 
 Maker channel send web request parameters (used in THAT):
 
@@ -78,4 +78,15 @@ winkName - name of wink device/group/shortcut as defined in the wink app
 type: lock/light/group/shortcut
 
 cmd: on/off, lock/unlock
-level - dim level 0-100 required for light dimmers and groups
+level - dim level 0-100 required for light dimmers and groups if not present will be auto set to 100 for on and 0 for off commands.
+
+
+Since Blue Iris system can also do web service calls here is how to make it call node-red for cameras:
+
+* In Blue Iris, open a camera's properties and go to the "Alerts" tab.
+* Check "Request from a web service"
+* Click "Configure" next to the "Request from a web service" line
+* In the "When Triggered" section, select "https://" or "http://" based on your node-red setup and enter yourappname.mybluemix.net/red/ifttt
+* Replace "yourappname" above with the name of your node-red app.
+* pass command details by  populating "POST text"  same way as "maker channel body" example above.
+* Click OK all the way out.
