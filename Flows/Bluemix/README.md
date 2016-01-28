@@ -1,4 +1,14 @@
 == UPDATE ==
+01/28/2016
+------------------
+Readme - how to use node-red and IFTT, how to config blue-iris to post to node-red<br>
+[HOWTO - IFTTT](../../README-IFTTT.md)<br>
+Added presence details to freeboards:<br>
+*  import updated [tabletUI.json](tabletUI.json)
+*  import updated [winkIntegration.json](winkIntegration.json)
+*  import updated [Freeboards](winkFreeboards.json)<br><br><br>
+
+
 01/25/2016
 ------------------
 Readme - how to import/update flows to node-red
