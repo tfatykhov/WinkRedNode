@@ -80,6 +80,8 @@ type: lock/light/group/shortcut
 cmd: on/off, lock/unlock
 level - dim level 0-100 required for light dimmers and groups if not present will be auto set to 100 for on and 0 for off commands.
 
+[Sample IFTTT recipe](https://ifttt.com/recipes/378174-post-command-to-wink-node-red)
+
 
 Since Blue Iris system can also do web service calls here is how to make it call node-red for cameras:
 
