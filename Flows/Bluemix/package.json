@@ -19,6 +19,6 @@
         "node-red-contrib-later":"~0.x"
     },
     "engines": {
-        "node": "~0.x"
+        "node": "~4.x"
     }
 }
