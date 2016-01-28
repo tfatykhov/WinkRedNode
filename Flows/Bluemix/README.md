@@ -1,4 +1,10 @@
 == UPDATE ==
+01/29/2016
+-----------------
+Moved to node.js version 4.x since it is more stable and have better performance and memory management<br>
+* update package.json via git console of bluemix using [package.json](package.json)
+* restart node-red app via blue-mix git
+
 01/28/2016
 ------------------
 Readme - how to use node-red and IFTT, how to config blue-iris to post to node-red<br>
