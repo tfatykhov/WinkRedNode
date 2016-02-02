@@ -1,390 +1,25 @@
 [
   {
-    "id": "d86fcb2d.279038",
-    "type": "pushbullet-config",
-    "name": "Push Bullet"
-  },
-  {
-    "id": "3f9c2dc8.c063d2",
-    "type": "subflow",
-    "name": "Adjust switch",
-    "in": [
-      {
-        "x": 70,
-        "y": 70,
-        "wires": [
-          {
-            "id": "8f40ba44.70bf48"
-          }
-        ]
-      }
-    ],
-    "out": []
-  },
-  {
-    "id": "8f40ba44.70bf48",
-    "type": "function",
-    "name": "BinarySwitch msg",
-    "func": "var newMsg ={\n    \"url\":\"https://winkapi.quirky.com/binary_switches/\"+context.global.winkState.binary_switches[msg.payload.binary_switch].object_id,\n    \"method\": \"PUT\",\n    headers: {\n        \"Authorization\":\"Bearer \"+context.global.WinkToken,\n        \"Content-Type\":\"application/json\"\n    },\n    payload: {\n        \"binary_switch\":msg.payload.binary_switch,\n        \"desired_state\": {\n            \"powered\":msg.payload.powered\n        },\n        \"trigger\":msg.payload.trigger\n    }\n};\nreturn newMsg;",
-    "outputs": 1,
-    "noerr": 0,
-    "x": 212,
-    "y": 70,
-    "z": "3f9c2dc8.c063d2",
-    "wires": [
-      [
-        "2294aab9.dd6b56",
-        "7b017ef3.84fe8"
-      ]
-    ]
-  },
-  {
-    "id": "2294aab9.dd6b56",
-    "type": "http request",
-    "name": "",
-    "method": "use",
-    "ret": "obj",
-    "url": "",
-    "x": 439,
-    "y": 70,
-    "z": "3f9c2dc8.c063d2",
-    "wires": [
-      []
-    ]
-  },
-  {
-    "id": "7b017ef3.84fe8",
-    "type": "function",
-    "name": "Pushbullet Message",
-    "func": "if (msg.payload.desired_state.powered===true)\n{\n    var newMsg = {\n        payload:context.global.timestamp+\": Turned on \"+msg.payload.binary_switch+\" - Trigger: \"+msg.payload.trigger\n    };\n}\nelse {\n    var newMsg = {\n        payload:context.global.timestamp+\": Turned off \"+msg.payload.binary_switch+\" - Trigger: \"+msg.payload.trigger\n    };\n}\nreturn newMsg;",
-    "outputs": 1,
-    "noerr": 0,
-    "x": 462,
-    "y": 104,
-    "z": "3f9c2dc8.c063d2",
-    "wires": [
-      [
-        "29f121f9.d60ede"
-      ]
-    ]
-  },
-  {
-    "id": "29f121f9.d60ede",
-    "type": "pushbullet",
-    "config": "d86fcb2d.279038",
-    "pushtype": "note",
-    "title": "Wink Lights",
-    "chan": "",
-    "name": "",
-    "x": 653,
-    "y": 104,
-    "z": "3f9c2dc8.c063d2",
-    "wires": []
-  },
-  {
-    "id": "eb1a5f06.14e5a",
-    "type": "comment",
-    "name": "Click on this comment box, then click on the \"Info\" tab on the right -->",
-    "info": "If you *DON'T* want to use Push Bullet alerts, you can delete the line going from `BinarySwitch msg` to `Pushbullet Message`\nIf you just delete the line, you can later re-add if you decide to use Push Bullet alerts.\n\nIf you *DO* want to get Push Bullet alerts whenever a schedule fires, update the Push Bullet node. \nYou'll need to click the \"pencil\" icon and enter in your Push Bullet API key.\n\nYou can get your Push Bullet API key from pushbullet.com - login and then click `Settings` on the left navigation.\nYou'll then see `Access Code` - copy that and paste it into the Push Bullet config.",
-    "x": 542,
-    "y": 141,
-    "z": "3f9c2dc8.c063d2",
-    "wires": []
-  },
-  {
-    "id": "d86fcb2d.279038",
-    "type": "pushbullet-config",
-    "name": "Push Bullet"
-  },
-  {
-    "id": "41321595.becdec",
-    "type": "subflow",
-    "name": "Adjust dimmer",
-    "in": [
-      {
-        "x": 70,
-        "y": 70,
-        "wires": [
-          {
-            "id": "d6546be.f29ab98"
-          }
-        ]
-      }
-    ],
-    "out": []
-  },
-  {
-    "id": "d6546be.f29ab98",
-    "type": "function",
-    "name": "Dimmer msg",
-    "func": "if (msg.payload.light_bulb!=\"\")\n{\nvar newMsg ={\n    \"url\":\"https://winkapi.quirky.com/light_bulbs/\"+context.global.winkState.light_bulbs[msg.payload.light_bulb].object_id,\n    \"method\": \"PUT\",\n    headers: {\n        \"Authorization\":\"Bearer \"+context.global.WinkToken,\n        \"Content-Type\":\"application/json\"\n    },\n    payload: {\n        \"light_bulb\":msg.payload.light_bulb,\n        \"desired_state\": {\n            \"powered\":msg.payload.powered,\n            \"brightness\": msg.payload.brightness\n        },\n        \"trigger\":msg.payload.trigger\n    }\n};\n}\nelse\n{\n    var newMsg ={\n    \"url\":\"127.0.0.1\",\n    \"method\": \"GET\"\n    };\n}\nreturn newMsg;",
-    "outputs": 1,
-    "noerr": 0,
-    "x": 193,
-    "y": 102,
-    "z": "41321595.becdec",
-    "wires": [
-      [
-        "6af0f718.950f08",
-        "96cf00bf.6931"
-      ]
-    ]
-  },
-  {
-    "id": "6af0f718.950f08",
-    "type": "http request",
-    "name": "",
-    "method": "use",
-    "ret": "obj",
-    "url": "",
-    "x": 383.77777099609375,
-    "y": 62.22222900390625,
-    "z": "41321595.becdec",
-    "wires": [
-      []
-    ]
-  },
-  {
-    "id": "96cf00bf.6931",
-    "type": "function",
-    "name": "Pushbullet Message",
-    "func": "if (msg.payload.desired_state.powered===true)\n{\n    var newMsg = {\n        payload:context.global.timestamp+\": Turned on \"+msg.payload.light_bulb+\" at brightness level: \"+msg.payload.desired_state.brightness+\" - Trigger: \"+msg.payload.trigger\n    };\n}\nelse\n{\n    var newMsg = {\n        payload:context.global.timestamp+\": Turned off \"+msg.payload.light_bulb+\" - Trigger: \"+msg.payload.trigger\n    };\n}\nreturn newMsg;",
-    "outputs": 1,
-    "noerr": 0,
-    "x": 404,
-    "y": 129,
-    "z": "41321595.becdec",
-    "wires": [
-      [
-        "845d49ba.7ba2b8"
-      ]
-    ]
-  },
-  {
-    "id": "845d49ba.7ba2b8",
-    "type": "pushbullet",
-    "config": "d86fcb2d.279038",
-    "pushtype": "note",
-    "title": "",
-    "chan": "",
-    "name": "",
-    "x": 587,
-    "y": 129,
-    "z": "41321595.becdec",
-    "wires": []
-  },
-  {
-    "id": "5c94aee5.a36b5",
-    "type": "comment",
-    "name": "Click on this comment box, then click on the \"Info\" tab on the right -->",
-    "info": "If you *DON'T* want to use Push Bullet alerts, you can delete the line going from `Dimmer msg` to `Pushbullet Message`\nIf you just delete the line, you can later re-add if you decide to use Push Bullet alerts.\n\nIf you *DO* want to get Push Bullet alerts whenever a schedule fires, update the Push Bullet node. \nYou'll need to click the \"pencil\" icon and enter in your Push Bullet API key.\n\nYou can get your Push Bullet API key from pushbullet.com - login and then click `Settings` on the left navigation.\nYou'll then see `Access Code` - copy that and paste it into the Push Bullet config.",
-    "x": 431,
-    "y": 163,
-    "z": "41321595.becdec",
-    "wires": []
-  },
-  {
-    "id": "d86fcb2d.279038",
-    "type": "pushbullet-config",
-    "name": "Push Bullet"
-  },
-  {
-    "id": "94c627ad.6b39d8",
-    "type": "subflow",
-    "name": "Adjust Group",
-    "in": [
-      {
-        "x": 70,
-        "y": 70,
-        "wires": [
-          {
-            "id": "7773ddb6.888c24"
-          }
-        ]
-      }
-    ],
-    "out": []
-  },
-  {
-    "id": "7773ddb6.888c24",
-    "type": "function",
-    "name": "Group msg",
-    "func": "if (msg.payload.group_name!==\"N/A\")\n{\nvar newMsg ={\n    \"url\":\"https://winkapi.quirky.com/groups/\"+context.global.winkState.groups[msg.payload.group_name].object_id+\"/activate\",\n    \"method\": \"POST\",\n    headers: {\n        \"Authorization\":\"Bearer \"+context.global.WinkToken,\n        \"Content-Type\":\"application/json\"\n    },\n    payload: {\n        \"group_name\":msg.payload.group_name,\n        \"desired_state\": {\n            \"powered\":msg.payload.powered,\n            \"brightness\": msg.payload.brightness\n        },\n        \"trigger\":msg.payload.trigger\n    }\n};\n}\nelse\n{\n    var newMsg ={\n    \"url\":\"mifbody.com\",\n    \"method\": \"GET\",\n    payload: {\n        \"desired_state\":{\n            \"powered\":\"N/A\"\n        }\n    }\n    };\n}\nreturn newMsg;",
-    "outputs": 1,
-    "noerr": 0,
-    "x": 199,
-    "y": 116,
-    "z": "94c627ad.6b39d8",
-    "wires": [
-      [
-        "e9d4793c.162b88",
-        "91f4f6ad.6e0b08"
-      ]
-    ]
-  },
-  {
-    "id": "e9d4793c.162b88",
-    "type": "http request",
-    "name": "",
-    "method": "use",
-    "ret": "obj",
-    "url": "",
-    "x": 365,
-    "y": 116,
-    "z": "94c627ad.6b39d8",
-    "wires": [
-      []
-    ]
-  },
-  {
-    "id": "91f4f6ad.6e0b08",
-    "type": "function",
-    "name": "Pushbullet Message",
-    "func": "if (msg.payload.desired_state.powered===true)\n{\n    var newMsg = {\n        payload:context.global.timestamp+\": Turned on \"+msg.payload.group_name+\" at brightness level: \"+msg.payload.desired_state.brightness+\" - Trigger: \"+msg.payload.trigger\n    };\n}\nelse if (msg.payload.desired_state.powered===false){\n    var newMsg = {\n        payload:context.global.timestamp+\": Turned off \"+msg.payload.group_name+\" - Trigger: \"+msg.payload.trigger\n    };\n}\nreturn newMsg;",
-    "outputs": 1,
-    "noerr": 0,
-    "x": 387,
-    "y": 152,
-    "z": "94c627ad.6b39d8",
-    "wires": [
-      [
-        "6c9bfd11.936404"
-      ]
-    ]
-  },
-  {
-    "id": "af2cc158.50d34",
-    "type": "pushbullet",
-    "config": "d86fcb2d.279038",
-    "pushtype": "note",
-    "title": "Wink Lights",
-    "chan": "",
-    "name": "",
-    "x": 713,
-    "y": 151,
-    "z": "94c627ad.6b39d8",
-    "wires": []
-  },
-  {
-    "id": "6c9bfd11.936404",
-    "type": "switch",
-    "name": "",
-    "property": "payload",
-    "rules": [
-      {
-        "t": "nnull"
-      }
-    ],
-    "checkall": "true",
-    "outputs": 1,
-    "x": 556,
-    "y": 152,
-    "z": "94c627ad.6b39d8",
-    "wires": [
-      [
-        "af2cc158.50d34"
-      ]
-    ]
-  },
-  {
-    "id": "68378dae.97c874",
-    "type": "comment",
-    "name": "Click on this comment box, then click on the \"Info\" tab on the right -->",
-    "info": "If you *DON'T* want to use Push Bullet alerts, you can delete the line going from `Group msg` to `Pushbullet Message`\nIf you just delete the line, you can later re-add if you decide to use Push Bullet alerts.\n\nIf you *DO* want to get Push Bullet alerts whenever a schedule fires, update the Push Bullet node. \nYou'll need to click the \"pencil\" icon and enter in your Push Bullet API key.\n\nYou can get your Push Bullet API key from pushbullet.com - login and then click `Settings` on the left navigation.\nYou'll then see `Access Code` - copy that and paste it into the Push Bullet config.",
-    "x": 531,
-    "y": 186,
-    "z": "94c627ad.6b39d8",
-    "wires": []
-  },
-  {
     "id": "96a37e7f.695c8",
     "type": "function",
+    "z": "47c504f6.b83afc",
     "name": "ScheduleLogic",
-    "func": "// You shouldn't have to edit anything in this section, scroll down to line 30 for instructions on setting up your schedule logic.\nvar date = new Date(msg.payload);\nvar hours = date.getHours();\nvar minutes =date.getMinutes();\nvar intday = date.getDay();\nhours = hours + context.global.Weather.Offset;\nif (hours<0) { hours = 24+hours }\ncontext.global.timestamp=new Date(msg.payload);\nvar newMsg = {\n    \"payload\": {\n        \"hours\":0,\n        \"minutes\":0,\n        \"intday\":0,\n        \"Sunset\":context.global.Weather.SunsetHour+\":\"+context.global.Weather.SunsetMin,\n        \"Sunrise\":context.global.Weather.SunriseHour+\":\"+context.global.Weather.SunriseMin,\n        \"light_bulb\":\"\",\n        \"group_name\":\"\",\n        \"powered\":\"\",\n        \"brightness\":\"\",\n        \"action\":\"\",\n        \"binary_switch\":\"\"\n    }\n};\nnewMsg.payload.hours=hours;\nnewMsg.payload.minutes=minutes;\nnewMsg.payload.intday=intday;\n// You shouldn't need to edit anything above. \n\n// Start of Scheduling Logic Instructions\n// The schedule logic can handle turning on/off Bulbs, Groups, and Switches based on specific time of day or based on sunset/sunrise.\n// To help illustrate the flexibility of the schedule logic, three schedules are included first -- one for updating a group, one for\n// updating a specific light bulb, and one for updating a binary switch. I've included a lot of example schedules as well, so you can\n// peruse the examples below to come up with your own schedules.\n//\n// **Note - check out the example on line 127 for an example of a schedule which is only triggered on weekdays. \n// \n// If you want to have any of your schedules be triggered by Sunset or Sunrise, use the following variables --\n// Sunrise: if(hours==context.global.Weather.SunriseHour && minutes==context.global.Weather.SunriseMin){ actions }\n// Sunset: if(hours==context.global.Weather.SunsetHour && minutes==context.global.Weather.SunsetMin){ actions }\n// Note: You can also offset Sunset/Sunrise by simply adding or subtracting from the value as seen below.\n\n// Here is an example of a group being updated based on Sunset. Note that the Sunset hour is offset by 1 hour. This means the lights come on one hour before\n// sunset when it's more \"dusk\" than dark.\nif(hours==(context.global.Weather.SunsetHour-1) && minutes==context.global.Weather.SunsetMin) // Indoor Lights at Dusk\n{\n    // Note this is updating a group - thus the next line is newMsg.payload.group_name\n    // if we were updating a light bulb, it should be newMsg.payload.light_bulb\n    // if we were updating a switch, it should be newMsg.payload.binary_switch\n    newMsg.payload.group_name=\"Family and Living\"; // In this case, we're triggering a group. Put in your group's name here.\n    newMsg.payload.powered=true; // True for on, False for off.\n    newMsg.payload.brightness=1.0; // Bulb brightness is from 0.0 (dim) to 1.0 (full brightness)\n    newMsg.payload.action=\"group\"; // This is used in the next step of the flow. Your options are either \"group\" \"lightbulb\" or \"switch\"\n    newMsg.payload.trigger=\"Schedule: Indoor Lights on at Dusk\"; // This text is used in a push bullet message later in the flow.\n    node.send(newMsg);\n}\n\n\n// Next we have an example of a single light bulb being updated at a specific time.\n// If you have multiple objects which you want to turn on at 5am, for example, stagger them 1 minute apart.\n// e.g. Lightbulb1 on at 5:01, group2 on at 5:02, switch off at 5:03.\n// You **cannot** have multiple objects triggered at the same time.\nif(hours==5 && minutes==03) //Family Ceiling Light on @ 5am\n{\n    // Since this is a light bulb being triggered, note it's newMsg.payload.light_bulb\n    // if it were a group, we'd want newMsg.payload.group_name\n    // if it were a switch, we'd want newMsg.payload.binary_switch\n    newMsg.payload.light_bulb=\"Family room ceiling\"; // Put your light bulb's name in here\n    newMsg.payload.powered=true; // true for on, false for off\n    newMsg.payload.brightness=0.5; // I'm only turning the bulb on to 50% brightness, thus 0.5. 0.0 is fully dim, 1.0 is full brightness.\n    newMsg.payload.action=\"lightbulb\"; // This is used in the next step of the flow. Your options are either \"group\" \"lightbulb\" or \"switch\"\n    newMsg.payload.trigger=\"Schedule: Family room Ceiling Light on at 5am\"; // This text is used in a push bullet message later in the flow.\n    node.send(newMsg);\n}\n\n// Lastly, we have an example of a z-wave switch being updated at a specific time.\nif(hours==5 && minutes==35) //Aquarium Light On\n{\n    // Again, since this is a switch being triggered, it's newMsg.payload.binary_switch\n    // if it were a group we wanted to update, we'd want newMsg.payload.group_name\n    // if it were an individual light bulb we wanted to update, we'd want newMsg.payload.light_bulb\n    newMsg.payload.binary_switch=\"Aquarium Light\"; // Enter the switch's name from Wink app.\n    newMsg.payload.powered=true; // true for on, false for off.\n    newMsg.payload.action=\"switch\"; // This is used in the next step of the flow. Your options are either \"group\" \"lightbulb\" or \"switch\"\n    newMsg.payload.trigger=\"Schedule: Aquarium on at 5:35am\"; // This text is used in a pushbullet message later in the flow.\n    node.send(newMsg);\n}\n\n\n// Here is a group named Garage which is turned on exactly at sunset.\nif(hours==(context.global.Weather.SunsetHour) && minutes==context.global.Weather.SunsetMin) // Garage Lights at Sunset\n{\n    newMsg.payload.group_name=\"Garage\";\n    newMsg.payload.powered=true;\n    newMsg.payload.brightness=0.0;\n    newMsg.payload.action=\"group\";\n    newMsg.payload.trigger=\"Schedule: Garage Lights on at Sunset\";\n    node.send(newMsg);\n}\n\n// Here the group named Garage is turned off 1 hour after sunrise. I felt like sunrise was still kinda dark, so I wanted the\n// lights to remain on for another hour.\nif(hours==(context.global.Weather.SunriseHour+1) && minutes==context.global.Weather.SunriseMin) //sunRise time\n{\n    newMsg.payload.group_name=\"Garage\";\n    newMsg.payload.powered=false;\n    newMsg.payload.brightness=0.0;\n    newMsg.payload.action=\"group\";\n    newMsg.payload.trigger=\"Schedule: Garage Lights off at Sunrise\";\n    node.send(newMsg);\n}\n\n// Group turned on at 9pm (ok, 9:01pm lol)\nif(hours==21 && minutes==01) //Dim Family Room @ 9pm\n{\n    newMsg.payload.group_name=\"FamilyRoom\";\n    newMsg.payload.powered=true;\n    newMsg.payload.brightness=0.0;\n    newMsg.payload.action=\"group\";\n    newMsg.payload.trigger=\"Schedule: Family Room dim at 9pm\";\n    node.send(newMsg);\n}\n\n// Individual light bulb turned on at 5:02am\nif(hours==5 && minutes==02) //Angie's Light on @ 5am\n{\n    newMsg.payload.light_bulb=\"Angie family room\";\n    newMsg.payload.powered=true;\n    newMsg.payload.brightness=1.0;\n    newMsg.payload.action=\"lightbulb\";\n    newMsg.payload.trigger=\"Schedule: Angie's Light on at 5am\";\n    node.send(newMsg);\n}\n\n// Here is a little more complex example -- I have a group which is only turned on during the week days.\n// intday is a value 0 through 6. 0 is Sunday, 1 is Monday, 2 is Tuesday, etc.\nif(hours==5 && minutes==01 && intday!==0 && intday!=6) //Living Room on dim @ 5am Weekdays\n{\n    newMsg.payload.group_name=\"Living Room\";\n    newMsg.payload.powered=true;\n    newMsg.payload.brightness=0.0;\n    newMsg.payload.action=\"group\";\n    newMsg.payload.trigger=\"Schedule: Living Room on dim at 5am\";\n    node.send(newMsg);\n}\n\n// Same as the above example, a group dimmed at 9pm on week days only.\nif(hours==21 && minutes==02 && intday!==0 && intday!=6) //Living Room on dim @ 9pm Weekdays\n{\n    newMsg.payload.group_name=\"Living Room\";\n    newMsg.payload.powered=true;\n    newMsg.payload.brightness=0.0;\n    newMsg.payload.action=\"group\";\n    newMsg.payload.trigger=\"Schedule: Living Room on dim at 9pm\";\n    node.send(newMsg);\n}\n\n// Since this group was turned on at brightness 0 at 5:01am, then at 7am when it's brighter outside I turn the brightness to 1.0.\nif(hours==7 && minutes==01 && intday!==0 && intday!=6) //Living Room on full @ 7am Weekdays\n{\n    newMsg.payload.group_name=\"Living Room\";\n    newMsg.payload.powered=true;\n    newMsg.payload.brightness=1.0;\n    newMsg.payload.action=\"group\";\n    newMsg.payload.trigger=\"Schedule: Living Room on full at 7am\";\n    node.send(newMsg);\n}\n\n// Turn the living room lights off at 10:30pm.\nif(hours==22 && minutes==30) //Living Room off @ 10:30pm\n{\n    newMsg.payload.group_name=\"Living Room\";\n    newMsg.payload.powered=false;\n    newMsg.payload.brightness=0.0;\n    newMsg.payload.action=\"group\";\n    newMsg.payload.trigger=\"Schedule: Living Room off at 10:30pm\";\n    node.send(newMsg);\n}\n\n// Turn the living room lights (which were set to 1.0 brightness at 7am) off at 8am. It's bright enough outside by 8am.\nif(hours==8 && minutes==01 && intday!==0 && intday!=6) //Living Room off @ 8am Weekdays\n{\n    newMsg.payload.group_name=\"Living Room\";\n    newMsg.payload.powered=false;\n    newMsg.payload.brightness=0.0;\n    newMsg.payload.action=\"group\";\n    newMsg.payload.trigger=\"Schedule: Living Room off at 8am\";\n    node.send(newMsg);\n}\n\n// Go to bed! It's 11pm! I'm turning the lights off on you!\nif(hours==23 && minutes==01) //Family Room off @ 11pm\n{\n    newMsg.payload.group_name=\"FamilyRoom\";\n    newMsg.payload.powered=false;\n    newMsg.payload.brightness=0.0;\n    newMsg.payload.action=\"group\";\n    newMsg.payload.trigger=\"Schedule: Family Room off at 11pm\";\n    node.send(newMsg);\n}\n\n// Turn the binary switch off at a specific time.\nif(hours==22 && minutes==35) //Aquarium Light Off\n{\n    newMsg.payload.binary_switch=\"Aquarium Light\";\n    newMsg.payload.powered=false;\n    newMsg.payload.action=\"switch\";\n    newMsg.payload.trigger=\"Schedule: Aquarium off at 10:35pm\";\n    node.send(newMsg);\n}\n\n// This is my test schedule for groups. If I ever want to test a group, I can come to this if statement and change it to 1==1.\n// Obviously, changing it back to 1!==1 stops it from triggering.\nif(1!==1) // Test Group Change\n{\n    newMsg.payload.group_name=\"Living Room\";\n    newMsg.payload.powered=true;\n    newMsg.payload.brightness=1.0;\n    newMsg.payload.action=\"group\";\n    newMsg.payload.trigger=\"Schedule: Test Schedule\";\n    node.send(newMsg);\n}\n\n// This is another test schedule for individual lightbulbs.\nif(1!==1) // Test Light Bulb Change\n{\n    newMsg.payload.light_bulb=\"TV Backlight\";\n    newMsg.payload.powered=true;\n    newMsg.payload.brightness=1.0;\n    newMsg.payload.action=\"lightbulb\";\n    newMsg.payload.trigger=\"Schedule: Test Schedule\";\n    node.send(newMsg);\n}\n\n// Lastly, my test schedule for switches.\nif(1!==1) // Test Switch Change\n{\n    newMsg.payload.binary_switch=\"Aquarium Light\";\n    newMsg.payload.powered=false;\n    newMsg.payload.action=\"switch\";\n    newMsg.payload.trigger=\"Schedule: Test Schedule\";\n    node.send(newMsg);\n}\n\n// *KEEP THIS LINE BELOW*\nreturn;",
-    "outputs": 1,
+    "func": "// You shouldn't have to edit anything in this section, scroll down to line 33 for instructions on setting up your schedule logic.\nfunction send_ui_note(n_type,n_timeout,n_message,obj_id){\n    var obj=obj_id||null;\n    var newMsg={\n        url:context.global.BlueMixUrlBase+'/red/notifications',\n        \"method\": \"POST\",\n        headers: {\n            \"Authorization\":\"Bearer \"+context.global.FREEBOARD_TOKEN\n        },\n        payload:{\n            \"id\":obj,\n            \"type\":n_type,\n            \"message\":n_message,\n            \"timeout\":n_timeout\n            }\n        };\n        node.send(newMsg);\n}\nvar date = new Date(msg.payload);\nvar hours = date.getHours();\nvar minutes =date.getMinutes();\nvar intday = date.getDay();\nhours = hours + context.global.Weather.Offset;\nif (hours<0) { hours = 24+hours }\ncontext.global.timestamp=new Date(msg.payload);\nvar device = \"\";\nvar type = \"\";\nvar powered = \"\";\nvar brightness = \"\";\nvar WinkCMDmsg = \"\";\n// You shouldn't need to edit anything above. \n\n// Start of Scheduling Logic Instructions\n// The schedule logic can handle turning on/off Bulbs, Groups, and Switches based on specific time of day or based on sunset/sunrise.\n// To help illustrate the flexibility of the schedule logic, three schedules are included first -- one for updating a group, one for\n// updating a specific light bulb, and one for updating a binary switch. I've included a lot of example schedules as well, so you can\n// peruse the examples below to come up with your own schedules.\n//\n// **Note - check out the example on line 169 for an example of a schedule which is only triggered on weekdays. \n// \n// If you want to have any of your schedules be triggered by Sunset or Sunrise, use the following variables --\n// Sunrise: if(hours==context.global.Weather.SunriseHour && minutes==context.global.Weather.SunriseMin){ actions }\n// Sunset: if(hours==context.global.Weather.SunsetHour && minutes==context.global.Weather.SunsetMin){ actions }\n// Note: You can also offset Sunset/Sunrise by simply adding or subtracting from the value as seen below.\n\n\n// For this schedule, our trigger is 1 hour prior to sunset.\nif(hours==(context.global.Weather.SunsetHour-1) && minutes==context.global.Weather.SunsetMin) // Indoor Lights at Dusk\n{\n    device=\"Great Room\"; // In this case, we're triggering a group. Put in your group's name here.\n    powered=\"on\"; // on or off.\n    brightness=100; // Bulb brightness is from 0 (dim) to 100 (full brightness)\n    type=\"group\"; // This is used in the next step of the flow. Your options are either \"light\", \"lock\", \"group\" or \"scene\"\n    WinkCMDmsg = context.global.executeWinkCMD(device,type,powered,brightness);\n    node.send(WinkCMDmsg);\n    WinkCMDmsg = send_ui_note('warning',30000,'Schedule: '+device+' '+type+' '+' turned '+powered,'123456');\n\n    // I want two different groups to turn on 1 hour before sunset, so here's another group. \n    // You can have one schedule trigger multiple actions, just copy lines 50 through 56 and paste in this schedule.\n    device=\"Kitchen\"; // In this case, we're triggering a group. Put in your group's name here.\n    powered=\"on\"; // on or off\n    brightness=100; // Bulb brightness is from 0 (dim) to 100 (full brightness)\n    type=\"group\"; // This is used in the next step of the flow. Your options are either \"light\", \"lock\", \"group\" or \"scene\"\n    WinkCMDmsg = context.global.executeWinkCMD(device,type,powered,brightness);\n    node.send(WinkCMDmsg);\n    WinkCMDmsg = send_ui_note('warning',30000,'Schedule: '+device+' '+type+' '+' turned '+powered,'123456');\n}\n\n// In this case, the schedule is triggered every day at 8pm.\nif(hours==20 && minutes==00) //Dim Great Room and Kitchen to 50% @ 8pm\n{\n    device=\"Great Room\";\n    powered=\"on\";\n    brightness=50;\n    type=\"group\";\n    WinkCMDmsg = context.global.executeWinkCMD(device,type,powered,brightness);\n    node.send(WinkCMDmsg);\n    WinkCMDmsg = send_ui_note('warning',30000,'Schedule: '+device+' '+type+' '+' turned '+powered,'123456');\n\n    device=\"Kitchen\";\n    powered=\"on\";\n    brightness=50;\n    type=\"group\";\n    WinkCMDmsg = context.global.executeWinkCMD(device,type,powered,brightness);\n    node.send(WinkCMDmsg);\n    WinkCMDmsg = send_ui_note('warning',30000,'Schedule: '+device+' '+type+' '+' turned '+powered,'123456');\n}\n\n// I dim the lights a little more at 8:30...\nif(hours==20 && minutes==30) //Dim Great Room and Kitchen to 35% @ 8:30pm\n{\n    device=\"Great Room\";\n    powered=\"on\";\n    brightness=35;\n    type=\"group\";\n    WinkCMDmsg = context.global.executeWinkCMD(device,type,powered,brightness);\n    node.send(WinkCMDmsg);\n    WinkCMDmsg = send_ui_note('warning',30000,'Schedule: '+device+' '+type+' '+' turned '+powered,'123456');\n\n    device=\"Kitchen\";\n    powered=\"on\";\n    brightness=35;\n    type=\"group\";\n    WinkCMDmsg = context.global.executeWinkCMD(device,type,powered,brightness);\n    node.send(WinkCMDmsg);\n    WinkCMDmsg = send_ui_note('warning',30000,'Schedule: '+device+' '+type+' '+' turned '+powered,'123456');\n}\n\n// And a little more at 9pm... Simulating a sunset inside my house...\nif(hours==21 && minutes==00) //Great Room and Kitchen to 10% brightness at 9:00pm\n{\n    device=\"Great Room\";\n    powered=\"on\";\n    brightness=10;\n    type=\"group\";\n    WinkCMDmsg = context.global.executeWinkCMD(device,type,powered,brightness);\n    node.send(WinkCMDmsg);\n    WinkCMDmsg = send_ui_note('warning',30000,'Schedule: '+device+' '+type+' '+' turned '+powered,'123456');\n\n    device=\"Kitchen\";\n    powered=\"on\";\n    brightness=10;\n    type=\"group\";\n    WinkCMDmsg = context.global.executeWinkCMD(device,type,powered,brightness);\n    node.send(WinkCMDmsg);\n    WinkCMDmsg = send_ui_note('warning',30000,'Schedule: '+device+' '+type+' '+' turned '+powered,'123456');\n}\n\n// And down to 1% at 9:30pm...\nif(hours==21 && minutes==30) //Great Room and Kitchen to 1% brightness at 9:30pm\n{\n    device=\"Great Room\";\n    powered=\"on\";\n    brightness=1;\n    type=\"group\";\n    WinkCMDmsg = context.global.executeWinkCMD(device,type,powered,brightness);\n    node.send(WinkCMDmsg);\n    WinkCMDmsg = send_ui_note('warning',30000,'Schedule: '+device+' '+type+' '+' turned '+powered,'123456');\n\n    device=\"Kitchen\";\n    powered=\"on\";\n    brightness=1;\n    type=\"group\";\n    WinkCMDmsg = context.global.executeWinkCMD(device,type,powered,brightness);\n    node.send(WinkCMDmsg);\n    WinkCMDmsg = send_ui_note('warning',30000,'Schedule: '+device+' '+type+' '+' turned '+powered,'123456');\n}\n\n// And completely off at 10pm.\nif(hours==22 && minutes==00) //Great Room and Kitchen off @ 10:00pm\n{\n    device=\"Great Room\";\n    powered=\"off\";\n    brightness=0;\n    type=\"group\";\n    WinkCMDmsg = context.global.executeWinkCMD(device,type,powered,brightness);\n    node.send(WinkCMDmsg);\n    WinkCMDmsg = send_ui_note('warning',30000,'Schedule: '+device+' '+type+' '+' turned '+powered,'123456');\n\n    device=\"Kitchen\";\n    powered=\"off\";\n    brightness=0;\n    type=\"group\";\n    WinkCMDmsg = context.global.executeWinkCMD(device,type,powered,brightness);\n    node.send(WinkCMDmsg);\n    WinkCMDmsg = send_ui_note('warning',30000,'Schedule: '+device+' '+type+' '+' turned '+powered,'123456');\n}\n\n// Here is a little more complex example -- I have a group which is only turned on during the week days.\n// intday is a value 0 through 6. 0 is Sunday, 1 is Monday, 2 is Tuesday, etc.\nif(hours==5 && minutes==30 && intday!==0 && intday!=6) //Only certain lights on 10% @ 5:30am Weekdays\n{\n    device=\"Angie Family Room\";\n    powered=\"on\";\n    brightness=10;\n    type=\"light\"; // We're triggering an individual light in this case, not a group\n    WinkCMDmsg = context.global.executeWinkCMD(device,type,powered,brightness);\n    node.send(WinkCMDmsg);\n    WinkCMDmsg = send_ui_note('warning',30000,'Schedule: '+device+' '+type+' '+' turned '+powered,'123456');\n\n    device=\"Kitchen Globe\";\n    powered=\"on\";\n    brightness=10;\n    type=\"light\"; // Another individual light\n    WinkCMDmsg = context.global.executeWinkCMD(device,type,powered,brightness);\n    node.send(WinkCMDmsg);\n    WinkCMDmsg = send_ui_note('warning',30000,'Schedule: '+device+' '+type+' '+' turned '+powered,'123456');\t\n}\n\n// Here we turn on the lights only Monday through Friday at 7am.\nif(hours==7 && minutes==00 && intday!==0 && intday!=6) //Great Room and Kitchen on 50% @ 7am Weekdays\n{\n    device=\"Great Room\";\n    powered=\"on\";\n    brightness=50;\n    type=\"group\";\n    WinkCMDmsg = context.global.executeWinkCMD(device,type,powered,brightness);\n    node.send(WinkCMDmsg);\n    WinkCMDmsg = send_ui_note('warning',30000,'Schedule: '+device+' '+type+' '+' turned '+powered,'123456');\n\n    device=\"Kitchen\";\n    powered=\"on\";\n    brightness=50;\n    type=\"group\";\n    WinkCMDmsg = context.global.executeWinkCMD(device,type,powered,brightness);\n    node.send(WinkCMDmsg);\n    WinkCMDmsg = send_ui_note('warning',30000,'Schedule: '+device+' '+type+' '+' turned '+powered,'123456');\n}\n\n// And turn them off Monday through Friday at 8am.\nif(hours==8 && minutes==00 && intday!==0 && intday!=6) //Great Room and Kitchen off @ 8am Weekdays\n{\n    device=\"Great Room\";\n    powered=\"off\";\n    brightness=0;\n    type=\"group\";\n    WinkCMDmsg = context.global.executeWinkCMD(device,type,powered,brightness);\n    node.send(WinkCMDmsg);\n    WinkCMDmsg = send_ui_note('warning',30000,'Schedule: '+device+' '+type+' '+' turned '+powered,'123456');\n\n    device=\"Kitchen\";\n    powered=\"off\";\n    brightness=0;\n    type=\"group\";\n    WinkCMDmsg = context.global.executeWinkCMD(device,type,powered,brightness);\n    node.send(WinkCMDmsg);\n    WinkCMDmsg = send_ui_note('warning',30000,'Schedule: '+device+' '+type+' '+' turned '+powered,'123456');\n}\n\n// Turn the binary switch on at a specific time.\nif(hours==5 && minutes==25) //Aquarium Light On\n{\n    device=\"Aquarium Light\";\n    powered=\"on\";\n    type=\"light\";\n    brightness=\"\";\n    WinkCMDmsg = context.global.executeWinkCMD(device,type,powered,brightness);\n    node.send(WinkCMDmsg);\n    WinkCMDmsg = send_ui_note('warning',30000,'Schedule: '+device+' '+type+' '+' turned '+powered,'123456');\n}\n\n// Turn the binary switch off at a specific time.\nif(hours==22 && minutes==30) //Aquarium Light Off\n{\n    device=\"Aquarium Light\";\n    powered=\"off\";\n    type=\"light\";\n    brightness=\"\";\n    WinkCMDmsg = context.global.executeWinkCMD(device,type,powered,brightness);\n    node.send(WinkCMDmsg);\n    WinkCMDmsg = send_ui_note('warning',30000,'Schedule: '+device+' '+type+' '+' turned '+powered,'123456');\n}\n\n// This is my test schedule for groups. If I ever want to test a group, I can come to this if statement and change it to 1==1.\n// Obviously, changing it back to 1!==1 stops it from triggering.\nif(1!==1) // Test Group Change\n{\n    device=\"Kitchen\";\n    powered=\"off\";\n    brightness=0;\n    type=\"group\";\n    WinkCMDmsg = context.global.executeWinkCMD(device,type,powered,brightness);\n    node.send(WinkCMDmsg);\n    WinkCMDmsg = send_ui_note('warning',30000,'Schedule: '+device+' '+type+' '+' turned '+powered,'123456');\n}\n\n// This is another test schedule for individual lightbulbs.\nif(1!==1) // Test Light Bulb Change\n{\n    device=\"Brian family room\";\n    powered=\"on\";\n    brightness=10;\n    type=\"light\";\n    WinkCMDmsg = context.global.executeWinkCMD(device,type,powered,brightness);\n    node.send(WinkCMDmsg);\n    WinkCMDmsg = send_ui_note('warning',30000,'Schedule: '+device+' '+type+' '+' turned '+powered,'123456');\n}\n\n// Lastly, my test schedule for switches.\nif(1!==1) // Test Switch Change\n{\n    device=\"Aquarium Light\";\n    powered=\"on\";\n    type=\"light\";\n    brightness=0;\n    WinkCMDmsg = context.global.executeWinkCMD(device,type,powered,brightness);\n    node.send(WinkCMDmsg);\n    WinkCMDmsg = send_ui_note('warning',30000,'Schedule: '+device+' '+type+' '+' turned '+powered,'123456');\n}\n\n// *KEEP THESE LINES BELOW*\nreturn WinkCMDmsg;",
+    "outputs": "1",
     "noerr": 0,
     "x": 261.1666564941406,
     "y": 80,
-    "z": "47c504f6.b83afc",
     "wires": [
       [
-        "6c3e83de.93c17c",
-        "210b2491.def4dc"
+        "7360009d.8ca",
+        "108d06f7.ef72f9"
       ]
     ]
-  },
-  {
-    "id": "6c3e83de.93c17c",
-    "type": "switch",
-    "name": "Switch",
-    "property": "payload.action",
-    "rules": [
-      {
-        "t": "eq",
-        "v": "lightbulb"
-      },
-      {
-        "t": "eq",
-        "v": "group"
-      },
-      {
-        "t": "eq",
-        "v": "switch"
-      }
-    ],
-    "checkall": "true",
-    "outputs": 3,
-    "x": 439.1666564941406,
-    "y": 81.25,
-    "z": "47c504f6.b83afc",
-    "wires": [
-      [
-        "a0153d69.5feac",
-        "a202c38.f5dfd4"
-      ],
-      [
-        "a0153d69.5feac",
-        "a4cd8a74.5b3278"
-      ],
-      [
-        "ef089b08.10f768",
-        "a0153d69.5feac"
-      ]
-    ]
-  },
-  {
-    "id": "a0153d69.5feac",
-    "type": "debug",
-    "name": "",
-    "active": true,
-    "console": "true",
-    "complete": "payload",
-    "x": 647.6666259765625,
-    "y": 20,
-    "z": "47c504f6.b83afc",
-    "wires": []
-  },
-  {
-    "id": "a4cd8a74.5b3278",
-    "type": "subflow:94c627ad.6b39d8",
-    "name": "",
-    "x": 648.9999389648438,
-    "y": 96.69442749023438,
-    "z": "47c504f6.b83afc",
-    "wires": []
-  },
-  {
-    "id": "a202c38.f5dfd4",
-    "type": "subflow:41321595.becdec",
-    "name": "",
-    "x": 652.583251953125,
-    "y": 57.74998474121094,
-    "z": "47c504f6.b83afc",
-    "wires": []
   },
   {
     "id": "4717f112.b8e81",
     "type": "inject",
+    "z": "47c504f6.b83afc",
     "name": "",
     "topic": "",
     "payload": "",
@@ -394,7 +29,6 @@
     "once": true,
     "x": 89.5,
     "y": 80,
-    "z": "47c504f6.b83afc",
     "wires": [
       [
         "96a37e7f.695c8"
@@ -404,62 +38,57 @@
   {
     "id": "d8ab1953.2754e8",
     "type": "comment",
+    "z": "47c504f6.b83afc",
     "name": "Schedule: Uses if statements to match various time-driven profiles",
     "info": "",
     "x": 250.5,
     "y": 39,
-    "z": "47c504f6.b83afc",
-    "wires": []
-  },
-  {
-    "id": "ef089b08.10f768",
-    "type": "subflow:3f9c2dc8.c063d2",
-    "name": "",
-    "x": 649.5,
-    "y": 136,
-    "z": "47c504f6.b83afc",
-    "wires": []
-  },
-  {
-    "id": "210b2491.def4dc",
-    "type": "debug",
-    "name": "",
-    "active": false,
-    "console": "false",
-    "complete": "false",
-    "x": 626.5,
-    "y": 261,
-    "z": "47c504f6.b83afc",
     "wires": []
   },
   {
     "id": "eb9e2a8b.1461d8",
     "type": "comment",
+    "z": "47c504f6.b83afc",
     "name": "Click the \"button\" on the right of the debug node if you want to turn this debug on. --^",
     "info": "",
-    "x": 423.5,
-    "y": 294,
-    "z": "47c504f6.b83afc",
-    "wires": []
-  },
-  {
-    "id": "93a7031d.6c59",
-    "type": "comment",
-    "name": "^-- Double click these subflows above, then click \"Edit subflow\"",
-    "info": "",
-    "x": 817,
-    "y": 173,
-    "z": "47c504f6.b83afc",
+    "x": 330.5,
+    "y": 150,
     "wires": []
   },
   {
     "id": "183978f0.e7c687",
     "type": "comment",
+    "z": "47c504f6.b83afc",
     "name": "Double click to edit --^",
     "info": "",
     "x": 210,
     "y": 116,
+    "wires": []
+  },
+  {
+    "id": "7360009d.8ca",
+    "type": "http request",
     "z": "47c504f6.b83afc",
+    "name": "",
+    "method": "use",
+    "ret": "obj",
+    "url": "",
+    "x": 516,
+    "y": 80,
+    "wires": [
+      []
+    ]
+  },
+  {
+    "id": "108d06f7.ef72f9",
+    "type": "debug",
+    "z": "47c504f6.b83afc",
+    "name": "",
+    "active": true,
+    "console": "false",
+    "complete": "payload",
+    "x": 518,
+    "y": 117,
     "wires": []
   }
 ]
