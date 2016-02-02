@@ -27,60 +27,35 @@ Click on "Node-RED Starter" -- you may have to wait a while for the form in the 
 
 <img src='images/04.png'/>
 
-Enter the application "name" in the "Create an app" panel (e.g., "MyWinkNodeRed". <br><b>remember name you created as you will use it later in the configuration</b>
+Enter the application "name" in the "Create an app" panel (e.g., "MyWinkNodeRed". <br><b>remember the name you created as you will use it later in the configuration</b>
 the "host" will automatically be filled-in. Click on "Create":
 
 <img src='images/06.png'/>
 
 In approximately 30 seconds, the screen will change to "Your application is staging.":
-Once that appears, scroll down and click on "Start Coding >" and then "Download Starter Code":
 
-<img src='images/07.png'/>
+<img src='http://i64.tinypic.com/2aetrn.png'/>
 
-Once downloaded and unzipped, you will have a folder named as your application:
+## Set up a Git Hub repository for your Node Red application
+On the left hand side you will see your application's name, click "Overview" to be taken to your application's overview page. Click the link which says "Add Git" on the top right side of the browser window (above "App Health")
+<img src='http://i68.tinypic.com/ddp79h.png'/>
 
-<img src='images/10.png'/>
+Follow the window through the prompts to create a Git Hub repository.
+<img src='http://i63.tinypic.com/flvk95.png'/>
 
-Wait about two minutes --
-you'll see "Your app is running. [https://MyWinkNodeRed.mybluemix.net](https://MyWinkNodeRed.mybluemix.net)" -- 
-click on the link to access your application:
-
-<img src='images/09.png'/>
-
-## Download and Configure the Cloud Foundry environment
-Go to [https://github.com/cloudfoundry/cli/releases](https://github.com/cloudfoundry/cli/releases):
-
-<img src='images/00.png'/>
-
-Click on the link for the appropriate installer,
-after it successfully downloads,
-double-click on the installer program,
-and then follow the steps.
-
-Open your command line program (`cmd` on Windows, `iTerm` on Mac OS X, `xterm` on Linux, etc.) and
-and run the `cf api https://api.ng.bluemix.net` command:
-
-<img src='images/11.png'/>
-
-Then run the 
-
-        cf login -u your_ibm_bluemix_login_id
-
-command,
-and when prompted, enter your IBM Bluemix password.
+Once created, you'll be taken to the Git Hub repository which includes all of your files for the Wink Node Red application. Click "Edit Code" at the top right to be taken to the web-based file editor.
+<img src='http://i64.tinypic.com/2nlhhqd.png'/>
 
 ## Configuring Your Application
 
-### Editing three files
-In the "MyWinkNodeRed" folder that was created,
-there are three files to be edited.
+In the "MyWinkNodeRed" git hub repository that was created, there are three files to be edited. Bluemix-settings.js, manifest.yml, and package.json. We'll walk you through editing each of the 3 files in the following steps. You'll make these changes using the web-based file editor in the Git Hub repository for your application. **Just like any file editor, when you're finished editing a file, click "File" and then "Save"**
 
-* In `bluemix-settings.js`,
-look for this line:
+#### bluemix-settings.js
+In `bluemix-settings.js`, look for this line:
 
         functionGlobalContext: { },
 
-    and replace it with these lines: (remember to change <b>MyWinkNodeRed</b> part to the app name you selected during BlueMix configuration
+and replace it with these lines: (remember to change <b>MyWinkNodeRed</b> part to the app name you selected during BlueMix configuration
 
         functionGlobalContext: {
               WinkUser         : { uid : "your Wink username"
@@ -96,28 +71,33 @@ look for this line:
             , motionAdjustTstat: true
         },
 
-    to get an API key for `forecast.io` go [here](https://developer.forecast.io).
-    to get an IFTTT token go to http://ifttt.com/maker and look for secret key strinkg
-* In 'manifest.yml',
-below the line:
+* to get an API key for `forecast.io` go [here](https://developer.forecast.io).
+* to get an IFTTT token go to http://ifttt.com/maker and look for secret key strinkg
+
+**Remember to use "File" -> "Save" so your changes are saved.**
+
+#### manifest.yml
+In 'manifest.yml', below the line:
 
           domain: mybluemix.net
 
-    add these three lines:
+add these three lines:
 
           env:
             NODE_RED_USERNAME: another-pseudo-random-string
             NODE_RED_PASSWORD: and-another-pseudo-random-string
 
-    e.g.,
+e.g.,
 
           env:
             NODE_RED_USERNAME: zphiZvUMUsMFoyTUD9VkVyThDNV3Vh
             NODE_RED_PASSWORD: pZiMGaK8FtppasbhdPWr=JRPzh2vtn
 
-    Note that indentation is important!
+Keep in mind that what you enter for the username and password will be what you will use to log in to the Node Red application. Don't make it too complex, but don't make it too easy either -- your login page is visible to everyone on the internet! If your username/password combo is too easy then anyone can gain access to your Node Red application. 
 
-    When you're done the entire file should look something like: ((remember to change <b>MyWinkNodeRed</b> part to the app name you selected during BlueMix configuration)
+Note that indentation is important!
+
+When you're done the entire file should look something like: ((remember to change <b>MyWinkNodeRed</b> part to the app name you selected during BlueMix configuration))
 
         applications:
         - services:
@@ -135,68 +115,32 @@ below the line:
           instances: 1
           memory: 512M
 
-* In `package.json`,
-below the line:
+**Remember to use "File" -> "Save" so your changes are saved.**
 
-        "node-red-node-cf-cloudant":"0.x",
+#### package.json
+ In `package.json`, delete all of the text in the file, then copy and paste the text from this link into your package.json file.
+* [https://github.com/tfatykhov/WinkRedNode/blob/master/Flows/Bluemix/package.json](https://github.com/tfatykhov/WinkRedNode/blob/master/Flows/Bluemix/package.json)
 
-    add this line:
+**Remember to use "File" -> "Save" so your changes are saved.**
 
-        "node-red-node-pushbullet":"0.x",
+### Updating the application after editing the files
+Once you're done editing the three files above, click the icon on the left hand side which resembles an upside down Rachio icon, you can see it highlighted in white on the below photo.
 
-    Also, below the line:
+When you're in the commit section, you'll see all the changes on the right pane. Click "Select all" and then put some text into the box at the top to describe your changes. "Initial setup" for example. Click "Commit" in the top right (cut off in this picture) and you'll see the changes on the left pane show up ready to be synced. Click "Sync" at the top.
+<img src='http://i64.tinypic.com/23wphdz.png'/>
 
-        "node-red-contrib-bluemix-hdfs":"0.x",
+At the top right of the page, click `Build & Deploy` and you'll see your changes being built and then deployed to your Node Red application. If your changes were done correctly you'll see Success. If there's any issues, you can click to view the logs and that should give you hints as to what was done wrong.
 
-    add this line:
-
-        "node-red-contrib-freeboard":"git://github.com/tfatykhov/node-red-contrib-freeboard.git",
-
-    When you're done the entire file should look something like:
-
-        {
-            "name"         : "node-red-bluemix",
-            "version"      : "0.4.20",
-            "dependencies": {
-                "when": "~3.x",
-                "mongodb": "~1.4.x",
-                "nano": "~5.11.0",
-                "cfenv":"~1.0.0",
-                "feedparser":"~0.19.2",
-                "redis":"~0.10.1",
-                "node-red": "0.x",
-                "node-red-bluemix-nodes":"0.x",
-                "node-red-node-cf-cloudant":"0.x",
-                "node-red-node-pushbullet":"0.x",
-                "node-red-contrib-scx-ibmiotapp":"0.x",
-                "node-red-contrib-ibmpush":"0.x",
-                "node-red-contrib-bluemix-hdfs":"0.x",
-                "node-red-contrib-freeboard":"git://github.com/tfatykhov/node-red-contrib-freeboard.git",
-                "node-red-nodes-cf-sqldb-dashdb":"0.x"
-            },
-            "engines": {
-                "node": "0.10.x"
-            }
-        }
-
-### Updating the application
-Open your command line program,
-change to the folder where the the folder named for your application was created,
-and run the `cf push MyWinkNodeRed` command:
-
-<img src='images/12.png'/>
+If you run into problems and are stuck, you can get support through the following two methods:
+* **(Preferred)** [https://www.facebook.com/groups/WinkNodeRed/](https://www.facebook.com/groups/WinkNodeRed/) - Reach out to us on Facebook at our Wink Node Red facebook group.
+* [https://github.com/tfatykhov/WinkRedNode/issues](https://github.com/tfatykhov/WinkRedNode/issues) - Create a new issue on the Wink Node Red project git hub.
 
 ## Fundamental Flows for Node-RED on Bluemix
-Go to [https://MyWinkNodeRed.mybluemix.net](https://MyWinkNodeRed.mybluemix.net) and click on 
-["Go to your Node-RED flow editor"](https://mywinknodered.mybluemix.net/red).
+Go to [https://MyWinkNodeRed.mybluemix.net](https://MyWinkNodeRed.mybluemix.net) (change MyWinkNodeRed to your application name) and click on ["Go to your Node-RED flow editor"](https://mywinknodered.mybluemix.net/red).
 
-You will be prompted to enter the `NODE_RED_USERNAME` and `NODE_RED_PASSWORD` values
-that you previously entered into `manifest.yml`.
+You will be prompted to enter the `NODE_RED_USERNAME` and `NODE_RED_PASSWORD` values that you previously entered into `manifest.yml`.
 
-Navigate to [Flows/Bluemix/](Flows/Bluemix/) and Import 3 core flows.<br>
-[Check readme on how to create tabs and import 3 core flows one to each tab](Flows/Bluemix/README.md#8122015) if you are a first time user.
-
-Click on "Deploy". you will see information will start flow in debug window on right side of the screen (may need to swith to debug tab)
+Navigate to [https://github.com/tfatykhov/WinkRedNode/blob/master/README-ImportingUpdating%20Flows.md](https://github.com/tfatykhov/WinkRedNode/blob/master/README-ImportingUpdating%20Flows.md) and follow the directions for importing the main flows into Wink Node Red.
 
 To start using Freeboard,
 go to [https://mywinknodered.mybluemix.net/freeboard](https://mywinknodered.mybluemix.net/freeboard/),
