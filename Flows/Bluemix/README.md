@@ -1,7 +1,7 @@
 == UPDATE ==
 02/02/2016
 -----------------
-Tablet UI summary updates (refuel icon, more dynamic changes), bug fixes<br>
+Tablet UI summary updates: refuel icon, more dynamic changes(try to trigger tripper :) ), bug fixes<br>
 <img src="images/ui_updates.png">
 *  Import updated [winkCore.json](winkCore.json)
 *  Import updated [tabletUI.json](tabletUI.json)
