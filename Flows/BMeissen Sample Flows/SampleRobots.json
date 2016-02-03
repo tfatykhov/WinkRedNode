@@ -1,0 +1,114 @@
+[
+  {
+    "id": "c0728837.3f8d78",
+    "type": "http in",
+    "z": "f17c0cb2.0e83f",
+    "name": "",
+    "url": "/red/robots",
+    "method": "post",
+    "swaggerDoc": "",
+    "x": 84,
+    "y": 20,
+    "wires": [
+      [
+        "d7f8d9a.f280728"
+      ]
+    ]
+  },
+  {
+    "id": "f6ec754e.091388",
+    "type": "comment",
+    "z": "f17c0cb2.0e83f",
+    "name": "^---- Update the \"Robots\" node to program your robots.",
+    "info": "",
+    "x": 543,
+    "y": 100,
+    "wires": []
+  },
+  {
+    "id": "aa0c758d.55f388",
+    "type": "function",
+    "z": "f17c0cb2.0e83f",
+    "name": "Robots",
+    "func": "if ('useRobots' in context.global && context.global.useRobots) {\n    var WinkCMDmsg = \"\";\n    // Import changed data into a local variable for ease of use\n    changed = msg.payload;\n    //node.warn(\"Checking robots for \"+msg.payload.name);\n    // All robots are \"if statements\"\n    // Use the examples below to create your own robots -- you can have multiple conditions as seen below.\n    \n    // Example: If the Patio Door opens (and was previously not open), do something.\n    if (changed.name==\"Patio Door\" && changed.old_state!==\"Opened\" && changed.new_state==\"Opened\")\n    {\n        // This command just shows a message in the debug tab.\n        node.warn(\"Blinking the LIFX lights when the patio door opens\");\n    }\n    \n    if ((changed.name == (\"Home\" || \"Kids' Room\" || \"Downstairs\" || \"Bedrom\")) && changed.new_state.occupied == \"true\" && changed.old_state.occupied == \"false\")\n    {\n        node.warn(\"Motion detected in \" + changed.name);\n    }\n    \n    // Example 2: If the front door opens (and was previously not open) and my wife isn't home, then do something.\n    if (changed.name==\"Front Door\" && changed.old_state!==\"Opened\" && changed.new_state==\"Opened\" && context.global.Presence[Angie].home==false)\n    {\n        // Command shows a message in the debug tab when it's triggered:\n        node.warn(\"Front door opened!\");\n        \n        // This command sends an HTTP command to the URL specified.\n        // In this case, it sends a message through IFTTT which then notifies my wife the front door opened whiles he was gone.\n        WinkCMDmsg ={\n            \"url\":\"https://maker.ifttt.com/trigger/front_door_opened/with/key/-edited-\",\n            \"method\": \"PUT\",\n            payload:{}\n        }\n    }\n    \n    // Example 3: When the garage door opens (and was previously not open), do something.\n    if (changed.name==\"GarageDoor\" && changed.old_state!==\"Opened\" && changed.new_state==\"Opened\")\n    {\n        // Say something in the debug window.\n        node.warn(\"Garage door opened!\");\n        \n        // Send a wink Command to turn the Garage Interior group on at 100% brightness.\n        // If I wanted to change a bulb on/off, then I would use:\n        // WinkCMDmsg = context.global.executeWinkCMD(\"Light Bulb\",\"light\",\"on\",\"1\");\n        // The command above would turn a light bulb on at 1%. Obviously change on to off, 1 to a number 1 through 100.\n        WinkCMDmsg = context.global.executeWinkCMD(\"Garage Interior\",\"group\",\"on\",\"100\");\n    }\n}    \n    \n// You shouldn't have to edit anything below this line.\nif (WinkCMDmsg !== \"\"){\n    node.warn(WinkCMDmsg.url);\n    return [msg,WinkCMDmsg];\n}\nelse { \n    return [msg]; \n}",
+    "outputs": "2",
+    "noerr": 0,
+    "x": 383,
+    "y": 61,
+    "wires": [
+      [],
+      [
+        "9d16c901.62e938"
+      ]
+    ]
+  },
+  {
+    "id": "9d16c901.62e938",
+    "type": "http request",
+    "z": "f17c0cb2.0e83f",
+    "name": "",
+    "method": "use",
+    "ret": "obj",
+    "url": "",
+    "x": 536,
+    "y": 68,
+    "wires": [
+      [
+        "b23c43b8.4dc3c"
+      ]
+    ]
+  },
+  {
+    "id": "b23c43b8.4dc3c",
+    "type": "debug",
+    "z": "f17c0cb2.0e83f",
+    "name": "",
+    "active": true,
+    "console": "false",
+    "complete": "false",
+    "x": 705,
+    "y": 68,
+    "wires": []
+  },
+  {
+    "id": "d7f8d9a.f280728",
+    "type": "function",
+    "z": "f17c0cb2.0e83f",
+    "name": "",
+    "func": "if(msg.req.headers.authorization && msg.req.headers.authorization==\"Bearer \"+context.global.FREEBOARD_TOKEN){\nmsg.StatusCode=\"200\";\n//if ('camera_name' in msg.payload && msg.payload.camera_name!=='undefined') msg.payload.camera_name=msg.req.body.camera_name\n} else {\nmsg.StatusCode=\"403\";\n}\n\nif (msg.StatusCode==\"200\")\n{\n    return [msg, msg];\n}\nelse { \n    return [msg];\n}",
+    "outputs": "2",
+    "noerr": 0,
+    "x": 246,
+    "y": 20,
+    "wires": [
+      [
+        "8526ef09.7ad91"
+      ],
+      [
+        "aa0c758d.55f388",
+        "872ed241.78d13"
+      ]
+    ]
+  },
+  {
+    "id": "8526ef09.7ad91",
+    "type": "http response",
+    "z": "f17c0cb2.0e83f",
+    "name": "",
+    "x": 384,
+    "y": 20,
+    "wires": []
+  },
+  {
+    "id": "872ed241.78d13",
+    "type": "debug",
+    "z": "f17c0cb2.0e83f",
+    "name": "",
+    "active": false,
+    "console": "false",
+    "complete": "false",
+    "x": 402,
+    "y": 136,
+    "wires": []
+  }
+]
