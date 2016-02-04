@@ -47,7 +47,7 @@ Once created, you'll be taken to the Git Hub repository which includes all of yo
 <img src='http://i64.tinypic.com/2nlhhqd.png'/>
 
 ## Configuring Your Application
-
+-----------------
 In the "MyWinkNodeRed" git hub repository that was created, there are three files to be edited. Bluemix-settings.js, manifest.yml, and package.json. We'll walk you through editing each of the 3 files in the following steps. You'll make these changes using the web-based file editor in the Git Hub repository for your application. **Just like any file editor, when you're finished editing a file, click "File" and then "Save"**
 
 #### bluemix-settings.js
@@ -69,6 +69,8 @@ and replace it with these lines: (remember to change <b>MyWinkNodeRed</b> part t
             , FREEBOARD_TOKEN  : "pseudo-random-string"
             , IFTTT_TOKEN: "your IFTTT secret key"
             , motionAdjustTstat: true
+            , CRYPTO:  require("crypto")
+            , VCAP_SERVICES: JSON.parse(process.env.VCAP_SERVICES)
         },
 
 * to get an API key for `forecast.io` go [here](https://developer.forecast.io).
