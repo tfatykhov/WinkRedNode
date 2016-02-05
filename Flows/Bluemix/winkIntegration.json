@@ -1,12 +1,5 @@
 [
   {
-    "id": "b25b93a7.4da47",
-    "type": "websocket-listener",
-    "z": "",
-    "path": "/ws/winkStat",
-    "wholemsg": "false"
-  },
-  {
     "id": "ea611044.159ef",
     "type": "function",
     "z": "17b3daf5.e84c25",
@@ -27,11 +20,11 @@
     "type": "function",
     "z": "17b3daf5.e84c25",
     "name": "",
-    "func": "var WinkCMDmsg={};\nif (msg.payload.iftttkey==context.global.IFTTT_TOKEN || msg.payload.iftttkey==context.global.FREEBOARD_TOKEN || context.global.getCookie('exchange_token',msg.req.headers.cookie)==context.global.FREEBOARD_TOKEN)\n{\n    if ('ifttt' in  msg.payload)\n    {\n      context.global.ifttt=(msg.payload.ifttt.toLowerCase()==\"on\" ? true:false)\n      msg.res.StatusCode=200;\n      return [msg];\n    }\n    if ('winkName' in msg.payload)\n    {\n//    node.warn('Name '+msg.payload.winkName)\n    if ('level' in msg.payload)\n    {\n        level=msg.payload.level\n    }  else level= (msg.payload.cmd.toLowerCase() =='on' ? 100 : 0)\n    if ('cmd' in msg.payload)\n    {\n        cmd=msg.payload.cmd\n    } else cmd=''   \n//    node.warn(level)\n    WinkCMDmsg = context.global.executeWinkCMD(msg.payload.winkName,msg.payload.type,msg.payload.cmd,level);\n    msg.statusCode=200;\n//    node.warn('Message '+ JSON.stringify(WinkCMDmsg))\n    }\n}\nelse {\n    node.warn(\"ifttt messages bad request\")\n     msg.statusCode=403;\n}\nif (WinkCMDmsg!==\"\")\n{\n    return [msg,WinkCMDmsg];\n}\nelse\n{\nreturn [msg];\n}",
+    "func": "var WinkCMDmsg={};\nvar web_req=(context.global.getCookie('exchange_token',msg.req.headers.cookie)=='0' ? false:true);\n\nif (msg.payload.iftttkey==context.global.IFTTT_TOKEN || msg.payload.iftttkey==context.global.FREEBOARD_TOKEN) web_req=true;\nif (web_req)\n{\n    if ('ifttt' in  msg.payload)\n    {\n      context.global.ifttt=(msg.payload.ifttt.toLowerCase()==\"on\" ? true:false)\n      msg.res.StatusCode=200;\n      return [msg];\n    }\n    if ('winkName' in msg.payload)\n    {\n//    node.warn('Name '+msg.payload.winkName)\n    if ('cmd' in msg.payload)\n    {\n        cmd=msg.payload.cmd\n    } else cmd='on' \n    if ('level' in msg.payload)\n    {\n        level=msg.payload.level\n    }  else level= (cmd.toLowerCase() =='on' ? 100 : 0)\n//    node.warn(level)\n    WinkCMDmsg = context.global.executeWinkCMD(msg.payload.winkName,msg.payload.type,msg.payload.cmd,level);\n    msg.statusCode=200;\n//    node.warn('Message '+ JSON.stringify(WinkCMDmsg))\n    }\n}\nelse {\n    node.warn(\"ifttt messages bad request\")\n     msg.statusCode=403;\n     return [msg,null];\n}\nif (WinkCMDmsg!==\"\")\n{\n    return [msg,WinkCMDmsg];\n}\nelse\n{\nreturn [msg,null];\n}",
     "outputs": "2",
     "noerr": 0,
-    "x": 587.5,
-    "y": 253.49993896484375,
+    "x": 649.5,
+    "y": 230.49993896484375,
     "wires": [
       [
         "d04364de.2fbc98"
