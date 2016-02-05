@@ -277,6 +277,7 @@
     "name": "",
     "url": "/red/wink/subscribtions",
     "method": "post",
+    "swaggerDoc": "",
     "x": 154,
     "y": 458.00006103515625,
     "wires": [
@@ -1320,7 +1321,7 @@
     "type": "http in",
     "z": "3cc9f29d.c3360e",
     "name": "wscomms",
-    "url": "red/wscomms",
+    "url": "/red/wscomms",
     "method": "post",
     "swaggerDoc": "",
     "x": 735,
