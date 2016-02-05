@@ -1,4 +1,16 @@
 == UPDATE ==
+02/06/2016
+-----------------
+fixed - ifttt integration bug for shortcuts<br>
+removed canary from camera page<br>
+added canary status updates in event log<br>
+trying to solve dup websockets<br>
+wink api index added to summary page<br>
+*  Import updated [winkCore.json](winkCore.json)
+*  Import updated [tabletUI.json](tabletUI.json)
+*  Import updated [winkIntegration.json](winkIntegration.json)
+
+
 02/02/2016
 -----------------
 Tablet UI summary updates: refuel icon, more dynamic changes(try to trigger tripper :) ), bug fixes<br>
