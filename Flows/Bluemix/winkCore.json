@@ -7,6 +7,25 @@
     "wholemsg": "false"
   },
   {
+    "id": "b792c9ff.486d38",
+    "type": "inject",
+    "z": "3cc9f29d.c3360e",
+    "name": "",
+    "topic": "",
+    "payload": "",
+    "payloadType": "str",
+    "repeat": "82800",
+    "crontab": "",
+    "once": true,
+    "x": 662,
+    "y": 346,
+    "wires": [
+      [
+        "8551766c.7aae88"
+      ]
+    ]
+  },
+  {
     "id": "61fe1975.9e01e8",
     "type": "function",
     "z": "3cc9f29d.c3360e",
@@ -68,25 +87,6 @@
     "wires": [
       [
         "c407313e.3bf8d"
-      ]
-    ]
-  },
-  {
-    "id": "b792c9ff.486d38",
-    "type": "inject",
-    "z": "3cc9f29d.c3360e",
-    "name": "",
-    "topic": "",
-    "payload": "",
-    "payloadType": "str",
-    "repeat": "82800",
-    "crontab": "",
-    "once": true,
-    "x": 662,
-    "y": 346,
-    "wires": [
-      [
-        "8551766c.7aae88"
       ]
     ]
   },
@@ -1025,7 +1025,7 @@
     "type": "function",
     "z": "3cc9f29d.c3360e",
     "name": "UI Notifications",
-    "func": "var pct = function(value) {\n    return ((value > 1.0 ? value : value * 100).toFixed(0) + '%');\n}\nfunction send_ui_note(n_type,n_timeout,n_message,obj_id){\n    var obj=obj_id||null;\n    var newMsg={\n        url:context.global.BlueMixUrlBase+'/red/notifications',\n        \"method\": \"POST\",\n        headers: {\n            \"Authorization\":\"Bearer \"+context.global.FREEBOARD_TOKEN\n        },\n        payload:{\n            \"id\":obj,\n            \"type\":n_type,\n            \"message\":n_message,\n            \"timeout\":n_timeout\n            }\n        };\n        node.send(newMsg);\n}\nif ('last_reading' in msg.payload){\n    var Obj_name=msg.payload.name;\n    var Obj_type=msg.payload.object_type;\n    var Obj_id=msg.payload.object_id;\n    var lr = msg.payload.last_reading;\n    if ('opened' in lr && lr.opened) send_ui_note('warning',30000,Obj_name+' opened',Obj_id);\n    if ('locked' in lr && !lr.locked) send_ui_note('warning',30000,Obj_name+' unlocked',Obj_id);\n    if ('motion' in lr && lr.motion)  send_ui_note('warning',30000,Obj_name+' motion detected',Obj_id);\n    if ('tamber_detected' in lr && lr.tamper_detected) send_ui_note('error',60000,Obj_name+' tamper detected!!!');\n    if ('battery' in lr && lr.battery!==null) ((lr.battery>=0.33 && lr.battery < 0.5) ? send_ui_note('information',30000,Obj_name+' battery level '+ pct(lr.battery)) : (lr.battery>= 0.1 && lr.battery <0.33) ? send_ui_note('warning',60000,Obj_name+' battery level '+ pct(lr.battery)) : lr.battery<0.1 ? send_ui_note('error',false,Obj_name+' battery level '+ pct(lr.battery)) : null);\n    if ('remaining' in lr) ((lr.remaining>=0.33 && lr.remaining < 0.5) ? send_ui_note('information',30000,Obj_name+' propane level '+ pct(lr.remaining)) : (lr.remaining>= 0.1 && lr.remaining <0.33) ? send_ui_note('warning',60000,Obj_name+' propane level '+ pct(lr.remaining)) : lr.remaining<0.1 ? send_ui_note('error',false,Obj_name+' propane level '+ pct(lr.remaining)) : null);\n    if ('liquid_detected' in lr && lr.liquid_detected) send_ui_note('error',false,Obj_name+' liquid detected!!!');\n    if ('smoke_detected' in lr && lr.smoke_detected) send_ui_note('error',false,Obj_name+' smoke detected!!!<br>Severity: '+pct(lr.co_severity));\n    if ('co_detected' in lr && lr.smoke_detected) send_ui_note('error',false,Obj_name+' smoke detected!!!<br>Severity: '+pct(lr.co_severity));\n    if ('enabled' in lr) send_ui_note('warning',30000,'Robot \"'+Obj_name+(lr.enabled ? '\" enabled' : '\" disabled'),Obj_id);\n    if ('fired' in lr && lr.fired) send_ui_note('warning',30000,'Robot \"'+Obj_name+'\" fired',Obj_id);\n    if ('mode' in lr && Obj_type!='thermostat') send_ui_note('warning',30000,'Canary \"'+Obj_name+'\" set to '+lr.mode+' mode',Obj_id);\n    if ('garage_doors' in lr) send_ui_note('warning',30000,Obj_name+(lr.garage_doors==\"0\" ? \" Closed\":\" Opened\"),Obj_id);    \n    if ((Obj_type=='light_bulb' || Obj_type=='binary_switch' || Obj_type=='powerstrip') && context.global.LightsNotification) {\n        send_ui_note('warning',30000,Obj_name+(lr.powered ? \" On\":\" off\") + ('brightness' in lr && lr.powered ? ' @'+pct(lr.brightness) : ''),Obj_id);\n    }\n    \n    \n}\nreturn;",
+    "func": "var pct = function(value) {\n    return ((value > 1.0 ? value : value * 100).toFixed(0) + '%');\n}\nfunction send_ui_note(n_type,n_timeout,n_message,obj_id){\n    var obj=obj_id||null;\n    var newMsg={\n        url:context.global.BlueMixUrlBase+'/red/notifications',\n        \"method\": \"POST\",\n        headers: {\n            \"Authorization\":\"Bearer \"+context.global.FREEBOARD_TOKEN\n        },\n        payload:{\n            \"id\":obj,\n            \"type\":n_type,\n            \"message\":n_message,\n            \"timeout\":n_timeout\n            }\n        };\n        node.send(newMsg);\n}\nif ('last_reading' in msg.payload){\n    var Obj_name=msg.payload.name;\n    var Obj_type=msg.payload.object_type;\n    var Obj_id=msg.payload.object_id;\n    var lr = msg.payload.last_reading;\n    if ('opened' in lr && lr.opened) send_ui_note('warning',3600000,Obj_name+' opened',Obj_id);\n    if ('locked' in lr && !lr.locked) send_ui_note('warning',3600000,Obj_name+' unlocked',Obj_id);\n    if ('motion' in lr && lr.motion)  send_ui_note('warning',3600000,Obj_name+' motion detected',Obj_id);\n    if ('tamber_detected' in lr && lr.tamper_detected) send_ui_note('error',3600000,Obj_name+' tamper detected!!!');\n    if ('battery' in lr && lr.battery!==null) ((lr.battery>=0.33 && lr.battery < 0.5) ? send_ui_note('information',false,Obj_name+' battery level '+ pct(lr.battery)) : (lr.battery>= 0.1 && lr.battery <0.33) ? send_ui_note('warning',60000,Obj_name+' battery level '+ pct(lr.battery)) : lr.battery<0.1 ? send_ui_note('error',false,Obj_name+' battery level '+ pct(lr.battery)) : null);\n    if ('remaining' in lr) ((lr.remaining>=0.33 && lr.remaining < 0.5) ? send_ui_note('information',false,Obj_name+' propane level '+ pct(lr.remaining)) : (lr.remaining>= 0.1 && lr.remaining <0.33) ? send_ui_note('warning',60000,Obj_name+' propane level '+ pct(lr.remaining)) : lr.remaining<0.1 ? send_ui_note('error',false,Obj_name+' propane level '+ pct(lr.remaining)) : null);\n    if ('liquid_detected' in lr && lr.liquid_detected) send_ui_note('error',false,Obj_name+' liquid detected!!!');\n    if ('smoke_detected' in lr && lr.smoke_detected) send_ui_note('error',false,Obj_name+' smoke detected!!!<br>Severity: '+pct(lr.co_severity));\n    if ('co_detected' in lr && lr.smoke_detected) send_ui_note('error',false,Obj_name+' smoke detected!!!<br>Severity: '+pct(lr.co_severity));\n    if ('enabled' in lr) send_ui_note('warning',300000,'Robot \"'+Obj_name+(lr.enabled ? '\" enabled' : '\" disabled'),Obj_id);\n    if ('fired' in lr && lr.fired) send_ui_note('warning',300000,'Robot \"'+Obj_name+'\" fired',Obj_id);\n    if ('mode' in lr && Obj_type!='thermostat') send_ui_note('warning',300000,'Canary \"'+Obj_name+'\" set to '+lr.mode+' mode',Obj_id);\n    if ('garage_doors' in lr) send_ui_note('warning',300000,Obj_name+(lr.garage_doors==\"0\" ? \" Closed\":\" Opened\"),Obj_id);    \n    if ((Obj_type=='light_bulb' || Obj_type=='binary_switch' || Obj_type=='powerstrip') && context.global.LightsNotification) {\n        send_ui_note('notification',\"90000\",Obj_name+(lr.powered ? \" On\":\" off\") + ('brightness' in lr && lr.powered ? ' @'+pct(lr.brightness) : ''),Obj_id);\n    }\n    \n    \n}\nreturn;",
     "outputs": 1,
     "noerr": 0,
     "x": 693.5,
@@ -1125,7 +1125,7 @@
     "type": "function",
     "z": "3cc9f29d.c3360e",
     "name": "",
-    "func": "if(msg.req.headers.authorization && msg.req.headers.authorization==\"Bearer \"+context.global.FREEBOARD_TOKEN){\nvar newMsg={}    \nnewMsg.payload={\n    'id':msg.payload.id||null,\n    'alertType':msg.payload.type,\n    'message':msg.payload.message\n }\nmsg.res.statuCode=200;\nnode.send([msg, newMsg]);\n} else { \n    msg.res.statusCode=200\n    node.send([msg]);\n}",
+    "func": "if(msg.req.headers.authorization && msg.req.headers.authorization==\"Bearer \"+context.global.FREEBOARD_TOKEN){\nvar newMsg={}    \nnewMsg.payload={\n    'id':msg.payload.id||null,\n    'alertType':msg.payload.type,\n    'timeout':msg.payload.timeout || false,\n    'message':msg.payload.message\n }\nmsg.res.statuCode=200;\nnode.send([msg, newMsg]);\n} else { \n    msg.res.statusCode=200\n    node.send([msg]);\n}",
     "outputs": "2",
     "noerr": 0,
     "x": 910.5,
