@@ -10,6 +10,8 @@ wink api index added to summary page<br>
 *  Import updated [tabletUI.json](tabletUI.json)
 *  Import updated [winkIntegration.json](winkIntegration.json)
 
+***NOTE: In this case, once you have imported all 3 tabs, make sure you do a **FULL** import***  
+
 
 02/02/2016
 -----------------
