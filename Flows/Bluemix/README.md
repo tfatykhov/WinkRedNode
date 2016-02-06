@@ -1,6 +1,11 @@
 == UPDATE ==
 02/06/2016
 -----------------
+Updated 'what changed' flow on winkCore to show occupancy and temp in *F<br>
+*  Import updated [winkCore.json](winkCore.json)
+
+02/05/2016
+-----------------
 fixed - ifttt integration bug for shortcuts<br>
 removed canary from camera page<br>
 added canary status updates in event log<br>
