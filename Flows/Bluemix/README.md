@@ -1,7 +1,7 @@
 == UPDATE ==
 02/06/2016, v2
 -----------------
-Added ability to show light status in the logs via config
+Added ability to refresh wink Devices via UI
 <img src="images/updated_config2.png">
 
 Flow Editor:<br>
