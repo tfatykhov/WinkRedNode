@@ -13,7 +13,6 @@
         "node-red-contrib-scx-ibmiotapp":"0.x",
         "node-red-contrib-ibmpush":"0.x",
         "node-red-contrib-bluemix-hdfs":"0.x",
-        "node-red-nodes-cf-sqldb-dashdb":"0.x",
         "node-red-contrib-freeboard":"git://github.com/tfatykhov/node-red-contrib-freeboard.git",
         "node-red-node-pushbullet":"0.x",
         "node-red-contrib-later":"~0.x"
