@@ -1,15 +1,19 @@
 == UPDATE ==
 02/06/2016
 -----------------
-Added ability to save custom freeboards to your local computer so you can re-load them again:
+Added ability to save custom freeboards to your local computer so you can re-load them again:<br>
 <img src="images/safe_custom_freeboard.png">
+
 Updated 'what changed' flow on winkCore to show occupancy and temp in *F<br>
 Removed 'second ws instance' trying to avoid ws duplicate errors<br>
 Issue with deployment on bluemix<br>
+Added ability to show light status in the logs via config
+<img src="images/new_cfg.png">
 
 Flow Editor:<br>
 *  Import updated [winkCore.json](winkCore.json)
 *  Import updated [winkIntegration.json](winkIntegration.json)
+*  Import updated [tabletUI.json](tabletUI.json)
 *  perform "FULL" deployment<br>
 
 Bluemix git console:<br>
