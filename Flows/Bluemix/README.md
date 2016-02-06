@@ -6,6 +6,7 @@ Added ability to save custom freeboards to your local computer so you can re-loa
 
 Updated 'what changed' flow on winkCore to show occupancy and temp in *F<br>
 Removed 'second ws instance' trying to avoid ws duplicate errors<br>
+wink api should show 'retrieving' if it is not there yet.<br>
 Issue with deployment on bluemix<br>
 Added ability to show light status in the logs via config
 <img src="images/new_cfg.png">
