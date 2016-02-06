@@ -1,4 +1,14 @@
 == UPDATE ==
+02/06/2016, v2
+-----------------
+Added ability to show light status in the logs via config
+<img src="images/updated_config2.png">
+
+Flow Editor:<br>
+*  Import updated [winkCore.json](winkCore.json)
+*  Import updated [tabletUI.json](tabletUI.json)
+*  perform "FULL" deployment<br>
+
 02/06/2016
 -----------------
 Added ability to save custom freeboards to your local computer so you can re-load them again:<br>
