@@ -6,11 +6,14 @@ Added ability to save custom freeboards to your local computer so you can re-loa
 Updated 'what changed' flow on winkCore to show occupancy and temp in *F<br>
 Removed 'second ws instance' trying to avoid ws duplicate errors<br>
 Issue with deployment on bluemix<br>
+
 Flow Editor:<br>
 *  Import updated [winkCore.json](winkCore.json)
 *  Import updated [winkIntegration.json](winkIntegration.json)
-*  perform "FULL" deployment
+*  perform "FULL" deployment<br>
+
 Bluemix git console:<br>
+
 *  copy contents of [package.json](package.json) and update same file in your configuration with it contents.
 *  restart application 
 
