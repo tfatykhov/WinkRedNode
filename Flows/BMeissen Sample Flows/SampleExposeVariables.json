@@ -1,0 +1,186 @@
+[
+  {
+    "id": "ffdb2fec.0024d",
+    "type": "comment",
+    "z": "d842650b.27bd98",
+    "name": "CAUTION - Make sure you edit what's shown in the \"Edit Me!\" node.",
+    "info": "",
+    "x": 254,
+    "y": 26,
+    "wires": []
+  },
+  {
+    "id": "d98a0cc.f2675f",
+    "type": "comment",
+    "z": "d842650b.27bd98",
+    "name": "If you uncomment a line that could expose sensitive data, be sure to re-comment and re-deploy after you're done viewing the page!",
+    "info": "",
+    "x": 454,
+    "y": 62,
+    "wires": []
+  },
+  {
+    "id": "adb4ceb4.524b3",
+    "type": "http in",
+    "z": "d842650b.27bd98",
+    "name": "",
+    "url": "/red/exposevariables",
+    "method": "get",
+    "swaggerDoc": "",
+    "x": 115,
+    "y": 105,
+    "wires": [
+      [
+        "5d5578c.fa2aa88"
+      ]
+    ]
+  },
+  {
+    "id": "df156288.20eaa",
+    "type": "function",
+    "z": "d842650b.27bd98",
+    "name": "Edit Me!",
+    "func": "// Remove the two slashes from the line below to show all variables.\n// CAUTION: If you uncomment the AllVariables line, you *WILL* expose username and password combinations.\n//msg.payload.AllVariables=context.global;\n\n\n// Uncomment these lines to show Presence information.\n//msg.payload.Presence=context.global.Presence;\n//msg.payload.PresenceHistory=context.global.PresenceHistory;\n\n// Uncomment this line to show Wink data only.\n//msg.payload.WinkData=context.global.winkState;\n\n// Uncomment this line to see the winkChanged data that's used for robots -- showing a door open and closed, for example\n//msg.payload.winkChanged=context.global.winkChanged;\n\n// Uncomment this line to see sensor data from WinkState\n//msg.payload.sensor_pods=context.global.winkState.sensor_pods;\n\n// Uncomment this line to see all summary and group data (including group membership)\n//msg.payload.groups=context.global.winkState.groups;\n\n// Uncomment this line to see IFTTT data\n//msg.payload.ifttt=context.global.ifttt\n\n// Uncomment this line to see Hub data\n//msg.payload.winkState2=context.global.winkState.hubs;\n\n// Uncomment this line to see Last Updates\n//msg.payload.lastUpdates = context.global.winkState.lastUpdates;\n\n// Uncomment this line to see dev capabilities for devices\n//msg.payload.winkDevCap=context.global.winkDevCap;\n\nreturn msg;",
+    "outputs": 1,
+    "noerr": 0,
+    "x": 618,
+    "y": 143,
+    "wires": [
+      [
+        "d764647.f289b98"
+      ]
+    ]
+  },
+  {
+    "id": "5d5578c.fa2aa88",
+    "type": "template",
+    "z": "d842650b.27bd98",
+    "name": "",
+    "field": "payload",
+    "fieldType": "msg",
+    "format": "html",
+    "template": "\n<!DOCTYPE html>\n<html lang=\"en\">\n<head>\n    <meta charset=\"utf-8\">\n    <meta name=\"mobile-web-app-capable\" content=\"yes\">\n    <meta name=\"apple-mobile-web-app-capable\" content=\"yes\" />\n    <meta name=\"apple-mobile-web-app-status-bar-style\" content=\"black\" />\n    <meta name=\"viewport\" content = \"width = device-width, initial-scale = 1, user-scalable = yes\" />\n    <title>Expose Variables</title>\n    <link rel=\"stylesheet\" type=\"text/css\" href=\"bootstrap/css/bootstrap.min.css\" />\n    <link rel=\"stylesheet\" type=\"text/css\" href=\"font-awesome/css/font-awesome.min.css\" />\n    <link rel=\"stylesheet\" type=\"text/css\" href=\"css/local.css\" />\n    <script type=\"text/javascript\" src=\"js/jquery-1.10.2.min.js\"></script>\n    <script type=\"text/javascript\" src=\"bootstrap/js/bootstrap.min.js\"></script>\n    <script type=\"text/javascript\" src=\"//www.prepbootstrap.com/Content/js/gridData.js\"></script>\n</head>\n<body>\n<div class=\"container\">\n<form role=\"form\" action=\"/red/exposevariables\" method=\"POST\">        \n\n      <div class=\"col-lg-6\">\n       <div class=\"panel panel-primary\">\n        <div class=\"panel-heading\">\n            <h3>Please login using Wink app credentials</h3>\n        </div>    \n        <div class=\"panel-body\">\n       <div>\n            <div class=\"col-md-9\">\n                <input type=\"email\" name=\"uid\" class=\"form-control input-lg\"  id=\"emailaddress\" placeholder=\"Enter email address\">\n                <p class=\"help-block\">\n                \n                </p>\n            </div>\n        </div>\n        <div>\n            <div class=\"col-md-9\">\n                <input type=\"password\" name=\"pwd\" class=\"form-control input-lg\"  id=\"password\" placeholder=\"Enter Password\">\n                 <p class=\"help-block\">\n                </p>\n            </div>\n        </div>\n\n        <div class=\"col-md-9\">\n                <button type=\"submit\" class=\"btn btn-primary btn-lg\">\n                    Login\n                </button>\n            </div>\n\n    </div> \n  </div> \n  </div>\n\n</form> \n</div>\n    <!-- /#wrapper -->\n\n</body>\n</html>\n",
+    "x": 305,
+    "y": 105,
+    "wires": [
+      [
+        "d5db6059.2a24a"
+      ]
+    ]
+  },
+  {
+    "id": "d5db6059.2a24a",
+    "type": "http response",
+    "z": "d842650b.27bd98",
+    "name": "",
+    "x": 440,
+    "y": 105,
+    "wires": []
+  },
+  {
+    "id": "821e10c7.7de1f",
+    "type": "http in",
+    "z": "d842650b.27bd98",
+    "name": "",
+    "url": "/red/exposevariables",
+    "method": "post",
+    "swaggerDoc": "",
+    "x": 125,
+    "y": 183,
+    "wires": [
+      [
+        "22e761cb.dd189e"
+      ]
+    ]
+  },
+  {
+    "id": "22e761cb.dd189e",
+    "type": "function",
+    "z": "d842650b.27bd98",
+    "name": "",
+    "func": "if (msg.payload.uid==context.global.WinkUser.uid && msg.payload.pwd==context.global.WinkUser.pwd){\nmsg.statusCode=\"200\";\nmsg.payload={\"pwd_str\":context.global.FREEBOARD_TOKEN}\n} else {\nmsg.statusCode=\"403\";\n}\nreturn msg;",
+    "outputs": 1,
+    "noerr": 0,
+    "x": 332.0000305175781,
+    "y": 183,
+    "wires": [
+      [
+        "844066df.7bbf98"
+      ]
+    ]
+  },
+  {
+    "id": "844066df.7bbf98",
+    "type": "switch",
+    "z": "d842650b.27bd98",
+    "name": "",
+    "property": "statusCode",
+    "rules": [
+      {
+        "t": "eq",
+        "v": "200"
+      },
+      {
+        "t": "eq",
+        "v": "403"
+      }
+    ],
+    "checkall": "true",
+    "outputs": 2,
+    "x": 468.0000305175781,
+    "y": 183,
+    "wires": [
+      [
+        "df156288.20eaa"
+      ],
+      [
+        "5c3e32a.fa3c1cc"
+      ]
+    ]
+  },
+  {
+    "id": "5c3e32a.fa3c1cc",
+    "type": "template",
+    "z": "d842650b.27bd98",
+    "name": "",
+    "field": "payload",
+    "fieldType": "msg",
+    "format": "handlebars",
+    "template": "<html>\n  <head>\n    <title>Invalid login</title>\n    <META http-equiv=\"refresh\" content=\"3;URL=/freeboard/winkboard\">\n  </head>\n <body bgcolor=\"#ffffff\">\n    <center>Invalid user Id or Password</a>\n    </center>\n  </body>\n\n</html>",
+    "x": 611,
+    "y": 189,
+    "wires": [
+      [
+        "1fe580ee.e01a7f"
+      ]
+    ]
+  },
+  {
+    "id": "d764647.f289b98",
+    "type": "http response",
+    "z": "d842650b.27bd98",
+    "name": "",
+    "x": 824,
+    "y": 143,
+    "wires": []
+  },
+  {
+    "id": "1fe580ee.e01a7f",
+    "type": "http response",
+    "z": "d842650b.27bd98",
+    "name": "",
+    "x": 744,
+    "y": 189,
+    "wires": []
+  },
+  {
+    "id": "995117ae.66aee8",
+    "type": "comment",
+    "z": "d842650b.27bd98",
+    "name": "v--- Edit this node. Uncomment the line which you want to view data",
+    "info": "",
+    "x": 802,
+    "y": 105,
+    "wires": []
+  }
+]
