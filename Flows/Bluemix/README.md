@@ -4,10 +4,11 @@
 Imrpoved wink data refresh functionality:<br>
 now, when you click on the "refresh" button, ui will wait for data refresh to happen and then autorefresh itself<br>
 <img src="images/auto_refresh.png">
-Fixes and updates:
-Removed non-user created or empty robots from dashboards.
-Removed empty groups
-Fixed multi-sensors on "old" freeboards
+
+Fixes and updates:<br>
+Removed non-user created or empty robots from dashboards.<br>
+Removed empty groups<br>
+Fixed multi-sensors on "old" freeboards<br>
 Flow Editor:<br>
 *  Import updated [winkCore.json](winkCore.json)
 *  Import updated [winkIntegration.json](winkIntegration.json)
