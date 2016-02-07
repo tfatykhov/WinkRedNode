@@ -14,7 +14,7 @@ Flow Editor:<br>
 *  Import updated [winkIntegration.json](winkIntegration.json)
 *  import updated [Freeboards](winkFreeboards.json)
 *  Import updated [tabletUI.json](tabletUI.json)
-*  perform "MODIFIED NODES ONLY" deployment<br>
+*  perform "FULL" deployment<br>
 
 02/06/2016, v2
 -----------------
