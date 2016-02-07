@@ -1,4 +1,20 @@
 == UPDATE ==
+02/07/2016
+----------------
+Imrpoved wink data refresh functionality:<br>
+now, when you click on the "refresh" button, ui will wait for data refresh to happen and then autorefresh itself<br>
+<img src="images/auto_refresh.png">
+Fixes and updates:
+Removed non-user created or empty robots from dashboards.
+Removed empty groups
+Fixed multi-sensors on "old" freeboards
+Flow Editor:<br>
+*  Import updated [winkCore.json](winkCore.json)
+*  Import updated [winkIntegration.json](winkIntegration.json)
+*  import updated [Freeboards](winkFreeboards.json)
+*  Import updated [tabletUI.json](tabletUI.json)
+*  perform "MODIFIED NODES ONLY" deployment<br>
+
 02/06/2016, v2
 -----------------
 Added ability to refresh wink Devices via UI
