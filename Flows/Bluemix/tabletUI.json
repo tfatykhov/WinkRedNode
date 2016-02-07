@@ -1,108 +1,91 @@
 [
   {
-    "id": "1788d164.e8772f",
+    "id": "91a6a78b.6e5958",
     "type": "function",
-    "z": "811c60ec.7ee3a",
+    "z": "f8e35a3.f071ca8",
     "name": "",
     "func": "if ((msg.req.body.uid==context.global.WinkUser.uid && msg.req.body.pwd==context.global.WinkUser.pwd) || msg.payload.token==context.global.FREEBOARD_TOKEN){\nmsg.statusCode=\"200\";\n//msg.res.cookie('exchange_token',context.global.FREEBOARD_TOKEN);\nmsg.headers={\n    \"Set-Cookie\":\"exchange_token=\"+context.global.FREEBOARD_TOKEN+'; Path=/'\n}\n//msg.res.winktoken=context.global.FREEBOARD_TOKEN;\nmsg.payload.pwd_str=context.global.FREEBOARD_TOKEN;\nmsg.payload.ui_shortcuts=[]\nif ('cameras' in context.global.winkState) msg.payload.cameras=true; else msg.payload.cameras=false;\nfor (var i=0;i<6;i++){\n    msg.payload.ui_shortcuts[i]={}\n    if ('tab_ui_shortcuts' in context.global && context.global.tab_ui_shortcuts[i]!=='undefined'){\n        msg.payload.ui_shortcuts[i].name=context.global.tab_ui_shortcuts[i];\n        msg.payload.ui_shortcuts[i].shortuct=context.global.tab_ui_shortcuts[i];\n        } else {\n        msg.payload.ui_shortcuts[i].name='Shortcut '+i;\n        msg.payload.ui_shortcuts[i].shortuct='#';\n        }\n    }\nmsg.payload.ifttt_token=(context.global.IFTTT_TOKEN!=='undefined' ? context.global.IFTTT_TOKEN : context.global.FREEBOARD_TOKEN) ;\n//if ('camera_name' in msg.payload && msg.payload.camera_name!=='undefined') msg.payload.camera_name=msg.req.body.camera_name\n} else {\nmsg.res.statusCode=\"403\";\n}\nreturn msg;",
     "outputs": 1,
     "noerr": 0,
-    "x": 341,
-    "y": 66,
+    "x": 350,
+    "y": 68,
     "wires": [
       [
-        "7610d97e.89ef28"
+        "ebf5c21f.140a4"
       ]
     ]
   },
   {
-    "id": "7a57426e.85a8bc",
+    "id": "49a056b0.b65fa8",
     "type": "http in",
-    "z": "811c60ec.7ee3a",
+    "z": "f8e35a3.f071ca8",
     "name": "",
     "url": "/freeboard/ui",
     "method": "post",
     "swaggerDoc": "",
-    "x": 132,
-    "y": 66.99996948242188,
+    "x": 141,
+    "y": 68.99996948242188,
     "wires": [
       [
-        "1788d164.e8772f"
+        "91a6a78b.6e5958"
       ]
     ]
   },
   {
-    "id": "61db953c.9e246c",
-    "type": "template",
-    "z": "811c60ec.7ee3a",
-    "name": "",
-    "field": "",
-    "fieldType": "msg",
-    "format": "handlebars",
-    "template": "<!DOCTYPE html>\n<html lang=\"en\" manifest=\"manifest.cache\">\n<head>\n    <meta charset=\"utf-8\">\n\t<meta name=\"mobile-web-app-capable\" content=\"yes\">\n    <meta name=\"apple-mobile-web-app-capable\" content=\"yes\" />\n    <meta name=\"apple-mobile-web-app-status-bar-style\" content=\"black\" />\n    <meta name=\"viewport\" content = \"width = device-width, initial-scale = 1.0, user-scalable = yes\" />\n    <title>Home Dashboard</title>\n\n    <link rel=\"stylesheet\" type=\"text/css\" href=\"bootstrap/css/bootstrap.min.css\" />\n    <link rel=\"stylesheet\" type=\"text/css\" href=\"font-awesome/css/font-awesome.min.css\" />\n    <link rel=\"stylesheet\" type=\"text/css\" href=\"css/local.css\" />\n    <link rel=\"stylesheet\" type=\"text/css\" href=\"css/animate.css\" />\n   \n    <link rel=\"shortcut icon\" href=\"assets/img/main_ico_02.png\">\n    <script type=\"text/javascript\" src=\"js/jquery-1.10.2.min.js\"></script>\n    <script type=\"text/javascript\" src=\"bootstrap/js/bootstrap.min.js\" async></script>\n    <script type=\"text/javascript\" src=\"js/jquery.noty.packaged.min.js\" async></script>\n    <!-- you need to include the shieldui css and js assets in order for the charts to work -->\n    <!--<script type=\"text/javascript\" src=\"https://www.prepbootstrap.com/Content/js/gridData.js\" async></script> -->\n    <style>\n    .spinner {\n  display: inline-block;\n  opacity: 0;\n  width: 0;\n\n  -webkit-transition: opacity 0.25s, width 0.25s;\n  -moz-transition: opacity 0.25s, width 0.25s;\n  -o-transition: opacity 0.25s, width 0.25s;\n  transition: opacity 0.25s, width 0.25s;\n}\n\n.has-spinner.active {\n  cursor:progress;\n}\n\n.has-spinner.active .spinner {\n  opacity: 1;\n  width: auto; /* This doesn't work, just fix for unkown width elements */\n}\n\n.has-spinner.btn-mini.active .spinner {\n    width: 10px;\n}\n\n.has-spinner.btn-small.active .spinner {\n    width: 13px;\n}\n\n.has-spinner.btn.active .spinner {\n    width: 16px;\n}\n\n.has-spinner.btn-large.active .spinner {\n    width: 19px;\n}\n</style>\n</head>\n<body>\n     <div class=\"col-xs-12 col-md-12\" id=\"mainbody\">\n                    <header>\n                        <ul id=\"tabs\" class=\"nav nav-tabs lg-nav-justified md-nav-justified\">\n                            <li class=\"active\">\n                                <a data-toggle=\"tab\" href=\"#Dashboard0\">Summary</a>\n                            </li>                            \n                            <li class=\"\">\n                                <a data-toggle=\"tab\" href=\"#Dashboard1\">Details</a>\n                            </li>\n                            {{#payload.cameras}}\n                            <li class=\"hidden-xs hidden-sm\">\n                                <a data-toggle=\"tab\" href=\"#Dashboard2\">Cameras</a>\n                            </li>\n                            {{/payload.cameras}}\n                              <li class=\"\">\n                                <a data-toggle=\"tab\" href=\"#Dashboard3\">Controls</a>\n                            </li>\n                            <li class=\"hidden-xs hidden-sm hidden-md\">\n                                <a data-toggle=\"tab\" href=\"#Config\">Configuration</a>\n                            </li>\n                        </ul>\n                    </header>\n                    <div class=\"body tab-content\">\n                        <div class=\"tab-pane fade active in\" id=\"Dashboard0\">\n<!--                                <iframe frameBorder=\"0\" seamless=\"seamless\" allowtransparency=\"true\" id=\"Iframe0\" src=\"TopRow\" width=\"100%\"></iframe> -->\n                                <iframe frameBorder=\"0\" seamless=\"seamless\" allowtransparency=\"true\" id=\"Iframe0\" src=\"mysummary\" width=\"100%\"></iframe>                                \n                                    {{#payload.ui_shortcuts}}\n                                        <div class=\"col-sm-2 col-md-2 hidden-xs\"> \n                                            <button id=\"{{name}}\" type=\"button\" class=\"btn btn-primary  btn-block has-spinner\" style=\"margin-bottom:4px;white-space:normal;\">\n                                                <div style=\"overflow: hidden;text-overflow: ellipsis;display: inline;\">\n                                                <span class=\"spinner\"><i class=\"fa fa-spinner fa-spin\"></i></span>\n                                                {{name}}</div>\n                                            </button>\n                                       </div>\n                                     {{/payload.ui_shortcuts}}\n                        </div>\n                        <div class=\"tab-pane fade in\" id=\"Dashboard1\">\n                                <iframe frameBorder=\"0\" allowtransparency=\"true\" id=\"freeboard1\" src=\"winkautogroup\"  width=\"100%\" seamless=\"seamless\"></iframe>\n                        </div>\n                        {{#payload.cameras}}\n                        <div class=\"tab-pane fade in hidden-xs\"  id=\"Dashboard2\">\n                            <iframe frameBorder=\"0\" allowtransparency=\"true\" id=\"freeboard2\" src=\"mycameras\"  width=\"100%\" seamless=\"seamless\"></iframe>\n                        </div>\n                        {{/payload.cameras}}\n                        <div class=\"tab-pane fade in\" id=\"Dashboard3\">\n                        <!--<div class=\"col-xs-12\" style=\"height:4px;\"></div> -->\n                        <div class=\"container-fluid\">\n                        <div class=\"panel-group\" id=\"accordion\" role=\"tablist\" aria-multiselectable=\"true\">\n                          <div class=\"panel panel-primary\">\n                            <div class=\"panel-heading\" role=\"tab\" id=\"headingOne\">\n                              <h5 class=\"panel-title\">\n                                <a role=\"button\" data-toggle=\"collapse\" data-parent=\"#accordion\" href=\"#collapseOne\" aria-expanded=\"true\" aria-controls=\"collapseOne\">\n                                    <span class=\"fa fa-lightbulb-o\" aria-hidden=\"true\"></span>\n                                    Lights and Switches\n                                </a>\n                              </h5>\n                            </div>\n                            <div id=\"collapseOne\" class=\"panel-collapse collapse in\" role=\"tabpanel\" aria-labelledby=\"headingOne\">\n                              <div class=\"panel-body\" clearfix style=\"border : 1px;\">     \n                             <iframe frameBorder=\"0\" allowtransparency=\"true\" id=\"freeboard3\" src=\"lightcontrols\"  width=\"100%\" seamless=\"seamless\" style=\" border : 0; -webkit-background-size: cover; -moz-background-size: cover; -o-background-size: cover; background-size: cover\"></iframe>\n                             </div>\n                              </div> \n                             </div>\n                              <div class=\"panel panel-primary\" clearfix style=\"background:none;\">\n                                <div class=\"panel-heading\" role=\"tab\" id=\"headingTwo\">\n                                  <h5 class=\"panel-title\">\n                                    <a class=\"collapsed\" role=\"button\" data-toggle=\"collapse\" data-parent=\"#accordion\" href=\"#collapseTwo\" aria-expanded=\"false\" aria-controls=\"collapseTwo\">\n                                    <!--   <p class=\"text-nowrap\"> -->\n                                        <span class=\"fa fa-lock\" aria-hidden=\"true\"></span>  \n                                        Locks\n                                    <!--  </p>  -->\n                                    </a>\n                                  </h5>\n                                </div>\n                                <div id=\"collapseTwo\" class=\"panel-collapse collapse\" role=\"tabpanel\" aria-labelledby=\"headingTwo\">\n                                  <div class=\"panel-body\">\n                                   <iframe frameBorder=\"0\" allowtransparency=\"true\" id=\"freeboard3L\" src=\"lockcontrols\"  width=\"100%\" seamless=\"seamless\" style=\" border : 0; -webkit-background-size: cover; -moz-background-size: cover; -o-background-size: cover; background-size: cover\"></iframe>\n                                  </div>\n                                </div>\n                              </div>\n                            </div>\n                         </div>\n                        </div>\n                        <div class=\"tab-pane fade in hidden-xs hidden-s hidden-md\" id=\"Config\" >\n                                <iframe frameBorder=\"0\" allowtransparency=\"true\" id=\"Controls\" src=\"getconfig\"  width=\"100%\" seamless=\"seamless\"></iframe>\n                        </div>\n            </div>\n    </div>\n    <!-- /#wrapper -->\n\n    <script type=\"text/javascript\">\n    function getCookie(cname) {\n    var name = cname + \"=\";\n    var ca = document.cookie.split(';');\n    for(var i=0; i<ca.length; i++) {\n        var c = ca[i];\n        while (c.charAt(0)==' ') c = c.substring(1);\n        if (c.indexOf(name) == 0) return c.substring(name.length,c.length);\n    }\n    return \"\";\n}\n\n        jQuery(function ($) {\n            $Curr_Tab=$(\"ul#tabs li.active\")[0].lastElementChild.hash;\n            $('.panel-collapse').css('background','black');\n            $(\"#Iframe0\").css('height', $( window ).height()-115);\n            $(\"#freeboard1\").css('height', $( window ).height()-75);\n            {{#payload.cameras}}\n            $(\"#freeboard2\").css('height', $( window ).height()-75);\n            {{/payload.cameras}}\n             $(\"#freeboard3\").css('height', $( window ).height()-215);\n             $(\"#freeboard3L\").css('height', $( window ).height()-235);\n             $( \"#Controls\" ).css('height', $( window ).height()-75);\n             $( \"#Controls\" ).css('width', \"100%\");\n             $(\"#mainbody\").css('background',\"#111\");\n        });        \n            $( window ).resize(function () {\n                //console.log('window got resized '+$( window ).height());\n                //console.log('freeboard height '+$( \"#freeboard2\" ).height());\n                $(\"#Iframe0\").css('height', $( window ).height()-115);\n                $(\"#Iframe0\").css('width',\"100%\");\n                $( \"#freeboard1\" ).css('height', $( window ).height()-75);\n                $( \"#freeboard1\" ).css('width', \"100%\");\n                {{#payload.cameras}}\n                $( \"#freeboard2\" ).css('height', $( window ).height()-75);\n                $( \"#freeboard2\" ).css('width', \"100%\");\n                {{/payload.cameras}}\n                $( \"#freeboard3\" ).css('height', $( window ).height()-215);\n                $(\"#freeboard3L\").css('height', $( window ).height()-235);\n                $( \"#freeboard3\" ).css('width', \"100%\");\n                $( \"#freeboard3L\" ).css('width', \"100%\");\n                $( \"#Controls\" ).css('height', $( window ).height()-75);\n                $( \"#Controls\" ).css('width', \"100%\");                \n           });\n        $(\".btn-block\").click(function(){\n            var me=$(this);\n            $(this).toggleClass('active').removeClass('btn-primary').addClass('btn-warning');\n            $.post( \"/red/ifttt\", {\"winkName\":this.id,\"type\":\"shortcut\",\"cmd\":\"\",\"level\":\"\" , \"iftttkey\" : getCookie('exchange_token')}).done(function(data) {\n             setTimeout(function(){ me.toggleClass('active').removeClass('btn-warning').addClass('btn-primary'); }, 3000);\n            });\n        });\n        $(document).on('shown.bs.tab', 'a[data-toggle=\"tab\"]', function (e) {\n          $Curr_Tab=e.target.hash;\n    });\n    </script>\n</body>\n</html>\n",
-    "x": 815,
-    "y": 59,
-    "wires": [
-      [
-        "fc21b15.f03de5"
-      ]
-    ]
-  },
-  {
-    "id": "fc21b15.f03de5",
+    "id": "e7deb600.182148",
     "type": "http response",
-    "z": "811c60ec.7ee3a",
+    "z": "f8e35a3.f071ca8",
     "name": "",
-    "x": 953,
-    "y": 58,
+    "x": 962,
+    "y": 60,
     "wires": []
   },
   {
-    "id": "ec483fcc.13b7c",
+    "id": "48588714.b7a778",
     "type": "template",
-    "z": "811c60ec.7ee3a",
+    "z": "f8e35a3.f071ca8",
     "name": "",
     "field": "payload",
     "fieldType": "msg",
     "format": "html",
     "template": "\n<!DOCTYPE html>\n<html lang=\"en\" manifest=\"manifest.cache\">\n<head>\n    <meta charset=\"utf-8\">\n    <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">\n    <meta name=\"mobile-web-app-capable\" content=\"yes\">\n    <meta name=\"apple-mobile-web-app-capable\" content=\"yes\" />\n    <meta name=\"apple-mobile-web-app-status-bar-style\" content=\"black\" />\n    <title>Home Dashboard</title>\n    <link rel=\"stylesheet\" type=\"text/css\" href=\"bootstrap/css/bootstrap.min.css\" />\n  <!--  <link rel=\"stylesheet\" type=\"text/css\" href=\"font-awesome/css/font-awesome.min.css\" /> -->\n    <link rel=\"stylesheet\" type=\"text/css\" href=\"css/local.css\" />\n    <link rel=\"shortcut icon\" href=\"assets/img/main_ico_02.png\">\n</head>\n<body>\n<div class=\"container\">\n<form role=\"form\" class=\"form-signin\" action=\"/freeboard/ui\" method=\"POST\">        \n        <br>\n        <br>\n        <br>\n        <br>\n       <div class=\"panel panel-primary\">\n        <div class=\"panel-heading\">\n            <h3>Please login using Wink app credentials</h3>\n        </div>    \n        <div class=\"panel-body\">\n            <div class=\"col-md-9 col-lg-9 col-sm-9 col-xs-9\">\n                <div class=\"input-group input-primary\">\n                    <span class=\"input-group-addon input-primary\"><i class=\"glyphicon glyphicon-user\"></i></span>\n                    <input type=\"email\" name=\"uid\" class=\"form-control input-lg\"  id=\"emailaddress\" placeholder=\"Enter email address\">\n                </div>\n            </div>\n            <div class=\"col-md-9 col-lg-9 col-sm-9 col-xs-9\">\n            <br>\n                <div class=\"input-group\">\n                    <span class=\"input-group-addon input-primary\"><i class=\"glyphicon glyphicon-lock\"></i></span>\n                    <input type=\"password\" name=\"pwd\" class=\"form-control input-lg\"  id=\"password\" placeholder=\"Enter Password\">\n                </div>\n            </div>\n        <div class=\"col-md-4 col-lg-4 col-sm-4 col-xs-4\">\n        <br>\n        <br>\n            <div class=\"form-group\">\n                <button type=\"submit\" class=\"btn btn-primary btn-lg\">\n                    Login\n                </button>\n            </div>\n        </div>\n    </div> \n  </div> \n</form> \n</div>\n    <!-- /#wrapper -->\n    <script type=\"text/javascript\" src=\"js/jquery-1.10.2.min.js\"></script>\n    <script type=\"text/javascript\" src=\"bootstrap/js/bootstrap.min.js\" async></script>\n    <!--<script type=\"text/javascript\" src=\"https://www.prepbootstrap.com/Content/js/gridData.js\" async></script> -->\n</body>\n</html>\n",
-    "x": 400,
-    "y": 131,
+    "x": 409,
+    "y": 133,
     "wires": [
       [
-        "3b45f9f3.c4ba06"
+        "cb314247.34cec"
       ]
     ]
   },
   {
-    "id": "3b45f9f3.c4ba06",
+    "id": "cb314247.34cec",
     "type": "http response",
-    "z": "811c60ec.7ee3a",
+    "z": "f8e35a3.f071ca8",
     "name": "",
-    "x": 563,
-    "y": 130,
+    "x": 572,
+    "y": 132,
     "wires": []
   },
   {
-    "id": "96a758a7.6958a8",
+    "id": "48f54379.b70abc",
     "type": "http in",
-    "z": "811c60ec.7ee3a",
+    "z": "f8e35a3.f071ca8",
     "name": "",
     "url": "/freeboard/UI",
     "method": "get",
     "swaggerDoc": "",
-    "x": 116,
-    "y": 148,
+    "x": 125,
+    "y": 150,
     "wires": [
       [
-        "ec483fcc.13b7c"
+        "48588714.b7a778"
       ]
     ]
   },
   {
-    "id": "7610d97e.89ef28",
+    "id": "ebf5c21f.140a4",
     "type": "switch",
-    "z": "811c60ec.7ee3a",
+    "z": "f8e35a3.f071ca8",
     "name": "",
     "property": "statusCode",
     "rules": [
@@ -117,95 +100,95 @@
     ],
     "checkall": "true",
     "outputs": 2,
-    "x": 469,
-    "y": 63,
+    "x": 478,
+    "y": 65,
     "wires": [
       [
-        "ad6dbbc0.529248"
+        "7ddec14e.82214"
       ],
       [
-        "445246b0.bbadb8"
+        "588f630f.a7709c"
       ]
     ]
   },
   {
-    "id": "445246b0.bbadb8",
+    "id": "588f630f.a7709c",
     "type": "template",
-    "z": "811c60ec.7ee3a",
+    "z": "f8e35a3.f071ca8",
     "name": "",
     "field": "payload",
     "fieldType": "msg",
     "format": "handlebars",
     "template": "<!DOCTYPE html>\n<html lang=\"en\" manifest=\"cache.manifest\">\n<head>\n    <META http-equiv=\"refresh\" content=\"3;URL=/freeboard/ui\">\n    <meta charset=\"utf-8\">\n    <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">\n    <title>Home Dashboard</title>\n\n    <link rel=\"stylesheet\" type=\"text/css\" href=\"bootstrap/css/bootstrap.min.css\" />\n    <link rel=\"stylesheet\" type=\"text/css\" href=\"font-awesome/css/font-awesome.min.css\" />\n    <link rel=\"stylesheet\" type=\"text/css\" href=\"css/local.css\" />\n\n    <script type=\"text/javascript\" src=\"js/jquery-1.10.2.min.js\"></script>\n    <script type=\"text/javascript\" src=\"bootstrap/js/bootstrap.min.js\"></script>\n\n    <!-- you need to include the shieldui css and js assets in order for the charts to work -->\n\n    <!--<script type=\"text/javascript\" src=\"https://www.prepbootstrap.com/Content/js/gridData.js\" async></script> -->\n<body>\n<div class=\"center-block\">\n    <div class=\"col-lg-8\">\n        <div class=\"alert alert-dismissable alert-info\">\n            <div class=\"panel-heading\">\n                <h3>Incorrect User Id or Password...</h3>\n            </div> \n        </div>\n    </div>\n</div>\n</body>\n</html>",
-    "x": 811,
-    "y": 112,
+    "x": 820,
+    "y": 114,
     "wires": [
       [
-        "e7b778e0.184888"
+        "e525975d.1ada68"
       ]
     ]
   },
   {
-    "id": "e7b778e0.184888",
+    "id": "e525975d.1ada68",
     "type": "http response",
-    "z": "811c60ec.7ee3a",
+    "z": "f8e35a3.f071ca8",
     "name": "",
-    "x": 957,
-    "y": 111,
+    "x": 966,
+    "y": 113,
     "wires": []
   },
   {
-    "id": "ad6dbbc0.529248",
+    "id": "7ddec14e.82214",
     "type": "function",
-    "z": "811c60ec.7ee3a",
+    "z": "f8e35a3.f071ca8",
     "name": "",
     "func": "msg.payload.freeboard_token=context.global.FREEBOARD_TOKEN\nreturn msg;",
     "outputs": 1,
     "noerr": 0,
-    "x": 665,
-    "y": 58,
+    "x": 674,
+    "y": 60,
     "wires": [
       [
-        "61db953c.9e246c"
+        "e934a502.16cb58"
       ]
     ]
   },
   {
-    "id": "929545ef.6d6ab8",
+    "id": "dfa0f20a.205f1",
     "type": "http in",
-    "z": "811c60ec.7ee3a",
+    "z": "f8e35a3.f071ca8",
     "name": "",
     "url": "/freeboard/TopRow",
     "method": "get",
     "swaggerDoc": "",
-    "x": 138,
-    "y": 296,
+    "x": 147,
+    "y": 298,
     "wires": [
       [
-        "8e22fc32.71dd"
+        "bc97f2c4.43681"
       ]
     ]
   },
   {
-    "id": "8e22fc32.71dd",
+    "id": "bc97f2c4.43681",
     "type": "function",
-    "z": "811c60ec.7ee3a",
+    "z": "f8e35a3.f071ca8",
     "name": "",
     "func": "if ((msg.req.body.uid==context.global.WinkUser.uid && msg.req.body.pwd==context.global.WinkUser.pwd)||context.global.getCookie('exchange_token',msg.req.headers.cookie)==context.global.FREEBOARD_TOKEN || msg.payload.token==context.global.FREEBOARD_TOKEN){\nmsg.statusCode=\"200\";\nmsg.payload.pwd_str=context.global.FREEBOARD_TOKEN\n//if ('camera_name' in msg.payload && msg.payload.camera_name!=='undefined') msg.payload.camera_name=msg.req.body.camera_name\n} else {\nmsg.statusCode=\"403\";\n}\nreturn msg;",
     "outputs": 1,
     "noerr": 0,
-    "x": 333,
-    "y": 298,
+    "x": 342,
+    "y": 300,
     "wires": [
       [
-        "9dbbb38a.62445"
+        "f935d805.06ca28"
       ]
     ]
   },
   {
-    "id": "9dbbb38a.62445",
+    "id": "f935d805.06ca28",
     "type": "switch",
-    "z": "811c60ec.7ee3a",
+    "z": "f8e35a3.f071ca8",
     "name": "",
     "property": "res.statusCode",
     "rules": [
@@ -220,231 +203,231 @@
     ],
     "checkall": "true",
     "outputs": 2,
-    "x": 504,
-    "y": 299,
+    "x": 513,
+    "y": 301,
     "wires": [
       [
-        "f74d1dd.f08b2e"
+        "af76511f.5089b"
       ],
       [
-        "873dc8ec.78c238"
+        "13f0659.fec0f9a"
       ]
     ]
   },
   {
-    "id": "f74d1dd.f08b2e",
+    "id": "af76511f.5089b",
     "type": "template",
-    "z": "811c60ec.7ee3a",
+    "z": "f8e35a3.f071ca8",
     "name": "",
     "field": "",
     "format": "handlebars",
     "template": "<!DOCTYPE html>\n<html manifest=\"manifest.cache\">\n<head>\n    <meta charset=\"UTF-8\">\n    <title>freeboard</title>\n\t<meta name=\"mobile-web-app-capable\" content=\"yes\">\n    <meta name=\"apple-mobile-web-app-capable\" content=\"yes\" />\n    <meta name=\"apple-mobile-web-app-status-bar-style\" content=\"black\" />\n    <meta name=\"viewport\" content = \"width = device-width, initial-scale = 1.0, user-scalable = yes\" />\n    <link href=\"css/freeboard.min.css\" rel=\"stylesheet\" />\n    <script src=\"js/freeboard.thirdparty.min.js\"></script>\n    <script type=\"text/javascript\">\n        head.js(\"js/freeboard.js\",\"js/freeboard.plugins.min.js\",\"../freeboard_api/datasources\",\n                \"lib/js/thirdparty/wink.js\",\n\n                // *** Load more plugins here ***\n                function(){\n                    $(function()\n                    { //DOM Ready\n                        freeboard.initialize(true);\n\n                        //var hash = window.location.hash;\n                        //if (hash !== null) {\n                            $.get({{context.global.BlueMixUrlBase}}\"/red/getFreeboardTopRowJson?auth={{payload.pwd_str}}\", function(data) {\n\t\t\t\t\t\t\t\tvar datap=JSON.parse(data);\n\t\t\t\t\t\t\t\tif (!datap.empty){\n\t\t\t\t\t\t\t\t\tfreeboard.loadDashboard(datap, function() {\n\t\t\t\t\t\t\t\t\t\tfreeboard.setEditing(false);\n\t\t\t\t\t\t\t\t\t});\n\t\t\t\t\t\t\t\t}\n                            });\n                        //}\n\n                    });\n                });\n    </script>\n</head>\n<body>\n<div id=\"board-content\">\n    <img id=\"dash-logo\" data-bind=\"attr:{src: header_image}, visible:header_image()\">\n    <div class=\"gridster responsive-column-width\">\n        <ul data-bind=\"grid: true\">\n        </ul>\n    </div>\n</div>\n<header id=\"main-header\" data-bind=\"if:allow_edit\">\n    <div id=\"admin-bar\">\n        <div id=\"admin-menu\">\n            <div id=\"board-tools\">\n                <h1 id=\"board-logo\" class=\"title bordered\">freeboard</h1>\n                <div id=\"board-actions\">\n                    <ul class=\"board-toolbar vertical\">\n                        <!--<li data-bind=\"click: loadDashboardFromLocalFile\"><i id=\"full-screen-icon\" class=\"icon-folder-open icon-white\"></i><label id=\"full-screen\">Load Freeboard</label></li>-->\n                        <li data-bind=\"click: saveDashboard\"><i class=\"icon-download-alt icon-white\"></i><label>Save Freeboard</label></li>\n                        <li id=\"add-pane\" data-bind=\"click: createPane\"><i class=\"icon-plus icon-white\"></i><label>Add Pane</label></li>\n                    </ul>\n                </div>\n            </div>\n            <div id=\"datasources\">\n                <h2 class=\"title\">DATASOURCES</h2>\n\n                <div class=\"datasource-list-container\">\n                    <table class=\"table table-condensed sub-table\" id=\"datasources-list\" data-bind=\"if: datasources().length\">\n                        <thead>\n                        <tr>\n                            <th>Name</th>\n                            <th>Last Updated</th>\n                            <th>&nbsp;</th>\n                        </tr>\n                        </thead>\n                        <tbody data-bind=\"foreach: datasources\">\n                        <tr>\n                            <td>\n                                <span class=\"text-button datasource-name\" data-bind=\"text: name, pluginEditor: {operation: 'edit', type: 'datasource'}\"></span>\n                            </td>\n                            <td data-bind=\"text: last_updated\"></td>\n                            <td>\n                                <ul class=\"board-toolbar\">\n                                    <li data-bind=\"click: updateNow\"><i class=\"icon-refresh icon-white\"></i></li>\n                                    <li data-bind=\"pluginEditor: {operation: 'delete', type: 'datasource'}\">\n                                        <i class=\"icon-trash icon-white\"></i></li>\n                                </ul>\n                            </td>\n                        </tr>\n                        </tbody>\n                    </table>\n                </div>\n                <span class=\"text-button table-operation\" data-bind=\"pluginEditor: {operation: 'add', type: 'datasource'}\">ADD</span>\n            </div>\n        </div>\n    </div>\n\t<div id=\"column-tools\" class=\"responsive-column-width\">\n\t\t<ul class=\"board-toolbar left-columns\">\n\t\t\t<li class=\"column-tool add\" data-bind=\"click: addGridColumnLeft\"><span class=\"column-icon right\"></span><i class=\"icon-arrow-left icon-white\"></i></li>\n\t\t\t<li class=\"column-tool sub\" data-bind=\"click: subGridColumnLeft\"><span class=\"column-icon left\"></span><i class=\"icon-arrow-right icon-white\"></i></li>\n\t\t</ul>\n\t\t<ul class=\"board-toolbar right-columns\">\n\t\t\t<li class=\"column-tool sub\" data-bind=\"click: subGridColumnRight\"><span class=\"column-icon right\"></span><i class=\"icon-arrow-left icon-white\"></i></li>\n\t\t\t<li class=\"column-tool add\" data-bind=\"click: addGridColumnRight\"><span class=\"column-icon left\"></span><i class=\"icon-arrow-right icon-white\"></i></li>\n\t\t</ul>\n\t</div>\n    <div id=\"toggle-header\" data-bind=\"click: toggleEditing\">\n        <i id=\"toggle-header-icon\" class=\"icon-wrench icon-white\"></i></div>\n</header>\n\n<div style=\"display:hidden\">\n    <ul data-bind=\"template: { name: 'pane-template', foreach: panes}\">\n    </ul>\n</div>\n\n<script type=\"text/html\" id=\"pane-template\">\n    <li data-bind=\"pane: true\">\n        <header>\n            <h1 data-bind=\"text: title\"></h1>\n            <ul class=\"board-toolbar pane-tools\">\n                <li data-bind=\"pluginEditor: {operation: 'add', type: 'widget'}\">\n                    <i class=\"icon-plus icon-white\"></i>\n                </li>\n                <li data-bind=\"pluginEditor: {operation: 'edit', type: 'pane'}\">\n                    <i class=\"icon-wrench icon-white\"></i>\n                </li>\n                <li data-bind=\"pluginEditor: {operation: 'delete', type: 'pane'}\">\n                    <i class=\"icon-trash icon-white\"></i>\n                </li>\n            </ul>\n        </header>\n        <section data-bind=\"foreach: widgets\">\n            <div class=\"sub-section\" data-bind=\"css: 'sub-section-height-' + height()\">\n                <div class=\"widget\" data-bind=\"widget: true, css:{fillsize:fillSize}\"></div>\n                <div class=\"sub-section-tools\">\n                    <ul class=\"board-toolbar\">\n                        <!-- ko if:$parent.widgetCanMoveUp($data) -->\n                        <li data-bind=\"click:$parent.moveWidgetUp\"><i class=\"icon-chevron-up icon-white\"></i></li>\n                        <!-- /ko -->\n                        <!-- ko if:$parent.widgetCanMoveDown($data) -->\n                        <li data-bind=\"click:$parent.moveWidgetDown\"><i class=\"icon-chevron-down icon-white\"></i></li>\n                        <!-- /ko -->\n                        <li data-bind=\"pluginEditor: {operation: 'edit', type: 'widget'}\"><i class=\"icon-wrench icon-white\"></i></li>\n                        <li data-bind=\"pluginEditor: {operation: 'delete', type: 'widget'}\"><i class=\"icon-trash icon-white\"></i></li>\n                    </ul>\n                </div>\n            </div>\n        </section>\n    </li>\n</script>\n\n</body>\n</html>\n",
-    "x": 689,
-    "y": 292,
+    "x": 698,
+    "y": 294,
     "wires": [
       [
-        "ce769f2e.31896"
+        "c7530217.38ad"
       ]
     ]
   },
   {
-    "id": "873dc8ec.78c238",
+    "id": "13f0659.fec0f9a",
     "type": "template",
-    "z": "811c60ec.7ee3a",
+    "z": "f8e35a3.f071ca8",
     "name": "",
     "field": "payload",
     "format": "handlebars",
     "template": "<html>\n  <head>\n    <title>Invalid login</title>\n    <META http-equiv=\"refresh\" content=\"3;URL=/freeboard/camerahistory\">\n  </head>\n <body bgcolor=\"#ffffff\">\n    <center>Invalid user Id or Password</a>\n    </center>\n  </body>\n\n</html>",
-    "x": 686,
-    "y": 332,
+    "x": 695,
+    "y": 334,
     "wires": [
       [
-        "1fe89b35.e01765"
+        "d801c29a.27fe4"
       ]
     ]
   },
   {
-    "id": "ce769f2e.31896",
+    "id": "c7530217.38ad",
     "type": "http response",
-    "z": "811c60ec.7ee3a",
+    "z": "f8e35a3.f071ca8",
     "name": "",
-    "x": 842,
-    "y": 293,
+    "x": 851,
+    "y": 295,
     "wires": []
   },
   {
-    "id": "1fe89b35.e01765",
+    "id": "d801c29a.27fe4",
     "type": "http response",
-    "z": "811c60ec.7ee3a",
+    "z": "f8e35a3.f071ca8",
     "name": "",
-    "x": 843,
-    "y": 332,
+    "x": 852,
+    "y": 334,
     "wires": []
   },
   {
-    "id": "5e7dd288.a1822c",
+    "id": "ed44502f.12bbb",
     "type": "http in",
-    "z": "811c60ec.7ee3a",
+    "z": "f8e35a3.f071ca8",
     "name": "",
     "url": "/red/getGroupsJson",
     "method": "get",
     "swaggerDoc": "",
-    "x": 144.5,
-    "y": 509.5,
+    "x": 153.5,
+    "y": 511.5,
     "wires": [
       [
-        "9cf0b00c.630f5"
+        "ac188778.53e778"
       ]
     ]
   },
   {
-    "id": "d07d3155.2f82d",
+    "id": "636e4315.9c91bc",
     "type": "http response",
-    "z": "811c60ec.7ee3a",
+    "z": "f8e35a3.f071ca8",
     "name": "",
-    "x": 852.5,
-    "y": 508.5,
+    "x": 861.5,
+    "y": 510.5,
     "wires": []
   },
   {
-    "id": "ddb482a0.224b8",
+    "id": "a285e7e5.5d7a18",
     "type": "json",
-    "z": "811c60ec.7ee3a",
+    "z": "f8e35a3.f071ca8",
     "name": "",
-    "x": 687.5,
-    "y": 509.5,
+    "x": 696.5,
+    "y": 511.5,
     "wires": [
       [
-        "d07d3155.2f82d"
+        "636e4315.9c91bc"
       ]
     ]
   },
   {
-    "id": "b4b3af74.4b4c5",
+    "id": "b1b7e450.4e4818",
     "type": "http in",
-    "z": "811c60ec.7ee3a",
+    "z": "f8e35a3.f071ca8",
     "name": "",
     "url": "/freeboard/LightControl",
     "method": "get",
     "swaggerDoc": "",
-    "x": 161,
-    "y": 820,
+    "x": 170,
+    "y": 822,
     "wires": [
       [
-        "d3e88043.2c178"
+        "4f3f6a8.fb0c094"
       ]
     ]
   },
   {
-    "id": "d3e88043.2c178",
+    "id": "4f3f6a8.fb0c094",
     "type": "function",
-    "z": "811c60ec.7ee3a",
+    "z": "f8e35a3.f071ca8",
     "name": "GenLights",
     "func": "if((msg.req.headers.authorization && msg.req.headers.authorization==\"Bearer \"+context.global.FREEBOARD_TOKEN) || context.global.getCookie('exchange_token',msg.req.headers.cookie)==context.global.FREEBOARD_TOKEN){\n//if ((msg.req.body.uid==context.global.WinkUser.uid && msg.req.body.pwd==context.global.WinkUser.pwd) || msg.payload.token==context.global.FREEBOARD_TOKEN){\n//if (true){\n//msg.payload.pwd_str=context.global.FREEBOARD_TOKEN;\nmsg.payload.haveLights=false\nvar lights=[]\nif ('light_bulbs' in context.global.winkState){\n        for (var l_bulb in context.global.winkState.light_bulbs){\n            var bulb=context.global.winkState.light_bulbs[l_bulb];\n            lights.push({\n            name:bulb.name,\n            object_id:bulb.object_id,\n            powered:bulb.powered,\n            brightness:Math.round(bulb.brightness*100)\n        });\n    }\n    msg.payload.haveLights=true\n} \n    \nif ('binary_switches' in context.global.winkState){\n    for (var bswitch in context.global.winkState.binary_switches){\n        var bulb=context.global.winkState.binary_switches[bswitch];\n        lights.push({\n            name:bulb.name,\n            object_id:bulb.object_id,\n            powered:bulb.powered,\n            brightness:(bulb.powered ? 100:0)\n        });\n}\n    msg.payload.haveLights=true;\n}\n\nif ('powerstrips' in context.global.winkState){\n    for (var bswitch in context.global.winkState.powerstrips){\n        var bulb=context.global.winkState.powerstrips[bswitch];\n        if (bulb.object_type==='outlet'){\n        lights.push({\n            name:bulb.name,\n            class_name:'dial '+bulb.object_id,\n            object_id:bulb.object_id,\n            powered:bulb.powered,\n            step:100,\n            brightness:(bulb.powered ? 100:0)\n        });\n    }\n}\n    msg.payload.haveLights=true\n}\n\nmsg.payload.lights=lights;\nmsg.res.statusCode=\"200\";\nvar Etag=\"\";\nif ('CRYPTO' in context.global) Etag=context.global.CRYPTO.createHash(\"md5\").update(JSON.stringify(lights),\"utf8\").digest(\"hex\");\nmsg.headers={\n  'Content-Type': 'application/json',\n  'ETag': Etag\n};\n\n//msg.res.set({\n//  'Content-Type': 'application/json',\n//  'ETag': Etag\n//})\n} else {\nmsg.statusCode=\"403\";\n}\nreturn msg;",
     "outputs": 1,
     "noerr": 0,
-    "x": 421,
-    "y": 822,
+    "x": 430,
+    "y": 824,
     "wires": [
       [
-        "af66ae74.50995"
+        "d4ea23a6.2b15e"
       ]
     ]
   },
   {
-    "id": "af66ae74.50995",
+    "id": "d4ea23a6.2b15e",
     "type": "json",
-    "z": "811c60ec.7ee3a",
+    "z": "f8e35a3.f071ca8",
     "name": "",
-    "x": 579,
-    "y": 821,
+    "x": 588,
+    "y": 823,
     "wires": [
       [
-        "7c2015ee.83dfec"
+        "22b692f7.dd496e"
       ]
     ]
   },
   {
-    "id": "7c2015ee.83dfec",
+    "id": "22b692f7.dd496e",
     "type": "http response",
-    "z": "811c60ec.7ee3a",
+    "z": "f8e35a3.f071ca8",
     "name": "",
-    "x": 731,
-    "y": 821,
+    "x": 740,
+    "y": 823,
     "wires": []
   },
   {
-    "id": "46014107.b9fec",
+    "id": "172c0876.e8d3f8",
     "type": "comment",
-    "z": "811c60ec.7ee3a",
+    "z": "f8e35a3.f071ca8",
     "name": "Main page---------------------------------------",
     "info": "",
-    "x": 165,
-    "y": 20,
+    "x": 174,
+    "y": 22,
     "wires": []
   },
   {
-    "id": "7c94a83e.836b58",
+    "id": "1da714b2.e258eb",
     "type": "template",
-    "z": "811c60ec.7ee3a",
+    "z": "f8e35a3.f071ca8",
     "name": "",
     "field": "",
     "fieldType": "msg",
     "format": "handlebars",
     "template": "<!DOCTYPE html>\n<head>\n    <meta charset=\"UTF-8\">\n    <title>freeboard</title>\n\t<meta name=\"mobile-web-app-capable\" content=\"yes\">\n    <meta name=\"apple-mobile-web-app-capable\" content=\"yes\" />\n    <meta name=\"apple-mobile-web-app-status-bar-style\" content=\"black\" />\n    <meta name=\"viewport\" content = \"width = device-width, initial-scale = 1.0, user-scalable = yes\" />\n    <link href=\"css/freeboard.min.css\" rel=\"stylesheet\" />\n    <script src=\"js/freeboard.thirdparty.min.js\"></script>\n    <script type=\"text/javascript\">\n        head.js(\"js/freeboard.js\",\"js/freeboard.plugins.min.js\",\"../freeboard_api/datasources\",\n                \"lib/js/thirdparty/wink.js\",\n\n                // *** Load more plugins here ***\n                function(){\n                    $(function()\n                    { //DOM Ready\n                        freeboard.initialize(true);\n\n                        //var hash = window.location.hash;\n                        //if (hash !== null) {\n                            $.get({{context.global.BlueMixUrlBase}}\"/red/getGroupsJson?auth={{payload.pwd_str}}\", function(data) {\n\t\t\t\t\t\t\t\tvar datap=JSON.parse(data);\n\t\t\t\t\t\t\t\tif (!datap.empty){\n\t\t\t\t\t\t\t\t\tfreeboard.loadDashboard(datap, function() {\n\t\t\t\t\t\t\t\t\t\tfreeboard.setEditing(false);\n\t\t\t\t\t\t\t\t\t});\n\t\t\t\t\t\t\t\t}\n                            });\n                        //}\n\n                    });\n                });\n    </script>\n</head>\n<body>\n<div id=\"board-content\">\n    <img id=\"dash-logo\" data-bind=\"attr:{src: header_image}, visible:header_image()\">\n    <div class=\"gridster responsive-column-width\">\n        <ul data-bind=\"grid: true\">\n        </ul>\n    </div>\n</div>\n<header id=\"main-header\" data-bind=\"if:allow_edit\">\n    <div id=\"admin-bar\">\n        <div id=\"admin-menu\">\n            <div id=\"board-tools\">\n                <h1 id=\"board-logo\" class=\"title bordered\">freeboard</h1>\n                <div id=\"board-actions\">\n                    <ul class=\"board-toolbar vertical\">\n                        <!--<li data-bind=\"click: loadDashboardFromLocalFile\"><i id=\"full-screen-icon\" class=\"icon-folder-open icon-white\"></i><label id=\"full-screen\">Load Freeboard</label></li>-->\n                        <li data-bind=\"click: saveDashboard\"><i class=\"icon-download-alt icon-white\"></i><label>Save Freeboard</label></li>\n                        <li id=\"add-pane\" data-bind=\"click: createPane\"><i class=\"icon-plus icon-white\"></i><label>Add Pane</label></li>\n                    </ul>\n                </div>\n            </div>\n            <div id=\"datasources\">\n                <h2 class=\"title\">DATASOURCES</h2>\n\n                <div class=\"datasource-list-container\">\n                    <table class=\"table table-condensed sub-table\" id=\"datasources-list\" data-bind=\"if: datasources().length\">\n                        <thead>\n                        <tr>\n                            <th>Name</th>\n                            <th>Last Updated</th>\n                            <th>&nbsp;</th>\n                        </tr>\n                        </thead>\n                        <tbody data-bind=\"foreach: datasources\">\n                        <tr>\n                            <td>\n                                <span class=\"text-button datasource-name\" data-bind=\"text: name, pluginEditor: {operation: 'edit', type: 'datasource'}\"></span>\n                            </td>\n                            <td data-bind=\"text: last_updated\"></td>\n                            <td>\n                                <ul class=\"board-toolbar\">\n                                    <li data-bind=\"click: updateNow\"><i class=\"icon-refresh icon-white\"></i></li>\n                                    <li data-bind=\"pluginEditor: {operation: 'delete', type: 'datasource'}\">\n                                        <i class=\"icon-trash icon-white\"></i></li>\n                                </ul>\n                            </td>\n                        </tr>\n                        </tbody>\n                    </table>\n                </div>\n                <span class=\"text-button table-operation\" data-bind=\"pluginEditor: {operation: 'add', type: 'datasource'}\">ADD</span>\n            </div>\n        </div>\n    </div>\n\t<div id=\"column-tools\" class=\"responsive-column-width\">\n\t\t<ul class=\"board-toolbar left-columns\">\n\t\t\t<li class=\"column-tool add\" data-bind=\"click: addGridColumnLeft\"><span class=\"column-icon right\"></span><i class=\"icon-arrow-left icon-white\"></i></li>\n\t\t\t<li class=\"column-tool sub\" data-bind=\"click: subGridColumnLeft\"><span class=\"column-icon left\"></span><i class=\"icon-arrow-right icon-white\"></i></li>\n\t\t</ul>\n\t\t<ul class=\"board-toolbar right-columns\">\n\t\t\t<li class=\"column-tool sub\" data-bind=\"click: subGridColumnRight\"><span class=\"column-icon right\"></span><i class=\"icon-arrow-left icon-white\"></i></li>\n\t\t\t<li class=\"column-tool add\" data-bind=\"click: addGridColumnRight\"><span class=\"column-icon left\"></span><i class=\"icon-arrow-right icon-white\"></i></li>\n\t\t</ul>\n\t</div>\n    <div id=\"toggle-header\" data-bind=\"click: toggleEditing\">\n        <i id=\"toggle-header-icon\" class=\"icon-wrench icon-white\"></i></div>\n</header>\n\n\n<div style=\"display:hidden\">\n    <ul data-bind=\"template: { name: 'pane-template', foreach: panes}\">\n    </ul>\n</div>\n\n<script type=\"text/html\" id=\"pane-template\">\n    <li data-bind=\"pane: true\">\n        <header>\n            <h1 data-bind=\"text: title\"></h1>\n            <ul class=\"board-toolbar pane-tools\">\n                <li data-bind=\"pluginEditor: {operation: 'add', type: 'widget'}\">\n                    <i class=\"icon-plus icon-white\"></i>\n                </li>\n                <li data-bind=\"pluginEditor: {operation: 'edit', type: 'pane'}\">\n                    <i class=\"icon-wrench icon-white\"></i>\n                </li>\n                <li data-bind=\"pluginEditor: {operation: 'delete', type: 'pane'}\">\n                    <i class=\"icon-trash icon-white\"></i>\n                </li>\n            </ul>\n        </header>\n        <section data-bind=\"foreach: widgets\">\n            <div class=\"sub-section\" data-bind=\"css: 'sub-section-height-' + height()\">\n                <div class=\"widget\" data-bind=\"widget: true, css:{fillsize:fillSize}\"></div>\n                <div class=\"sub-section-tools\">\n                    <ul class=\"board-toolbar\">\n                        <!-- ko if:$parent.widgetCanMoveUp($data) -->\n                        <li data-bind=\"click:$parent.moveWidgetUp\"><i class=\"icon-chevron-up icon-white\"></i></li>\n                        <!-- /ko -->\n                        <!-- ko if:$parent.widgetCanMoveDown($data) -->\n                        <li data-bind=\"click:$parent.moveWidgetDown\"><i class=\"icon-chevron-down icon-white\"></i></li>\n                        <!-- /ko -->\n                        <li data-bind=\"pluginEditor: {operation: 'edit', type: 'widget'}\"><i class=\"icon-wrench icon-white\"></i></li>\n                        <li data-bind=\"pluginEditor: {operation: 'delete', type: 'widget'}\"><i class=\"icon-trash icon-white\"></i></li>\n                    </ul>\n                </div>\n            </div>\n        </section>\n    </li>\n</script>\n\n</body>\n</html>\n",
-    "x": 767.5,
-    "y": 578,
+    "x": 776.5,
+    "y": 580,
     "wires": [
       [
-        "12da061c.ed25fa"
+        "8e21f60a.71de08"
       ]
     ]
   },
   {
-    "id": "12da061c.ed25fa",
+    "id": "8e21f60a.71de08",
     "type": "http response",
-    "z": "811c60ec.7ee3a",
+    "z": "f8e35a3.f071ca8",
     "name": "",
-    "x": 927.5,
-    "y": 578,
+    "x": 936.5,
+    "y": 580,
     "wires": []
   },
   {
-    "id": "d7f2a064.280d6",
+    "id": "5df6a66d.a20958",
     "type": "function",
-    "z": "811c60ec.7ee3a",
+    "z": "f8e35a3.f071ca8",
     "name": "",
     "func": "if ((msg.req.body.uid==context.global.WinkUser.uid && msg.req.body.pwd==context.global.WinkUser.pwd)||context.global.getCookie('exchange_token',msg.req.headers.cookie)==context.global.FREEBOARD_TOKEN || msg.payload.token==context.global.FREEBOARD_TOKEN){\nmsg.res.statusCode=\"200\";\nmsg.payload={\"pwd_str\":context.global.FREEBOARD_TOKEN}\n} else {\nmsg.res.statusCode=\"403\";\n}\nreturn msg;",
     "outputs": 1,
     "noerr": 0,
-    "x": 408.5,
-    "y": 572,
+    "x": 417.5,
+    "y": 574,
     "wires": [
       [
-        "e9e2d6e0.161d28"
+        "3d465250.c2b9ae"
       ]
     ]
   },
   {
-    "id": "fb2b0c76.04d4f",
+    "id": "739c1605.8c63e8",
     "type": "http in",
-    "z": "811c60ec.7ee3a",
+    "z": "f8e35a3.f071ca8",
     "name": "",
     "url": "/freeboard/winkautogroup",
     "method": "get",
     "swaggerDoc": "",
-    "x": 157,
-    "y": 572,
+    "x": 166,
+    "y": 574,
     "wires": [
       [
-        "d7f2a064.280d6"
+        "5df6a66d.a20958"
       ]
     ]
   },
   {
-    "id": "e9e2d6e0.161d28",
+    "id": "3d465250.c2b9ae",
     "type": "switch",
-    "z": "811c60ec.7ee3a",
+    "z": "f8e35a3.f071ca8",
     "name": "",
     "property": "res.statusCode",
     "rules": [
@@ -459,681 +442,681 @@
     ],
     "checkall": "true",
     "outputs": 2,
-    "x": 550.5,
-    "y": 573,
+    "x": 559.5,
+    "y": 575,
     "wires": [
       [
-        "7c94a83e.836b58"
+        "1da714b2.e258eb"
       ],
       [
-        "b51e2ff5.4ae1d"
+        "1ddcc312.e2233d"
       ]
     ]
   },
   {
-    "id": "903528e7.6fcad8",
+    "id": "ef149356.10eb7",
     "type": "http response",
-    "z": "811c60ec.7ee3a",
+    "z": "f8e35a3.f071ca8",
     "name": "",
-    "x": 931.5,
-    "y": 620,
+    "x": 940.5,
+    "y": 622,
     "wires": []
   },
   {
-    "id": "b51e2ff5.4ae1d",
+    "id": "1ddcc312.e2233d",
     "type": "template",
-    "z": "811c60ec.7ee3a",
+    "z": "f8e35a3.f071ca8",
     "name": "",
     "field": "payload",
     "fieldType": "msg",
     "format": "handlebars",
     "template": "<html>\n  <head>\n    <title>Invalid login</title>\n    <META http-equiv=\"refresh\" content=\"3;URL=/freeboard/winkboardautogroup\">\n  </head>\n <body bgcolor=\"#ffffff\">\n    <center>Invalid user Id or Password</a>\n    </center>\n  </body>\n\n</html>",
-    "x": 769.5,
-    "y": 620,
+    "x": 778.5,
+    "y": 622,
     "wires": [
       [
-        "903528e7.6fcad8"
+        "ef149356.10eb7"
       ]
     ]
   },
   {
-    "id": "2e909290.d16f6e",
+    "id": "55809883.aa7f68",
     "type": "comment",
-    "z": "811c60ec.7ee3a",
+    "z": "f8e35a3.f071ca8",
     "name": "Summary page---------------------------------------",
     "info": "",
-    "x": 203,
-    "y": 224,
+    "x": 212,
+    "y": 226,
     "wires": []
   },
   {
-    "id": "93b4381d.6c4bc8",
+    "id": "886e3485.7791c8",
     "type": "comment",
-    "z": "811c60ec.7ee3a",
+    "z": "f8e35a3.f071ca8",
     "name": "details page---------------------------------------",
     "info": "",
-    "x": 196,
-    "y": 458,
+    "x": 205,
+    "y": 460,
     "wires": []
   },
   {
-    "id": "bc27a692.43d858",
+    "id": "c1fc21e9.3e03e",
     "type": "comment",
-    "z": "811c60ec.7ee3a",
+    "z": "f8e35a3.f071ca8",
     "name": "Controls page---------------------------------------",
     "info": "",
-    "x": 211,
-    "y": 703,
+    "x": 220,
+    "y": 705,
     "wires": []
   },
   {
-    "id": "ab649189.549b7",
+    "id": "cd67836d.32988",
     "type": "http in",
-    "z": "811c60ec.7ee3a",
+    "z": "f8e35a3.f071ca8",
     "name": "",
     "url": "/freeboard/MyCameras",
     "method": "get",
     "swaggerDoc": "",
-    "x": 181,
-    "y": 1056,
+    "x": 190,
+    "y": 1058,
     "wires": [
       [
-        "30bb1f27.cf44e"
+        "1004c6c6.effb39"
       ]
     ]
   },
   {
-    "id": "30bb1f27.cf44e",
+    "id": "1004c6c6.effb39",
     "type": "function",
-    "z": "811c60ec.7ee3a",
+    "z": "f8e35a3.f071ca8",
     "name": "GenCameras",
     "func": "//if(msg.req.headers.authorization && msg.req.headers.authorization==\"Bearer \"+context.global.FREEBOARD_TOKEN){\nif ((msg.req.body.uid==context.global.WinkUser.uid && msg.req.body.pwd==context.global.WinkUser.pwd) ||context.global.getCookie('exchange_token',msg.req.headers.cookie)==context.global.FREEBOARD_TOKEN || msg.payload.token==context.global.FREEBOARD_TOKEN){\n//if (true){\nmsg.statusCode=\"200\";\nmsg.payload.pwd_str=context.global.FREEBOARD_TOKEN;\nmsg.payload.ifttt_token=context.global.FREEBOARD_TOKEN;\ncameras=[]\nfor (var cam in context.global.winkState.cameras){\n    var camera=context.global.winkState.cameras[cam];\n    if(camera.device_manufacturer!='canary'){\n    cameras.push({\n        name:camera.name,\n        id:camera.object_id,\n        connection:camera.connection,\n        url:camera.snap_url,\n        history_url:camera.history_url,\n        refresh_interval:30\n    });\n   }\n}\nmsg.payload.cameras=cameras;\nmsg.res.statusCode=\"200\";\n} else {\nmsg.statusCode=\"403\";\n}\nreturn msg;",
     "outputs": 1,
     "noerr": 0,
-    "x": 421,
-    "y": 1055,
+    "x": 430,
+    "y": 1057,
     "wires": [
       [
-        "41810918.be7ef8"
+        "523a9715.adc568"
       ]
     ]
   },
   {
-    "id": "41810918.be7ef8",
+    "id": "523a9715.adc568",
     "type": "template",
-    "z": "811c60ec.7ee3a",
+    "z": "f8e35a3.f071ca8",
     "name": "",
     "field": "",
     "format": "handlebars",
     "template": "<!DOCTYPE html>\n<html lang=\"en\">\n<head>\n    <meta charset=\"utf-8\">\n\t<meta name=\"mobile-web-app-capable\" content=\"yes\">\n    <meta name=\"apple-mobile-web-app-capable\" content=\"yes\" />\n    <meta name=\"apple-mobile-web-app-status-bar-style\" content=\"black\" />\n    <meta name=\"viewport\" content = \"width = device-width, initial-scale = 1.0, user-scalable = yes\" />\n    <title>Cameras control</title>\n\n    <link rel=\"stylesheet\" type=\"text/css\" href=\"bootstrap/css/bootstrap.min.css\" />\n    <link rel=\"stylesheet\" type=\"text/css\" href=\"font-awesome/css/font-awesome.min.css\" />\n    <link rel=\"stylesheet\" type=\"text/css\" href=\"css/local.css\" />\n\n</head>\n<body>\n\n<div class=\"container\">\n    {{#payload.cameras}}\n    <div class=\"col-md-6 col-sm-12 col-xs-12\">\n     <div class=\"panel panel-primary panel-{{id}}\">\n  <!-- Default panel contents -->\n        <div class=\"panel-heading {{name}}\" id=\"Header {{name}}\">\n        <p class=\"text-nowrap\">\n            <span class=\"glyphicon glyphicon-camera\" aria-hidden=\"true\"></span>\n            {{name}}\n     <!--       <button type=\"button\" class=\"btn btn-success btn-sm pull-right\"  onclick=\"ShowCamHist('cam_history?token={{payload.pwd_str}}&camera_name={{name}}','{{name}} History');\">{{name}} history</button> -->\n                <button type=\"button\" class=\"btn btn-success btn-sm pull-right\"  onclick=\"ShowCamHist('cam_history?camera_name={{name}}','{{name}} History');\">{{name}} history</button>\n        </p>                \n        </div>\n        <div class=\"panel-body panel-image panel-image-{{id}}\" id=\"{{id}}\" name=\"{{url}}\" style=\"width: 100%; height: 380px; background-image: url({{url}});-webkit-background-size: cover; -moz-background-size: cover; -o-background-size: cover; background-size: cover;\">\n\n        </div>\n    </div>\n    </div>\n    {{/payload.cameras}}\n</div>\n\n<script type=\"text/javascript\" src=\"js/jquery-1.10.2.min.js\"></script>\n<script type=\"text/javascript\" src=\"bootstrap/js/bootstrap.min.js\" async></script>\n<!-- you need to include the shieldui css and js assets in order for the charts to work -->\n<!--<script type=\"text/javascript\" src=\"https://www.prepbootstrap.com/Content/js/gridData.js\" async></script> -->\n<script type=\"text/javascript\" src=\"js/eModalBl.min.js\" async></script>\n\n<script>\n    \n    function ShowCamHist(hist_url,title){\n        var options = {\n            url: hist_url,\n            title:title,\n            size: eModal.size.lg,\n            buttons: [\n                {text: 'OK', style: 'success',   close: true}\n            ]\n        };\n        eModal.iframe(options);\n    }\n\n    $(document).ready(function() {\n        function updateImage()\n            {\n            if(window.parent.$Curr_Tab=='#Dashboard2'){\n                    for (var i=0;i<$('.panel-image').length;i++){\n                        widget='.panel-image-'+ $('.panel-image')[i].id;\n                        var imageURL = $(widget).attr('name'); //.css(\"background-image\");\n                        imageURL = imageURL.replace(/.*\\s?url\\([\\'\\\"]?/, '').replace(/[\\'\\\"]?\\).*/, '')\n                        var cacheBreakerURL = imageURL + (imageURL.indexOf(\"?\") == -1 ? \"?\" : \"&\") + Date.now();\n                         $(widget).css({\n                            \"background-image\" :  \"url(\" + cacheBreakerURL + \")\"\n                        });\n                    }\n                } \n            }\n \n    setInterval(updateImage, 30000);\n    });\n</script>\n</body>\n</html>\n<!-- data-angleOffset=-125 data-angleArc=250 -->",
-    "x": 600,
-    "y": 1055,
+    "x": 609,
+    "y": 1057,
     "wires": [
       [
-        "78d64c6b.8729b4"
+        "f88b35b9.0774c8"
       ]
     ]
   },
   {
-    "id": "78d64c6b.8729b4",
+    "id": "f88b35b9.0774c8",
     "type": "http response",
-    "z": "811c60ec.7ee3a",
+    "z": "f8e35a3.f071ca8",
     "name": "",
-    "x": 757,
-    "y": 1054,
+    "x": 766,
+    "y": 1056,
     "wires": []
   },
   {
-    "id": "81f98d04.7e067",
+    "id": "bb8b9275.44747",
     "type": "comment",
-    "z": "811c60ec.7ee3a",
+    "z": "f8e35a3.f071ca8",
     "name": "Cameras page---------------------------------------",
     "info": "",
-    "x": 226.5,
-    "y": 998,
+    "x": 235.5,
+    "y": 1000,
     "wires": []
   },
   {
-    "id": "103c41bf.efc3be",
+    "id": "21b19841.de4e68",
     "type": "http in",
-    "z": "811c60ec.7ee3a",
+    "z": "f8e35a3.f071ca8",
     "name": "",
     "url": "/freeboard/cam_history",
     "method": "get",
     "swaggerDoc": "",
-    "x": 185,
-    "y": 1123,
+    "x": 194,
+    "y": 1125,
     "wires": [
       [
-        "858ab6e3.7a7548"
+        "4ad906f6.b526f8"
       ]
     ]
   },
   {
-    "id": "858ab6e3.7a7548",
+    "id": "4ad906f6.b526f8",
     "type": "function",
-    "z": "811c60ec.7ee3a",
+    "z": "f8e35a3.f071ca8",
     "name": "",
     "func": "if (msg.payload.token ==context.global.FREEBOARD_TOKEN || context.global.getCookie('exchange_token',msg.req.headers.cookie)==context.global.FREEBOARD_TOKEN){\n    msg.statusCode=\"200\";\n    var cam_array=[]\n    if ( 'camera_name' in msg.payload && msg.payload.camera_name!=='' && 'activities' in context.global.winkState.cameras[msg.payload.camera_name]){\n        for (var i=0;i<context.global.winkState.cameras[msg.payload.camera_name].activities.length;i++){\n            var activity=context.global.winkState.cameras[msg.payload.camera_name].activities[i];\n             var datetime=new Date(activity.cuepoint_id*1000+context.global.Weather.Offset*60*60*1000);\n            cam_array.push({\n            position:i,\n            is_active:(i===0 ? true:false),\n            title_tm: datetime.toLocaleTimeString(),\n            title_dt: datetime.toLocaleDateString(),\n            //toString(\"dddd, MMMM dd, yyyy h:mm:ss tt\"),\n            img_url:activity.snapshot_url\n            });\n        }\n    msg.payload.cam_activities=cam_array;\n    if (!('headers' in msg)) msg.headers={}\n    msg.headers['Cache-Control']=\"max-age=0,no-cache,no-store,post-check=0,pre-check=0\"\n    } \n} else {\n    msg.statusCode=\"403\";   \n    }\nreturn msg;\n",
     "outputs": 1,
     "noerr": 0,
-    "x": 411,
-    "y": 1130,
+    "x": 420,
+    "y": 1132,
     "wires": [
       [
-        "21c3d831.de3c28"
+        "ffb542db.004ac"
       ]
     ]
   },
   {
-    "id": "21c3d831.de3c28",
+    "id": "ffb542db.004ac",
     "type": "template",
-    "z": "811c60ec.7ee3a",
+    "z": "f8e35a3.f071ca8",
     "name": "",
     "field": "",
     "format": "handlebars",
     "template": "<!DOCTYPE html>\n<html lang=\"en\">\n<head>\n  <meta charset=\"utf-8\">\n  <meta name=\"viewport\" content=\"width=device-width, initial-scale=1\">\n    <link rel=\"stylesheet\" type=\"text/css\" href=\"bootstrap/css/bootstrap.min.css\" />\n    <link rel=\"stylesheet\" type=\"text/css\" href=\"font-awesome/css/font-awesome.min.css\" />\n    <link rel=\"stylesheet\" type=\"text/css\" href=\"css/local.css\" />\n    <link rel=\"stylesheet\" type=\"text/css\" href=\"css/animate.css\" />\n    <script type=\"text/javascript\" src=\"js/jquery-1.10.2.min.js\"></script>\n    <script type=\"text/javascript\" src=\"bootstrap/js/bootstrap.min.js\" async></script>\n      <style>\n  .carousel-inner > .item > img,\n  .carousel-inner > .item > a > img {\n      width: 100%;\n      margin: auto;\n      height: 420px;\n  }\n  .carousel-fade .carousel-inner .item {\n  opacity: 0;\n  -webkit-transition-property: left;\n  -moz-transition-property: left;\n  -o-transition-property: left;\n  transition-property: left;\n}\n.carousel-fade .carousel-inner .active {\n  opacity: 1;\n}\n.carousel-fade .carousel-inner .active.left,\n.carousel-fade .carousel-inner .active.right {\n  left: 0;\n  opacity: 0;\n  z-index: 14;\n}\n.carousel-fade .carousel-inner .next.left,\n.carousel-fade .carousel-inner .prev.right {\n  opacity: 1;\n}\n.carousel-fade .carousel-control {\n  z-index: 14;\n}\n  </style>\n</head>\n<body>\n<div class=\"container\">\n    <br>\n    <br>\n        <div id=\"myCarousel\" class=\"carousel slide carousel-fade col-md-12 col-lg-12 col-sm-12 col-xs-12 col-offset-3\" data-ride=\"carousel\">\n          <!-- Indicators -->\n          <ol class=\"carousel-indicators\">\n            {{#payload.cam_activities}}\n            <li data-target=\"#myCarousel\" data-slide-to=\"{{position}}\" {{#is_active}}class=\"active \"{{/is_active}}></li>\n            {{/payload.cam_activities}}\n          </ol>\n        \n          <!-- Wrapper for slides -->\n          <div class=\"carousel-inner\">\n            {{#payload.cam_activities}}\n            <div class=\"item{{#is_active}} active{{/is_active}}\">\n              <img src=\"{{img_url}}\" alt=\"{{title}}\" class=\"img-responsive animated fadeIn\" >\n                <div class=\"carousel-caption\">\n                    <p>Date: {{title_dt}}</p>\n                    <p>Time: {{title_tm}}</p>\n                </div>\n            </div>\n            {{/payload.cam_activities}}\n          </div>\n        \n          <!-- Left and right controls -->\n          <a class=\"left carousel-control\" href=\"#myCarousel\" role=\"button\" data-slide=\"prev\">\n            <span class=\"glyphicon glyphicon-chevron-left\" aria-hidden=\"true\"></span>\n            <span class=\"sr-only\">Previous</span>\n          </a>\n          <a class=\"right carousel-control\" href=\"#myCarousel\" role=\"button\" data-slide=\"next\">\n            <span class=\"glyphicon glyphicon-chevron-right\" aria-hidden=\"true\"></span>\n            <span class=\"sr-only\">Next</span>\n          </a>\n        </div>\n\n</div>\n</body>\n</html>",
-    "x": 608,
-    "y": 1115,
+    "x": 617,
+    "y": 1117,
     "wires": [
       [
-        "f887a343.07786"
+        "525d71c5.ada29"
       ]
     ]
   },
   {
-    "id": "f887a343.07786",
+    "id": "525d71c5.ada29",
     "type": "http response",
-    "z": "811c60ec.7ee3a",
+    "z": "f8e35a3.f071ca8",
     "name": "",
-    "x": 767,
-    "y": 1117,
+    "x": 776,
+    "y": 1119,
     "wires": []
   },
   {
-    "id": "bd4b206f.42b4e",
+    "id": "951878bd.6ae788",
     "type": "catch",
-    "z": "811c60ec.7ee3a",
+    "z": "f8e35a3.f071ca8",
     "name": "",
-    "x": 101,
-    "y": 1592,
+    "x": 110,
+    "y": 1594,
     "wires": [
       [
-        "1c9919a0.e366e6"
+        "dfc6b869.203948"
       ]
     ]
   },
   {
-    "id": "1c9919a0.e366e6",
+    "id": "dfc6b869.203948",
     "type": "debug",
-    "z": "811c60ec.7ee3a",
+    "z": "f8e35a3.f071ca8",
     "name": "",
     "active": true,
     "console": "false",
     "complete": "error",
-    "x": 301,
-    "y": 1592,
+    "x": 310,
+    "y": 1594,
     "wires": []
   },
   {
-    "id": "53d294ec.ac2d6c",
+    "id": "1ce67318.e3198d",
     "type": "http in",
-    "z": "811c60ec.7ee3a",
+    "z": "f8e35a3.f071ca8",
     "name": "",
     "url": "/freeboard/MySummary",
     "method": "get",
     "swaggerDoc": "",
-    "x": 151,
-    "y": 353,
+    "x": 160,
+    "y": 355,
     "wires": [
       [
-        "3ff479a9.c00b86"
+        "1bd913f3.e426ec"
       ]
     ]
   },
   {
-    "id": "781ae340.87e51c",
+    "id": "91fb3295.6e04d",
     "type": "function",
-    "z": "811c60ec.7ee3a",
+    "z": "f8e35a3.f071ca8",
     "name": "GenSummary",
     "func": "var pct = function(value) {\n    return ((value > 1.0 ? value : value * 100).toFixed(0) + '%')\n}\nvar dual_temp = function (value) {\n    return (typeof value === 'number' ? (value.toFixed(1) + 'C / ' + ((value * 1.8) + 32).toFixed(1) + 'F') : '')\n}\nif ((msg.req.body.uid==context.global.WinkUser.uid && msg.req.body.pwd==context.global.WinkUser.pwd)||context.global.getCookie('exchange_token',msg.req.headers.cookie)==context.global.FREEBOARD_TOKEN || msg.payload.token==context.global.FREEBOARD_TOKEN){\n//if (true){\nmsg.statusCode=\"200\";\nmsg.payload={}\n//msg.payload.pwd_str=context.global.FREEBOARD_TOKEN;\n//msg.payload.ifttt_token=context.global.FREEBOARD_TOKEN;\nmsg.payload.home_lat=context.global.HomeLocation.lat;\nmsg.payload.home_lon=context.global.HomeLocation.lon;\nmsg.payload.weather=context.global.Weather;\nmsg.payload.HoursFormat24=context.global.HoursFormat24 || false;\n//msg.payload.lights=context.global.winkState.groups['@lights'];\n//msg.payload.wholeHouse=context.global.winkState.groups['.all'];\nvar all=context.global.winkState.groups['.all'];\nvar l=context.global.winkState.groups['@lights'];\nmsg.payload.home_components=[];\n//msg.payload.hasLocks=false;\n//msg.payload.hasCoAlarms=false;\n//msg.payload.hasLights=false;\nvar Wmsg = context.global.render_home_components('.all');\nmsg.payload.home_components=Wmsg.payload.home_components;\nmsg.res.statusCode=\"200\";\nif (msg.topic=='json'){\n    var Etag=\"\";\n    if ('CRYPTO' in context.global) Etag=context.global.CRYPTO.createHash(\"md5\").update(JSON.stringify(msg.payload),\"utf8\").digest(\"hex\");\n    msg.headers={\n      'Content-Type': 'application/json',\n      'ETag': Etag\n    };\n}\n} else {\nmsg.res.statusCode=\"403\";\n}\nreturn msg;",
     "outputs": 1,
     "noerr": 0,
-    "x": 543,
-    "y": 388,
+    "x": 552,
+    "y": 390,
     "wires": [
       [
-        "f5aa70b2.0a559"
+        "da779247.25887"
       ]
     ]
   },
   {
-    "id": "ce3b8941.31c478",
+    "id": "8c9b3864.7364c8",
     "type": "template",
-    "z": "811c60ec.7ee3a",
+    "z": "f8e35a3.f071ca8",
     "name": "",
     "field": "",
     "fieldType": "msg",
     "format": "handlebars",
     "template": "<!DOCTYPE html>\n<html lang=\"en\"><!--manifest=\"manifest.cache\"-->\n<head>\n    <meta charset=\"utf-8\">\n\t<meta name=\"mobile-web-app-capable\" content=\"yes\">\n    <meta name=\"apple-mobile-web-app-capable\" content=\"yes\" />\n    <meta name=\"apple-mobile-web-app-status-bar-style\" content=\"black\" />\n    <meta name=\"viewport\" content = \"width = device-width, initial-scale = 1.0, user-scalable = yes\" />\n    <title>Summary</title>\n    <link rel=\"stylesheet\" type=\"text/css\" href=\"bootstrap/css/bootstrap.min.css\" />\n    <link href=\"//maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css\" rel=\"stylesheet\"> \n    <link rel=\"stylesheet\" type=\"text/css\" href=\"css/local.css\" />\n    <link rel=\"stylesheet\" href=\"css/weather-icons.css\">\n    <link rel=\"stylesheet\" href=\"css/weather-icons-wind.css\">\n    <link rel=\"stylesheet\" type=\"text/css\" href=\"css/animate.css\" />\n    <link rel=\"stylesheet\" type=\"text/css\" href=\"css/c-ico.css\">\n    <style>\n    .weather-text {\n        margin: 6px 5px 0px;\n        font-weight: bolder;\n        font-size: 15px;\n        color: #2a9fd6;\n        /*margin-left: 1px;*/\n        margin-right: 5px;\n        font-weight: 600;\n        font-stretch: extra-expanded;\n        /* font-family: Verdana, Geneva, sans-serif; */\n        /* line-height: 20px; */\n        background-color: transparent;\n        text-shadow: 5px 5px 5px rgba(0, 0, 0, 0.41);\n    }\n    .panel-messages {\n        overflow: auto;\n    }\n    .panel-stat {\n        overflow: auto;\n    }\n    .clock-list { \n        /*width:800px; */\n        margin:0 auto; \n        padding:0px; \n        list-style:none; \n        text-align:center; \n        \n    }\n    .clock-list-item { \n        display:inline;\n        font-size:51px;\n        color:#F3B955;\n        text-align:center; \n        font-family:'BebasNeueRegular', Arial, Helvetica, sans-serif; \n        text-shadow: 5px 5px 5px rgba(0, 0, 0, 0.41);\n        /*text-shadow:0 0 5px #00c6ff; */\n        \n    }\n    .table {\n        width: 100%;\n        margin-bottom: 1px;\n        margin-top: 1px;\n        border-top: transparent;\n    }\n    .weather_table{\n        background: transparent;\n        width: 100%;\n        height: 100%;\n    }\n    .panel-azure {\n    background-color:azure;\n    }\n    .panel-no_border {\n        border-color: transparent;\n    }\n    .wi-large {\n        color: #F3B955;\n        font-size: 60px;\n        font-variant: normal;\n        font-stretch: expanded;\n        margin-top: 13px;\n        margin-left: 15%;\n        text-shadow: 5px 5px 5px rgba(0, 0, 0, 0.41);\n    }\n    .wi-home-icon {\n        /*color: #F3B955;*/\n        font-size: 4.5vw;\n        text-shadow: 5px 5px 5px rgba(0, 0, 0, 0.41);\n        /*margin-top: 5px;*/\n    }\n    .large-txt {\n        display: inline-block;\n        position: relative;\n        top: -15px;\n        margin-left: 5px;\n        font-size: 50px;\n        font-weight: bold;\n        text-align: center;\n        line-height: 0.65em;\n        color:#2a9fd6;\n    }\n    .detail-txt {\n        font-size: 13px;\n        color: #2a9fd6;\n        margin-left: 1px;\n        margin-right: 5px;\n        font-weight: 600;\n        font-stretch: extra-expanded;\n        font-family: Verdana, Geneva, sans-serif;\n        line-height: 20px;\n        background-color: transparent;\n        text-shadow: 5px 5px 5px rgba(0, 0, 0, 0.41);\n        display:-moz-inline-box;\n        \n    }\n    .detail-txt-home {\n        font-size: 2vw;\n        /*color: #2a9fd6;*/\n        /*margin-left: 3px;*/\n        /* margin-right: 5px; */\n        /* font-weight: 900; */\n        /* font-stretch: expanded; */\n        /*font-family: Verdana, Geneva, sans-serif;*/\n        /*line-height: 22px;*/\n        text-shadow: 5px 5px 5px rgba(0, 0, 0, 0.41);\n        display: inline-box;\n        display: -webkit-inline-box;\n        display:-moz-inline-box;\n        background-color: transparent;\n    }\n    .detail-danger {\n        color:#F7553A;\n    }\n    .detail-ok {\n        color:#33A032;\n    }\n    .detail-na {\n        color:#616361;\n    }\n    .detail-warning {\n        color:#F5A03F;\n        text-shadow: 0px 0px 10px #FF9900,15px 0px 15px rgba(0, 0, 0, 0.41);\n    }\n    .panel-tile {\n       /* box-shadow: 3px 3px 15px rgba(0, 0, 0, 0.41);*/\n        /*background-color: #1D1F1F;*/\n        height: 7.5vw;\n}\n</style>\n</head>\n<body onunload=\"ws.disconnect();\">\n\n<div class=\"container-fluid\">\n <div class=\"row\">\n <div class=\"col-lg-9 col-md-9 col-sm-12 col-xs-12\">\n  <div class=\"row\">\n    <div class=\"col-lg-6 col-md-6 col-sm-6 hidden-xs\">\n        <div class=\"panel panel-primary panel-time\">\n        <div class=\"panel-heading weather\" id=\"Header time\">\n            <span class=\"fa  fa-clock-o\" aria-hidden=\"true\"></span>\n            Time\n        </div>\n        <div class=\"panel-body panel-clock\" id=\"clock\">\n            <div class=\"row\">\n            <div id=\"DateName\" class=\"detail-txt pull-left\" style=\"margin-left: 10px;\">\n                {{payload.weather.DateName}}\n            </div> \n            </div>\n            <div class=\"row\">\n            <ul class=\"clock-list\">\n            \t<li class=\"clock-list-item\" id=\"hours\">00</li>\n                <li class=\"clock-list-item\" id=\"point\">:</li>\n                <li class=\"clock-list-item\" id=\"min\">00</li>\n                <li class=\"clock-list-item\" id=\"point\">:</li>\n                <li class=\"clock-list-item\" id=\"sec\">00</li>\n            </ul>\n            </div>\n            <div class=\"row\">\n            <div id=\"sun_data\" class=\"detail-txt pull-right\" style=\"margin-right: 10px;\">\n                {{payload.weather.sun_data}}\n            </div>\n            </div>\n        </div>\n        </div>\n    </div>\n    <div class=\"col-lg-6 col-md-6 col-sm-6 col-xs-12\">\n        <div class=\"panel panel-primary panel-weather\">\n        <div class=\"panel-heading weather\" id=\"Header weather\">\n            <span class=\"fa fa-sun-o\" aria-hidden=\"true\"></span>\n            Current Weather\n        </div>\n        <div class=\"panel-body panel-weather\" id=\"weather2\">\n            <div class=\"row\">\n                 <table class=\"weather_table\">\n                    <tbody>\n                        <tr>\n                            <td>\n                            <span id=\"WeatherIcon\" class=\"wi wi-large {{payload.weather.currently.web_icon}}\" aria-hidden=\"true\"></span>\n                            <div class=\"weather-text\" id=\"curr_weather\">\n                                {{payload.weather.WeatherSummary}}\n                            </div>\n                            </td>\n                            <td>\n                            <div class=\"detail-txt pull-right\">\n                                <table class=\"detail-txt table\" style=\"margin-bottom: 6px;border-top: transparent;\">\n                                        <tbody>\n                                            <tr>\n                                                <td>Temperature</td>\n                                                <td id=\"curr_temp\">{{payload.weather.currently.dual_temp}}</td>\n                                            </tr>\n                                            <tr>\n                                                <td>Cloud Cover</td>\n                                                <td id=\"clouds\">{{payload.weather.currently.clouds_pct}}</td>\n                                            </tr>\n                                            <tr>\n                                                <td>Humidity</td>\n                                                <td id=\"humidity\">{{payload.weather.currently.humidity_pct}}</td>\n                                          </tr>\n                                        </tbody>\n                                </table>\n                            </div>\n                            </td>\n                        </tr>\n                    </tbody>\n                </table>\n            </div>\n        </div>\n      </div>\n    </div>  \n    </div>\n    <div class=\"row\"> <!-- main panel with status icons -->\n    <div class=\"col-lg-12 col-md-12 col-sm-12 col-xs-12\">\n        <div class=\"panel panel-primary panel-homestat\">\n        <div class=\"panel-heading homestat\" id=\"Header homestat\">\n            <span class=\"fa fa-home\" aria-hidden=\"true\"></span>\n            Home status\n        </div>\n        <div class=\"panel-body panel-stat\" id=\"homestat\">\n        {{#payload.home_components}}\n            <div class=\"col-lg-3 col-md-3 col-sm-3 col-xs-4\">\n                <div class=\"panel panel-default panel-no_border  panel-{{type}}\">\n                    <div class=\"panel-body panel-tile panel-no_border panel-body-{{type}}\">\n                     <div class=\"row\">\n                     <table style=\"background:transparent;margin-left:5px;\">\n                      <tbody>\n                      <tr>\n                        <td><div class=\"{{icon}} {{icon_color}}\" area-hidden=\"true\" id=\"icon-{{type}}\"></div></td>\n                        <td style=\"padding-left: 5px;\"><div class=\"detail-txt-home detail-{{type}} {{icon_color}} pull-right\" id=\"txt-{{type}}\">{{value}}</div></td>\n                       </tr>\n                       </tbody>\n                      </table>\n                     </div>\n                    </div>\n                </div>\n            </div>    \n        {{/payload.home_components}}\n        </div>\n      </div>\n   </div>\n   </div>\n</div>         \n    <div class=\"col-lg-3 col-md-3 hidden-sm hidden-xs\">\n        <div class=\"panel panel-primary panel-messages\">\n        <div class=\"panel-heading messages\" id=\"Header messages\">\n            <span class=\"fa fa-rss\" aria-hidden=\"true\"></span>\n            Events log\n        </div>\n            <div class=\"panel-body panel-messages\" id=\"messages\" style=\"height:0px;\">\n            </div>\n        </div>\n    </div>\n </div>\n</div>    \n<script type=\"text/javascript\" src=\"js/jquery-1.12.0.min.js\"></script>\n<script type=\"text/javascript\" src=\"bootstrap/js/bootstrap.min.js\" async></script>\n<script type=\"text/javascript\" src=\"js/jquery.noty.packaged.min.js\" async></script>\n<!-- you need to include the shieldui css and js assets in order for the charts to work -->\n<!--<script type=\"text/javascript\" src=\"https://www.prepbootstrap.com/Content/js/gridData.js\" async></script> -->\n<script type=\"text/javascript\" src=\"js/eModalBl.min.js\" async></script>\n\n<script>\n    function update_weather_data(weather){\n        $('#DateName').html(weather.DateName);\n        $('#sun_data').html(weather.sun_data);\n        var curr_cls=$('#WeatherIcon').attr(\"class\").split(\" \")[2];\n        $('#WeatherIcon').removeClass(curr_cls).addClass(weather.currently.web_icon);\n        $('#curr_temp').html(weather.currently.dual_temp);\n        $('#clouds').html(weather.currently.clouds_pct);\n        $('#humidity').html(weather.currently.humidity_pct);\n        $('#curr_weather').html(weather.WeatherSummary);        \n    }\n    function update_home_status(home_data){\n        //console.log(home_data);\n        for(var i=0;i<home_data.length;i++){\n            var o=home_data[i];\n            var curr_cls_a=$('#icon-'+o.type).attr(\"class\").split(\" \");\n            var curr_icon=$('#icon-'+o.type).attr(\"class\").split(\" \")[2];\n            var color_cls=curr_cls_a[curr_cls_a.length-1];\n            $('#icon-'+o.type).removeClass(curr_icon).addClass(o.icon);\n            $('#icon-'+o.type).removeClass(color_cls).addClass(o.icon_color);\n            $('#txt-'+o.type).removeClass(color_cls).addClass(o.icon_color);\n            $('#txt-'+o.type).html(o.value);\n        }\n    }\n    function display_notification(data){\n        var datetime = new Date();\n        var title_tm=datetime.toLocaleTimeString();\n        var title_dt=datetime.toLocaleDateString();\n        if('id' in data && data.id!==null){\n        if (data.id in $noty_arr && $.noty.get($noty_arr[data.id].options.id)){\n                    $.noty.setText($noty_arr[data.id].options.id,title_tm+': '+data.message);\n                    $.noty.setType($noty_arr[data.id].options.id,data.alertType);\n            }\n            else {\n                $noty_arr[data.id] = $('div#messages').noty({\n                    //layout      : 'centerRight',\n                    layout      : 'top',\n                    text        : title_tm+': '+data.message,\n                    type        : data.alertType,\n                    maxVisible  : 30,\n                    force       : true,\n                    timeout     : (data.alertType=='error' ? false : data.timeout || 3600000),\n                    dismissQueue: true,\n                    theme       : 'relax'\n                });\n            }\n        } else {\n            var n =  $('div#messages').noty({\n                    //layout      : 'centerRight',\n                    layout      : 'top',\n                    text        : title_tm+': '+data.message,\n                    type        : data.alertType,\n                    maxVisible  : 30,\n                    force       : true,\n                    timeout     : (data.alertType=='error' ? false :  data.timeout || 3600000),\n                    dismissQueue: true,\n                    theme       : 'relax'\n                });\n        }\n    }\n    function wsConnect() {\n        var ws;\n        var wsUri = \"ws:\";\n        var loc = window.location;\n        if (loc.protocol === \"https:\") { wsUri = \"wss:\"; }\n        wsUri += \"//\" + loc.host + \"/ws/winkStat\";\n            ws = new WebSocket(wsUri);\n            ws.onmessage = function(msg) {\n                var data = JSON.parse(msg.data);\n                //console.log(data);\n                if ('alertType' in data){\n                display_notification(data);\n                }\n                if ('weather' in data){\n                    update_weather_data(data.weather);    \n                }\n                if ('home_components' in data){\n                    update_home_status(data.home_components);    \n                }\n                if ('config' in data){\n                     HoursFormat24=data.config.HoursFormat24;\n                }\n            }\n            ws.onopen = function() {\n                    console.log(\"connected\");\n                    if (typeof getDataIn !== 'undefined' && getOnly) clearInterval(getDataIn);\n                    if(getOnly){\n                    getDataIn=setInterval(executeQuery, 120000);\n                    getOnly=false;\n                    }\n            }\n            ws.onclose = function() {\n            //    console.log(\"re connecting\");\n                setTimeout(wsConnect(),3000);\n            }\n            ws.onerror = function(event){\n                if (typeof getDataIn !== 'undefined' && !getOnly) clearInterval(getDataIn);\n                if (!getOnly){\n                getDataIn=setInterval(executeQuery, 2000);\n                console.log('websocket error, activating get');\n                getOnly=true;\n                }\n            }\n        };\n\nfunction clock()\n{\n    var seconds = new Date().getSeconds();\n\tvar minutes = new Date().getMinutes();\n\tvar hours = new Date().getHours();\n\tif  (HoursFormat24){\n    \t$(\"#hours\").html(( hours < 10 ? \"0\" : \"\" ) + hours);\n    \t$(\"#min\").html(( minutes < 10 ? \"0\" : \"\" ) + minutes);\n    \t$(\"#sec\").html(( seconds < 10 ? \"0\" : \"\" ) + seconds);\n\t} else {\n    \tvar day_frame = (hours<12 ? \" AM\" : \" PM\")\n    \thours=(hours<13 ? hours : hours-12)\n    \t$(\"#hours\").html(( hours < 10 ? \"0\" : \"\" ) + hours);\n    \t$(\"#min\").html(( minutes < 10 ? \"0\" : \"\" ) + minutes);\n    \t$(\"#sec\").html(( seconds < 10 ? \"0\" : \"\" ) + seconds+ day_frame);\n\t}\n}\n    $( window ).resize(function () {\n        $(\"#messages\").css('height', $( window ).height()-75);\n        $(\"#homestat\").css('height', $( window ).height()-(103+178));\n        \n    });\n        $(document).ready(function() {\n        $noty_arr = {};\n        {{#payload.HoursFormat24}}\n        HoursFormat24=true;\n \t    {{/payload.HoursFormat24}}\n\t    {{^payload.HoursFormat24}}\n\t    HoursFormat24=false;\n\t    {{/payload.HoursFormat24}}\n        $(\"#messages\").css('height', $( window ).height()-75);\n        $(\"#homestat\").css('height', $( window ).height()-(103+178));        \n        setInterval(clock, 1000);\n    });\n    \n    function executeQuery() {\n        $.ajax({\n        url: 'MySummaryJson',\n        method: 'GET',\n        ifModified:true,\n//        dataType: 'JSON',\n        headers: {\n//        'Authorization':'Bearer {{payload.pwd_str}}',\n        'Content-Type':'application/json',\n        'If-None-Match':$eTag\n        },\n        success: function(data,status, xhr) {\n                if (xhr.status===200){\n                $eTag=xhr.getResponseHeader('Etag');\n                // console.log(wink_obj.haveLights);\n                if ('weather' in data){\n                    update_weather_data(data.weather);    \n                }\n                if ('home_components' in data){\n                    update_home_status(data.home_components);    \n                }\n                if ('config' in data){\n                     HoursFormat24=data.config.HoursFormat24;\n                }\n            }        \n        }\n    });\n }\n    //setTimeout(executeQuery, 5000); // you could choose not to continue on failure...\n    $(document).ready(function() {\n    $eTag=\"sasd12312sefsdf=\";\n    $noty_arr=[];        \n    getOnly=false;\n    // run the first time; all subsequent calls will take care of themselves\n    //setInterval(executeQuery, 3000);\n    executeQuery();\n    if (\"WebSocket\" in window) wsConnect();\n    else GetDataIn=setInterval(executeQuery,2000);\n    });\n</script>\n</body>\n</html>",
-    "x": 884,
-    "y": 382,
+    "x": 893,
+    "y": 384,
     "wires": [
       [
-        "e0645bda.1f9ba8"
+        "da5a282f.25a5d8"
       ]
     ]
   },
   {
-    "id": "e0645bda.1f9ba8",
+    "id": "da5a282f.25a5d8",
     "type": "http response",
-    "z": "811c60ec.7ee3a",
+    "z": "f8e35a3.f071ca8",
     "name": "",
-    "x": 1122,
-    "y": 413,
+    "x": 1131,
+    "y": 415,
     "wires": []
   },
   {
-    "id": "fbb499d7.044b68",
+    "id": "1af194fc.e50e6b",
     "type": "http in",
-    "z": "811c60ec.7ee3a",
+    "z": "f8e35a3.f071ca8",
     "name": "",
     "url": "/freeboard/LockControls",
     "method": "get",
     "swaggerDoc": "",
-    "x": 179,
-    "y": 891,
+    "x": 188,
+    "y": 893,
     "wires": [
       [
-        "9d133cff.62ecc"
+        "c404f8a7.3bfb08"
       ]
     ]
   },
   {
-    "id": "9d133cff.62ecc",
+    "id": "c404f8a7.3bfb08",
     "type": "function",
-    "z": "811c60ec.7ee3a",
+    "z": "f8e35a3.f071ca8",
     "name": "GenLocks",
     "func": "//if(msg.req.headers.authorization && msg.req.headers.authorization==\"Bearer \"+context.global.FREEBOARD_TOKEN){\nif ((msg.req.body.uid==context.global.WinkUser.uid && msg.req.body.pwd==context.global.WinkUser.pwd)||context.global.getCookie('exchange_token',msg.req.headers.cookie)==context.global.FREEBOARD_TOKEN || msg.payload.token==context.global.FREEBOARD_TOKEN){\n//if (true){\nmsg.statusCode=\"200\";\nmsg.headers={'Cache-Control':\"max-age=0,no-cache,no-store,post-check=0,pre-check=0\"};\nmsg.payload.pwd_str=context.global.FREEBOARD_TOKEN;\nmsg.payload.ifttt_token=context.global.FREEBOARD_TOKEN;\nmsg.payload.haveLLocks=false\nvar locks=[]\nif ('locks' in context.global.winkState){\n        for (var l_lock in context.global.winkState.locks){\n            var lock=context.global.winkState.locks[l_lock];\n            locks.push({\n            name:lock.name,\n            //class_name:'dial '+bulb.object_id,\n            object_id:lock.object_id,\n            locked:lock.locked,\n            not_locked:!lock.locked\n        });\n    }\n    msg.payload.haveLocks=true\n}\nmsg.payload.locks=locks;\n} else {\nmsg.statusCode=\"403\";\n}\nreturn msg;",
     "outputs": 1,
     "noerr": 0,
-    "x": 419,
-    "y": 890,
+    "x": 428,
+    "y": 892,
     "wires": [
       [
-        "f569cb5f.0a9638"
+        "16c1e1aa.e93e1e"
       ]
     ]
   },
   {
-    "id": "f569cb5f.0a9638",
+    "id": "16c1e1aa.e93e1e",
     "type": "template",
-    "z": "811c60ec.7ee3a",
+    "z": "f8e35a3.f071ca8",
     "name": "",
     "field": "",
     "fieldType": "msg",
     "format": "handlebars",
     "template": "<!DOCTYPE html>\n<html lang=\"en\">\n<head>\n    <meta charset=\"utf-8\">\n\t<meta name=\"mobile-web-app-capable\" content=\"yes\">\n    <meta name=\"apple-mobile-web-app-capable\" content=\"yes\" />\n    <meta name=\"apple-mobile-web-app-status-bar-style\" content=\"black\" />\n    <meta name=\"viewport\" content = \"width = device-width, initial-scale = 1.0, user-scalable = yes\" />\n    <title>light control</title>\n\n    <link rel=\"stylesheet\" type=\"text/css\" href=\"bootstrap/css/bootstrap.min.css\" />\n    <link rel=\"stylesheet\" type=\"text/css\" href=\"bootstrap/css/bootstrap-toggle.min.css\" />\n    <link rel=\"stylesheet\" type=\"text/css\" href=\"font-awesome/css/font-awesome.min.css\" />\n    <link rel=\"stylesheet\" type=\"text/css\" href=\"css/local.css\" />\n\n    <script type=\"text/javascript\" src=\"js/jquery-1.10.2.min.js\"></script>\n    <script type=\"text/javascript\" src=\"bootstrap/js/bootstrap.min.js\" async></script>\n    <script type=\"text/javascript\" src=\"bootstrap/js/bootstrap-toggle.min.js\" async></script>\n    <script src=\"assets/js/jquery.knob.min.js\"></script>\n    <script src=\"//crypto-js.googlecode.com/svn/tags/3.1.2/build/rollups/aes.js\"></script>\n    <!-- you need to include the shieldui css and js assets in order for the charts to work -->\n <!--   <script type=\"text/javascript\" src=\"https://www.prepbootstrap.com/Content/js/gridData.js\" async></script> -->\n <style>\n  .slow .toggle-group { transition: left 0.7s; -webkit-transition: left 0.7s; }\n</style>\n</head>\n<body onload=\"wsConnect();\" onunload=\"ws.disconnect();\">\n\n<!--<div class=\"container\"> -->\n    {{#payload.locks}}\n    <div class=\"col-xs-12 col-md-3 col-sm-3\" style=\"background:none;\"> \n     <div class=\"panel panel-primary panel-{{object_id}}\">\n  <!-- Default panel contents -->\n        <div class=\"panel-heading {{name}}\" id=\"Header {{name}}\">\n            <p class=\"text-nowrap\">\n            <span class=\"fa fa-lock icon-{{object_id}}\" aria-hidden=\"true\"></span>\n            <small>{{name}}</small>\n            </p>\n        </div>\n        <div class=\"panel-body\">\n                <input type=\"checkbox\" class=\"lock-{{object_id}}\" id=\"{{name}}\" name=\"{{object_id}}\" {{#locked}}checked{{/locked}} data-style=\"slow\" data-toggle=\"toggle\" data-onstyle=\"success\" data-offstyle=\"warning\" data-on=\"<i class='fa fa-lock'></i> Locked\" data-off=\"<i class='fa fa-unlock'></i> Unlocked\" data-width=\"100%\" data-height=\"85\">\n        </div>\n    </div>\n    </div>\n    {{/payload.locks}}   \n<!--</div> -->\n\n<script type=\"text/javascript\">\n    function getCookie(cname) {\n    var name = cname + \"=\";\n    var ca = document.cookie.split(';');\n    for(var i=0; i<ca.length; i++) {\n        var c = ca[i];\n        while (c.charAt(0)==' ') c = c.substring(1);\n        if (c.indexOf(name) == 0) return c.substring(name.length,c.length);\n    }\n    return \"\";\n}\n    $('input[type=checkbox]').change(function(){\n        //console.log(this.id);\n        var LName=this.id; //.substring(0,this.id.length-3);\n        var Wcmd;\n        var l_id='.panel-'+this.name;\n        Wcmd=($(this).prop('checked') ? 'lock' : 'unlock')\n        if($lock[this.name]==='undefined' || $lock[this.name]!==Wcmd){\n         $.post( \"/red/ifttt\", {\"winkName\":LName,\"type\":\"lock\",\"cmd\":Wcmd,\"level\":\"\" , \"iftttkey\" :getCookie('exchange_token')}); \n          $lock[this.name]=Wcmd;\n        }\n        // (Wcmd=='unlock' ? $(l_id).removeClass('panel-primary').addClass('panel-warning') : $(l_id).removeClass('panel-warning').addClass('panel-primary'));\n    });\n    \n    function wsConnect() {\n        var ws;\n        var wsUri = \"ws:\";\n        var loc = window.location;\n        if (loc.protocol === \"https:\") { wsUri = \"wss:\"; }\n        wsUri += \"//\" + loc.host + \"/ws/winkStat\";\n            ws = new WebSocket(wsUri);\n            ws.onmessage = function(msg) {\n            var data = JSON.parse(msg.data);\n            if('locked' in data){\n                var l_id='.panel-'+data.object_id;\n                var lock_id='.lock-'+data.object_id;\n                var icon='.icon-'+data.object_id;\n                $lock[data.object_id]=(data.locked ? 'lock':'unlock');\n                if(!data.locked) \n                  {\n                      $(l_id).removeClass('panel-primary').addClass('panel-warning');\n                      $(icon).removeClass('fa-lock').addClass('fa-unlock');\n                      $(lock_id).prop('checked', false).change()\n                       \n                  } else {\n                      $(l_id).removeClass('panel-warning').addClass('panel-primary');\n                      $(icon).removeClass('fa-unlock').addClass('fa-lock');\n                      $(lock_id).prop('checked', true).change()\n                  }\n                }\n            }\n            ws.onopen = function() {\n                    console.log(\"connected\");\n            }\n            ws.onclose = function() {\n            //    console.log(\"re connecting\");\n                setTimeout(wsConnect,3000);\n            }\n        };\n    \n    \n    function executeQuery() {\n        $.ajax({\n        url: 'lockdata',\n        method: 'GET',\n        ifModified:true,\n//        dataType: 'JSON',\n        headers: {\n        'Authorization':'Bearer '+getCookie('exchange_token'),\n        'Content-Type':'application/json',\n        'If-None-Match':$eTag\n        },\n        success: function(data,status, xhr) {\n        if (xhr.status===200){\n        var wink_obj=data;// JSON.parse(data);\n        \n        $eTag=xhr.getResponseHeader('Etag');\n        // console.log(wink_obj.haveLights);\n         var locks=wink_obj.locks;\n         for(var i=0;i<locks.length;i++){\n          var l_id='.panel-'+locks[i].object_id;\n          var lock_id='.lock-'+locks[i].object_id;\n          $lock[locks[i].object_id]=(locks[i].locked ? 'lock':'unlock');\n          var icon='.icon-'+locks[i].object_id;\n          if(locks[i].locked) \n              {\n                    $(l_id).removeClass('panel-warning').addClass('panel-primary');\n                    $(icon).removeClass('fa-lock').addClass('fa-unlock');\n                    $(lock_id).prop('checked', true).change()\n              } else {\n                    $(l_id).removeClass('panel-primary').addClass('panel-warning');\n                    $(icon).removeClass('fa-unlock').addClass('fa-lock');\n                    $(lock_id).prop('checked', false).change()\n              }\n         }\n        }\n    }\n    });\n    //setTimeout(executeQuery, 5000); // you could choose not to continue on failure...\n    }\n\n    $(document).ready(function() {\n    $lock=[]\n    $eTag=\"sasd12312sdfsdf=\";\n    // run the first time; all subsequent calls will take care of themselves\n    //setInterval(executeQuery, 3000);\n    executeQuery();\n    setInterval(executeQuery, 120000);\n    });\n</script>\n</body>\n</html>",
-    "x": 598,
-    "y": 890,
+    "x": 607,
+    "y": 892,
     "wires": [
       [
-        "5454fc5f.abab04"
+        "eba950e7.1456b"
       ]
     ]
   },
   {
-    "id": "5454fc5f.abab04",
+    "id": "eba950e7.1456b",
     "type": "http response",
-    "z": "811c60ec.7ee3a",
+    "z": "f8e35a3.f071ca8",
     "name": "",
-    "x": 755,
-    "y": 889,
+    "x": 764,
+    "y": 891,
     "wires": []
   },
   {
-    "id": "779c65af.88639c",
+    "id": "507c488d.af83b8",
     "type": "http in",
-    "z": "811c60ec.7ee3a",
+    "z": "f8e35a3.f071ca8",
     "name": "",
     "url": "/freeboard/LockData",
     "method": "get",
     "swaggerDoc": "",
-    "x": 166,
-    "y": 944,
+    "x": 175,
+    "y": 946,
     "wires": [
       [
-        "243bb324.dbc44c"
+        "3218d1ae.cde72e"
       ]
     ]
   },
   {
-    "id": "243bb324.dbc44c",
+    "id": "3218d1ae.cde72e",
     "type": "function",
-    "z": "811c60ec.7ee3a",
+    "z": "f8e35a3.f071ca8",
     "name": "GenLocks",
     "func": "if((msg.req.headers.authorization && msg.req.headers.authorization==\"Bearer \"+context.global.FREEBOARD_TOKEN) || context.global.getCookie('exchange_token',msg.req.headers.cookie)==context.global.FREEBOARD_TOKEN ){\n//if ((msg.req.body.uid==context.global.WinkUser.uid && msg.req.body.pwd==context.global.WinkUser.pwd) || msg.payload.token==context.global.FREEBOARD_TOKEN){\n//if (true){\n//msg.payload.pwd_str=context.global.FREEBOARD_TOKEN;\nmsg.payload.haveLights=false\nvar locks=[]\nif ('locks' in context.global.winkState){\n        for (var l_lock in context.global.winkState.locks){\n            var lock=context.global.winkState.locks[l_lock];\n            locks.push({\n            name:lock.name,\n            //class_name:'dial '+bulb.object_id,\n            object_id:lock.object_id,\n            locked:lock.locked,\n            not_locked:!lock.locked\n        });\n    }\n    msg.payload.haveLocks=true\n}\nmsg.payload.locks=locks;\nmsg.statusCode=\"200\";\nvar Etag=\"\";\nif ('CRYPTO' in context.global) Etag=context.global.CRYPTO.createHash(\"md5\").update(JSON.stringify(locks),\"utf8\").digest(\"hex\");\nmsg.headers={\n  'Content-Type': 'application/json',\n  'ETag': Etag\n};\n\n//msg.res.set({\n//  'Content-Type': 'application/json',\n//  'ETag': Etag\n//})\n} else {\nmsg.statusCode=\"403\";\n}\nreturn msg;",
     "outputs": 1,
     "noerr": 0,
-    "x": 447,
-    "y": 942,
+    "x": 456,
+    "y": 944,
     "wires": [
       [
-        "d442f320.2bbd1"
+        "afab9805.505468"
       ]
     ]
   },
   {
-    "id": "d442f320.2bbd1",
+    "id": "afab9805.505468",
     "type": "json",
-    "z": "811c60ec.7ee3a",
+    "z": "f8e35a3.f071ca8",
     "name": "",
-    "x": 605,
-    "y": 941,
+    "x": 614,
+    "y": 943,
     "wires": [
       [
-        "4a531d2d.b5ace4"
+        "a5ab8349.5a548"
       ]
     ]
   },
   {
-    "id": "4a531d2d.b5ace4",
+    "id": "a5ab8349.5a548",
     "type": "http response",
-    "z": "811c60ec.7ee3a",
+    "z": "f8e35a3.f071ca8",
     "name": "",
-    "x": 757,
-    "y": 941,
+    "x": 766,
+    "y": 943,
     "wires": []
   },
   {
-    "id": "dc0fd09b.23f03",
+    "id": "5900a1a9.a6ff6",
     "type": "http in",
-    "z": "811c60ec.7ee3a",
+    "z": "f8e35a3.f071ca8",
     "name": "",
     "url": "/freeboard/manifest.cache1",
     "method": "get",
     "swaggerDoc": "",
-    "x": 179,
-    "y": 1487,
+    "x": 188,
+    "y": 1489,
     "wires": [
       [
-        "bce4d008.431b3"
+        "b94150d.f46beb"
       ]
     ]
   },
   {
-    "id": "bce4d008.431b3",
+    "id": "b94150d.f46beb",
     "type": "template",
-    "z": "811c60ec.7ee3a",
+    "z": "f8e35a3.f071ca8",
     "name": "",
     "field": "payload",
     "fieldType": "msg",
     "format": "text",
     "template": "CACHE MANIFEST\n# Ver 8.00.23\n\n# Add the entire internet to the \"white list\" of sites that may be accessed by this site.\n# This is needed for TypeKit and Google Analytics\n\nNETWORK:\n/freeboard/*\n/red/camera_history\nlightcontrols\nlockcontrols\ncam_history\nmysummary\n*.jpg\n*\n\n# The following files are explicitly cached -\nCACHE:\n//netdna.bootstrapcdn.com/font-awesome/3.2.1/css/font-awesome.css\nbootstrap/css/bootstrap.min.css\nbootstrap/css/bootstrap-toggle.min.css\nfont-awesome/css/font-awesome.min.css\ncss/local.css\ncss/animate.min.css\ncss/freeboard.min.css\njs/freeboard.thirdparty.min.js\nassets/js/jquery.knob.min.js\njs/jquery-1.10.2.min.js\njs/jquery.noty.packaged.min.js\nbootstrap/js/bootstrap.min.js\nbootstrap/js/bootstrap-toggle.min.js\njs/eModalBl.min.js\njs/freeboard.js\njs/freeboard.plugins.min.js\nlib/js/thirdparty/wink.js\nplugins/thirdparty/jquery.sparkline.min.js\nassets/img/main_ico_02.png\nfonts/glyphicons-halflings-regular.woff\nbootstrap/fonts/glyphicons-halflings-regular.woff2\nfont-awesome/fonts/fontawesome-webfont.woff",
-    "x": 476,
-    "y": 1487,
+    "x": 485,
+    "y": 1489,
     "wires": [
       [
-        "be8248f4.417db8"
+        "7878e483.87871c"
       ]
     ]
   },
   {
-    "id": "be8248f4.417db8",
+    "id": "7878e483.87871c",
     "type": "http response",
-    "z": "811c60ec.7ee3a",
+    "z": "f8e35a3.f071ca8",
     "name": "",
-    "x": 699,
-    "y": 1485,
+    "x": 708,
+    "y": 1487,
     "wires": []
   },
   {
-    "id": "9bd3a16e.642c6",
+    "id": "b45fb2bb.4ba05",
     "type": "comment",
-    "z": "811c60ec.7ee3a",
+    "z": "f8e35a3.f071ca8",
     "name": "Cache manifest-----------------------------------",
     "info": "",
-    "x": 188,
-    "y": 1437,
+    "x": 197,
+    "y": 1439,
     "wires": []
   },
   {
-    "id": "db133f45.24ecc",
+    "id": "d925790.f26da88",
     "type": "http in",
-    "z": "811c60ec.7ee3a",
+    "z": "f8e35a3.f071ca8",
     "name": "",
     "url": "/freeboard/LightControls",
     "method": "get",
     "swaggerDoc": "",
-    "x": 170,
-    "y": 752,
+    "x": 179,
+    "y": 754,
     "wires": [
       [
-        "7f081e5d.80f7e"
+        "d7f26885.280d98"
       ]
     ]
   },
   {
-    "id": "7f081e5d.80f7e",
+    "id": "d7f26885.280d98",
     "type": "function",
-    "z": "811c60ec.7ee3a",
+    "z": "f8e35a3.f071ca8",
     "name": "GenLights",
     "func": "//if(msg.req.headers.authorization && msg.req.headers.authorization==\"Bearer \"+context.global.FREEBOARD_TOKEN){\nif ((msg.req.body.uid==context.global.WinkUser.uid && msg.req.body.pwd==context.global.WinkUser.pwd) || context.global.getCookie('exchange_token',msg.req.headers.cookie)==context.global.FREEBOARD_TOKEN || msg.payload.token==context.global.FREEBOARD_TOKEN){\n//if (true){\n//node.warn( context.global.getCookie('exchange_token',msg.req.headers.cookie));\nmsg.statusCode=\"200\";\nmsg.headers={'Cache-Control':\"max-age=0,no-cache,no-store,post-check=0,pre-check=0\"};\nmsg.payload.pwd_str=context.global.FREEBOARD_TOKEN;\nmsg.payload.ifttt_token=context.global.FREEBOARD_TOKEN;\nmsg.payload.haveLights=false;\nvar lights=[];\nif ('light_bulbs' in context.global.winkState){\n        for (var l_bulb in context.global.winkState.light_bulbs){\n            var bulb=context.global.winkState.light_bulbs[l_bulb];\n            lights.push({\n            name:bulb.name,\n            class_name:'dial '+bulb.object_id,\n            object_id:bulb.object_id,\n            powered:bulb.powered,\n            not_powered:!bulb.powered,\n            step:1,\n            brightness:Math.round(bulb.brightness*100)\n        });\n    }\n    msg.payload.haveLights=true;\n}\nif ('binary_switches' in context.global.winkState){\n    for (var bswitch in context.global.winkState.binary_switches){\n        var bulb=context.global.winkState.binary_switches[bswitch];\n        lights.push({\n            name:bulb.name,\n            class_name:'dial '+bulb.object_id,\n            object_id:bulb.object_id,\n            powered:bulb.powered,\n            step:100,\n            brightness:(bulb.powered ? 100:0)\n        });\n}\n    msg.payload.haveLights=true;\n}\n\nif ('powerstrips' in context.global.winkState){\n    for (var bswitch in context.global.winkState.powerstrips){\n        var bulb=context.global.winkState.powerstrips[bswitch];\n        if (bulb.object_type==='outlet'){\n        lights.push({\n            name:bulb.name,\n            class_name:'dial '+bulb.object_id,\n            object_id:bulb.object_id,\n            powered:bulb.powered,\n            step:100,\n            brightness:(bulb.powered ? 100:0)\n        });\n    }\n}\n    msg.payload.haveLights=true;\n}\n\n\nmsg.payload.lights=lights;\n} else {\nmsg.statusCode=\"403\";\n}\nreturn msg;",
     "outputs": 1,
     "noerr": 0,
-    "x": 410,
-    "y": 751,
+    "x": 419,
+    "y": 753,
     "wires": [
       [
-        "1b5e7d6.fe4a183"
+        "b4211232.4bdef"
       ]
     ]
   },
   {
-    "id": "1b5e7d6.fe4a183",
+    "id": "b4211232.4bdef",
     "type": "template",
-    "z": "811c60ec.7ee3a",
+    "z": "f8e35a3.f071ca8",
     "name": "",
     "field": "",
     "fieldType": "msg",
     "format": "handlebars",
     "template": "<!DOCTYPE html>\n<html lang=\"en\">\n<head>\n    <meta charset=\"utf-8\">\n\t<meta name=\"mobile-web-app-capable\" content=\"yes\">\n    <meta name=\"apple-mobile-web-app-capable\" content=\"yes\" />\n    <meta name=\"apple-mobile-web-app-status-bar-style\" content=\"black\" />\n    <meta name=\"viewport\" content = \"width = device-width, initial-scale = 1.0, user-scalable = yes\" />\n    <title>light control</title>\n\n    <link rel=\"stylesheet\" type=\"text/css\" href=\"bootstrap/css/bootstrap.min.css\" />\n    <link rel=\"stylesheet\" type=\"text/css\" href=\"font-awesome/css/font-awesome.min.css\" />\n    <link rel=\"stylesheet\" type=\"text/css\" href=\"css/local.css\" />\n\n    <script type=\"text/javascript\" src=\"js/jquery-1.10.2.min.js\"></script>\n    <script type=\"text/javascript\" src=\"bootstrap/js/bootstrap.min.js\" async></script>\n    <script src=\"assets/js/jquery.knob.min.js\"></script>\n    <script src=\"//crypto-js.googlecode.com/svn/tags/3.1.2/build/rollups/aes.js\"></script>\n</head>\n<body onunload=\"ws.disconnect();\">\n\n<!--<div class=\"container\"> -->\n    {{#payload.lights}}\n    <div class=\"col-xs-12 col-md-3 col-sm-4\" style=\"background:none;\"> \n     <div class=\"panel panel-primary panel-{{object_id}}\">\n  <!-- Default panel contents -->\n        <div class=\"panel-heading {{name}}\" id=\"Header {{name}}\">\n        <!--    <p class=\"text-nowrap\"> -->\n            <span class=\"glyphicon glyphicon-off\" aria-hidden=\"true\"></span>\n            <small class=\"text-nowrap\">{{name}}</small>\n        <!--    </p> -->\n        </div>\n        <div class=\"panel-body\">\n            <div class=\"col-sm-8 col-md-8 col-xs-8\">\n                <input id=\"{{name}}\" data-angleOffset=-125 data-angleArc=250 data-linecap=round data-fontWeight=\"regular\" data-displayPrevious=\"true\" data-thickness=\".5\" data-step=\"{{step}}\" data-width=80 data-height=80 class=\"{{class_name}}\" value={{brightness}}>\n            </div>\n            <div class=\"col-xs-2 col-md-2 col-sm-2\">\n                <div id=\"btngrp {{name}}\" class=\"btn-group-vertical btn-md\" data-toggle=\"buttons\">\n                        <label class=\"btn btn-default btn-md\">\n                            <input type=\"radio\" data-toggle=\"radio-button\" name={{object_id}} id=\"{{name}}_On\" class=\"radio-popup-style radio-{{object_id}}-on{{#powered}} active{{/powered}}\"{{#powered}} checked{{/powered}}>On</input>\n                        </label>\n                        <label class=\"btn btn-default btn-md\">\n                            <input type=\"radio\" data-toggle=\"radio-button\" name={{object_id}} id=\"{{name}}_Of\" class=\"radio-popup-style radio-{{object_id}}-of{{#not_powered}} active{{/not_powered}}\"{{#not_powered}} checked{{/not_powered}}>Off</input>\n                        </label>\n                </div>\n            </div>\n        </div>\n    </div>\n    </div>\n    {{/payload.lights}}   \n<!--</div> -->\n\n<script type=\"text/javascript\">\n    function getCookie(cname) {\n    var name = cname + \"=\";\n    var ca = document.cookie.split(';');\n    for(var i=0; i<ca.length; i++) {\n        var c = ca[i];\n        while (c.charAt(0)==' ') c = c.substring(1);\n        if (c.indexOf(name) == 0) return c.substring(name.length,c.length);\n    }\n    return \"\";\n}\n    $(\".dial\").knob({\n        'dynamicDraw' : true,\n        'release' : function (v) {\n            if(!webUpd){\n             $.post( \"/red/ifttt\", {\"winkName\":this.$.attr('id'),\"type\":\"light\",\"cmd\":(v >0 ? 'on' : 'off' ),\"level\":(v<0 ? 0:v)}) \n            }\n            webUpd=false;\n            }\n    });\n    \n    $('input[type=radio]').change(function(){\n        //console.log(this.id);\n        var LName=this.id.substring(0,this.id.length-3);\n        var Wcmd;\n        var Wlevel=$('.dial.'+this.name)[0].value;\n        var l_id='.panel-'+this.name;\n        $(this).addClass(\"active\").siblings().removeAttr('checked').removeClass(\"active\").parent().removeClass('active');\n        (this.id.indexOf(\"_On\")!=-1 ?  Wcmd='on':  Wcmd='off');\n         $.post( \"/red/ifttt\", {\"winkName\":LName,\"type\":\"light\",\"cmd\":Wcmd,\"level\":Wlevel , \"iftttkey\" : getCookie('exchange_token')}); \n         (Wcmd=='on' ? $(l_id).removeClass('panel-primary').addClass('panel-warning') : $(l_id).removeClass('panel-warning').addClass('panel-primary'));\n    });\n    \n    function wsConnect() {\n        var ws;\n        var wsUri = \"ws:\";\n        var loc = window.location;\n        if (loc.protocol === \"https:\") { wsUri = \"wss:\"; }\n        wsUri += \"//\" + loc.host + \"/ws/winkStat\";\n            ws = new WebSocket(wsUri);\n            ws.onmessage = function(msg) {\n            var data = JSON.parse(msg.data);\n            if ('powered' in data){\n            var l_id='.panel-'+data.object_id;\n            var dial_name='.dial.'+data.object_id;\n            var btn_id='.radio-'+data.object_id;\n            if(data.powered) \n              {\n                  $(l_id).removeClass('panel-primary').addClass('panel-warning');\n                  $(btn_id+'-on').prop('checked',true).parent().addClass('active').siblings().removeClass(\"active\").blur();\n                  $(btn_id+'-of').removeAttr('checked').prop('checked',false).parent().removeClass('active').blur();\n                  webUpd=true;            \n                  $(dial_name).val(data.brightness).trigger(\"change\");\n                  webUpd=false;\n              } else {\n                  $(l_id).removeClass('panel-warning').addClass('panel-primary');\n                  $(btn_id+'-of').prop('checked',true).parent().addClass('active').siblings().removeClass(\"active\").blur();\n                  $(btn_id+'-on').removeAttr('checked').prop('checked',false).parent().removeClass('active').blur();\n                  //$(l_id).parent().click();\n                  //$(l_id).parent().focus();\n              }\n            }\n            }\n            ws.onopen = function() {\n                    console.log(\"connected\");\n                    if (typeof getDataIn !== 'undefined' && getOnly) clearInterval(getDataIn);\n                    if(getOnly){\n                    getDataIn=setInterval(executeQuery, 120000);\n                    getOnly=false;\n                    }\n            }\n            ws.onclose = function() {\n            //    console.log(\"re connecting\");\n                setTimeout(wsConnect,3000);\n            }\n            ws.onerror = function(event){\n                if (typeof getDataIn !== 'undefined' && !getOnly) clearInterval(getDataIn);\n                if (!getOnly){\n                getDataIn=setInterval(executeQuery, 2000);\n                console.log('websocket error, activating get');\n                console.log(getDataIn)\n                getOnly=true;\n                }\n            }\n        };\n    \n    \n    function executeQuery() {\n        $.ajax({\n        url: 'lightcontrol',\n        method: 'GET',\n        ifModified:true,\n//        dataType: 'JSON',\n        headers: {\n//        'Authorization':'Bearer {{payload.pwd_str}}',\n        'Content-Type':'application/json',\n        'If-None-Match':$eTag\n        },\n        success: function(data,status, xhr) {\n        if (xhr.status===200){\n        var wink_obj=data;// JSON.parse(data);\n        \n        $eTag=xhr.getResponseHeader('Etag');\n        // console.log(wink_obj.haveLights);\n         var lights=wink_obj.lights;\n         for(var i=0;i<lights.length;i++){\n          var l_id='.panel-'+lights[i].object_id;\n          var dial_name='.dial.'+lights[i].object_id;\n          var btn_id='.radio-'+lights[i].object_id;\n          if(lights[i].powered) \n              {\n                  $(l_id).removeClass('panel-primary').addClass('panel-warning');\n                  $(btn_id+'-on').prop('checked',true).parent().addClass('active').siblings().removeClass(\"active\").blur();\n                  $(btn_id+'-of').removeAttr('checked').prop('checked',false).parent().removeClass('active').blur();\n              } else {\n                  $(l_id).removeClass('panel-warning').addClass('panel-primary');\n                  $(btn_id+'-of').prop('checked',true).parent().addClass('active').siblings().removeClass(\"active\").blur();\n                  $(btn_id+'-on').removeAttr('checked').prop('checked',false).parent().removeClass('active').blur();\n              }\n          webUpd=true;\n          $(dial_name).val(lights[i].brightness).trigger(\"change\");\n          webUpd=false;\n         }\n        }\n    }\n    });\n    //setTimeout(executeQuery, 5000); // you could choose not to continue on failure...\n    }\n\n    $(document).ready(function() {\n    $eTag=\"sasd12312sdfsdf=\";\n    webUpd=false;\n    getOnly=false;\n    // run the first time; all subsequent calls will take care of themselves\n    //setInterval(executeQuery, 3000);\n    executeQuery();\n    if (\"WebSocket\" in window) wsConnect();\n    else GetDataIn=setInterval(executeQuery,2000);\n//    GetDataIn=setInterval(executeQuery, 120000);\n    });\n</script>\n</body>\n</html>",
-    "x": 589,
-    "y": 751,
+    "x": 598,
+    "y": 753,
     "wires": [
       [
-        "5cb987e6.a34678"
+        "d2c49182.2d3b7"
       ]
     ]
   },
   {
-    "id": "5cb987e6.a34678",
+    "id": "d2c49182.2d3b7",
     "type": "http response",
-    "z": "811c60ec.7ee3a",
+    "z": "f8e35a3.f071ca8",
     "name": "",
-    "x": 746,
-    "y": 750,
+    "x": 755,
+    "y": 752,
     "wires": []
   },
   {
-    "id": "6f74fc90.908b04",
+    "id": "f0f8b046.0f075",
     "type": "template",
-    "z": "811c60ec.7ee3a",
+    "z": "f8e35a3.f071ca8",
     "name": "",
     "field": "payload",
     "fieldType": "msg",
     "format": "handlebars",
     "template": "<!DOCTYPE html>\n<html lang=\"en\"><!--manifest=\"manifest.cache\"-->\n<head>\n    <meta charset=\"utf-8\">\n\t<meta name=\"mobile-web-app-capable\" content=\"yes\">\n    <meta name=\"apple-mobile-web-app-capable\" content=\"yes\" />\n    <meta name=\"apple-mobile-web-app-status-bar-style\" content=\"black\" />\n    <meta name=\"viewport\" content = \"width = device-width, initial-scale = 1.0, user-scalable = yes\" />\n    <title>Configuration</title>\n    <link rel=\"stylesheet\" type=\"text/css\" href=\"bootstrap/css/bootstrap.min.css\" />\n    <link href=\"//maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css\" rel=\"stylesheet\"> \n    <link rel=\"stylesheet\" type=\"text/css\" href=\"css/local.css\" />\n    <link rel=\"stylesheet\" href=\"css/weather-icons.css\">\n    <link rel=\"stylesheet\" href=\"css/weather-icons-wind.css\">\n    <link rel=\"stylesheet\" type=\"text/css\" href=\"css/animate.css\" />\n    <link rel=\"stylesheet\" type=\"text/css\" href=\"css/c-ico.css\">\n    <link rel=\"stylesheet\" type=\"text/css\" href=\"css/selectize.bootstrap3.css\" />\n    <style>\n    .form-horizontal .control-label {\n        padding-top: 0px;\n        margin-bottom: 0;\n        text-align: right;\n    }\n    .form-control {\n        display: block;\n        width: 100%;\n        height: 38px;\n        padding: 8px 12px;\n        font-size: 14px;\n        line-height: 1.42857143;\n        color: #337AB7;\n    }\n    .form_config{\n        padding-top: 0px;\n    }\n    .config_label {\n        padding-top: 0px;\n        color: #C7A173;\n    }\n </style>\n</head>\n<body >\n<div class=\"container-fluid\">\n    <div class=\"col-lg-6 col-xs-12 col-md-12 col-sm-12\" style=\"background:none;\"> \n        <div class=\"panel panel-primary panel-config\">\n      <!-- Default panel contents -->\n            <div class=\"panel-heading\" id=\"Header\">\n                <span class=\"fa fa-cogs\" aria-hidden=\"true\">\n                    Application configuration\n                </span>    \n            </div>\n            <div class=\"panel-body\">\n                <form class=\"form-horizontal form_config\" role=\"form\" id=\"cfg_form\">\n                    {{#payload.txt_fields}}\n                  <div class=\"form-group\">\n                    <label class=\"control-label col-sm-2 config_label\" for=\"{{item}}\">{{label}}</label>\n                    <div class=\"col-sm-10\">\n                      <input type=\"{{type}}\" class=\"form-control\" name=\"{{item}}\" id=\"{{item}}\" placeholder=\"Enter {{label}}\" value=\"{{value}}\" {{#value}}checked{{/value}} >\n                    </div>\n                  </div>\n                   {{/payload.txt_fields}}\n                    <div class=\"form-group\">\n                        <label class=\"control-label col-sm-2 config_label\">UI Shortcuts</label>\n                        <div class=\"col-sm-10\">\n                            <select class=\"form-control form-primary\" name=\"tab_ui_shortcuts\" id=\"tab_ui_shortcuts\" multiple>\n                                {{#payload.scenes}}\n                                    <option class=\"option option-primary\" value=\"{{name}}\" {{#selected}} selected=\"selected\"{{/selected}} >{{name}}</option>\n                                {{/payload.scenes}}\n                            </select>\n                        </div>\n                    </div>\n                <button type=\"submit\" id=\"sbmt_form\" class=\"btn btn-primary btn-block\">Submit</button>\n                <button type=\"button\"  id=\"refresh_wink\" class=\"btn btn-warning btn-block\">Refresh Wink Data</button>\n                </form>\n            </div>    \n        </div>\n    </div>\n</div>    \n<script type=\"text/javascript\" src=\"js/jquery-1.10.2.min.js\"></script>\n<script type=\"text/javascript\" src=\"bootstrap/js/bootstrap.min.js\" async></script>\n<script type=\"text/javascript\" src=\"js/standalone/selectize.min.js\"></script>\n<script type=\"text/javascript\" src=\"js/jquery.noty.packaged.min.js\" async></script>\n\n<script>\n  $(document).ready(function() {\n    $('#tab_ui_shortcuts').selectize({\n         plugins: ['remove_button'],\n         delimiter: ',',\n        maxItems: 6\n        });\n        $(\"#refresh_wink\").on('click', function(event){\n        event.preventDefault();\n        $.ajax({\n            url: \"/red/wink_query\",\n            type: \"POST\",\n            data: $(this).serialize(),\n\n            success: function(){\n                //alert(\"Information has been updated successfully\");\n            var n1 =  noty({\n                    layout      : 'center',\n                    text        : '<i class=\"fa fa-2x fa-spinner fa-spin active\"></i><font size=\"4\">  Refreshing Wink data...</font>',\n                    type        : 'warning',\n                    modal       : true,\n                    theme       : 'bootstrapTheme'\n            });\n            setTimeout(function () {\n                            n1.close();\n                            window.parent.location.reload();\n            }, 35000);\n            }\n        });\n        });\n        $(\"#cfg_form\").submit(function(e){\n        e.preventDefault();\n        $.ajax({\n            url: \"/freeboard/save_cfg\",\n            type: \"POST\",\n            data: $(this).serialize(),\n\n            success: function(){\n                //alert(\"Information has been updated successfully\");\n                var n =  noty({\n                    layout      : 'center',\n                    text        : '<b>Success<b><br>Configuration has been saved successfully',\n                    type        : 'information',\n                    modal       : true,\n                    theme       : 'relax',\n                    buttons     : [\n                        { addClass: 'btn btn-primary', text: 'Ok', onClick: function (n) {\n                            n.close();\n                            }\n                        }\n                    ]\n                });\n            }\n\n\n        });\n    });\n  });\n</script>\n</body>\n</html>",
-    "x": 581,
-    "y": 1278,
+    "x": 590,
+    "y": 1280,
     "wires": [
       [
-        "c718bffd.38e74"
+        "6bbe97c9.944168"
       ]
     ]
   },
   {
-    "id": "c718bffd.38e74",
+    "id": "6bbe97c9.944168",
     "type": "http response",
-    "z": "811c60ec.7ee3a",
+    "z": "f8e35a3.f071ca8",
     "name": "",
-    "x": 738,
-    "y": 1277,
+    "x": 747,
+    "y": 1279,
     "wires": []
   },
   {
-    "id": "a3c43a52.5c3bc8",
+    "id": "2786450c.d879ba",
     "type": "http in",
-    "z": "811c60ec.7ee3a",
+    "z": "f8e35a3.f071ca8",
     "name": "",
     "url": "/freeboard/getConfig",
     "method": "get",
     "swaggerDoc": "",
-    "x": 153,
-    "y": 1274,
+    "x": 162,
+    "y": 1276,
     "wires": [
       [
-        "6716455.f98e9bc"
+        "f46aa141.0b956"
       ]
     ]
   },
   {
-    "id": "6716455.f98e9bc",
+    "id": "f46aa141.0b956",
     "type": "function",
-    "z": "811c60ec.7ee3a",
+    "z": "f8e35a3.f071ca8",
     "name": "Throw Config Data",
     "func": "if (msg.payload.token ==context.global.FREEBOARD_TOKEN || context.global.getCookie('exchange_token',msg.req.headers.cookie)==context.global.FREEBOARD_TOKEN){\n//if (true){\n// text fields array\ntxt_fields=[]\ntxt_fields.push({\n    type:\"text\",\n    item:\"lat\",\n    label:\"Home Lattitude\",\n    value : context.global.HomeLocation.lat || \"\" \n});\n\ntxt_fields.push({\n    type:\"text\",\n    item:\"lon\",\n    label:\"Home Longtitude\",\n    value : context.global.HomeLocation.lon || \"\" \n});\n\ntxt_fields.push({\n    type:\"text\",\n    item:\"forecastIoApiKey\",\n    label:\"Forecast.io API Key\",\n    value : context.global.forecastIoApiKey || \"\" \n});\n//txt_fields.push({\n//    type:\"text\",    \n//    item:\"FREEBOARD_TOKEN\",\n//    label:\"Freeboard Token\",\n//    value: context.global.FREEBOARD_TOKEN || \"\" \n//});\ntxt_fields.push({\n    type:\"text\",    \n    item:\"IFTTT_TOKEN\",\n    label:\"IFTTT Token\",\n    value: context.global.IFTTT_TOKEN || \"\" \n});\ntxt_fields.push({\n    type:\"text\",\n    item:\"LIFX_TOKEN\",\n    label:\"Lifx API Key\",\n    value: context.global.LIFX_TOKEN || \"\" \n});\ntxt_fields.push({\n    type:\"text\",\n    item:\"InitialStateKey\",\n    label:\"InitialState.com Api Key\",\n    value: context.global.InitialStateKey ||\"\"\n});\ntxt_fields.push({\n    type:\"checkbox\",    \n    item:\"motionAdjustTstat\",\n    label:\"Motion affects thermostat?\",\n    value: context.global.motionAdjustTstat || false\n});\n\ntxt_fields.push({\n    type:\"checkbox\",    \n    item:\"HoursFormat24\",\n    label:\"Use 24 hours time format?\",\n    value: context.global.HoursFormat24 || false\n});\n\ntxt_fields.push({\n    type:\"checkbox\",    \n    item:\"LightsNotification\",\n    label:\"Show Light Changes in the log?\",\n    value: context.global.LightsNotification || false\n});\n\n\nmsg.payload.txt_fields=txt_fields;\nmsg.payload.scenes=[]\nfor (var s in context.global.winkState.scenes){\n    var scene=context.global.winkState.scenes[s];\n    if ('name' in scene){\n    msg.payload.scenes.push({\n        name:scene.name,\n        id:scene.id,\n        selected:(context.global.tab_ui_shortcuts.indexOf(scene.name)!=-1 ? true : false)\n    });\n    } else node.warn(scene)\n}\ntxt_area_fields=[];\n\ntxt_area_fields.push({FosCam : JSON.stringify(context.global.foscam || \"\")});\ntxt_area_fields.push({SamsungCam : JSON.stringify(context.global.SamsungCam || \"\")});\ntxt_area_fields.push({DlinkCam : JSON.stringify(context.global.DlinkCam || \"\")});\ntxt_area_fields.push({camera_motion : JSON.stringify(context.global.camera_motion || \"\")});\n//txt_area_fields.push({tab_ui_shortcuts : JSON.stringify(context.global.tab_ui_shortcuts || \"\")});\nmsg.payload.txt_area_fields=txt_area_fields;\n\nmsg.statusCode=\"200\";\nreturn msg;\n}\nelse\n{\n    //msg.payload=\"Not Authorized\";\n   msg.statusCode=\"403\";\n   return msg;\n//   msg.res.send(\"403\",\"Forbidden\");\n//  return;\n}\n",
     "outputs": 1,
     "noerr": 0,
-    "x": 394.4999694824219,
-    "y": 1278,
+    "x": 403.4999694824219,
+    "y": 1280,
     "wires": [
       [
-        "6f74fc90.908b04"
+        "f0f8b046.0f075"
       ]
     ]
   },
   {
-    "id": "4ecda794.b13258",
+    "id": "fa2b0f6.f05d4f",
     "type": "http in",
-    "z": "811c60ec.7ee3a",
+    "z": "f8e35a3.f071ca8",
     "name": "",
     "url": "/freeboard/save_cfg",
     "method": "post",
     "swaggerDoc": "",
-    "x": 141,
-    "y": 1330,
+    "x": 150,
+    "y": 1332,
     "wires": [
       [
-        "51f04a9b.ae0fb4"
+        "64f5f0e1.9b0a1"
       ]
     ]
   },
   {
-    "id": "2567091b.da98f6",
+    "id": "353ea4d9.cac15c",
     "type": "debug",
-    "z": "811c60ec.7ee3a",
+    "z": "f8e35a3.f071ca8",
     "name": "",
     "active": false,
     "console": "false",
     "complete": "payload",
-    "x": 719,
-    "y": 1365,
+    "x": 728,
+    "y": 1367,
     "wires": []
   },
   {
-    "id": "51f04a9b.ae0fb4",
+    "id": "64f5f0e1.9b0a1",
     "type": "function",
-    "z": "811c60ec.7ee3a",
+    "z": "f8e35a3.f071ca8",
     "name": "",
     "func": "if (msg.payload.token ==context.global.FREEBOARD_TOKEN || context.global.getCookie('exchange_token',msg.req.headers.cookie)==context.global.FREEBOARD_TOKEN){\n    msg.statusCode=200;\n    for (var v in msg.payload){\n    if (v=='lat'){\n        if (typeof (context.global.HomeLocation) === 'undefined') context.global.HomeLocation={};\n        context.global.HomeLocation.lat=msg.payload['lat'];\n    } else if (v=='lon'){\n        if (typeof (context.global.HomeLocation) === 'undefined') context.global.HomeLocation={};\n        context.global.HomeLocation.lon=msg.payload['lon'];\n    }\n    else    context.global[v]=msg.payload[v];\n    }\n    if (!('motionAdjustTstat' in msg.payload)) context.global.motionAdjustTstat=false\n    else context.global.motionAdjustTstat=true\n    if (!('HoursFormat24' in msg.payload)) context.global.HoursFormat24=false\n    else context.global.HoursFormat24=true\n    \n    if (!('LightsNotification' in msg.payload)) context.global.LightsNotification=false\n    else context.global.LightsNotification=true\n}\nmsg.url=context.global.BlueMixUrlBase+'/red/update_app_cfg';\nmsg.method=\"POST\";\nmsg.headers= {\n    \"Authorization\":\"Bearer \"+context.global.FREEBOARD_TOKEN\n};\nmsg.payload={\n   db_mode:\"update\"\n}\nnode.send(msg)\n\n\n",
     "outputs": "1",
     "noerr": 0,
-    "x": 354,
-    "y": 1330,
+    "x": 363,
+    "y": 1332,
     "wires": [
       [
-        "2567091b.da98f6",
-        "df6aceb6.20953",
-        "121652bb.ede9ad"
+        "353ea4d9.cac15c",
+        "62be8757.9d4178",
+        "463860c5.b9c7a"
       ]
     ]
   },
   {
-    "id": "df6aceb6.20953",
+    "id": "62be8757.9d4178",
     "type": "http response",
-    "z": "811c60ec.7ee3a",
+    "z": "f8e35a3.f071ca8",
     "name": "",
-    "x": 520,
-    "y": 1389,
+    "x": 529,
+    "y": 1391,
     "wires": []
   },
   {
-    "id": "121652bb.ede9ad",
+    "id": "463860c5.b9c7a",
     "type": "http request",
-    "z": "811c60ec.7ee3a",
+    "z": "f8e35a3.f071ca8",
     "name": "",
     "method": "use",
     "ret": "txt",
     "url": "",
-    "x": 567,
-    "y": 1319,
+    "x": 576,
+    "y": 1321,
     "wires": [
       []
     ]
   },
   {
-    "id": "6eb934e.f9146cc",
+    "id": "173a875c.e8c579",
     "type": "http in",
-    "z": "811c60ec.7ee3a",
+    "z": "f8e35a3.f071ca8",
     "name": "",
     "url": "/freeboard/MySummaryJson",
     "method": "get",
     "swaggerDoc": "",
-    "x": 154,
-    "y": 408,
+    "x": 163,
+    "y": 410,
     "wires": [
       [
-        "34bf4969.cb40b6"
+        "73a1f70f.8c5e08"
       ]
     ]
   },
   {
-    "id": "3ff479a9.c00b86",
+    "id": "1bd913f3.e426ec",
     "type": "function",
-    "z": "811c60ec.7ee3a",
+    "z": "f8e35a3.f071ca8",
     "name": "",
     "func": "msg.topic='page';\nreturn msg;",
     "outputs": 1,
     "noerr": 0,
-    "x": 374,
-    "y": 354,
+    "x": 383,
+    "y": 356,
     "wires": [
       [
-        "781ae340.87e51c"
+        "91fb3295.6e04d"
       ]
     ]
   },
   {
-    "id": "34bf4969.cb40b6",
+    "id": "73a1f70f.8c5e08",
     "type": "function",
-    "z": "811c60ec.7ee3a",
+    "z": "f8e35a3.f071ca8",
     "name": "",
     "func": "msg.topic='json';\nreturn msg;",
     "outputs": 1,
     "noerr": 0,
-    "x": 375,
-    "y": 407,
+    "x": 384,
+    "y": 409,
     "wires": [
       [
-        "781ae340.87e51c"
+        "91fb3295.6e04d"
       ]
     ]
   },
   {
-    "id": "f5aa70b2.0a559",
+    "id": "da779247.25887",
     "type": "switch",
-    "z": "811c60ec.7ee3a",
+    "z": "f8e35a3.f071ca8",
     "name": "",
     "property": "topic",
     "propertyType": "msg",
@@ -1149,57 +1132,74 @@
     ],
     "checkall": "true",
     "outputs": 2,
-    "x": 716,
-    "y": 399,
+    "x": 725,
+    "y": 401,
     "wires": [
       [
-        "ce3b8941.31c478"
+        "8c9b3864.7364c8"
       ],
       [
-        "198e826b.e6717e"
+        "31bfb376.ce404c"
       ]
     ]
   },
   {
-    "id": "198e826b.e6717e",
+    "id": "31bfb376.ce404c",
     "type": "json",
-    "z": "811c60ec.7ee3a",
+    "z": "f8e35a3.f071ca8",
     "name": "",
-    "x": 882,
-    "y": 424,
+    "x": 891,
+    "y": 426,
     "wires": [
       [
-        "e0645bda.1f9ba8"
+        "da5a282f.25a5d8"
       ]
     ]
   },
   {
-    "id": "6ff2d1d5.900d3",
+    "id": "2d5ed16d.d2a12e",
     "type": "function",
-    "z": "811c60ec.7ee3a",
+    "z": "f8e35a3.f071ca8",
     "name": "GenSummary",
     "func": "var pct = function(value) {\n    return ((value > 1.0 ? value : value * 100).toFixed(0) + '%')\n}\nvar dual_temp = function (value) {\n    return (typeof value === 'number' ? (value.toFixed(1) + 'C / ' + ((value * 1.8) + 32).toFixed(1) + 'F') : '')\n}\nif ((msg.req.body.uid==context.global.WinkUser.uid && msg.req.body.pwd==context.global.WinkUser.pwd)||context.global.getCookie('exchange_token',msg.req.headers.cookie)==context.global.FREEBOARD_TOKEN || msg.payload.token==context.global.FREEBOARD_TOKEN){\n//if (true){\nmsg.statusCode=\"200\";\nmsg.payload={}\n//msg.payload.pwd_str=context.global.FREEBOARD_TOKEN;\n//msg.payload.ifttt_token=context.global.FREEBOARD_TOKEN;\nmsg.payload.home_lat=context.global.HomeLocation.lat;\nmsg.payload.home_lon=context.global.HomeLocation.lon;\nmsg.payload.weather=context.global.Weather;\nmsg.payload.HoursFormat24=context.global.HoursFormat24 || false;\n//msg.payload.lights=context.global.winkState.groups['@lights'];\n//msg.payload.wholeHouse=context.global.winkState.groups['.all'];\nvar all=context.global.winkState.groups['.all'];\nvar l=context.global.winkState.groups['@lights'];\nmsg.payload.home_components=[];\n//msg.payload.hasLocks=false;\n//msg.payload.hasCoAlarms=false;\n//msg.payload.hasLights=false;\nif ('temperature' in context.global.winkState.groups['.all']){\n    //node.warn('adding temperature')\n    msg.payload.home_components.push(\n        {\n            type:'temperature',\n            icon:'wi wi-home-icon wi-thermometer',\n//            icon:'wi-humidity',\n            label:\"Temperature\",\n            value:dual_temp(all.temperature.average),\n            icon_color:(all.temperature.average<10 || all.temperature.average > 50 ? 'detail-warning' : 'detail-ok')\n        });\n}\nif ('humidity' in context.global.winkState.groups['.all']){\n   //     node.warn('adding humidity')\n    msg.payload.home_components.push(\n        {\n            type:'humidity',\n            icon:'wi wi-home-icon wi-humidity',\n            label:\"Humidity\",\n            value:pct(all.humidity.average),\n            icon_color:(all.humidity.average < 0.1 || all.humidity.average > 90 ? 'detail-warning' : 'detail-ok')\n        });\n}\nif ('smoke_detected' in context.global.winkState.groups['.all']){\n    //node.warn('adding smoke det')\n    msg.payload.home_components.push(\n        {\n            type:'smoke_detected',\n            icon:'wi wi-home-icon cicon-fire',\n            label:\"Smoke\",\n            value:(all.smoke_detected.and || all.smoke_detected.or ? \"Fire!!\" : \"OK\"),\n            icon_color: (all.smoke_detected.and || all.smoke_detected.or ? \"detail-danger\" : \"detail-ok\")\n        });\n    //    node.warn('adding co2 det')\n    msg.payload.home_components.push(\n        {\n            type:'co_detected',\n            icon:'wi wi-home-icon cicon-CO2',\n            label:\"CO2\",\n            value:(all.co_detected.and || all.co_detected.or ? \"CO2!!\" : \"OK\"),\n            icon_color:(all.co_detected.and || all.co_detected.or ? \"detail-danger\" : \"detail-ok\"),\n        });\n}\nif ('liquid_detected' in context.global.winkState.groups['.all']){\n    //node.warn('adding leak sens')\n    msg.payload.home_components.push({\n        type:'liquid_detected',\n        icon:'wi wi-home-icon cicon-droplet',\n        label:\"Leaks\",\n        value:(all.liquid_detected.and || all.liquid_detected.or ? \"Leak detected\" : \"No Leaks\"),\n        icon_color:(all.liquid_detected.and || all.liquid_detected.or ?  \"detail-danger\" : \"detail-ok\")\n    });\n}\nif ('motion' in context.global.winkState.groups['.all']){\n   // node.warn('adding motion sens')\n    msg.payload.home_components.push(\n        {\n            type:'motion',\n            icon:'wi wi-home-icon cicon-feed',\n            label:\"Motion\",\n            value:(all.motion.and || all.motion.or ? \"Motion\" : \"No Motion\"),\n            icon_color:(all.motion.and || all.motion.or ?  'detail-warning' : 'detail-ok')\n        });\n}\nif ('locked' in context.global.winkState.groups['.all']){\n    //node.warn('adding locks')\n    msg.payload.home_components.push(\n        {\n            type:'locked', \n            icon:'wi wi-home-icon cicon-doors4',\n            label:\"Locks\",\n            value:(all.locked.and || all.locked.or ? all.locked.true_count+\" Locked\" : all.locked.false_count+\" Unlocked\"),\n            icon_color:(all.locked.and || all.locked.or ?  'detail-ok' : 'detail-warning')\n        });\n}\n\nif ('opened' in context.global.winkState.groups['.all']){\n    //node.warn('adding trippers')\n    msg.payload.home_components.push(\n        {\n            type:'opened',\n            icon:'wi wi-home-icon '+(all.opened.and || all.opened.or ? 'cicon-opened_door':'cicon-closed_door'),\n            label:\"Doors\",\n            value:(all.opened.and || all.opened.or ? all.opened.true_count+\" Opened\" :all.opened.false_count+\" Closed\"),\n            icon_color:(all.opened.and || all.opened.or ?  'detail-warning' : 'detail-ok')\n        });\n}\nif ('light_bulbs' in context.global.winkState || 'binary_switches' in context.global.winkState){\n     //   node.warn('adding lights')\n        msg.payload.home_components.push(\n            {type:'lights',\n            icon:'wi wi-home-icon cicon-bulb',\n            label:\"Lights\",\n            value:(l.powered.and || l.powered.or ? l.powered.true_count+\" ON\" : l.powered.false_count+\" OFF\"),\n            icon_color:(l.powered.and || l.powered.or ? 'detail-warning' : 'detail-ok')\n            });\n}\n\nif ('remaining' in context.global.winkState.groups['.all']){\n    //node.warn('adding trippers')\n    msg.payload.home_components.push(\n        {\n                type:'propane',\n                icon:'wi wi-home-icon ' + (all.remaining.min <=0.50  ? 'cicon-propane_tnk_half' : 'cicon-propane_tnk_full'),\n                label:\"Propane\",\n                value:pct(all.remaining.min),\n                icon_color:(all.remaining.min <0.10  ?  'detail-danger' : all.remaining.min <=0.50 ? 'detail-warning' : 'detail-ok')\n        });\n}\n\nif ('battery' in context.global.winkState.groups['.all']){\n    //node.warn('adding trippers')\n    msg.payload.home_components.push(\n        {\n            type:'battery',\n            icon:'fa wi-home-icon '+(all.battery.min <0.25  ? 'fa-battery-quarter': all.battery.min <=0.50  ? 'fa-battery-half':'fa-battery-full'),\n            label:\"Battery\",\n            value:(all.battery.min <0.10  ? \"Check\" : all.battery.min <=0.50  ? pct(all.battery.min) :\"OK\"),\n            icon_color:(all.battery.min <0.10  ?  'detail-danger' : all.battery.min <=0.50  ?  'detail-warning' : 'detail-ok')\n        });\n}\n\nmsg.res.statusCode=\"200\";\nif (msg.topic=='json'){\n    var Etag=\"\";\n    if ('CRYPTO' in context.global) Etag=context.global.CRYPTO.createHash(\"md5\").update(JSON.stringify(msg.payload),\"utf8\").digest(\"hex\");\n    msg.headers={\n      'Content-Type': 'application/json',\n      'ETag': Etag\n    };\n}\n} else {\nmsg.res.statusCode=\"403\";\n}\nreturn msg;",
     "outputs": 1,
     "noerr": 0,
-    "x": 529,
-    "y": 437,
+    "x": 538,
+    "y": 439,
     "wires": [
       []
     ]
   },
   {
-    "id": "9cf0b00c.630f5",
+    "id": "ac188778.53e778",
     "type": "function",
-    "z": "811c60ec.7ee3a",
+    "z": "f8e35a3.f071ca8",
     "name": "Generate Freeboard by Group",
     "func": "if (msg.payload.auth ==context.global.FREEBOARD_TOKEN){\nvar pane_idx = {};\nvar freeboard = {}\nvar bulbs = 0;\nfreeboard.version=\"1\";\nfreeboard.allow_edit=false;\nfreeboard.panes=[];\nfreeboard.plugins= [];\nvar i=0;\n\nfor (var key in context.global.winkState.sensor_pods)\n{\n    //  node.warn(key+\" \"+ context.global.winkDevCap[key].sensor_types)\n    //pane_id=4;\n    if (typeof context.global.winkState.sensor_pods[key].motion !== 'undefined') \n    { \n        if( typeof pane_idx.motion !=='undefined') \n        {\n            pane_id=pane_idx.motion; //motion\n        } else\n        {\n            freeboard.panes.push(  {\n                \"title\":\"Motion Sensors\",\n                \"width\": 1,\n                \"row\": {\n                    \"3\": 1\n                },\n                \"col\": {\n                    \"3\": 1\n                },\n                \"col_width\": 1,\n                widgets:[]\n            });\n            pane_idx.motion=i;\n            pane_id=i;\n            i++;\n        }\n    } else if (typeof context.global.winkState.sensor_pods[key].opened !== 'undefined') \n    {\n        if( typeof pane_idx.trippers !=='undefined') \n        {\n            pane_id=pane_idx.trippers; //motion\n        } else\n        {\n            freeboard.panes.push(  {\n                \"title\":\"Trippers\",\n                \"width\": 1,\n                \"row\": {\n                    \"3\": 1\n                },\n                \"col\": {\n                    \"3\": 1\n                },\n                \"col_width\": 1,\n                widgets:[]\n            });\n            pane_idx.trippers=i;\n            pane_id=i;\n            i++;\n        }\n\n    } else\n    {\n        //other sensors pane\n        if( typeof pane_idx.other !=='undefined') \n        {\n            pane_id=pane_idx.other; //motion\n        } else\n        {\n            freeboard.panes.push(  {\n                \"title\":\"Multi Sensors\",\n                \"width\": 1,\n                \"row\": {\n                    \"3\": 1\n                },\n                \"col\": {\n                    \"3\": 1\n                },\n                \"col_width\": 1,\n                widgets:[]\n            });\n            pane_idx.other=i;\n            pane_id=i;\n            i++;\n        }\n    }\n    if(context.global.winkDevCap[key].fields)\n    {\n        for (s=0; s<context.global.winkDevCap[key].fields.length;s++)\n        {\n            var field=context.global.winkDevCap[key].fields[s].field\n            if( context.global.winkState.sensor_pods[key][field] !== null)\n            {\n                freeboard.panes[pane_id].widgets.push(\n                 {\n                     \"type\": \"indicator\",\n                     \"settings\": \n                      {\n                          \"title\":key + \" \" + field.replace(\"_\",\" \").replace(/opened|detected|motion|occupied|state/,\"\"),\n                          \"value\":\"wink.indicator.value(datasources[\\\"Node-Red\\\"] && datasources[\\\"Node-Red\\\"][\\\"WinkData\\\"][\\\"sensor_pods\\\"][\\\"\" + key + \"\\\"],\\\"\" + field +\"\\\")\",\n                          \"on_text\":\"wink.indicator.on_text(datasources[\\\"Node-Red\\\"] && datasources[\\\"Node-Red\\\"][\\\"WinkData\\\"][\\\"sensor_pods\\\"][\\\"\" + key + \"\\\"],\\\"\" + field +\"\\\")\",\n                          \"off_text\":\"wink.indicator.off_text(datasources[\\\"Node-Red\\\"] && datasources[\\\"Node-Red\\\"][\\\"WinkData\\\"][\\\"sensor_pods\\\"][\\\"\" + key + \"\\\"],\\\"\" + field +\"\\\")\",\n                          \"style_element\":\"wink.indicator.style_element(datasources[\\\"Node-Red\\\"] && datasources[\\\"Node-Red\\\"][\\\"WinkData\\\"][\\\"sensor_pods\\\"][\\\"\" + key + \"\\\"],\\\"\" + field +\"\\\")\"\n                      }\n                 })\n            }\n      }\n   }\n} //end sensor pods\n//i=0;\n\nfor (var key in context.global.winkState.groups)\n{\n    if(key.substring(0,1)!==\".\" && key.substring(0,1)!==\"@\" && context.global.winkState.groups[key].members)\n    {\n        freeboard.panes.push(  {\n            \"title\":context.global.winkState.groups[key].name + \" -  Lights and Switches\",\n            \"width\": 1,\n            \"row\": {\n                \"3\": 1\n            },\n            \"col\": {\n                \"3\": 1\n            },\n            \"col_width\": 1,\n            widgets:[]\n        });\n        pane_idx.key=i;\n        pane_id=i;\n        i++;\n        \n        for (var light_bulbs in context.global.winkState.groups[key].members)\n        {\n            light_type=context.global.winkState.groups[key].members[light_bulbs].object_type\n            freeboard.panes[pane_id].widgets.push(\n            {\n                \"type\": \"indicator\",\n                \"settings\": {\n                \"title\":light_bulbs,\n                \"value\":\"wink.indicator.value(datasources[\\\"Node-Red\\\"] && datasources[\\\"Node-Red\\\"][\\\"WinkData\\\"][\\\"\"+light_type+\"\\\"][\\\"\" + light_bulbs + \"\\\"])\",\n                \"on_text\":\"wink.indicator.on_text(datasources[\\\"Node-Red\\\"] && datasources[\\\"Node-Red\\\"][\\\"WinkData\\\"][\\\"\"+light_type+\"\\\"][\\\"\" + light_bulbs + \"\\\"])\",\n                \"off_text\":\"wink.indicator.off_text(datasources[\\\"Node-Red\\\"] && datasources[\\\"Node-Red\\\"][\\\"WinkData\\\"][\\\"\"+light_type+\"\\\"][\\\"\" + light_bulbs + \"\\\"])\",\n                \"style_element\":\"wink.indicator.style_element(datasources[\\\"Node-Red\\\"] && datasources[\\\"Node-Red\\\"][\\\"WinkData\\\"][\\\"\"+light_type+\"\\\"][\\\"\" + light_bulbs + \"\\\"])\"\n                }\n            })\n            bulbs++;\n            context.global.winkState[light_type][light_bulbs].freeboard = 1;\n        }\n    }\n}\n\n\n\nfor (var key in context.global.winkState.binary_switches){\nif (context.global.winkState.binary_switches[key].freeboard && context.global.winkState.binary_switches[key].freeboard!=1)\n{\n    if( typeof pane_idx.lights !=='undefined') \n    {\n        pane_id=pane_idx.lights; //motion\n    } else\n    {\n        freeboard.panes.push(  {\n            \"title\":\"Switches\",\n            \"width\": 1,\n            \"row\": {\n                \"3\": 1\n            },\n            \"col\": {\n                \"3\": 1\n            },\n            \"col_width\": 1,\n            widgets:[]\n        });\n        pane_idx.lights=i;\n        pane_id=i;\n        i++;\n    }\n  \n    freeboard.panes[pane_id].widgets.push(\n    {\n    \"type\": \"indicator\",\n    \"settings\": {\n        \"title\":key,\n        \"value\":\"wink.indicator.value(datasources[\\\"Node-Red\\\"] && datasources[\\\"Node-Red\\\"][\\\"WinkData\\\"][\\\"binary_switches\\\"][\\\"\" + key + \"\\\"])\",\n        \"on_text\":\"wink.indicator.on_text(datasources[\\\"Node-Red\\\"] && datasources[\\\"Node-Red\\\"][\\\"WinkData\\\"][\\\"binary_switches\\\"][\\\"\" + key + \"\\\"])\",\n        \"off_text\":\"wink.indicator.off_text(datasources[\\\"Node-Red\\\"] && datasources[\\\"Node-Red\\\"][\\\"WinkData\\\"][\\\"binary_switches\\\"][\\\"\" + key + \"\\\"])\",\n        \"style_element\":\"wink.indicator.style_element(datasources[\\\"Node-Red\\\"] && datasources[\\\"Node-Red\\\"][\\\"WinkData\\\"][\\\"binary_switches\\\"][\\\"\" + key + \"\\\"])\"\n    }\n})\n}\n}// end bin switches\n\n\nfor (var key in context.global.winkState.light_bulbs){\nif (context.global.winkState.light_bulbs[key].freeboard && context.global.winkState.light_bulbs[key].freeboard!=1)\n{\n    if( typeof pane_idx.lights !=='undefined') \n    {\n        pane_id=pane_idx.lights; //motion\n    } else\n    {\n        freeboard.panes.push(  {\n            \"title\":\"Lights and Switches\",\n            \"width\": 1,\n            \"row\": {\n                \"3\": 1\n            },\n            \"col\": {\n                \"3\": 1\n            },\n            \"col_width\": 1,\n            widgets:[]\n        });\n        pane_idx.lights=i;\n        pane_id=i;\n        i++;\n    }\n    freeboard.panes[pane_id].widgets.push(\n    {\n        \"type\": \"indicator\",\n        \"settings\": {\n            \"title\":key,\n            \"value\":\"wink.indicator.value(datasources[\\\"Node-Red\\\"] && datasources[\\\"Node-Red\\\"][\\\"WinkData\\\"][\\\"light_bulbs\\\"][\\\"\" + key + \"\\\"])\",\n            \"on_text\":\"wink.indicator.on_text(datasources[\\\"Node-Red\\\"] && datasources[\\\"Node-Red\\\"][\\\"WinkData\\\"][\\\"light_bulbs\\\"][\\\"\" + key + \"\\\"])\",\n            \"off_text\":\"wink.indicator.off_text(datasources[\\\"Node-Red\\\"] && datasources[\\\"Node-Red\\\"][\\\"WinkData\\\"][\\\"light_bulbs\\\"][\\\"\" + key + \"\\\"])\",\n            \"style_element\":\"wink.indicator.style_element(datasources[\\\"Node-Red\\\"] && datasources[\\\"Node-Red\\\"][\\\"WinkData\\\"][\\\"light_bulbs\\\"][\\\"\" + key + \"\\\"])\"\n        }\n    })\n}\n} // end light bulbs\n\n\nfor (var key in context.global.winkState.powerstrips)\n{\n    if( typeof pane_idx.powerstrips !=='undefined') \n    {\n        pane_id=pane_idx.powerstrips; //motion\n    } else\n    {\n        freeboard.panes.push(  {\n            \"title\":\"Powerstrips\",\n            \"width\": 1,\n            \"row\": {\n                \"3\": 1\n            },\n            \"col\": {\n                \"3\": 1\n            },\n            \"col_width\": 1,\n            widgets:[]\n        });\n        pane_idx.powerstrips=i;\n        pane_id=i;\n        i++;\n    }\n    if (typeof context.global.winkState.powerstrips[key].powered !== 'undefined'){\n    freeboard.panes[pane_id].widgets.push(\n    {\n        \"type\": \"indicator\",\n        \"settings\": {\n            \"title\":key,\n            \"value\":\"wink.indicator.value(datasources[\\\"Node-Red\\\"] && datasources[\\\"Node-Red\\\"][\\\"WinkData\\\"][\\\"powerstrips\\\"][\\\"\" + key + \"\\\"])\",\n            \"on_text\":\"wink.indicator.on_text(datasources[\\\"Node-Red\\\"] && datasources[\\\"Node-Red\\\"][\\\"WinkData\\\"][\\\"powerstrips\\\"][\\\"\" + key + \"\\\"])\",\n            \"off_text\":\"wink.indicator.off_text(datasources[\\\"Node-Red\\\"] && datasources[\\\"Node-Red\\\"][\\\"WinkData\\\"][\\\"powerstrips\\\"][\\\"\" + key + \"\\\"])\",\n            \"style_element\":\"wink.indicator.style_element(datasources[\\\"Node-Red\\\"] && datasources[\\\"Node-Red\\\"][\\\"WinkData\\\"][\\\"powerstrips\\\"][\\\"\" + key + \"\\\"])\"\n        }\n    })\n    }\n} // end light bulbs\n\nfor (var key in context.global.winkState.locks)\n{\n    if( typeof pane_idx.locks !=='undefined') \n    {\n        pane_id=pane_idx.locks; //motion\n    } else\n    {\n        freeboard.panes.push(  {\n            \"title\":\"Locks\",\n            \"width\": 1,\n            \"row\": {\n                \"3\": 1\n            },\n            \"col\": {\n                \"3\": 1\n            },\n            \"col_width\": 1,\n            widgets:[]\n        });\n        pane_idx.locks=i;\n        pane_id=i;\n        i++;\n    }\n    freeboard.panes[pane_id].widgets.push(\n{\n    \"type\": \"indicator\",\n    \"settings\": {\n        \"title\":key,\n        \"value\":\"wink.indicator.value(datasources[\\\"Node-Red\\\"] && datasources[\\\"Node-Red\\\"][\\\"WinkData\\\"][\\\"locks\\\"][\\\"\" + key + \"\\\"])\",\n        \"on_text\":\"wink.indicator.on_text(datasources[\\\"Node-Red\\\"] && datasources[\\\"Node-Red\\\"][\\\"WinkData\\\"][\\\"locks\\\"][\\\"\" + key + \"\\\"])\",\n        \"off_text\":\"wink.indicator.off_text(datasources[\\\"Node-Red\\\"] && datasources[\\\"Node-Red\\\"][\\\"WinkData\\\"][\\\"locks\\\"][\\\"\" + key + \"\\\"])\",\n        \"style_element\":\"wink.indicator.style_element(datasources[\\\"Node-Red\\\"] && datasources[\\\"Node-Red\\\"][\\\"WinkData\\\"][\\\"locks\\\"][\\\"\" + key + \"\\\"])\"\n    }\n})\n    if (typeof context.global.winkState.locks[key].battery !== 'undefined')\n    {\n        freeboard.panes[pane_id].widgets.push(\n{\n    \"type\": \"indicator\",\n    \"settings\": {\n        \"title\":key + \" battery\",\n        \"value\":\"wink.indicator.value(datasources[\\\"Node-Red\\\"] && datasources[\\\"Node-Red\\\"][\\\"WinkData\\\"][\\\"locks\\\"][\\\"\" + key + \"\\\"],\\\"battery\\\")\",\n        \"on_text\":\"wink.indicator.on_text(datasources[\\\"Node-Red\\\"] && datasources[\\\"Node-Red\\\"][\\\"WinkData\\\"][\\\"locks\\\"][\\\"\" + key + \"\\\"],\\\"battery\\\")\",\n        \"off_text\":\"wink.indicator.off_text(datasources[\\\"Node-Red\\\"] && datasources[\\\"Node-Red\\\"][\\\"WinkData\\\"][\\\"locks\\\"][\\\"\" + key + \"\\\"],\\\"battery\\\")\",\n        \"style_element\":\"wink.indicator.style_element(datasources[\\\"Node-Red\\\"] && datasources[\\\"Node-Red\\\"][\\\"WinkData\\\"][\\\"locks\\\"][\\\"\" + key + \"\\\"],\\\"battery\\\")\"\n    }\n})\n}\n} //end locks\nfor (var key in context.global.winkState.smoke_detectors)\n{\n    if( typeof pane_idx.smoke !=='undefined') \n    {\n        pane_id=pane_idx.smoke; //motion\n    } else\n    {\n        freeboard.panes.push(  {\n            \"title\":\"Smoke Detectors\",\n            \"width\": 1,\n            \"row\": {\n                \"3\": 1\n            },\n            \"col\": {\n                \"3\": 1\n            },\n            \"col_width\": 1,\n            widgets:[]\n        });\n        pane_idx.smoke=i;\n        pane_id=i;\n        i++;\n    }\n    freeboard.panes[pane_id].widgets.push(\n{\n    \"type\": \"indicator\",\n    \"settings\": {\n        \"title\":key + (context.global.winkState.smoke_detectors[key].connection ? \" Smoke\" : \" Offline\"),\n        \"value\":\"wink.indicator.value(datasources[\\\"Node-Red\\\"] && datasources[\\\"Node-Red\\\"][\\\"WinkData\\\"][\\\"smoke_detectors\\\"][\\\"\" + key + \"\\\"],\\\"smoke_detected\\\")\",\n        \"on_text\":\"wink.indicator.on_text(datasources[\\\"Node-Red\\\"] && datasources[\\\"Node-Red\\\"][\\\"WinkData\\\"][\\\"smoke_detectors\\\"][\\\"\" + key + \"\\\"],\\\"smoke_detected\\\")\",\n        \"off_text\":\"wink.indicator.off_text(datasources[\\\"Node-Red\\\"] && datasources[\\\"Node-Red\\\"][\\\"WinkData\\\"][\\\"smoke_detectors\\\"][\\\"\" + key + \"\\\"],\\\"smoke_detected\\\")\",\n        \"style_element\":\"wink.indicator.style_element(datasources[\\\"Node-Red\\\"] && datasources[\\\"Node-Red\\\"][\\\"WinkData\\\"][\\\"smoke_detectors\\\"][\\\"\" + key + \"\\\"],\\\"smoke_detected\\\")\"\n    }\n})\n    \n    freeboard.panes[pane_id].widgets.push(\n{\n    \"type\": \"indicator\",\n    \"settings\": {\n        \"title\":key + (context.global.winkState.smoke_detectors[key].connection ? \" CO2\" : \" Offline\"),\n        \"value\":\"wink.indicator.value(datasources[\\\"Node-Red\\\"] && datasources[\\\"Node-Red\\\"][\\\"WinkData\\\"][\\\"smoke_detectors\\\"][\\\"\" + key + \"\\\"],\\\"co_detected\\\")\",\n        \"on_text\":\"wink.indicator.on_text(datasources[\\\"Node-Red\\\"] && datasources[\\\"Node-Red\\\"][\\\"WinkData\\\"][\\\"smoke_detectors\\\"][\\\"\" + key + \"\\\"],\\\"co_detected\\\")\",\n        \"off_text\":\"wink.indicator.off_text(datasources[\\\"Node-Red\\\"] && datasources[\\\"Node-Red\\\"][\\\"WinkData\\\"][\\\"smoke_detectors\\\"][\\\"\" + key + \"\\\"],\\\"co_detected\\\")\",\n        \"style_element\":\"wink.indicator.style_element(datasources[\\\"Node-Red\\\"] && datasources[\\\"Node-Red\\\"][\\\"WinkData\\\"][\\\"smoke_detectors\\\"][\\\"\" + key + \"\\\"],\\\"co_detected\\\")\"\n    }\n})\nif (typeof context.global.winkState.smoke_detectors[key].battery !== 'undefined')\n    {\n        freeboard.panes[pane_id].widgets.push(\n{\n    \"type\": \"indicator\",\n    \"settings\": {\n        \"title\":key + \" battery\",\n        \"value\":\"wink.indicator.value(datasources[\\\"Node-Red\\\"] && datasources[\\\"Node-Red\\\"][\\\"WinkData\\\"][\\\"smoke_detectors\\\"][\\\"\" + key + \"\\\"],\\\"battery\\\")\",\n        \"on_text\":\"wink.indicator.on_text(datasources[\\\"Node-Red\\\"] && datasources[\\\"Node-Red\\\"][\\\"WinkData\\\"][\\\"smoke_detectors\\\"][\\\"\" + key + \"\\\"],\\\"battery\\\")\",\n        \"off_text\":\"wink.indicator.off_text(datasources[\\\"Node-Red\\\"] && datasources[\\\"Node-Red\\\"][\\\"WinkData\\\"][\\\"smoke_detectors\\\"][\\\"\" + key + \"\\\"],\\\"battery\\\")\",\n        \"style_element\":\"wink.indicator.style_element(datasources[\\\"Node-Red\\\"] && datasources[\\\"Node-Red\\\"][\\\"WinkData\\\"][\\\"smoke_detectors\\\"][\\\"\" + key + \"\\\"],\\\"battery\\\")\"\n    }\n})\n}\n} //end smoke detectors\n\nfor (var key in context.global.winkState.thermostats)\n{\n    if( typeof pane_idx.tstats !=='undefined') \n    {\n        pane_id=pane_idx.tstats; //motion\n    } else\n    {\n        freeboard.panes.push(  {\n            \"title\":\"Thermostats\",\n            \"width\": 1,\n            \"row\": {\n                \"3\": 1\n            },\n            \"col\": {\n                \"3\": 1\n            },\n            \"col_width\": 1,\n            widgets:[]\n        });\n        pane_idx.tstats=i;\n        pane_id=i;\n        i++;\n    }\n\n//added so thermostats without max_set_point won't show [ecobee sensor compatibility]\nif (context.global.winkState.thermostats[key].max_set_point>0)\n{\n    freeboard.panes[pane_id].widgets.push(\n    {\n        \"type\": \"indicator\",\n        \"settings\": {\n            \"title\":key,\n            \"value\":\"wink.indicator.value(datasources[\\\"Node-Red\\\"] && datasources[\\\"Node-Red\\\"][\\\"WinkData\\\"][\\\"thermostats\\\"][\\\"\" + key + \"\\\"],\\\"mode\\\")\",\n            \"on_text\":\"wink.indicator.on_text(datasources[\\\"Node-Red\\\"] && datasources[\\\"Node-Red\\\"][\\\"WinkData\\\"][\\\"thermostats\\\"][\\\"\" + key + \"\\\"],\\\"mode\\\")\",\n            \"off_text\":\"wink.indicator.off_text(datasources[\\\"Node-Red\\\"] && datasources[\\\"Node-Red\\\"][\\\"WinkData\\\"][\\\"thermostats\\\"][\\\"\" + key + \"\\\"],\\\"mode\\\")\",\n            \"style_element\":\"wink.indicator.style_element(datasources[\\\"Node-Red\\\"] && datasources[\\\"Node-Red\\\"][\\\"WinkData\\\"][\\\"thermostats\\\"][\\\"\" + key + \"\\\"],\\\"mode\\\")\"\n        }\n    })\n}\n//if (typeof context.global.winkState.thermostats[key].users_away !== 'undefined')\n//    {\nfreeboard.panes[pane_id].widgets.push(\n{\n    \"type\": \"indicator\",\n    \"settings\": {\n        \"title\":key+\" Current temperature\",\n        \"value\":\"wink.indicator.value(datasources[\\\"Node-Red\\\"] && datasources[\\\"Node-Red\\\"][\\\"WinkData\\\"][\\\"thermostats\\\"][\\\"\" + key + \"\\\"],\\\"temperature\\\")\",\n        \"on_text\":\"wink.indicator.on_text(datasources[\\\"Node-Red\\\"] && datasources[\\\"Node-Red\\\"][\\\"WinkData\\\"][\\\"thermostats\\\"][\\\"\" + key + \"\\\"],\\\"temperature\\\")\",\n        \"off_text\":\"wink.indicator.off_text(datasources[\\\"Node-Red\\\"] && datasources[\\\"Node-Red\\\"][\\\"WinkData\\\"][\\\"thermostats\\\"][\\\"\" + key + \"\\\"],\\\"temperature\\\")\",\n        \"style_element\":\"wink.indicator.style_element(datasources[\\\"Node-Red\\\"] && datasources[\\\"Node-Red\\\"][\\\"WinkData\\\"][\\\"thermostats\\\"][\\\"\" + key + \"\\\"],\\\"temperature\\\")\"\n    }\n})\n//}\n} //end thermostats\n\nfor (var key in context.global.winkState.air_conditioners)\n{\n    if( typeof pane_idx.air_con !=='undefined') \n    {\n        pane_id=pane_idx.air_con; //motion\n    } else\n    {\n        freeboard.panes.push(  {\n            \"title\":\"Air Conditioners\",\n            \"width\": 1,\n            \"row\": {\n                \"3\": 1\n            },\n            \"col\": {\n                \"3\": 1\n            },\n            \"col_width\": 1,\n            widgets:[]\n        });\n        pane_idx.air_con=i;\n        pane_id=i;\n        i++;\n    }\n    freeboard.panes[pane_id].widgets.push(\n{\n    \"type\": \"indicator\",\n    \"settings\": {\n        \"title\":key,\n        \"value\":\"wink.indicator.value(datasources[\\\"Node-Red\\\"] && datasources[\\\"Node-Red\\\"][\\\"WinkData\\\"][\\\"air_conditioners\\\"][\\\"\" + key + \"\\\"])\",\n        \"on_text\":\"wink.indicator.on_text(datasources[\\\"Node-Red\\\"] && datasources[\\\"Node-Red\\\"][\\\"WinkData\\\"][\\\"air_conditioners\\\"][\\\"\" + key + \"\\\"])\",\n        \"off_text\":\"wink.indicator.off_text(datasources[\\\"Node-Red\\\"] && datasources[\\\"Node-Red\\\"][\\\"WinkData\\\"][\\\"air_conditioners\\\"][\\\"\" + key + \"\\\"])\",\n        \"style_element\":\"wink.indicator.style_element(datasources[\\\"Node-Red\\\"] && datasources[\\\"Node-Red\\\"][\\\"WinkData\\\"][\\\"air_conditioners\\\"][\\\"\" + key + \"\\\"])\"\n    }\n})\nfreeboard.panes[pane_id].widgets.push(\n{\n    \"type\": \"indicator\",\n    \"settings\": {\n        \"title\":key+ ' temperature',\n        \"value\":\"wink.indicator.value(datasources[\\\"Node-Red\\\"] && datasources[\\\"Node-Red\\\"][\\\"WinkData\\\"][\\\"air_conditioners\\\"][\\\"\" + key + \"\\\"],\\\"temperature\\\")\",\n        \"on_text\":\"wink.indicator.on_text(datasources[\\\"Node-Red\\\"] && datasources[\\\"Node-Red\\\"][\\\"WinkData\\\"][\\\"air_conditioners\\\"][\\\"\" + key + \"\\\"],\\\"temperature\\\")\",\n        \"off_text\":\"wink.indicator.off_text(datasources[\\\"Node-Red\\\"] && datasources[\\\"Node-Red\\\"][\\\"WinkData\\\"][\\\"air_conditioners\\\"][\\\"\" + key + \"\\\"],\\\"temperature\\\")\",\n        \"style_element\":\"wink.indicator.style_element(datasources[\\\"Node-Red\\\"] && datasources[\\\"Node-Red\\\"][\\\"WinkData\\\"][\\\"air_conditioners\\\"][\\\"\" + key + \"\\\"],\\\"temperature\\\")\"\n    }\n\n})\n\n}\n\nfor (var key in context.global.winkState.propane_tanks)\n{\n    if( typeof pane_idx.prop_tnk !=='undefined') \n    {\n        pane_id=pane_idx.prop_tnk; //motion\n    } else\n    {\n        freeboard.panes.push(  {\n            \"title\":\"Propane Tanks\",\n            \"width\": 1,\n            \"row\": {\n                \"3\": 1\n            },\n            \"col\": {\n                \"3\": 1\n            },\n            \"col_width\": 1,\n            widgets:[]\n        });\n        pane_idx.prop_tnk=i;\n        pane_id=i;\n        i++;\n    }\n    freeboard.panes[pane_id].widgets.push(\n{\n    \"type\": \"indicator\",\n    \"settings\": {\n        \"title\":key,\n        \"value\":\"wink.indicator.value(datasources[\\\"Node-Red\\\"] && datasources[\\\"Node-Red\\\"][\\\"WinkData\\\"][\\\"propane_tanks\\\"][\\\"\" + key + \"\\\"])\",\n        \"on_text\":\"wink.indicator.on_text(datasources[\\\"Node-Red\\\"] && datasources[\\\"Node-Red\\\"][\\\"WinkData\\\"][\\\"propane_tanks\\\"][\\\"\" + key + \"\\\"],\\\"remaining\\\")\",\n        \"off_text\":\"wink.indicator.off_text(datasources[\\\"Node-Red\\\"] && datasources[\\\"Node-Red\\\"][\\\"WinkData\\\"][\\\"propane_tanks\\\"][\\\"\" + key + \"\\\"],\\\"remaining\\\")\",\n        \"style_element\":\"wink.indicator.style_element(datasources[\\\"Node-Red\\\"] && datasources[\\\"Node-Red\\\"][\\\"WinkData\\\"][\\\"propane_tanks\\\"][\\\"\" + key + \"\\\"])\"\n    }\n})\nfreeboard.panes[pane_id].widgets.push(\n{\n        \"type\": \"indicator\",\n         \"settings\": {\n        \"title\":key + ' Battery',\n        \"value\":\"wink.indicator.value(datasources[\\\"Node-Red\\\"] && datasources[\\\"Node-Red\\\"][\\\"WinkData\\\"][\\\"propane_tanks\\\"][\\\"\" + key + \"\\\"],\\\"battery\\\")\",\n        \"on_text\":\"wink.indicator.on_text(datasources[\\\"Node-Red\\\"] && datasources[\\\"Node-Red\\\"][\\\"WinkData\\\"][\\\"propane_tanks\\\"][\\\"\" + key + \"\\\"],\\\"battery\\\")\",\n        \"off_text\":\"wink.indicator.off_text(datasources[\\\"Node-Red\\\"] && datasources[\\\"Node-Red\\\"][\\\"WinkData\\\"][\\\"propane_tanks\\\"][\\\"\" + key + \"\\\"],\\\"battery\\\")\",\n        \"style_element\":\"wink.indicator.style_element(datasources[\\\"Node-Red\\\"] && datasources[\\\"Node-Red\\\"][\\\"WinkData\\\"][\\\"propane_tanks\\\"][\\\"\" + key + \"\\\"],\\\"battery\\\")\"\n         }\n})\n\n}\n\nfor (var key in context.global.winkState.garage_doors)\n{\n    if( typeof pane_idx.garage !=='undefined') \n    {\n        pane_id=pane_idx.garage; //motion\n    } else\n    {\n        freeboard.panes.push(  {\n            \"title\":\"Garage doors\",\n            \"width\": 1,\n            \"row\": {\n                \"3\": 1\n            },\n            \"col\": {\n                \"3\": 1\n            },\n            \"col_width\": 1,\n            widgets:[]\n        });\n        pane_idx.garage=i;\n        pane_id=i;\n        i++;\n    }\n    freeboard.panes[pane_id].widgets.push(\n{\n    \"type\": \"indicator\",\n    \"settings\": {\n        \"title\":key + (context.global.winkState.garage_doors[key].connection ? \" - Online\" : \" - Off\"),\n        \"value\":\"wink.indicator.value(datasources[\\\"Node-Red\\\"] && datasources[\\\"Node-Red\\\"][\\\"WinkData\\\"][\\\"garage_doors\\\"][\\\"\" + key + \"\\\"])\",\n        \"on_text\":\"wink.indicator.on_text(datasources[\\\"Node-Red\\\"] && datasources[\\\"Node-Red\\\"][\\\"WinkData\\\"][\\\"garage_doors\\\"][\\\"\" + key + \"\\\"])\",\n        \"off_text\":\"wink.indicator.off_text(datasources[\\\"Node-Red\\\"] && datasources[\\\"Node-Red\\\"][\\\"WinkData\\\"][\\\"garage_doors\\\"][\\\"\" + key + \"\\\"])\",\n        \"style_element\":\"wink.indicator.style_element(datasources[\\\"Node-Red\\\"] && datasources[\\\"Node-Red\\\"][\\\"WinkData\\\"][\\\"garage_doors\\\"][\\\"\" + key + \"\\\"])\"\n    }\n})\n    \n}\n\nfor (var key in context.global.winkState.piggy_banks)\n{\n    if( typeof pane_idx.porky !=='undefined') \n    {\n        pane_id=pane_idx.porky; //porky banko\n    } else\n    {\n        freeboard.panes.push(  {\n            \"title\":\"Piggy Banks\",\n            \"width\": 1,\n            \"row\": {\n                \"3\": 1\n            },\n            \"col\": {\n                \"3\": 1\n            },\n            \"col_width\": 1,\n            widgets:[]\n        });\n        pane_idx.porky=i;\n        pane_id=i;\n        i++;\n    }\n    freeboard.panes[pane_id].widgets.push(\n{\n    \"type\": \"indicator\",\n    \"settings\": {\n        \"title\":key,\n        \"value\":\"wink.indicator.value(datasources[\\\"Node-Red\\\"] && datasources[\\\"Node-Red\\\"][\\\"WinkData\\\"][\\\"piggy_banks\\\"][\\\"\" + key + \"\\\"])\",\n        \"on_text\":\"wink.indicator.on_text(datasources[\\\"Node-Red\\\"] && datasources[\\\"Node-Red\\\"][\\\"WinkData\\\"][\\\"piggy_banks\\\"][\\\"\" + key + \"\\\"])\",\n        \"off_text\":\"wink.indicator.off_text(datasources[\\\"Node-Red\\\"] && datasources[\\\"Node-Red\\\"][\\\"WinkData\\\"][\\\"piggy_banks\\\"][\\\"\" + key + \"\\\"])\",\n        \"style_element\":\"wink.indicator.style_element(datasources[\\\"Node-Red\\\"] && datasources[\\\"Node-Red\\\"][\\\"WinkData\\\"][\\\"piggy_banks\\\"][\\\"\" + key + \"\\\"])\"\n    }\n})\n    \n}\n\n\n\nfor (var key in context.global.winkState.hubs)\n{\n    if( typeof pane_idx.hubs !=='undefined') \n    {\n        pane_id=pane_idx.hubs; //motion\n    } else\n    {\n        freeboard.panes.push(  {\n            \"title\":\"Hubs\",\n            \"width\": 1,\n            \"row\": {\n                \"3\": 1\n            },\n            \"col\": {\n                \"3\": 1\n            },\n            \"col_width\": 1,\n            widgets:[]\n        });\n        pane_idx.hubs=i;\n        pane_id=i;\n        i++;\n    }\n    freeboard.panes[pane_id].widgets.push(\n{\n    \"type\": \"indicator\",\n    \"settings\": {\n        \"title\":key,\n        \"value\":\"wink.indicator.value(datasources[\\\"Node-Red\\\"] && datasources[\\\"Node-Red\\\"][\\\"WinkData\\\"][\\\"hubs\\\"][\\\"\" + key + \"\\\"])\",\n        \"on_text\":\"wink.indicator.on_text(datasources[\\\"Node-Red\\\"] && datasources[\\\"Node-Red\\\"][\\\"WinkData\\\"][\\\"hubs\\\"][\\\"\" + key + \"\\\"])\",\n        \"off_text\":\"wink.indicator.off_text(datasources[\\\"Node-Red\\\"] && datasources[\\\"Node-Red\\\"][\\\"WinkData\\\"][\\\"hubs\\\"][\\\"\" + key + \"\\\"])\",\n        \"style_element\":\"wink.indicator.style_element(datasources[\\\"Node-Red\\\"] && datasources[\\\"Node-Red\\\"][\\\"WinkData\\\"][\\\"hubs\\\"][\\\"\" + key + \"\\\"])\"\n    }\n}\n)\n\nif (context.global.winkState.hubs[key].firmware_version !== null)\n    {\nfreeboard.panes[pane_id].widgets.push(\n{\n    \"type\": \"text_widget\",\n    \"settings\": {\n        \"title\":\"Current firmware\",\n        \"value\":\"datasources[\\\"Node-Red\\\"][\\\"WinkData\\\"][\\\"hubs\\\"][\\\"\" + key + \"\\\"][\\\"firmware_version\\\"]\",\n        \"size\":\"regular\",\n        \"animate\":\"true\"\n    }\n})\n}\n}\n\nfor (var key in context.global.Presence){\n    if( typeof pane_idx.presence !=='undefined') \n        {\n            pane_id=pane_idx.presence; //motion\n        } else\n        {\n            freeboard.panes.push(  {\n                \"title\":\"Presence\",\n                \"width\": 1,\n                \"row\": {\n                    \"3\": 1\n                },\n                \"col\": {\n                    \"3\": 1\n                },\n                \"col_width\": 1,\n                widgets:[]\n            });\n            pane_idx.presence=i;\n            pane_id=i;\n            i++;\n        }\n//}\nif( typeof pane_idx.presence !=='undefined'){\n                    freeboard.panes[pane_idx.presence].widgets.push(\n                 {\n                     \"type\": \"indicator\",\n                     \"settings\": \n                      {\n                          \"title\":\"\" ,\n                          \"value\":\"(datasources[\\\"Node-Red\\\"][\\\"PresenceDetail\\\"][\\\"\" + key + \"\\\"][\\\"home\\\"]==\\\"yes\\\" ? true : false)\",\n                          \"on_text\":key+\" Home\",\n                          \"off_text\":key+\" Out\"\n                      }\n                 })\n} \n}\nvar k=0;\nvar b=0;\nfor (var key in context.global.winkState.robots){\n    if (k>9){\n        b++; \n        k=0;\n        \n    }\n    if( typeof pane_idx['robots'+b] !=='undefined') \n        {\n            pane_id=pane_idx['robots'+b]; //motion\n        } else\n        {\n            freeboard.panes.push(  {\n                \"title\":\"Robots\",\n                \"width\": 1,\n                \"row\": {\n                    \"3\": 1\n                },\n                \"col\": {\n                    \"3\": 1\n                },\n                \"col_width\": 1,\n                widgets:[]\n            });\n            pane_idx['robots'+b]=i;\n            pane_id=i;\n            i++;\n        }\n        if( typeof pane_idx['robots'+b] !=='undefined'){\n                            freeboard.panes[pane_idx['robots'+b]].widgets.push(\n                         {\n                             \"type\": \"indicator\",\n                             \"settings\": \n                              {\n                                  \"title\":key,\n                                  \"value\":\"datasources[\\\"Node-Red\\\"][\\\"WinkData\\\"][\\\"robots\\\"][\\\"\" + key + \"\\\"][\\\"enabled\\\"]\",\n                                  \"on_text\":\"Enabled\",\n                                  \"off_text\":\"Disabled\"\n                              }\n                         })\n        k++;\n        } \n}\n\n\n\n\nfreeboard.datasources =\n [\n    {\n        \"name\": \"Node-Red\",\n        \"type\": \"JSON\",\n        \"settings\": {\n            \"url\": context.global.BlueMixUrlBase+\"/red/getGlobalDataJson\",\n            \"use_thingproxy\": true,\n            \"refresh\": 2,\n            \"method\": \"GET\",\n            \"headers\": [\n              {\n                  \"name\": \"Authorization\",\n                  \"value\": \"Bearer \"+context.global.FREEBOARD_TOKEN\n              }\n            ],\n            \"name\":\"Node-Red\"\n        }\n    }   \n ]\nfreeboard.columns=i;\nmsg.payload=freeboard;\n}\nelse\n{\n    msg.payload=\"Bad request darling\"\n}\nreturn msg;",
     "outputs": 1,
     "noerr": 0,
-    "x": 455,
-    "y": 505,
+    "x": 464,
+    "y": 507,
     "wires": [
       [
-        "ddb482a0.224b8"
+        "a285e7e5.5d7a18"
+      ]
+    ]
+  },
+  {
+    "id": "e934a502.16cb58",
+    "type": "template",
+    "z": "f8e35a3.f071ca8",
+    "name": "",
+    "field": "",
+    "fieldType": "msg",
+    "format": "handlebars",
+    "template": "<!DOCTYPE html>\n<html lang=\"en\" manifest=\"manifest.cache\">\n<head>\n    <meta charset=\"utf-8\">\n\t<meta name=\"mobile-web-app-capable\" content=\"yes\">\n    <meta name=\"apple-mobile-web-app-capable\" content=\"yes\" />\n    <meta name=\"apple-mobile-web-app-status-bar-style\" content=\"black\" />\n    <meta name=\"viewport\" content = \"width = device-width, initial-scale = 1.0, user-scalable = yes\" />\n    <title>Home Dashboard</title>\n\n    <link rel=\"stylesheet\" type=\"text/css\" href=\"bootstrap/css/bootstrap.min.css\" />\n    <link rel=\"stylesheet\" type=\"text/css\" href=\"font-awesome/css/font-awesome.min.css\" />\n    <link rel=\"stylesheet\" type=\"text/css\" href=\"css/local.css\" />\n    <link rel=\"stylesheet\" type=\"text/css\" href=\"css/animate.css\" />\n   \n    <link rel=\"shortcut icon\" href=\"assets/img/main_ico_02.png\">\n    <script type=\"text/javascript\" src=\"js/jquery-1.10.2.min.js\"></script>\n    <script type=\"text/javascript\" src=\"bootstrap/js/bootstrap.min.js\" async></script>\n    <script type=\"text/javascript\" src=\"js/jquery.noty.packaged.min.js\" async></script>\n    <!-- you need to include the shieldui css and js assets in order for the charts to work -->\n    <!--<script type=\"text/javascript\" src=\"https://www.prepbootstrap.com/Content/js/gridData.js\" async></script> -->\n    <style>\n    .spinner {\n  display: inline-block;\n  opacity: 0;\n  width: 0;\n\n  -webkit-transition: opacity 0.25s, width 0.25s;\n  -moz-transition: opacity 0.25s, width 0.25s;\n  -o-transition: opacity 0.25s, width 0.25s;\n  transition: opacity 0.25s, width 0.25s;\n}\n\n.has-spinner.active {\n  cursor:progress;\n}\n\n.has-spinner.active .spinner {\n  opacity: 1;\n  width: auto; /* This doesn't work, just fix for unkown width elements */\n}\n\n.has-spinner.btn-mini.active .spinner {\n    width: 10px;\n}\n\n.has-spinner.btn-small.active .spinner {\n    width: 13px;\n}\n\n.has-spinner.btn.active .spinner {\n    width: 16px;\n}\n\n.has-spinner.btn-large.active .spinner {\n    width: 19px;\n}\n</style>\n</head>\n<body>\n     <div class=\"col-xs-12 col-md-12\" id=\"mainbody\">\n                    <header>\n                        <ul id=\"tabs\" class=\"nav nav-tabs lg-nav-justified md-nav-justified\">\n                            <li class=\"active\">\n                                <a data-toggle=\"tab\" href=\"#Dashboard0\">Summary</a>\n                            </li>                            \n                            <li class=\"\">\n                                <a data-toggle=\"tab\" href=\"#Dashboard1\">Details</a>\n                            </li>\n                            {{#payload.cameras}}\n                            <li class=\"hidden-xs\">\n                                <a data-toggle=\"tab\" href=\"#Dashboard2\">Cameras</a>\n                            </li>\n                            {{/payload.cameras}}\n                              <li class=\"\">\n                                <a data-toggle=\"tab\" href=\"#Dashboard3\">Controls</a>\n                            </li>\n                            <li class=\"hidden-xs hidden-sm hidden-md\">\n                                <a data-toggle=\"tab\" href=\"#Config\">Configuration</a>\n                            </li>\n                        </ul>\n                    </header>\n                    <div class=\"body tab-content\">\n                        <div class=\"tab-pane fade active in\" id=\"Dashboard0\">\n<!--                                <iframe frameBorder=\"0\" seamless=\"seamless\" allowtransparency=\"true\" id=\"Iframe0\" src=\"TopRow\" width=\"100%\"></iframe> -->\n                                <iframe frameBorder=\"0\" seamless=\"seamless\" allowtransparency=\"true\" id=\"Iframe0\" src=\"mysummary\" width=\"100%\"></iframe>                                \n                                    {{#payload.ui_shortcuts}}\n                                        <div class=\"col-sm-2 col-md-2 hidden-xs\"> \n                                            <button id=\"{{name}}\" type=\"button\" class=\"btn btn-primary  btn-block has-spinner\" style=\"margin-bottom:4px;white-space:normal;\">\n                                                <div style=\"overflow: hidden;text-overflow: ellipsis;display: inline;\">\n                                                <span class=\"spinner\"><i class=\"fa fa-spinner fa-spin\"></i></span>\n                                                {{name}}</div>\n                                            </button>\n                                       </div>\n                                     {{/payload.ui_shortcuts}}\n                        </div>\n                        <div class=\"tab-pane fade in\" id=\"Dashboard1\">\n                                <iframe frameBorder=\"0\" allowtransparency=\"true\" id=\"freeboard1\" src=\"winkautogroup\"  width=\"100%\" seamless=\"seamless\"></iframe>\n                        </div>\n                        {{#payload.cameras}}\n                        <div class=\"tab-pane fade in\"  id=\"Dashboard2\">\n                            <iframe frameBorder=\"0\" allowtransparency=\"true\" id=\"freeboard2\" src=\"mycameras\"  width=\"100%\" seamless=\"seamless\"></iframe>\n                        </div>\n                        {{/payload.cameras}}\n                        <div class=\"tab-pane fade in\" id=\"Dashboard3\">\n                        <!--<div class=\"col-xs-12\" style=\"height:4px;\"></div> -->\n                        <div class=\"container-fluid\">\n                        <div class=\"panel-group\" id=\"accordion\" role=\"tablist\" aria-multiselectable=\"true\">\n                          <div class=\"panel panel-primary\">\n                            <div class=\"panel-heading\" role=\"tab\" id=\"headingOne\">\n                              <h5 class=\"panel-title\">\n                                <a role=\"button\" data-toggle=\"collapse\" data-parent=\"#accordion\" href=\"#collapseOne\" aria-expanded=\"true\" aria-controls=\"collapseOne\">\n                                    <span class=\"fa fa-lightbulb-o\" aria-hidden=\"true\"></span>\n                                    Lights and Switches\n                                </a>\n                              </h5>\n                            </div>\n                            <div id=\"collapseOne\" class=\"panel-collapse collapse in\" role=\"tabpanel\" aria-labelledby=\"headingOne\">\n                              <div class=\"panel-body\" clearfix style=\"border : 1px;\">     \n                             <iframe frameBorder=\"0\" allowtransparency=\"true\" id=\"freeboard3\" src=\"lightcontrols\"  width=\"100%\" seamless=\"seamless\" style=\" border : 0; -webkit-background-size: cover; -moz-background-size: cover; -o-background-size: cover; background-size: cover\"></iframe>\n                             </div>\n                              </div> \n                             </div>\n                              <div class=\"panel panel-primary\" clearfix style=\"background:none;\">\n                                <div class=\"panel-heading\" role=\"tab\" id=\"headingTwo\">\n                                  <h5 class=\"panel-title\">\n                                    <a class=\"collapsed\" role=\"button\" data-toggle=\"collapse\" data-parent=\"#accordion\" href=\"#collapseTwo\" aria-expanded=\"false\" aria-controls=\"collapseTwo\">\n                                    <!--   <p class=\"text-nowrap\"> -->\n                                        <span class=\"fa fa-lock\" aria-hidden=\"true\"></span>  \n                                        Locks\n                                    <!--  </p>  -->\n                                    </a>\n                                  </h5>\n                                </div>\n                                <div id=\"collapseTwo\" class=\"panel-collapse collapse\" role=\"tabpanel\" aria-labelledby=\"headingTwo\">\n                                  <div class=\"panel-body\">\n                                   <iframe frameBorder=\"0\" allowtransparency=\"true\" id=\"freeboard3L\" src=\"lockcontrols\"  width=\"100%\" seamless=\"seamless\" style=\" border : 0; -webkit-background-size: cover; -moz-background-size: cover; -o-background-size: cover; background-size: cover\"></iframe>\n                                  </div>\n                                </div>\n                              </div>\n                            </div>\n                         </div>\n                        </div>\n                        <div class=\"tab-pane fade in hidden-xs hidden-s hidden-md\" id=\"Config\" >\n                                <iframe frameBorder=\"0\" allowtransparency=\"true\" id=\"Controls\" src=\"getconfig\"  width=\"100%\" seamless=\"seamless\"></iframe>\n                        </div>\n            </div>\n    </div>\n    <!-- /#wrapper -->\n\n    <script type=\"text/javascript\">\n    function getCookie(cname) {\n    var name = cname + \"=\";\n    var ca = document.cookie.split(';');\n    for(var i=0; i<ca.length; i++) {\n        var c = ca[i];\n        while (c.charAt(0)==' ') c = c.substring(1);\n        if (c.indexOf(name) == 0) return c.substring(name.length,c.length);\n    }\n    return \"\";\n}\n\n        jQuery(function ($) {\n            $Curr_Tab=$(\"ul#tabs li.active\")[0].lastElementChild.hash;\n            $('.panel-collapse').css('background','black');\n            $(\"#Iframe0\").css('height', $( window ).height()-115);\n            $(\"#freeboard1\").css('height', $( window ).height()-75);\n            {{#payload.cameras}}\n            $(\"#freeboard2\").css('height', $( window ).height()-75);\n            {{/payload.cameras}}\n             $(\"#freeboard3\").css('height', $( window ).height()-215);\n             $(\"#freeboard3L\").css('height', $( window ).height()-235);\n             $( \"#Controls\" ).css('height', $( window ).height()-75);\n             $( \"#Controls\" ).css('width', \"100%\");\n             $(\"#mainbody\").css('background',\"#111\");\n        });        \n            $( window ).resize(function () {\n                //console.log('window got resized '+$( window ).height());\n                //console.log('freeboard height '+$( \"#freeboard2\" ).height());\n                $(\"#Iframe0\").css('height', $( window ).height()-115);\n                $(\"#Iframe0\").css('width',\"100%\");\n                $( \"#freeboard1\" ).css('height', $( window ).height()-75);\n                $( \"#freeboard1\" ).css('width', \"100%\");\n                {{#payload.cameras}}\n                $( \"#freeboard2\" ).css('height', $( window ).height()-75);\n                $( \"#freeboard2\" ).css('width', \"100%\");\n                {{/payload.cameras}}\n                $( \"#freeboard3\" ).css('height', $( window ).height()-215);\n                $(\"#freeboard3L\").css('height', $( window ).height()-235);\n                $( \"#freeboard3\" ).css('width', \"100%\");\n                $( \"#freeboard3L\" ).css('width', \"100%\");\n                $( \"#Controls\" ).css('height', $( window ).height()-75);\n                $( \"#Controls\" ).css('width', \"100%\");                \n           });\n        $(\".btn-block\").click(function(){\n            var me=$(this);\n            $(this).toggleClass('active').removeClass('btn-primary').addClass('btn-warning');\n            $.post( \"/red/ifttt\", {\"winkName\":this.id,\"type\":\"shortcut\",\"cmd\":\"\",\"level\":\"\" , \"iftttkey\" : getCookie('exchange_token')}).done(function(data) {\n             setTimeout(function(){ me.toggleClass('active').removeClass('btn-warning').addClass('btn-primary'); }, 3000);\n            });\n        });\n        $(document).on('shown.bs.tab', 'a[data-toggle=\"tab\"]', function (e) {\n          $Curr_Tab=e.target.hash;\n    });\n    </script>\n</body>\n</html>\n",
+    "x": 814,
+    "y": 57,
+    "wires": [
+      [
+        "e7deb600.182148"
       ]
     ]
   }
