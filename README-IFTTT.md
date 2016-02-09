@@ -92,3 +92,25 @@ Since Blue Iris system can also do web service calls here is how to make it call
 * Replace "yourappname" above with the name of your node-red app.
 * pass command details by  populating "POST text"  same way as "maker channel body" example above.
 * Click OK all the way out.
+
+
+Set/Update Node-Red global variable via IFTTT (new)
+----------------------------------------------------
+This is first drop to update a global node-red variable via IFTTT<br>
+use IFTTT maker channel for THAT 
+use same url, method and context-type
+
+in the body of the request you should use following format:
+{"nodeRedVar":"your var name (case Sensitive)","value":"your requred value","iftttkey":"your ifttt key"}<br>
+
+Example:<br>
+* {"nodeRedVar":"Timer","value":"off","iftttkey":"XXXXXXXXXXXXXXXXXXXXXXXXX"}
+
+variable will be set on the global context.<br>
+taking the example above you should call that variable in your node-red function as <b>context.global.Timer</b>
+ 
+  
+
+
+
+
