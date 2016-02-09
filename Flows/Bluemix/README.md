@@ -1,4 +1,22 @@
 == UPDATE ==
+02/08/2016
+----------------
+Added ability to set/change global variable via ifttt<br>
+Added home occupancy icon based on Node-Red Occupancy<br>
+<img src="images/new_updates.png">
+
+Bluemix git console:<br>
+
+*  restart application 
+
+Flow Editor:<br>
+*  Import updated [winkCore.json](winkCore.json)
+*  Import updated [winkIntegration.json](winkIntegration.json)
+*  Import updated [tabletUI.json](tabletUI.json)
+*  perform "FULL" deployment<br>
+
+Check  [HOWTO - IFTTT](../../README-IFTTT.md) for instructions on how to set variable in node-red via IFTTT (last section of the document). 
+
 02/07/2016
 ----------------
 Imrpoved wink data refresh functionality:<br>
