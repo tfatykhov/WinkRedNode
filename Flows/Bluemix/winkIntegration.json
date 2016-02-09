@@ -1,6 +1,6 @@
 [
   {
-    "id": "918a7154.6e759",
+    "id": "f33ac51c.0cc538",
     "type": "function",
     "z": "17b3daf5.e84c25",
     "name": "",
@@ -11,31 +11,31 @@
     "y": 776.5,
     "wires": [
       [
-        "cbcbc665.343438"
+        "5281f222.ad7e0c"
       ]
     ]
   },
   {
-    "id": "865cb796.79a348",
+    "id": "75e27669.8a1d88",
     "type": "function",
     "z": "17b3daf5.e84c25",
     "name": "",
-    "func": "var WinkCMDmsg={};\nvar web_req=(context.global.getCookie('exchange_token',msg.req.headers.cookie)=='0' ? false:true);\n\nif (msg.payload.iftttkey==context.global.IFTTT_TOKEN || msg.payload.iftttkey==context.global.FREEBOARD_TOKEN) web_req=true;\nif (web_req)\n{\n    if ('ifttt' in  msg.payload)\n    {\n      context.global.ifttt=(msg.payload.ifttt.toLowerCase()==\"on\" ? true:false)\n      msg.res.StatusCode=200;\n      return [msg];\n    }\n    if ('winkName' in msg.payload)\n    {\n//    node.warn('Name '+msg.payload.winkName)\n    if ('cmd' in msg.payload)\n    {\n        cmd=msg.payload.cmd\n    } else cmd='on' \n    if ('level' in msg.payload)\n    {\n        level=msg.payload.level\n    }  else level= (cmd.toLowerCase() =='on' ? 100 : 0)\n//    node.warn(level)\n    WinkCMDmsg = context.global.executeWinkCMD(msg.payload.winkName,msg.payload.type,msg.payload.cmd,level);\n    msg.statusCode=200;\n//    node.warn('Message '+ JSON.stringify(WinkCMDmsg))\n    }\n}\nelse {\n    node.warn(\"ifttt messages bad request\")\n     msg.statusCode=403;\n     return [msg,null];\n}\nif (WinkCMDmsg!==\"\")\n{\n    return [msg,WinkCMDmsg];\n}\nelse\n{\nreturn [msg,null];\n}",
+    "func": "var WinkCMDmsg={};\nvar web_req=(context.global.getCookie('exchange_token',msg.req.headers.cookie)=='0' ? false:true);\n\nif (msg.payload.iftttkey==context.global.IFTTT_TOKEN || msg.payload.iftttkey==context.global.FREEBOARD_TOKEN) web_req=true;\nif (web_req)\n{\n    if ('ifttt' in  msg.payload)\n    {\n      context.global.ifttt=(msg.payload.ifttt.toLowerCase()==\"on\" ? true:false)\n      msg.res.StatusCode=200;\n      return [msg];\n    }\n    if ('winkName' in msg.payload)\n    {\n//    node.warn('Name '+msg.payload.winkName)\n    if ('cmd' in msg.payload)\n    {\n        cmd=msg.payload.cmd\n    } else cmd='on' \n    if ('level' in msg.payload)\n    {\n        level=msg.payload.level\n    }  else level= (cmd.toLowerCase() =='on' ? 100 : 0)\n//    node.warn(level)\n    WinkCMDmsg = context.global.executeWinkCMD(msg.payload.winkName,msg.payload.type,msg.payload.cmd,level);\n    msg.statusCode=200;\n//    node.warn('Message '+ JSON.stringify(WinkCMDmsg))\n    }\n    if ('nodeRedVar' in msg.payload) {\n        if ('value' in msg.payload) value=msg.payload.value \n        else value = true;\n    context.global[msg.payload.nodeRedVar]=value;\n    WinkCMDmsg=context.global.send_ui_note('information',30000,'Variable '+msg.payload.nodeRedVar+' set to: '+context.global[msg.payload.nodeRedVar],null);\n    }\n}\nelse {\n    node.warn(\"ifttt messages bad request\")\n     msg.statusCode=403;\n     return [msg,null];\n}\nif (WinkCMDmsg!==\"\")\n{\n    return [msg,WinkCMDmsg];\n}\nelse\n{\nreturn [msg,null];\n}",
     "outputs": "2",
     "noerr": 0,
     "x": 649.5,
     "y": 225.49993896484375,
     "wires": [
       [
-        "2bcdd714.d43228"
+        "f82e5584.07d1a8"
       ],
       [
-        "7cc05454.833fac"
+        "a06a8288.5f958"
       ]
     ]
   },
   {
-    "id": "14602831.eb9fd8",
+    "id": "72cf971d.8d3068",
     "type": "http in",
     "z": "17b3daf5.e84c25",
     "name": "",
@@ -46,12 +46,12 @@
     "y": 238.5,
     "wires": [
       [
-        "29a586b4.d65a7a"
+        "14b428c4.eb4bd7"
       ]
     ]
   },
   {
-    "id": "2bcdd714.d43228",
+    "id": "f82e5584.07d1a8",
     "type": "http response",
     "z": "17b3daf5.e84c25",
     "name": "",
@@ -60,7 +60,7 @@
     "wires": []
   },
   {
-    "id": "5a8384e7.a57c7c",
+    "id": "2e8c5491.d173ac",
     "type": "comment",
     "z": "17b3daf5.e84c25",
     "name": "IFTTT Integration-------------------------------------------------------------------------------------------------------------------------------",
@@ -70,7 +70,7 @@
     "wires": []
   },
   {
-    "id": "7cc05454.833fac",
+    "id": "a06a8288.5f958",
     "type": "http request",
     "z": "17b3daf5.e84c25",
     "name": "",
@@ -80,13 +80,11 @@
     "x": 791.5,
     "y": 265.49993896484375,
     "wires": [
-      [
-        "f0a7a49e.0f5858"
-      ]
+      []
     ]
   },
   {
-    "id": "1366d620.ec992a",
+    "id": "50c3a8fd.af3c58",
     "type": "comment",
     "z": "17b3daf5.e84c25",
     "name": "Wink API Apdex-------------------------------------------------------------------------------------------------------------------------------",
@@ -96,7 +94,7 @@
     "wires": []
   },
   {
-    "id": "968f75fd.697088",
+    "id": "d1ec100a.2e13f",
     "type": "inject",
     "z": "17b3daf5.e84c25",
     "name": "",
@@ -110,12 +108,12 @@
     "y": 368.4998779296875,
     "wires": [
       [
-        "b31b0fc.f4ce4f"
+        "6004b4d6.9ffb4c"
       ]
     ]
   },
   {
-    "id": "b31b0fc.f4ce4f",
+    "id": "6004b4d6.9ffb4c",
     "type": "function",
     "z": "17b3daf5.e84c25",
     "name": "",
@@ -126,12 +124,12 @@
     "y": 369.49993896484375,
     "wires": [
       [
-        "6747a621.98b858"
+        "4aab08ec.b554f8"
       ]
     ]
   },
   {
-    "id": "6747a621.98b858",
+    "id": "4aab08ec.b554f8",
     "type": "http request",
     "z": "17b3daf5.e84c25",
     "name": "",
@@ -142,12 +140,12 @@
     "y": 381.49993896484375,
     "wires": [
       [
-        "b99b262f.4664d8"
+        "577b4245.a884bc"
       ]
     ]
   },
   {
-    "id": "b99b262f.4664d8",
+    "id": "577b4245.a884bc",
     "type": "function",
     "z": "17b3daf5.e84c25",
     "name": "",
@@ -161,7 +159,7 @@
     ]
   },
   {
-    "id": "8d68704a.72979",
+    "id": "ed64d396.129b3",
     "type": "comment",
     "z": "17b3daf5.e84c25",
     "name": "DromCam/NestCam Integration-------------------------------------------------------------------------------------------------------------------------------",
@@ -171,7 +169,7 @@
     "wires": []
   },
   {
-    "id": "5424a5cb.abdb5c",
+    "id": "54404007.abbfc",
     "type": "comment",
     "z": "17b3daf5.e84c25",
     "name": "Presence  via IFTTT/Tasker/etc. -------------------------------------------------------------------------------------------------------------------------------",
@@ -181,7 +179,7 @@
     "wires": []
   },
   {
-    "id": "cf2d137c.30d2f",
+    "id": "68cad66b.973528",
     "type": "http in",
     "z": "17b3daf5.e84c25",
     "name": "",
@@ -192,13 +190,14 @@
     "y": 576.9998779296875,
     "wires": [
       [
-        "d8e0a6a6.271f58",
-        "e88b798.f177488"
+        "3d30c6cb.c2cf3a",
+        "f5a8c1ac.0a574",
+        "55941b8.faa6be4"
       ]
     ]
   },
   {
-    "id": "d8e0a6a6.271f58",
+    "id": "3d30c6cb.c2cf3a",
     "type": "function",
     "z": "17b3daf5.e84c25",
     "name": "Update Presence entry",
@@ -209,16 +208,16 @@
     "y": 577.9998779296875,
     "wires": [
       [
-        "40719207.bf8e6c",
-        "2eaca861.d15358"
+        "1ddb424.fe224be",
+        "beb1288.f414ed8"
       ],
       [
-        "409d263e.bf62d8"
+        "6f02a0f3.90fd6"
       ]
     ]
   },
   {
-    "id": "40719207.bf8e6c",
+    "id": "1ddb424.fe224be",
     "type": "http response",
     "z": "17b3daf5.e84c25",
     "name": "",
@@ -227,7 +226,7 @@
     "wires": []
   },
   {
-    "id": "409d263e.bf62d8",
+    "id": "6f02a0f3.90fd6",
     "type": "function",
     "z": "17b3daf5.e84c25",
     "name": "",
@@ -238,12 +237,12 @@
     "y": 649.22216796875,
     "wires": [
       [
-        "3a63029a.c59cfe"
+        "2b642905.d49bd6"
       ]
     ]
   },
   {
-    "id": "3a63029a.c59cfe",
+    "id": "2b642905.d49bd6",
     "type": "http request",
     "z": "17b3daf5.e84c25",
     "name": "",
@@ -257,7 +256,7 @@
     ]
   },
   {
-    "id": "88b536b2.774ac8",
+    "id": "49e6e43d.b6191c",
     "type": "comment",
     "z": "17b3daf5.e84c25",
     "name": "Integration with Ecobee Node Red ----------------------------------------------------------------------------------------------",
@@ -267,7 +266,7 @@
     "wires": []
   },
   {
-    "id": "4bd6209a.b429e",
+    "id": "65968484.9a697c",
     "type": "http in",
     "z": "17b3daf5.e84c25",
     "name": "",
@@ -278,12 +277,12 @@
     "y": 474.4999694824219,
     "wires": [
       [
-        "a5270863.5ad8f8"
+        "9064680f.6f9b98"
       ]
     ]
   },
   {
-    "id": "a5270863.5ad8f8",
+    "id": "9064680f.6f9b98",
     "type": "function",
     "z": "17b3daf5.e84c25",
     "name": "",
@@ -294,12 +293,12 @@
     "y": 473.4999694824219,
     "wires": [
       [
-        "e403a8b0.1bfc58"
+        "9eead6bd.611528"
       ]
     ]
   },
   {
-    "id": "e403a8b0.1bfc58",
+    "id": "9eead6bd.611528",
     "type": "http request",
     "z": "17b3daf5.e84c25",
     "name": "",
@@ -310,12 +309,12 @@
     "y": 475.4999694824219,
     "wires": [
       [
-        "b8b9a5e6.474658"
+        "9de0f285.621f1"
       ]
     ]
   },
   {
-    "id": "b8b9a5e6.474658",
+    "id": "9de0f285.621f1",
     "type": "http response",
     "z": "17b3daf5.e84c25",
     "name": "",
@@ -324,7 +323,7 @@
     "wires": []
   },
   {
-    "id": "829d7182.7d629",
+    "id": "7c61b1e2.839e5",
     "type": "function",
     "z": "17b3daf5.e84c25",
     "name": "",
@@ -335,12 +334,12 @@
     "y": 605.611083984375,
     "wires": [
       [
-        "3c21c6a5.c3de3a"
+        "b6d7a67c.492858"
       ]
     ]
   },
   {
-    "id": "2eaca861.d15358",
+    "id": "beb1288.f414ed8",
     "type": "function",
     "z": "17b3daf5.e84c25",
     "name": "",
@@ -351,12 +350,12 @@
     "y": 604.611083984375,
     "wires": [
       [
-        "82a4e66c.7d5b18"
+        "68c8e13a.97372"
       ]
     ]
   },
   {
-    "id": "82a4e66c.7d5b18",
+    "id": "68c8e13a.97372",
     "type": "http request",
     "z": "17b3daf5.e84c25",
     "name": "",
@@ -367,12 +366,12 @@
     "y": 604.611083984375,
     "wires": [
       [
-        "829d7182.7d629"
+        "7c61b1e2.839e5"
       ]
     ]
   },
   {
-    "id": "3c21c6a5.c3de3a",
+    "id": "b6d7a67c.492858",
     "type": "http request",
     "z": "17b3daf5.e84c25",
     "name": "",
@@ -386,7 +385,7 @@
     ]
   },
   {
-    "id": "71bab036.8e455",
+    "id": "e8d17476.172e88",
     "type": "inject",
     "z": "17b3daf5.e84c25",
     "name": "",
@@ -400,12 +399,12 @@
     "y": 998.8333129882812,
     "wires": [
       [
-        "cdae125a.3251f"
+        "108005a0.ef7ffa"
       ]
     ]
   },
   {
-    "id": "cdae125a.3251f",
+    "id": "108005a0.ef7ffa",
     "type": "function",
     "z": "17b3daf5.e84c25",
     "name": "Try to create DB",
@@ -416,12 +415,12 @@
     "y": 999.8332824707031,
     "wires": [
       [
-        "79a4a04a.865b6"
+        "396d100e.c692f"
       ]
     ]
   },
   {
-    "id": "79a4a04a.865b6",
+    "id": "396d100e.c692f",
     "type": "http request",
     "z": "17b3daf5.e84c25",
     "name": "db req",
@@ -432,12 +431,12 @@
     "y": 999.8332824707031,
     "wires": [
       [
-        "2c4034ca.d3bfcc"
+        "df6018ba.209fe8"
       ]
     ]
   },
   {
-    "id": "2c4034ca.d3bfcc",
+    "id": "df6018ba.209fe8",
     "type": "function",
     "z": "17b3daf5.e84c25",
     "name": "Check response",
@@ -448,12 +447,12 @@
     "y": 999.8332824707031,
     "wires": [
       [
-        "d35bc0bc.2ca44"
+        "e23eb7ad.1dc148"
       ]
     ]
   },
   {
-    "id": "d35bc0bc.2ca44",
+    "id": "e23eb7ad.1dc148",
     "type": "http request",
     "z": "17b3daf5.e84c25",
     "name": "",
@@ -464,12 +463,12 @@
     "y": 1000.72216796875,
     "wires": [
       [
-        "8b4b5576.74b4a8"
+        "1f4a84f5.e0b57b"
       ]
     ]
   },
   {
-    "id": "8b4b5576.74b4a8",
+    "id": "1f4a84f5.e0b57b",
     "type": "function",
     "z": "17b3daf5.e84c25",
     "name": "restore from db",
@@ -483,7 +482,7 @@
     ]
   },
   {
-    "id": "7328e5d4.8cd71c",
+    "id": "f1a1155c.0e5ee8",
     "type": "comment",
     "z": "17b3daf5.e84c25",
     "name": "Cloundant DB -------------------------------------------------------------------------------------------------------------------------------",
@@ -493,7 +492,7 @@
     "wires": []
   },
   {
-    "id": "8bebb8b7.741448",
+    "id": "c1c9d4f9.3e3628",
     "type": "function",
     "z": "17b3daf5.e84c25",
     "name": "Save Snapshots to db",
@@ -504,15 +503,15 @@
     "y": 1099.8332824707031,
     "wires": [
       [
-        "fe0e7473.01f188"
+        "90dbb5dc.6f2448"
       ],
       [
-        "924421e8.6dbbe"
+        "f40a26d4.0bf5d8"
       ]
     ]
   },
   {
-    "id": "924421e8.6dbbe",
+    "id": "f40a26d4.0bf5d8",
     "type": "http request",
     "z": "17b3daf5.e84c25",
     "name": "getPic",
@@ -523,12 +522,12 @@
     "y": 1105.8332824707031,
     "wires": [
       [
-        "9d4d533f.62b2b"
+        "8197b1ef.7e685"
       ]
     ]
   },
   {
-    "id": "9d4d533f.62b2b",
+    "id": "8197b1ef.7e685",
     "type": "function",
     "z": "17b3daf5.e84c25",
     "name": "save picture",
@@ -539,12 +538,12 @@
     "y": 1103.8332824707031,
     "wires": [
       [
-        "dbb7f563.244808"
+        "2a6a2531.d595da"
       ]
     ]
   },
   {
-    "id": "dbb7f563.244808",
+    "id": "2a6a2531.d595da",
     "type": "http request",
     "z": "17b3daf5.e84c25",
     "name": "",
@@ -555,12 +554,12 @@
     "y": 1104.72216796875,
     "wires": [
       [
-        "ff1e156c.00e1e8"
+        "74973457.8b68cc"
       ]
     ]
   },
   {
-    "id": "5851f82c.a7ae08",
+    "id": "7ec9e30a.81361c",
     "type": "http in",
     "z": "17b3daf5.e84c25",
     "name": "",
@@ -571,12 +570,12 @@
     "y": 1099.72216796875,
     "wires": [
       [
-        "8bebb8b7.741448"
+        "c1c9d4f9.3e3628"
       ]
     ]
   },
   {
-    "id": "fe0e7473.01f188",
+    "id": "90dbb5dc.6f2448",
     "type": "http response",
     "z": "17b3daf5.e84c25",
     "name": "",
@@ -585,7 +584,7 @@
     "wires": []
   },
   {
-    "id": "ff1e156c.00e1e8",
+    "id": "74973457.8b68cc",
     "type": "function",
     "z": "17b3daf5.e84c25",
     "name": "cache results",
@@ -596,12 +595,12 @@
     "y": 1103.72216796875,
     "wires": [
       [
-        "bb28d223.44d73"
+        "505311ce.afacf"
       ]
     ]
   },
   {
-    "id": "bb28d223.44d73",
+    "id": "505311ce.afacf",
     "type": "http request",
     "z": "17b3daf5.e84c25",
     "name": "",
@@ -612,12 +611,12 @@
     "y": 1101.72216796875,
     "wires": [
       [
-        "f8921464.076de8"
+        "db5430c8.24abd"
       ]
     ]
   },
   {
-    "id": "f8921464.076de8",
+    "id": "db5430c8.24abd",
     "type": "function",
     "z": "17b3daf5.e84c25",
     "name": "delete old pics",
@@ -631,7 +630,7 @@
     ]
   },
   {
-    "id": "a234d18e.5dcb3",
+    "id": "e363729e.1c9c9",
     "type": "http in",
     "z": "17b3daf5.e84c25",
     "name": "",
@@ -642,12 +641,12 @@
     "y": 1157.72216796875,
     "wires": [
       [
-        "65ed065f.9a12f8"
+        "a87806da.5787f8"
       ]
     ]
   },
   {
-    "id": "65ed065f.9a12f8",
+    "id": "a87806da.5787f8",
     "type": "function",
     "z": "17b3daf5.e84c25",
     "name": "gen CLD url",
@@ -658,12 +657,12 @@
     "y": 1157.72216796875,
     "wires": [
       [
-        "5a7164e1.a58e9c"
+        "747ea1fe.8b816"
       ]
     ]
   },
   {
-    "id": "5a7164e1.a58e9c",
+    "id": "747ea1fe.8b816",
     "type": "http request",
     "z": "17b3daf5.e84c25",
     "name": "",
@@ -674,12 +673,12 @@
     "y": 1159.72216796875,
     "wires": [
       [
-        "7e98919e.81677"
+        "907d365c.6f82c8"
       ]
     ]
   },
   {
-    "id": "7e98919e.81677",
+    "id": "907d365c.6f82c8",
     "type": "http response",
     "z": "17b3daf5.e84c25",
     "name": "",
@@ -688,7 +687,7 @@
     "wires": []
   },
   {
-    "id": "ffcd5367.0032b",
+    "id": "72273009.8dd8d",
     "type": "http in",
     "z": "17b3daf5.e84c25",
     "name": "",
@@ -699,12 +698,12 @@
     "y": 1252.72216796875,
     "wires": [
       [
-        "f21c544b.0de3a8"
+        "a419101d.5be6f"
       ]
     ]
   },
   {
-    "id": "f21c544b.0de3a8",
+    "id": "a419101d.5be6f",
     "type": "function",
     "z": "17b3daf5.e84c25",
     "name": "get activities from db",
@@ -715,15 +714,15 @@
     "y": 1250.72216796875,
     "wires": [
       [
-        "890997fd.76f668"
+        "fcb7574a.0348a8"
       ],
       [
-        "aa6355be.559ca8"
+        "9dbc84e0.624378"
       ]
     ]
   },
   {
-    "id": "aa6355be.559ca8",
+    "id": "9dbc84e0.624378",
     "type": "http request",
     "z": "17b3daf5.e84c25",
     "name": "",
@@ -734,12 +733,12 @@
     "y": 1283.72216796875,
     "wires": [
       [
-        "9f21045b.60def8"
+        "731f9369.8ce06c"
       ]
     ]
   },
   {
-    "id": "9f21045b.60def8",
+    "id": "731f9369.8ce06c",
     "type": "function",
     "z": "17b3daf5.e84c25",
     "name": "cache cam history",
@@ -753,7 +752,7 @@
     ]
   },
   {
-    "id": "890997fd.76f668",
+    "id": "fcb7574a.0348a8",
     "type": "http response",
     "z": "17b3daf5.e84c25",
     "name": "",
@@ -762,7 +761,7 @@
     "wires": []
   },
   {
-    "id": "83a56793.7c5a98",
+    "id": "978054fa.687fa8",
     "type": "inject",
     "z": "17b3daf5.e84c25",
     "name": "",
@@ -776,12 +775,12 @@
     "y": 775.7499389648438,
     "wires": [
       [
-        "918a7154.6e759"
+        "f33ac51c.0cc538"
       ]
     ]
   },
   {
-    "id": "cbcbc665.343438",
+    "id": "5281f222.ad7e0c",
     "type": "debug",
     "z": "17b3daf5.e84c25",
     "name": "",
@@ -793,7 +792,7 @@
     "wires": []
   },
   {
-    "id": "c90d411a.36f2c",
+    "id": "9d857813.627a88",
     "type": "comment",
     "z": "17b3daf5.e84c25",
     "name": "Integration with LIFX Bulbs ---------------------------------------------------------------------------------------",
@@ -803,7 +802,7 @@
     "wires": []
   },
   {
-    "id": "867045e4.798fb8",
+    "id": "4ca6b0c4.b3595",
     "type": "function",
     "z": "17b3daf5.e84c25",
     "name": "Throw Config Data",
@@ -814,12 +813,12 @@
     "y": 62.5,
     "wires": [
       [
-        "78390252.87c6fc"
+        "777e325.f8881cc"
       ]
     ]
   },
   {
-    "id": "78390252.87c6fc",
+    "id": "777e325.f8881cc",
     "type": "http response",
     "z": "17b3daf5.e84c25",
     "name": "",
@@ -828,7 +827,7 @@
     "wires": []
   },
   {
-    "id": "20437006.dfbc9",
+    "id": "3d4059.ffc2bfa8",
     "type": "comment",
     "z": "17b3daf5.e84c25",
     "name": "Section for web services---------------------------------------------------------------------------------------------------------------------------------",
@@ -838,7 +837,7 @@
     "wires": []
   },
   {
-    "id": "8fdd4753.7022b8",
+    "id": "dbdf85ee.242078",
     "type": "http in",
     "z": "17b3daf5.e84c25",
     "name": "",
@@ -849,12 +848,12 @@
     "y": 112.5,
     "wires": [
       [
-        "50a408da.af5bf8"
+        "3719d16f.c8e62e"
       ]
     ]
   },
   {
-    "id": "50a408da.af5bf8",
+    "id": "3719d16f.c8e62e",
     "type": "function",
     "z": "17b3daf5.e84c25",
     "name": "Throw Cameras Data",
@@ -865,12 +864,12 @@
     "y": 115.5,
     "wires": [
       [
-        "22d55510.dd2aaa"
+        "1f3b9088.e0c46f"
       ]
     ]
   },
   {
-    "id": "22d55510.dd2aaa",
+    "id": "1f3b9088.e0c46f",
     "type": "http response",
     "z": "17b3daf5.e84c25",
     "name": "",
@@ -879,7 +878,7 @@
     "wires": []
   },
   {
-    "id": "8bb584a1.744a78",
+    "id": "d6ebf833.291408",
     "type": "catch",
     "z": "17b3daf5.e84c25",
     "name": "",
@@ -887,12 +886,12 @@
     "y": 1807,
     "wires": [
       [
-        "a9c482f7.563b8"
+        "8131f2dd.7ece1"
       ]
     ]
   },
   {
-    "id": "a9c482f7.563b8",
+    "id": "8131f2dd.7ece1",
     "type": "debug",
     "z": "17b3daf5.e84c25",
     "name": "",
@@ -904,19 +903,7 @@
     "wires": []
   },
   {
-    "id": "f0a7a49e.0f5858",
-    "type": "debug",
-    "z": "17b3daf5.e84c25",
-    "name": "",
-    "active": false,
-    "console": "false",
-    "complete": "true",
-    "x": 955.5,
-    "y": 266,
-    "wires": []
-  },
-  {
-    "id": "2076b3de.df894c",
+    "id": "a8a0e854.575f18",
     "type": "inject",
     "z": "17b3daf5.e84c25",
     "name": "",
@@ -930,12 +917,12 @@
     "y": 1552,
     "wires": [
       [
-        "a74dc246.58b24"
+        "b5f2e4d5.4a0d18"
       ]
     ]
   },
   {
-    "id": "a74dc246.58b24",
+    "id": "b5f2e4d5.4a0d18",
     "type": "function",
     "z": "17b3daf5.e84c25",
     "name": "",
@@ -946,12 +933,12 @@
     "y": 1552,
     "wires": [
       [
-        "660926fc.99f6d8"
+        "f9fbf41c.060408"
       ]
     ]
   },
   {
-    "id": "660926fc.99f6d8",
+    "id": "f9fbf41c.060408",
     "type": "http request",
     "z": "17b3daf5.e84c25",
     "name": "",
@@ -962,12 +949,12 @@
     "y": 1551,
     "wires": [
       [
-        "18ae227e.e751de"
+        "2f8418a3.d07be8"
       ]
     ]
   },
   {
-    "id": "18ae227e.e751de",
+    "id": "2f8418a3.d07be8",
     "type": "function",
     "z": "17b3daf5.e84c25",
     "name": "",
@@ -978,12 +965,12 @@
     "y": 1553,
     "wires": [
       [
-        "593ad241.a6c52c"
+        "c9de076b.3621f8"
       ]
     ]
   },
   {
-    "id": "593ad241.a6c52c",
+    "id": "c9de076b.3621f8",
     "type": "http request",
     "z": "17b3daf5.e84c25",
     "name": "",
@@ -997,37 +984,37 @@
     ]
   },
   {
-    "id": "e88b798.f177488",
+    "id": "f5a8c1ac.0a574",
     "type": "function",
     "z": "17b3daf5.e84c25",
     "name": "",
     "func": "function send_ui_note(n_type,n_timeout,n_message){\n    var newMsg={\n        url:context.global.BlueMixUrlBase+'/red/notifications',\n        \"method\": \"POST\",\n        headers: {\n            \"Authorization\":\"Bearer \"+context.global.FREEBOARD_TOKEN\n        },\n        payload:{\n            \"type\":n_type,\n            \"message\":n_message,\n            \"timeout\":n_timeout\n            }\n        };\n        node.send(newMsg);\n}\nvar note_msg=msg.payload.name+(msg.payload.home=='yes' ? ' is home' : ' has left');\nsend_ui_note('information',30000,note_msg)\nreturn;",
     "outputs": 1,
     "noerr": 0,
-    "x": 349.5,
-    "y": 659,
+    "x": 340.5,
+    "y": 693,
     "wires": [
       [
-        "a165a14f.5e9a6"
+        "95b97762.6a4688"
       ]
     ]
   },
   {
-    "id": "a165a14f.5e9a6",
+    "id": "95b97762.6a4688",
     "type": "http request",
     "z": "17b3daf5.e84c25",
     "name": "",
     "method": "use",
     "ret": "txt",
     "url": "",
-    "x": 489.5,
-    "y": 658,
+    "x": 480.5,
+    "y": 692,
     "wires": [
       []
     ]
   },
   {
-    "id": "676a638e.98959c",
+    "id": "2bdcb1ae.d4234e",
     "type": "inject",
     "z": "17b3daf5.e84c25",
     "name": "",
@@ -1041,12 +1028,12 @@
     "y": 870,
     "wires": [
       [
-        "4657a8bf.b9a858"
+        "7286c2f6.8d793c"
       ]
     ]
   },
   {
-    "id": "4657a8bf.b9a858",
+    "id": "7286c2f6.8d793c",
     "type": "delay",
     "z": "17b3daf5.e84c25",
     "name": "",
@@ -1063,12 +1050,12 @@
     "y": 871,
     "wires": [
       [
-        "b171018d.4e8f"
+        "f1a9f4ce.0e5608"
       ]
     ]
   },
   {
-    "id": "b171018d.4e8f",
+    "id": "f1a9f4ce.0e5608",
     "type": "function",
     "z": "17b3daf5.e84c25",
     "name": "try to refresh app_config data",
@@ -1079,12 +1066,12 @@
     "y": 862,
     "wires": [
       [
-        "864cb433.79b348"
+        "2f57132b.d0a8ec"
       ]
     ]
   },
   {
-    "id": "864cb433.79b348",
+    "id": "2f57132b.d0a8ec",
     "type": "http request",
     "z": "17b3daf5.e84c25",
     "name": "",
@@ -1095,12 +1082,12 @@
     "y": 867,
     "wires": [
       [
-        "ad7925db.5286d8"
+        "663e07b8.99c1f8"
       ]
     ]
   },
   {
-    "id": "ad7925db.5286d8",
+    "id": "663e07b8.99c1f8",
     "type": "function",
     "z": "17b3daf5.e84c25",
     "name": "create or update config ",
@@ -1111,12 +1098,12 @@
     "y": 868,
     "wires": [
       [
-        "ea876186.1578a"
+        "a6dc615b.5923a"
       ]
     ]
   },
   {
-    "id": "ea876186.1578a",
+    "id": "a6dc615b.5923a",
     "type": "http request",
     "z": "17b3daf5.e84c25",
     "name": "",
@@ -1127,12 +1114,12 @@
     "y": 864,
     "wires": [
       [
-        "6784b536.987b4c"
+        "4177d64f.be8828"
       ]
     ]
   },
   {
-    "id": "8e2020f3.71dfe",
+    "id": "36a8e5f0.c9571a",
     "type": "http in",
     "z": "17b3daf5.e84c25",
     "name": "",
@@ -1143,12 +1130,12 @@
     "y": 928,
     "wires": [
       [
-        "dd73444e.228cb8"
+        "bb376dc.f44c89"
       ]
     ]
   },
   {
-    "id": "dd73444e.228cb8",
+    "id": "bb376dc.f44c89",
     "type": "function",
     "z": "17b3daf5.e84c25",
     "name": "",
@@ -1159,15 +1146,15 @@
     "y": 932,
     "wires": [
       [
-        "b171018d.4e8f"
+        "f1a9f4ce.0e5608"
       ],
       [
-        "4ee85334.b117ac"
+        "198f2419.e670dc"
       ]
     ]
   },
   {
-    "id": "4ee85334.b117ac",
+    "id": "198f2419.e670dc",
     "type": "http response",
     "z": "17b3daf5.e84c25",
     "name": "",
@@ -1176,7 +1163,7 @@
     "wires": []
   },
   {
-    "id": "6784b536.987b4c",
+    "id": "4177d64f.be8828",
     "type": "function",
     "z": "17b3daf5.e84c25",
     "name": "",
@@ -1187,12 +1174,12 @@
     "y": 943,
     "wires": [
       [
-        "8d10521d.72efb"
+        "4811d5ff.b7ee2c"
       ]
     ]
   },
   {
-    "id": "838606a4.7c79f8",
+    "id": "66fca477.99035c",
     "type": "json",
     "z": "17b3daf5.e84c25",
     "name": "",
@@ -1200,12 +1187,12 @@
     "y": 210,
     "wires": [
       [
-        "865cb796.79a348"
+        "75e27669.8a1d88"
       ]
     ]
   },
   {
-    "id": "29a586b4.d65a7a",
+    "id": "14b428c4.eb4bd7",
     "type": "switch",
     "z": "17b3daf5.e84c25",
     "name": "",
@@ -1232,18 +1219,18 @@
     "y": 236,
     "wires": [
       [
-        "838606a4.7c79f8"
+        "66fca477.99035c"
       ],
       [
-        "865cb796.79a348"
+        "75e27669.8a1d88"
       ],
       [
-        "865cb796.79a348"
+        "75e27669.8a1d88"
       ]
     ]
   },
   {
-    "id": "8d10521d.72efb",
+    "id": "4811d5ff.b7ee2c",
     "type": "http request",
     "z": "17b3daf5.e84c25",
     "name": "",
@@ -1252,6 +1239,36 @@
     "url": "",
     "x": 1236,
     "y": 944,
+    "wires": [
+      []
+    ]
+  },
+  {
+    "id": "55941b8.faa6be4",
+    "type": "function",
+    "z": "17b3daf5.e84c25",
+    "name": "",
+    "func": "var msg1=context.global.render_home_components('Presence');\nmsg1.method=\"POST\";\nmsg1.url=context.global.BlueMixUrlBase+'/red/wscomms';\nmsg1.headers= {\n    \"Authorization\":\"Bearer \"+context.global.FREEBOARD_TOKEN\n};\nreturn msg1;",
+    "outputs": 1,
+    "noerr": 0,
+    "x": 345,
+    "y": 645,
+    "wires": [
+      [
+        "b4c28329.4b3d8"
+      ]
+    ]
+  },
+  {
+    "id": "b4c28329.4b3d8",
+    "type": "http request",
+    "z": "17b3daf5.e84c25",
+    "name": "",
+    "method": "use",
+    "ret": "txt",
+    "url": "",
+    "x": 486.5,
+    "y": 646,
     "wires": [
       []
     ]
