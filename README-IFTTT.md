@@ -107,7 +107,7 @@ Example:<br>
 * {"nodeRedVar":"Timer","value":"off","iftttkey":"XXXXXXXXXXXXXXXXXXXXXXXXX"}
 
 variable will be set on the global context.<br>
-taking the example above you should call that variable in your node-red function as <b>context.global.Timer</b>
+taking the example above you should call that variable in your node-red function as <b>context.global.Timer</b><br>
  <b>Please use a single word for a variable name and make it alhpanumeric (no spaces or special characters).</b>
   
 
