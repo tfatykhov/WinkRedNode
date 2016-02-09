@@ -2,7 +2,7 @@
 02/08/2016
 ----------------
 Added ability to set/change global variable via ifttt<br>
-Added home occupancy icon based on Node-Red Occupancy<br>
+Added home occupancy icon based on Node-Red Presence<br>
 <img src="images/new_updates.png">
 
 Bluemix git console:<br>
@@ -15,7 +15,11 @@ Flow Editor:<br>
 *  Import updated [tabletUI.json](tabletUI.json)
 *  perform "FULL" deployment<br>
 
-Check  [HOWTO - IFTTT](../../README-IFTTT.md) for instructions on how to set variable in node-red via IFTTT (last section of the document). 
+Check  [HOWTO - IFTTT](../../README-IFTTT.md) for instructions on how to set variable in node-red via IFTTT (last section of the document). <br>
+
+Check [HOWTO - Presence](../../README-PresenceIntegration.md) for examples on how to set up Presence in Wink Node-Red<br>
+you can also use IFTTT wifi connected/disconnected in case of Android or IFTTT location instead of Life365 as THIS in recipe.<br> 
+You can also use Tasker or similar software that can make an HTTPS POST call.
 
 02/07/2016
 ----------------
