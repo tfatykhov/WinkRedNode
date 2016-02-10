@@ -1,5 +1,21 @@
 [
   {
+    "id": "6f02a0f3.90fd6",
+    "type": "function",
+    "z": "17b3daf5.e84c25",
+    "name": "",
+    "func": "var currDate= new Date();\ncurr_presence=context.global.checkPresence()\nif (msg.payload.new_value!=='ERROR' && msg.payload.new_value!==msg.payload.old_value){\n    if('old_presence' in  msg.payload){\n        var HistP={}\n        HistP.timestamp=new Date();\n        HistP.offset=context.global.Weather.Offset\n        HistP.details=msg.payload.old_presence\n        node.warn(HistP)\n        context.global.PresenceHistory.unshift(HistP)\n    }\n    if (context.global.PresenceHistory.length > 15) context.global.PresenceHistory.pop();\n\n    var currDate= new Date();\n    var currHours=currDate.getHours();\n    var currMins=currDate.getMinutes();\n    var currOffset=currDate.getTimezoneOffset()*-1/60;    \n    if ((currHours > context.global.Weather.SunriseHour && currHours < context.global.Weather.SunsetHour) || (currHours==context.global.Weather.SunsetHour && currMins <context.global.Weather.SunsetMin))\n    {\n        var timeFrame=\"DAY\";\n    }\n    else {\n        var timeFrame=\"NIGHT\";\n    }    \n    var scene_name=(msg.payload.new_value ? 'PRESENCE' : 'NO PRESENCE')+(timeFrame=='NIGHT' ? ' '+timeFrame : '');\n    for (var key in context.global.winkState.scenes){\n        if ( context.global.winkState.scenes[key].name.toUpperCase()==scene_name)\n        {\n            var newMsg ={\n            \"url\":\"https://winkapi.quirky.com/scenes/\"+context.global.winkState.scenes[key].object_id+\"/activate\",\n            \"method\": \"POST\",\n            headers: {\n                \"Authorization\":\"Bearer \"+context.global.WinkToken,\n                \"Content-Type\":\"application/json\"\n                }\n            }\n        node.send(newMsg)\n        return;\n        }\n    }\n}\nreturn;",
+    "outputs": 1,
+    "noerr": 0,
+    "x": 645.8958129882812,
+    "y": 649.22216796875,
+    "wires": [
+      [
+        "2b642905.d49bd6"
+      ]
+    ]
+  },
+  {
     "id": "f33ac51c.0cc538",
     "type": "function",
     "z": "17b3daf5.e84c25",
@@ -224,22 +240,6 @@
     "x": 651,
     "y": 562.9998779296875,
     "wires": []
-  },
-  {
-    "id": "6f02a0f3.90fd6",
-    "type": "function",
-    "z": "17b3daf5.e84c25",
-    "name": "",
-    "func": "var currDate= new Date();\ncurr_presence=context.global.checkPresence()\nif (msg.payload.new_value!=='ERROR' && msg.payload.new_value!==msg.payload.old_value){\n    if('old_presence' in  msg.payload){\n        var HistP={}\n        HistP.timestamp=new Date();\n        HistP.offset=context.global.Weather.Offset\n        HistP.details=msg.payload.old_presence\n        node.warn(HistP)\n        context.global.PresenceHistory.unshift(HistP)\n    }\n    if (context.global.PresenceHistory.length > 15) context.global.PresenceHistory.pop();\n\n    var currDate= new Date();\n    var currHours=currDate.getHours();\n    var currMins=currDate.getMinutes();\n    var currOffset=currDate.getTimezoneOffset()*-1/60;    \n    if ((currHours > context.global.Weather.SunriseHour && currHours < context.global.Weather.SunsetHour) || (currHours==context.global.Weather.SunsetHour && currMins <context.global.Weather.SunsetMin))\n    {\n        var timeFrame=\"DAY\";\n    }\n    else {\n        var timeFrame=\"NIGHT\";\n    }    \n    var scene_name=(msg.payload.new_value ? 'PRESENCE' : 'NO PRESENCE')+(timeFrame=='NIGHT' ? ' '+timFrame : '');\n    for (var key in context.global.winkState.scenes){\n        if ( context.global.winkState.scenes[key].name.toUpperCase()==scene_name)\n        {\n            var newMsg ={\n            \"url\":\"https://winkapi.quirky.com/scenes/\"+context.global.winkState.scenes[key].object_id+\"/activate\",\n            \"method\": \"POST\",\n            headers: {\n                \"Authorization\":\"Bearer \"+context.global.WinkToken,\n                \"Content-Type\":\"application/json\"\n                }\n            }\n        node.send(newMsg)\n        return;\n        }\n    }\n}\nreturn;",
-    "outputs": 1,
-    "noerr": 0,
-    "x": 645.8958129882812,
-    "y": 649.22216796875,
-    "wires": [
-      [
-        "2b642905.d49bd6"
-      ]
-    ]
   },
   {
     "id": "2b642905.d49bd6",
