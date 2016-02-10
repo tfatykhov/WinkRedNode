@@ -1,4 +1,16 @@
 == UPDATE ==
+02/09/2016
+----------------
+Added forecast(just click on current conditions weather icon)<br>
+<img src="images/forecast.png">
+Added ability to call PRESENCE / NO PRESENCE shortcuts during day (before sunset) and<br>
+PRESENCE NIGHT / NO PRESENCE NIGHT after sunset and before sunrize<br>
+Flow Editor:<br>
+*  Import updated [winkCore.json](winkCore.json)
+*  Import updated [winkIntegration.json](winkIntegration.json)
+*  Import updated [tabletUI.json](tabletUI.json)
+*  perform "FULL" deployment<br>
+
 02/08/2016
 ----------------
 Added ability to set/change global variable via ifttt<br>
