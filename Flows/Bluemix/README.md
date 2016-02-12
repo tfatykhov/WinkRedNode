@@ -1,4 +1,22 @@
 == UPDATE ==
+02/12/2016
+-----------------
+New light effects for IFTTT/Tasker/etc  [HOWTO - IFTTT](../../README-IFTTT.md#fadeinfadeoutpulse-effects-for-dimmable-lights-and-groups)<br>
+
+
+new custom page tab - navigate to config and add Label and url:<br>
+<img src="images/custom_tab.png">
+
+refresh browser window<br>
+
+<img src="images/custom_tab1.png">
+
+Flow Editor:<br>
+*  Import updated [winkIntegration.json](winkIntegration.json)
+*  Import updated [tabletUI.json](tabletUI.json)
+*  perform "Modified Flows" deployment<br>
+
+
 02/09/2016
 ----------------
 Added forecast(just click on current conditions weather icon)<br>
