@@ -137,7 +137,7 @@ example of Maker channel body
 <b>for pulse effect</b><br>
 
 * {"winkName": "Home office", "type": "light","repeat":"3","min":"10","max":"50","delay":"5", "iftttkey": "XXXXXXXXXX"}
-  * repeat number of times to repeat effect
+  * repeat - number of times to repeat effect
   * min - min brightness
   * max - max brightness
   * delay - time between min/max in seconds
