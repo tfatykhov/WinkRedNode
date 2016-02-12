@@ -127,7 +127,7 @@ content-type: application/json
 
 example of Maker channel body
 <b>for fadein/fadeout effects</b><br>
- * {"winkName": "Home office", "type": "light","period":"30","min":"0","max":"100", "iftttkey": "BZURpU1ifWL7I7Shi6fn"}
+ * {"winkName": "Home office", "type": "light","period":"30","min":"0","max":"100", "iftttkey": "XXXXXXX"}
   * period - total effect time in seconds
   * min - minimum brightness 0 - 100
   * max - maximum brightness 0 -100
@@ -136,7 +136,7 @@ example of Maker channel body
  
 <b>for pulse effect</b><br>
 
-* {"winkName": "Home office", "type": "light","repeat":"3","min":"10","max":"50","delay":"5", "iftttkey": "BZURpU1ifWL7I7Shi6fn"}
+* {"winkName": "Home office", "type": "light","repeat":"3","min":"10","max":"50","delay":"5", "iftttkey": "XXXXXXXXXX"}
   * repeat number of times to repeat effect
   * min - min brightness
   * max - max brightness
