@@ -100,7 +100,7 @@
     "payloadType": "date",
     "repeat": "",
     "crontab": "",
-    "once": false,
+    "once": true,
     "x": 109,
     "y": 237,
     "wires": [
