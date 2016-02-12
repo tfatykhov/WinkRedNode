@@ -110,7 +110,36 @@ variable will be set on the global context.<br>
 taking the example above you should call that variable in your node-red function as <b>context.global.Timer</b><br>
  <b>Please use a single word for a variable name and make it alhpanumeric (no spaces or special characters).</b>
   
+FadeIn/FadeOut/Pulse effects for dimmable lights and groups
+--------------------------------------------------------------
 
+Maker channel send web request parameters (used in THAT):
 
+url 
+(your node-red host)/red/ifttt/effects/(effect_name)    (for example samplewinkapp.mybluemix.net/red/ifttt)
 
+replace effect name with one of the following: fadein , fadeout , pulse<br> 
+ <b>example: https://samplewinkapp.mybluemix.net/red/ifttt/effects/fadeout</b>
 
+method: POST
+
+content-type: application/json
+
+example of Maker channel body
+<b>for fadein/fadeout effects</b><br>
+ * {"winkName": "Home office", "type": "light","period":"30","min":"0","max":"100", "iftttkey": "BZURpU1ifWL7I7Shi6fn"}
+  * period - total effect time in seconds
+  * min - minimum brightness 0 - 100
+  * max - maximum brightness 0 -100
+  * winkName - name of dimmable light or group
+  * type light/group
+ 
+<b>for pulse effect</b><br>
+
+* {"winkName": "Home office", "type": "light","repeat":"3","min":"10","max":"50","delay":"5", "iftttkey": "BZURpU1ifWL7I7Shi6fn"}
+  * repeat number of times to repeat effect
+  * min - min brightness
+  * max - max brightness
+  * delay - time between min/max in seconds
+  * winkName - name of dimmable light or group
+  * type light/group
