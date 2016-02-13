@@ -1,4 +1,18 @@
 == UPDATE ==
+02/13/2016
+-----------------
+Ring door bell notifications shown in the log and in dashboard<br>
+
+<img src="images/door_bell1.png">
+
+<img src="images/door_bell2.png">
+
+Flow Editor:<br>
+*  Import updated [winkCore.json](winkCore.json)
+*  perform "FULL" deployment<br>
+*  do not forget to check [duplicate websockets](../../README-WebsocketFix.md)<br>
+
+
 02/12/2016
 -----------------
 New light effects for IFTTT/Tasker/etc  [HOWTO - IFTTT](../../README-IFTTT.md#fadeinfadeoutpulse-effects-for-dimmable-lights-and-groups)<br>
