@@ -591,8 +591,8 @@
     "func": "if ('ok' in msg.payload && msg.payload.ok){\n    var cameraname=msg.payload.id.split('|')[0];\n    var tstamp=msg.payload.id.split('|')[1];\n    //node.warn('Camera - ' + cameraname)\n    if (typeof(context.global.winkState.cameras[cameraname].activities)==='undefined') context.global.winkState.cameras[cameraname].activities=[]\n    var cam_act={\n        id:msg.payload.rev,\n        cloudant_id:msg.payload.id,\n        category:\"cuepoint\",\n        cuepoint_id:Math.round(tstamp/1000),\n        trigger:msg.topic,\n        snapshot_url:context.global.BlueMixUrlBase+\"/red/camera_history?img_id=\"+msg.payload.id\n    }\n   context.global.winkState.cameras[cameraname].activities.splice(0,0,cam_act);\n   if (context.global.winkState.cameras[cameraname].activities.length>15){\n    for (var i=15; i<context.global.winkState.cameras[cameraname].activities.length;i++){\n    var doc_id=context.global.winkState.cameras[cameraname].activities[i].cloudant_id\n    var rev=context.global.winkState.cameras[cameraname].activities[i].id\n    if(typeof(doc_id)!=='undefined'){\n    var DBmsg={\n         topic:cameraname,\n         position:i,\n         url:context.global.VCAP_SERVICES.cloudantNoSQLDB[0].credentials.url+\"/winkapp/\"+doc_id+\"?rev=\"+rev,\n        method:\"DELETE\"\n    }\n    node.send(DBmsg);\n    }\n   }\n   }\n}\nreturn;",
     "outputs": 1,
     "noerr": 0,
-    "x": 1089.0000610351562,
-    "y": 1103.72216796875,
+    "x": 1106.0000610351562,
+    "y": 1215.72216796875,
     "wires": [
       [
         "505311ce.afacf"
@@ -1170,8 +1170,8 @@
     "func": "var msg1={\n    payload:{\n        config:{\n        HoursFormat24:context.global.HoursFormat24\n        }\n    }\n}\nmsg1.method=\"POST\";\nmsg1.url=context.global.BlueMixUrlBase+'/red/wscomms';\nmsg1.headers= {\n    \"Authorization\":\"Bearer \"+context.global.FREEBOARD_TOKEN\n};\n\nreturn msg1;",
     "outputs": 1,
     "noerr": 0,
-    "x": 1076.5,
-    "y": 1058,
+    "x": 1078.5,
+    "y": 1046,
     "wires": [
       [
         "4811d5ff.b7ee2c"
@@ -1229,8 +1229,8 @@
     "method": "use",
     "ret": "txt",
     "url": "",
-    "x": 1280,
-    "y": 1060,
+    "x": 1266,
+    "y": 1046,
     "wires": [
       []
     ]
@@ -1413,7 +1413,7 @@
     "type": "function",
     "z": "17b3daf5.e84c25",
     "name": "fadein",
-    "func": "var max=parseInt(msg.payload.max) || 0 //0-100\nvar min=parseInt(msg.payload.min) || 0  //0-100\nvar period=parseInt(msg.payload.period) ||0 //in secondsdd\nvar delay=parseInt(msg.payload.step_time) || 5; //in seconds\nvar timeout_adjust=0;\ngen_msg=function(winkName,type,level){\n    var WinkCMDmsg = context.global.executeWinkCMD(winkName,type,(level > 0 ? 'on' : 'off'),level);\n    node.send(WinkCMDmsg);\n};\nfunction doWithTimeout(i,delay){\n    setTimeout(function(){gen_msg(msg.payload.winkName,msg.payload.type,i);},delay)\n}\nif (max>min && ((msg.payload.type=='light' && msg.payload.winkName in context.global.winkState.light_bulbs) || msg.payload.type=='group')){\n    var step=Math.round((max-min)/period*delay)-1;\n    if (step<1) step=1;\n    var i=1;\n    var curr_br=min;\n    do {\n    \ttimeout_adjust++;\n    \tcurr_br=min+i;\n        doWithTimeout(curr_br,timeout_adjust*delay*1000);\n        i+=step;\n    } while(min+i<max);\n    timeout_adjust++;\n    if (curr_br<max) doWithTimeout(max,timeout_adjust*delay*1000);\n}\nreturn;",
+    "func": "var max=parseInt(msg.payload.max) || 0; //0-100\nvar min=parseInt(msg.payload.min) || 0;  //0-100\nvar period=parseInt(msg.payload.period) ||0; //in secondsdd\nvar delay=parseInt(msg.payload.step_time) || 5; //in seconds\nvar timeout_adjust=0;\ngen_msg=function(winkName,type,level){\n    var WinkCMDmsg = context.global.executeWinkCMD(winkName,type,(level > 0 ? 'on' : 'off'),level);\n    node.send(WinkCMDmsg);\n};\nfunction doWithTimeout(i,delay){\n    setTimeout(function(){gen_msg(msg.payload.winkName,msg.payload.type,i);},delay);\n}\nif (max>min && ((msg.payload.type=='light' && msg.payload.winkName in context.global.winkState.light_bulbs) || msg.payload.type=='group')){\n    var step=Math.round((max-min)/period*delay)-1;\n    if (step<1) step=1;\n    var i=1;\n    var curr_br=min;\n    do {\n    \ttimeout_adjust++;\n    \tcurr_br=min+i;\n        doWithTimeout(curr_br,timeout_adjust*delay*1000);\n        i+=step;\n    } while(min+i<max);\n    timeout_adjust++;\n    if (curr_br<max) doWithTimeout(max,timeout_adjust*delay*1000);\n}\nreturn;",
     "outputs": 1,
     "noerr": 0,
     "x": 882,
@@ -1464,8 +1464,8 @@
     "method": "use",
     "ret": "obj",
     "url": "",
-    "x": 1105,
-    "y": 335,
+    "x": 1117,
+    "y": 334,
     "wires": [
       []
     ]
