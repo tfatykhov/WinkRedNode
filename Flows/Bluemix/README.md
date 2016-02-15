@@ -1,4 +1,14 @@
 == UPDATE ==
+02/15/2016 part.2
+----------------
+Added garage doors to controls tab under Locks and Doors section<br>
+Flow Editor:<br>
+*  Import updated [winkCore.json](winkCore.json)
+*  Import updated [tabletUI.json](tabletUI.json)
+*  do not forget to check [duplicate websockets](../../README-WebsocketFix.md)
+*  perform "FULL" deployment<br>
+
+
 02/15/2016
 ----------------
 Added separate "Robots" tab where you can check status and enable/disable them.
