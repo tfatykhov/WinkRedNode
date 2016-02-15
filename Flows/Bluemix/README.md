@@ -10,7 +10,7 @@ Garage doors should work now:
 <img src="images/garage_door.png">
 
 New Command types for IFTTT and internal use<br>
-Check  [HOWTO - IFTTT](../../README-IFTTT.md) for instructions <br>
+Check  [HOWTO - IFTTT](../../README-IFTTT.md#send-wink-device-cmd-via-ifttt-new) for instructions <br>
 
 Flow Editor:<br>
 *  Import updated [winkCore.json](winkCore.json)
