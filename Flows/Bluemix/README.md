@@ -1,4 +1,14 @@
 == UPDATE ==
+02/14/2016 v2 11pm Eastern
+----------------
+Updated the "Standardize for robots" node on winkCore to allow for triggering Wink Node Red robots when a Wink app robot fires
+
+Flow Editor:<br>
+*  Import updated [winkCore.json](winkCore.json)
+*  perform "FULL" deployment<br>
+*  do not forget to check [duplicate websockets](../../README-WebsocketFix.md)<br>
+  
+
 02/14/2016
 ----------------
 New icons for door/windows/cabinets and garage (not tested since I do not have this device)
