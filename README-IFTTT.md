@@ -75,9 +75,10 @@ example of Maker channel body
 format:
 winkName - name of wink device/group/shortcut as defined in the wink app
 
-type: lock/light/group/shortcut
+type: lock/light/group/shortcut/garage/robot
 
-cmd: on/off, lock/unlock
+cmd: light/group: on/off, lock: lock/unlock   robot: enable/disable, garage: open/close
+
 level - dim level 0-100 required for light dimmers and groups if not present will be auto set to 100 for on and 0 for off commands.
 
 [Sample IFTTT recipe](https://ifttt.com/recipes/378174-post-command-to-wink-node-red)
