@@ -5,6 +5,13 @@ Added separate "Robots" tab where you can check status and enable/disable them.
 
 <img src="images/robots_tab.png">
 
+Garage doors should work now:
+
+<img src="images/garage_door.png">
+
+New Command types for IFTTT and internal use<br>
+Check  [HOWTO - IFTTT](../../README-IFTTT.md) for instructions <br>
+
 Flow Editor:<br>
 *  Import updated [winkCore.json](winkCore.json)
 *  Import updated [winkIntegration.json](winkIntegration.json)
