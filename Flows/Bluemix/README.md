@@ -1,4 +1,18 @@
 == UPDATE ==
+02/15/2016
+----------------
+Added separate "Robots" tab where you can check status and enable/disable them.
+
+<img src="images/robots_tab.png">
+
+Flow Editor:<br>
+*  Import updated [winkCore.json](winkCore.json)
+*  Import updated [winkIntegration.json](winkIntegration.json)
+*  Import updated [tabletUI.json](tabletUI.json)
+*  do not forget to check [duplicate websockets](../../README-WebsocketFix.md)
+*  perform "FULL" deployment<br>
+
+
 02/14/2016 v2 11pm Eastern
 ----------------
 Updated the "Standardize for robots" node on winkCore to allow for triggering Wink Node Red robots when a Wink app robot fires
