@@ -1,4 +1,31 @@
 == UPDATE ==
+02/14/2016 v2 11pm Eastern
+----------------
+Updated the "Standardize for robots" node on winkCore to allow for triggering Wink Node Red robots when a Wink app robot fires
+
+Flow Editor:<br>
+*  Import updated [winkCore.json](winkCore.json)
+*  perform "FULL" deployment<br>
+*  do not forget to check [duplicate websockets](../../README-WebsocketFix.md)<br>
+  
+
+02/14/2016
+----------------
+New icons for door/windows/cabinets and garage (not tested since I do not have this device)
+
+
+<img src="images/new_icons.png">
+
+
+Bluemix git console:<br>
+
+*  restart application 
+
+Flow Editor:<br>
+*  Import updated [winkCore.json](winkCore.json)
+*  perform "FULL" deployment<br>
+*  do not forget to check [duplicate websockets](../../README-WebsocketFix.md)<br>
+
 02/13/2016
 -----------------
 Ring door bell notifications shown in the log and in dashboard<br>
