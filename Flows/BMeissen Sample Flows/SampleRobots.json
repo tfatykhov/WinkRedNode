@@ -1,113 +1,139 @@
 [
   {
-    "id": "c0728837.3f8d78",
+    "id": "f6310303.09cf",
     "type": "http in",
-    "z": "f17c0cb2.0e83f",
+    "z": "c5235015.3adcb",
     "name": "",
     "url": "/red/robots",
     "method": "post",
     "swaggerDoc": "",
-    "x": 84,
-    "y": 20,
+    "x": 359,
+    "y": 194,
     "wires": [
       [
-        "d7f8d9a.f280728"
+        "1b75718e.e48a8e"
       ]
     ]
   },
   {
-    "id": "f6ec754e.091388",
+    "id": "12bbf4f5.ed440b",
     "type": "comment",
-    "z": "f17c0cb2.0e83f",
+    "z": "c5235015.3adcb",
     "name": "^---- Update the \"Robots\" node to program your robots.",
     "info": "",
-    "x": 543,
-    "y": 100,
+    "x": 818,
+    "y": 274,
     "wires": []
   },
   {
-    "id": "aa0c758d.55f388",
+    "id": "9215336c.6dead",
     "type": "function",
-    "z": "f17c0cb2.0e83f",
+    "z": "c5235015.3adcb",
     "name": "Robots",
-    "func": "date=new Date();\n\nif ('useRobots' in context.global && context.global.useRobots) {\n    var WinkCMDmsg = \"\";\n    // Import changed data into a local variable for ease of use\n    changed = msg.payload;\n    // All robots are \"if statements\"\n    // Use the examples below to create your own robots -- you can have multiple conditions as seen below.\n\n    // Example #1: If my Hallway Sensor (motion sensor) changes to motion detected, turn on my hallway light.\n    // Note best practice is to have old_state== && new_state== as these two conditions means that the old_state\n    // was something else and CHANGED to the new_state. You might get falsely triggered events if you do not\n    // put old_state into the condition.\n    if (changed.name==\"Hallway Sensor\" && changed.old_state!==true && changed.new_state==true )\n    {\n        // This command turns my Hallway light on to 100%\n        WinkCMDmsg = context.global.executeWinkCMD(\"Hallway\",\"light\",\"on\",\"100\");\n        node.send(WinkCMDmsg);\n    }\n    \n    // Example #2 - Another motion sensor example.\n    if (changed.name==\"Great Room Sensor\" && changed.old_state!==true && changed.new_state==true )\n    {\n        // This command sets my Ambiance group on at 100%\n        WinkCMDmsg = context.global.executeWinkCMD(\"Ambiance\",\"group\",\"on\",\"100\");\n        node.send(WinkCMDmsg);\n        \n        // This command just shows a message in the debug tab.\n        node.warn(\"Great Room Sensor motion detected - turn on Ambiance.\")\n    }\n    \n    // Example #3 turns the group off when Motion is no longer detected.\n    // Note in this example, I'm specifically saying when old_state==true and new_state==false because \n    // I only want this to trigger when the motion sensor CHANGES to false FROM true. In the above\n    // examples where old_state!==true, old_state could be undefined and new_state could equal true\n    // and the robots would still fire. In this case, if old_state is undefined and new_state is false\n    // then the robot could trigger erroneously.\n    if (changed.name==\"Great Room Sensor\" && changed.old_state==true && changed.new_state==false )\n    {\n        // This command turns my Ambiance group off when motion is no longer detected.\n        WinkCMDmsg = context.global.executeWinkCMD(\"Ambiance\",\"group\",\"off\",\"0\");\n        node.send(WinkCMDmsg);\n        node.warn(\"Great Room Sensor motion no longer detected - turn off Ambiance.\")\n    }\n    \n    // Example #4: If the front door opens (and was previously not open) and my wife isn't home, then do something.\n    if (changed.name==\"Front Door\" && changed.old_state==\"Closed\" && changed.new_state==\"Opened\" && context.global.Presence[Angie].home==false)\n    {\n        // Command shows a message in the debug tab when it's triggered:\n        node.warn(\"Front door opened!\");\n        \n        // This command sends an HTTP command to the URL specified.\n        // In this case, it sends a message through IFTTT which then notifies my wife the front door opened whiles he was gone.\n        WinkCMDmsg ={\n            \"url\":\"https://maker.ifttt.com/trigger/front_door_opened/with/key/\",\n            \"method\": \"PUT\",\n            payload:{}\n        }\n        node.send(WinkCMDmsg);\n    }\n    \n    // Example 5: When the garage door opens (and was previously not open), do something.\n    if (changed.name==\"GarageDoor\" && changed.old_state==\"Closed\" && changed.new_state==\"Opened\")\n    {\n        // Say something in the debug window.\n        node.warn(\"Garage door opened!\");\n        \n        // Send a wink Command to turn the Garage Interior group on at 100% brightness.\n        // If I wanted to change a bulb on/off, then I would use:\n        // WinkCMDmsg = context.global.executeWinkCMD(\"Light Bulb\",\"light\",\"on\",\"1\");\n        // The command above would turn a light bulb on at 1%. Obviously change on to off, 1 to a number 1 through 100.\n        WinkCMDmsg = context.global.executeWinkCMD(\"Garage Interior\",\"group\",\"on\",\"100\");\n        node.send(WinkCMDmsg);\n    }\n\n    \n}    \n    \n// You shouldn't have to edit anything below this line.\nreturn;",
+    "func": "date=new Date();\n\nif ('useRobots' in context.global && context.global.useRobots) {\n    var WinkCMDmsg = \"\";\n    // Import changed data into a local variable for ease of use\n    changed = msg.payload;\n    // All robots are \"if statements\"\n    // Use the examples below to create your own robots -- you can have multiple conditions as seen below.\n\n    // Example #1: If my Hallway Sensor (motion sensor) changes to motion detected, turn on my hallway light.\n    // Note best practice is to have old_state== && new_state== as these two conditions means that the old_state\n    // was something else and CHANGED to the new_state. You might get falsely triggered events if you do not\n    // put old_state into the condition.\n    if (changed.name==\"Hallway Sensor\" && changed.old_state!==true && changed.new_state===true )\n    {\n        // This command turns my Hallway light on to 100%\n        try {\n            WinkCMDmsg = context.global.executeWinkCMD(\"Hallway\",\"light\",\"on\",\"100\");\n            node.send(WinkCMDmsg);\n        }\n        catch(error){\n            node.warn(error.message);\n        }\n    }\n    \n    // Example #2 - Another motion sensor example.\n    if (changed.name==\"Great Room Sensor\" && changed.old_state!==true && changed.new_state===true )\n    {\n        // This command sets my Ambiance group on at 100%\n         try {\n            WinkCMDmsg = context.global.executeWinkCMD(\"Ambiance\",\"group\",\"on\",\"100\");\n            node.send(WinkCMDmsg);\n            // This command just shows a message in the debug tab.\n            node.warn(\"Great Room Sensor motion detected - turn on Ambiance.\");\n         }\n        catch(error){\n            node.warn(error.message);\n        }\n    }\n    \n    // Example #3 turns the group off when Motion is no longer detected.\n    // Note in this example, I'm specifically saying when old_state==true and new_state==false because \n    // I only want this to trigger when the motion sensor CHANGES to false FROM true. In the above\n    // examples where old_state!==true, old_state could be undefined and new_state could equal true\n    // and the robots would still fire. In this case, if old_state is undefined and new_state is false\n    // then the robot could trigger erroneously.\n    if (changed.name==\"Great Room Sensor\" && changed.old_state===true && changed.new_state===false )\n    {\n        // This command turns my Ambiance group off when motion is no longer detected.\n        try {\n            WinkCMDmsg = context.global.executeWinkCMD(\"Ambiance\",\"group\",\"off\",\"0\");\n            node.send(WinkCMDmsg);\n            node.warn(\"Great Room Sensor motion no longer detected - turn off Ambiance.\")\n        }\n        catch(error){\n            node.warn(error.message);\n        }\n    }\n    \n    // Example #4: If the front door opens (and was previously not open) and my wife isn't home, then do something.\n    if (changed.name==\"Front Door\" && changed.old_state==\"Closed\" && changed.new_state==\"Opened\" && context.global.Presence[Angie].home===false)\n    {\n        // Command shows a message in the debug tab when it's triggered:\n        node.warn(\"Front door opened!\");\n        try {\n            // This command sends an HTTP command to the URL specified.\n            // In this case, it sends a message through IFTTT which then notifies my wife the front door opened whiles he was gone.\n            WinkCMDmsg ={\n                \"url\":\"https://maker.ifttt.com/trigger/front_door_opened/with/key/\",\n                \"method\": \"PUT\",\n                payload:{}\n            }\n            node.send(WinkCMDmsg);\n        }\n        catch(error){\n            node.warn(error.message);\n        }\n    }\n    \n    // Example 5: When the garage door opens (and was previously not open), do something.\n    if (changed.name==\"GarageDoor\" && changed.old_state==\"Closed\" && changed.new_state==\"Opened\")\n    {\n        // Say something in the debug window.\n        node.warn(\"Garage door opened!\");\n        try {\n            // Send a wink Command to turn the Garage Interior group on at 100% brightness.\n            // If I wanted to change a bulb on/off, then I would use:\n            // WinkCMDmsg = context.global.executeWinkCMD(\"Light Bulb\",\"light\",\"on\",\"1\");\n            // The command above would turn a light bulb on at 1%. Obviously change on to off, 1 to a number 1 through 100.\n            WinkCMDmsg = context.global.executeWinkCMD(\"Garage Interior\",\"group\",\"on\",\"100\");\n            node.send(WinkCMDmsg);\n        }\n        catch(error){\n            node.warn(error.message);\n        }    \n    }\n\n    \n}    \n    \n// You shouldn't have to edit anything below this line.\nreturn;",
     "outputs": "1",
     "noerr": 0,
-    "x": 383,
-    "y": 61,
+    "x": 658,
+    "y": 235,
     "wires": [
       [
-        "9d16c901.62e938"
+        "b0fb38ba.4f04c8"
       ]
     ]
   },
   {
-    "id": "9d16c901.62e938",
+    "id": "b0fb38ba.4f04c8",
     "type": "http request",
-    "z": "f17c0cb2.0e83f",
+    "z": "c5235015.3adcb",
     "name": "",
     "method": "use",
     "ret": "obj",
     "url": "",
-    "x": 537,
-    "y": 61,
+    "x": 812,
+    "y": 235,
     "wires": [
       [
-        "b23c43b8.4dc3c"
+        "1ba154f2.e45eab"
       ]
     ]
   },
   {
-    "id": "b23c43b8.4dc3c",
+    "id": "1ba154f2.e45eab",
     "type": "debug",
-    "z": "f17c0cb2.0e83f",
+    "z": "c5235015.3adcb",
     "name": "",
     "active": false,
     "console": "false",
     "complete": "false",
-    "x": 708,
-    "y": 61,
+    "x": 983,
+    "y": 235,
     "wires": []
   },
   {
-    "id": "d7f8d9a.f280728",
+    "id": "1b75718e.e48a8e",
     "type": "function",
-    "z": "f17c0cb2.0e83f",
+    "z": "c5235015.3adcb",
     "name": "",
     "func": "if(msg.req.headers.authorization && msg.req.headers.authorization==\"Bearer \"+context.global.FREEBOARD_TOKEN){\nmsg.StatusCode=\"200\";\n//if ('camera_name' in msg.payload && msg.payload.camera_name!=='undefined') msg.payload.camera_name=msg.req.body.camera_name\n} else {\nmsg.StatusCode=\"403\";\n}\n\nif (msg.StatusCode==\"200\")\n{\n    return [msg, msg];\n}\nelse { \n    return [msg];\n}",
     "outputs": "2",
     "noerr": 0,
-    "x": 246,
-    "y": 20,
+    "x": 521,
+    "y": 194,
     "wires": [
       [
-        "8526ef09.7ad91"
+        "c4938c4.f3b6c7"
       ],
       [
-        "aa0c758d.55f388",
-        "872ed241.78d13"
+        "9215336c.6dead",
+        "4db9a84a.b24658"
       ]
     ]
   },
   {
-    "id": "8526ef09.7ad91",
+    "id": "c4938c4.f3b6c7",
     "type": "http response",
-    "z": "f17c0cb2.0e83f",
+    "z": "c5235015.3adcb",
     "name": "",
-    "x": 384,
-    "y": 20,
+    "x": 659,
+    "y": 194,
     "wires": []
   },
   {
-    "id": "872ed241.78d13",
+    "id": "4db9a84a.b24658",
     "type": "debug",
-    "z": "f17c0cb2.0e83f",
+    "z": "c5235015.3adcb",
     "name": "",
     "active": false,
     "console": "false",
     "complete": "false",
-    "x": 402,
-    "y": 136,
+    "x": 677,
+    "y": 310,
+    "wires": []
+  },
+  {
+    "id": "aae404f7.551bf8",
+    "type": "catch",
+    "z": "c5235015.3adcb",
+    "name": "",
+    "scope": null,
+    "x": 337,
+    "y": 499,
+    "wires": [
+      [
+        "9bea4c7.f6415b"
+      ]
+    ]
+  },
+  {
+    "id": "9bea4c7.f6415b",
+    "type": "debug",
+    "z": "c5235015.3adcb",
+    "name": "",
+    "active": true,
+    "console": "false",
+    "complete": "false",
+    "x": 526,
+    "y": 497,
     "wires": []
   }
 ]
