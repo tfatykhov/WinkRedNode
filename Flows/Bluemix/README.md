@@ -1,4 +1,48 @@
 == UPDATE ==
+02/19/2016
+----------------
+Added manual snaphsot button for each camera:
+
+<img src="images/snapshot_button.png">
+
+Added new global object <b>sunTimes</b> to use in schedules/robots/etc. it has following values:
+* sunrise	- sunrise (top edge of the sun appears on the horizon)
+* sunriseEnd	- sunrise ends (bottom edge of the sun touches the horizon)
+* goldenHourEnd	- morning golden hour (soft light, best time for photography) ends
+* solarNoon	- solar noon (sun is in the highest position)
+* goldenHour	- evening golden hour starts
+* sunsetStart	- sunset starts (bottom edge of the sun touches the horizon)
+* sunset	- sunset (sun disappears below the horizon, evening civil twilight starts)
+* dusk		- dusk (evening nautical twilight starts)
+* nauticalDusk	- nautical dusk (evening astronomical twilight starts)
+* night		- night starts (dark enough for astronomical observations)
+* nadir		- nadir (darkest moment of the night, sun is in the lowest position)
+* nightEnd	- night ends (morning astronomical twilight starts)
+* nauticalDawn	- nautical dawn (morning nautical twilight starts)
+* dawn		- dawn (morning nautical twilight ends, morning civil twilight starts)
+* sunset_m_1	- sunset minus one hour<br>
+Each attribute has 2 values: hour and minute
+
+so if you want to get values for dawn you need to address it as:<br>
+* context.global.sunTimes.dawn.hour
+* context.global.sunTimes.dawn.minute
+
+Required changes:<br>
+Bluemix git console:<br>
+
+*  copy contents of [package.json](package.json) and update same file in your configuration with it contents.
+*  add following line to the bluemix-settings.js inside functionGlobalContext section<br>
+	*  ,SunCalc : require("suncalc"). refer to [sample bluemix-settings.js](bluemix-settings.js)
+*  restart application 
+
+Flow Editor:<br>
+*  Import updated [winkCore.json](winkCore.json)
+*  Import updated [winkIntegration.json](winkIntegration.json)
+*  Import updated [tabletUI.json](tabletUI.json)
+*  do not forget to check [duplicate websockets](../../README-WebsocketFix.md)
+*  perform "FULL" deployment<br>
+
+
 02/15/2016 part.2
 ----------------
 Added garage doors to controls tab under Locks and Doors section<br>
