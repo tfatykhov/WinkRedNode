@@ -15,7 +15,9 @@
         "node-red-contrib-bluemix-hdfs":"0.x",
         "node-red-contrib-freeboard":"git://github.com/tfatykhov/node-red-contrib-freeboard.git",
         "node-red-node-pushbullet":"0.x",
-        "node-red-contrib-later":"~0.x"
+        "node-red-contrib-later":"~0.x",
+        "node-red-contrib-async":"~0.x",
+        "suncalc":"git://github.com/mourner/suncalc.git"
     },
     "engines": {
         "node": "~4.x"
