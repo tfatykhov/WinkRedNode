@@ -1,21 +1,5 @@
 [
   {
-    "id": "663e07b8.99c1f8",
-    "type": "function",
-    "z": "17b3daf5.e84c25",
-    "name": "create or update config ",
-    "func": "if ((\"error\" in msg.payload && msg.payload.error=='not_found') || msg.db_mode=='update'){\n    node.warn('no app_data exists in cloudant DB or update oeration, saving globals to database')\n    var DBMsg={\n        url:context.global.VCAP_SERVICES.cloudantNoSQLDB[0].credentials.url+\"/winkapp\",\n        method:(msg.db_mode=='update' ? \"PUT\":\"POST\"),\n        headers: \n            {\n                \"Content-Type\":\"application/json\"\n            },\n        payload: {\n            \"_id\":\"app_data\",\n            \"item\":\"app_data\",\n            \"app_cfg\":{\n            motionAdjustTstat: context.global.motionAdjustTstat||false,\n            BlueMixUrlBase:context.global.BlueMixUrlBase,\n            HomeLocation:context.global.HomeLocation,\n            HoursFormat24:context.global.HoursFormat24 || false,\n            LightsNotification:context.global.LightsNotification || false,\n            CustomTabUrl:context.global.CustomTabUrl || '',\n            CustomTabName:context.global.CustomTabName|| ''       \n            }\n        }\n    }\n    if(msg.db_mode=='update' && !(\"error\" in msg.payload && msg.payload.error=='not_found')){\n    DBMsg.url=DBMsg.url+\"/app_data\"    \n    DBMsg.payload._rev=msg.payload._rev;\n    }\n    if ('HomeLocation' in context.global) DBMsg.payload.app_cfg.HomeLocation=context.global.HomeLocation;\n//\tif ('FosCam' in context.global) DBMsg.payload.app_cfg.FosCam=context.global.FosCam;\n//\tif ('SamsungCam' in context.global) DBMsg.payload.app_cfg.SamsungCam=context.global.SamsungCam;\n//\tif ('DlinkCam' in context.global) DBMsg.payload.app_cfg.DlinkCam=context.global.DlinkCam;\n    if ('camera_motion' in context.global) DBMsg.payload.app_cfg.camera_motion=context.global.camera_motion;\n    if ('tab_ui_shortcuts' in context.global) DBMsg.payload.app_cfg.tab_ui_shortcuts=context.global.tab_ui_shortcuts;\n//    if ('netatmo' in context.global) DBMsg.payload.app_cfg.netatmo=context.global.netatmo;\n    if ('winkState' in context.global) DBMsg.payload.app_cfg.winkState=context.global.winkState;\n    if ('LIFX_TOKEN' in context.global) DBMsg.payload.app_cfg.LIFX_TOKEN=context.global.LIFX_TOKEN;\n    if ('IFTTT_TOKEN' in context.global)DBMsg.payload.app_cfg.IFTTT_TOKEN=context.global.IFTTT_TOKEN;\n    if ('forecastIoApiKey' in context.global)DBMsg.payload.app_cfg.forecastIoApiKey=context.global.forecastIoApiKey;\n    if ('InitialStateKey' in context.global)DBMsg.payload.app_cfg.InitialStateKey=context.global.InitialStateKey;\nnode.send(DBMsg);    \n}\nelse {\n    node.warn('config data exists, restoring');\n    for (var key in msg.payload.app_cfg){\n        node.warn('Restoring '+key+' settings')\n        if (key!=='winkState' && key!=='DlinkCam' && key!=='FosCam' && key!=='SamsungCam'){\n            context.global[key]=msg.payload.app_cfg[key];\n        } else if(msg.restore_wink||0===1) {\n            context.global[key]=msg.payload.app_cfg[key];\n        }\n    }\n}    \nreturn;",
-    "outputs": 1,
-    "noerr": 0,
-    "x": 958.5,
-    "y": 960,
-    "wires": [
-      [
-        "a6dc615b.5923a"
-      ]
-    ]
-  },
-  {
     "id": "f33ac51c.0cc538",
     "type": "function",
     "z": "17b3daf5.e84c25",
@@ -225,7 +209,8 @@
     "wires": [
       [
         "1ddb424.fe224be",
-        "beb1288.f414ed8"
+        "beb1288.f414ed8",
+        "7abee540.85411c"
       ],
       [
         "6f02a0f3.90fd6"
@@ -237,8 +222,8 @@
     "type": "http response",
     "z": "17b3daf5.e84c25",
     "name": "",
-    "x": 653,
-    "y": 660.9998779296875,
+    "x": 786,
+    "y": 662.9998779296875,
     "wires": []
   },
   {
@@ -249,8 +234,8 @@
     "func": "var currDate= new Date();\ncurr_presence=context.global.checkPresence()\nif (msg.payload.new_value!=='ERROR' && msg.payload.new_value!==msg.payload.old_value){\n    if('old_presence' in  msg.payload){\n        var HistP={}\n        HistP.timestamp=new Date();\n        HistP.offset=context.global.Weather.Offset\n        HistP.details=msg.payload.old_presence\n        node.warn(HistP)\n        context.global.PresenceHistory.unshift(HistP)\n    }\n    if (context.global.PresenceHistory.length > 15) context.global.PresenceHistory.pop();\n\n    var currDate= new Date();\n    var currHours=currDate.getHours();\n    var currMins=currDate.getMinutes();\n    currHours=currHours+context.global.Weather.Offset;\n    if ((currHours > context.global.Weather.SunriseHour && currHours < context.global.Weather.SunsetHour) || (currHours==context.global.Weather.SunsetHour && currMins <context.global.Weather.SunsetMin))\n    {\n        var timeFrame=\"DAY\";\n    }\n    else {\n        var timeFrame=\"NIGHT\";\n    }    \n    var scene_name=(msg.payload.new_value ? 'PRESENCE' : 'NO PRESENCE')+(timeFrame=='NIGHT' ? ' '+timeFrame : '');\n    for (var key in context.global.winkState.scenes){\n        if ( context.global.winkState.scenes[key].name.toUpperCase()==scene_name)\n        {\n            var newMsg ={\n            \"url\":\"https://winkapi.quirky.com/scenes/\"+context.global.winkState.scenes[key].object_id+\"/activate\",\n            \"method\": \"POST\",\n            headers: {\n                \"Authorization\":\"Bearer \"+context.global.WinkToken,\n                \"Content-Type\":\"application/json\"\n                }\n            }\n        node.send(newMsg)\n        return;\n        }\n    }\n}\nreturn;",
     "outputs": 1,
     "noerr": 0,
-    "x": 647.8958129882812,
-    "y": 747.22216796875,
+    "x": 780.8958129882812,
+    "y": 743.22216796875,
     "wires": [
       [
         "2b642905.d49bd6"
@@ -263,10 +248,10 @@
     "z": "17b3daf5.e84c25",
     "name": "",
     "method": "use",
-    "ret": "obj",
+    "ret": "txt",
     "url": "",
-    "x": 846.8958129882812,
-    "y": 748.333251953125,
+    "x": 939.8958129882812,
+    "y": 743.333251953125,
     "wires": [
       []
     ]
@@ -346,8 +331,8 @@
     "func": " var PresenceBkup={\n    Presence: context.global.Presence,\n    PresenceDetail: context.global.PresenceDetail,\n    PresenceHistory: context.global.PresenceHistory\n }\n    var DBMsg={\n        url:context.global.VCAP_SERVICES.cloudantNoSQLDB[0].credentials.url+\"/winkapp\",\n        method:\"POST\",\n        headers: \n            {\n                \"Content-Type\":\"application/json\"\n            },\n        payload: {\n            \"_id\":\"winkPresence\",\n            \"item\":\"Presence\",\n            \"Presence\":PresenceBkup\n        }\n    } \n \n \n //if (msg.payload.total_rows > 0  && msg.payload.rows.map(function(e) { return e.id; }).indexOf('winkPresence')!=-1){\n  if ('_rev' in msg.payload){   \n node.warn('record exists... updating');\n DBMsg.method=\"PUT\";\n DBMsg.url=DBMsg.url+\"/winkPresence\"\n DBMsg.payload._rev=msg.payload._rev;\n //msg.payload.rows.map(function(e) {if(e.id==\"winkPresence\") return e.value._rev; })[0];\n }\nreturn DBMsg;",
     "outputs": 1,
     "noerr": 0,
-    "x": 926.6041870117188,
-    "y": 703.611083984375,
+    "x": 1059.6041870117188,
+    "y": 705.611083984375,
     "wires": [
       [
         "b6d7a67c.492858"
@@ -362,8 +347,8 @@
     "func": "if (context.global.CloudantBkUP) {\n    var msg={\n        url:context.global.VCAP_SERVICES.cloudantNoSQLDB[0].credentials.url+\"/winkapp/winkPresence\",\n        method:\"GET\"\n    }\n    node.send(msg); \n}\nreturn;",
     "outputs": 1,
     "noerr": 0,
-    "x": 645.6041870117188,
-    "y": 702.611083984375,
+    "x": 778.6041870117188,
+    "y": 704.611083984375,
     "wires": [
       [
         "68c8e13a.97372"
@@ -378,8 +363,8 @@
     "method": "use",
     "ret": "obj",
     "url": "",
-    "x": 788.6041870117188,
-    "y": 702.611083984375,
+    "x": 921.6041870117188,
+    "y": 704.611083984375,
     "wires": [
       [
         "7c61b1e2.839e5"
@@ -394,8 +379,8 @@
     "method": "use",
     "ret": "obj",
     "url": "",
-    "x": 1065.6041870117188,
-    "y": 702.611083984375,
+    "x": 1198.6041870117188,
+    "y": 704.611083984375,
     "wires": [
       []
     ]
@@ -488,13 +473,15 @@
     "type": "function",
     "z": "17b3daf5.e84c25",
     "name": "restore from db",
-    "func": "if (\"Presence\" in msg.payload){\n    node.warn('restoring presence from db backup')\n    context.global.Presence=msg.payload.Presence.Presence\n    context.global.PresenceHistory=msg.payload.Presence.PresenceHistory\n}\nreturn;",
+    "func": "if (\"Presence\" in msg.payload){\n    node.warn('restoring presence from db backup')\n    context.global.Presence=msg.payload.Presence.Presence\n    context.global.PresenceHistory=msg.payload.Presence.PresenceHistory\n    for(var pr in context.global.Presence){\n        p=context.global.Presence[pr];\n        var PresenceSensorMsg={\n            url:context.global.BlueMixUrlBase+'/red/wink/subscribtions',\n            method:\"POST\",\n                headers: {\n                \"Content-Type\":\"application/json\"\n            },\n            payload:{\n              capabilities: { fields: [ { field: 'presence', type: 'boolean' } ] },\n              device_manufacturer: 'node_red_virtual_sensor',\n              hidden_at: null,\n              last_event: \n               { brightness_occurred_at: null,\n                 loudness_occurred_at: null,\n                 vibration_occurred_at: null },\n              last_reading: \n               { \n                   agent_session_id: 'FALSE',\n                   connection: true,\n                   presence:(p.home=='yes' ? true : false),\n               },\n              manufacturer_device_model: 'foscam_virtual_motion_sensor',\n              model_name: 'Presense Sensor',\n              \"eco_system\" : \"NODERED\",\n              name: pr,\n              object_id: 'Presense_'+pr,\n              object_type: 'sensor_pod',\n              radio_type: 'wifi',\n              sensor_pod_id: 'Presense_'+pr,\n              triggers: [],\n              units: {},\n              upc_code: 'presence_sensor',\n              upc_id: 'Presense_'+pr\n          }\n        }\n    node.send(PresenceSensorMsg);\n    }\n}\nreturn;",
     "outputs": 1,
     "noerr": 0,
     "x": 1021.3958282470703,
     "y": 1115.72216796875,
     "wires": [
-      []
+      [
+        "4e4df7dd.b1b208"
+      ]
     ]
   },
   {
@@ -512,7 +499,7 @@
     "type": "function",
     "z": "17b3daf5.e84c25",
     "name": "Save Snapshots to db",
-    "func": "function delay(ms) {\n        var cur_d = new Date();\n        var cur_ticks = cur_d.getTime();\n        var ms_passed = 0;\n        while(ms_passed < ms) {\n            var d = new Date();  // Possible memory leak?\n            var ticks = d.getTime();\n            ms_passed = ticks - cur_ticks;\n            // d = null;  // Prevent memory leak?\n        }\n    }\nif(msg.req.headers.authorization && msg.req.headers.authorization==\"Bearer \"+context.global.FREEBOARD_TOKEN){\nvar msg1=msg;\nvar trigger=msg.payload.object_name;\nvar cam_list=msg.payload.cam_list.split(',');\nmsg1.res.statusCode=\"200\";\nnode.send([msg1,null])\nvar date=new Date()\nfor (var i=0;i<cam_list.length;i++){\n//for (var cam in context.global.winkState.cameras){\n var camera=context.global.winkState.cameras[cam_list[i]]\n var cam=cam_list[i]\nif ('snap_url' in camera && camera.snap_url!=='undefined'){\n    var msg={}\n    msg.url=camera.snap_url\n    msg.method=\"GET\"\n    msg.date=date\n    msg.topic=cam\n    msg.trigger=trigger\n    node.send([null,msg]);\n    delay(400)\n}\n}\n\n} else {\n    msg.statusCode=\"401\";\n    node.send(msg);\n//    msg.res.send(401,\"Bad request\");\n}\nreturn;",
+    "func": "function delay(ms) {\n        var cur_d = new Date();\n        var cur_ticks = cur_d.getTime();\n        var ms_passed = 0;\n        while(ms_passed < ms) {\n            var d = new Date();  // Possible memory leak?\n            var ticks = d.getTime();\n            ms_passed = ticks - cur_ticks;\n            // d = null;  // Prevent memory leak?\n        }\n    }\nif ((msg.req.body.uid==context.global.WinkUser.uid && msg.req.body.pwd==context.global.WinkUser.pwd)||context.global.getCookie('exchange_token',msg.req.headers.cookie)==context.global.FREEBOARD_TOKEN || msg.payload.token==context.global.FREEBOARD_TOKEN){\nvar msg1=msg;\nvar trigger=msg.payload.object_name;\nvar cam_list=msg.payload.cam_list.split(',');\nmsg1.res.statusCode=\"200\";\nnode.send([msg1,null])\nvar date=new Date()\nfor (var i=0;i<cam_list.length;i++){\n//for (var cam in context.global.winkState.cameras){\n var camera=context.global.winkState.cameras[cam_list[i]]\n var cam=cam_list[i]\nif ('snap_url' in camera && camera.snap_url!=='undefined'){\n    var msg={}\n    msg.url=camera.snap_url\n    msg.method=\"GET\"\n    msg.date=date\n    msg.topic=cam\n    msg.trigger=trigger\n    node.send([null,msg]);\n    delay(400)\n}\n}\n\n} else {\n    msg.statusCode=\"401\";\n    node.send(msg);\n//    msg.res.send(401,\"Bad request\");\n}\nreturn;",
     "outputs": "2",
     "noerr": 0,
     "x": 383.1041717529297,
@@ -710,8 +697,8 @@
     "url": "/red/retrieve_activities",
     "method": "get",
     "swaggerDoc": "",
-    "x": 169.6042022705078,
-    "y": 1367.72216796875,
+    "x": 159.6042022705078,
+    "y": 1365.72216796875,
     "wires": [
       [
         "a419101d.5be6f"
@@ -974,7 +961,7 @@
     "type": "function",
     "z": "17b3daf5.e84c25",
     "name": "",
-    "func": "var lifxLights=msg.payload;\nvar useLiveUpd=('CRYPTO' in context.global ? true:false);\nvar CurreTag=\"\";\nvar eTag;\nif (Object.prototype.toString.call(lifxLights)==='[object Array]'){\n    lifxLights.forEach(function (bulb) {\n      //  node.warn(bulb.label)\n     if (context.global.winkState==='undefined') context.global.winkState={}\n     if (context.global.winkState.light_bulbs==='undefined') context.global.winkState.light_bulbs={}\n     if (bulb.label in context.global.winkState.light_bulbs && useLiveUpd) {\n          var WinkBulb={\n            \"connection\": context.global.winkState.light_bulbs[bulb.label].connection,\n            \"powered\": context.global.winkState.light_bulbs[bulb.label].powered,\n            \"brightness\": context.global.winkState.light_bulbs[bulb.label].brightness,\n            \"hue\" : context.global.winkState.light_bulbs[bulb.label].hue,\n            \"saturation\":context.global.winkState.light_bulbs[bulb.label].saturation,\n            \"temperature\":context.global.winkState.light_bulbs[bulb.label].temperature\n          }\n          CurreTag=context.global.CRYPTO.createHash(\"md5\").update(JSON.stringify(WinkBulb),\"utf8\").digest(\"hex\");\n     }\n     \n     var OrigObject={\n        \"connection\": bulb.connected,\n        \"powered\": (bulb.connected && bulb.power==\"on\" ? true : false),\n        \"brightness\": bulb.brightness,\n        \"hue\" : bulb.color.hue,\n        \"saturation\":bulb.color.saturation,\n        \"temperature\":bulb.color.kelvin\n     };\n     if (useLiveUpd){\n     var LifBulb={\n        \"name\": bulb.label,\n        \"manufacturer_id\": \"lifx\",\n        \"device_manufacturer\":\"lifx\",\n        \"object_type\": \"light_bulb\",\n        \"object_id\": bulb.id,\n        \"freeboard\": 0,\n        desired_state:{},\n        last_reading:{\n        \"connection\": bulb.connected,\n        \"powered\": (bulb.connected && bulb.power==\"on\" ? true : false),\n        \"brightness\": bulb.brightness,\n        \"hue\" : bulb.color.hue,\n        \"saturation\":bulb.color.saturation,\n        \"temperature\":bulb.color.kelvin\n        }\n     };\n      eTag=context.global.CRYPTO.createHash(\"md5\").update(JSON.stringify(OrigObject),\"utf8\").digest(\"hex\");\n     } else {\n    \n      context.global.winkState.light_bulbs[bulb.label]=OrigObject;\n     }\n     //LifBulb\n     \n     context.global.winkDevCap[bulb.label]=bulb.capabilities\n     //node.warn(bulb.label)\n      if (!('groups' in context.global.winkState)) context.global.winkState.groups={}\n     if (!(bulb.group.name in context.global.winkState.groups)){\n     context.global.winkState.groups[bulb.group.name]={\n         \"name\":bulb.group.name,\n         \"obejct_type\":\"groups\",\n         \"object_id\":bulb.group.id,\n          \"freeboard\": 0,\n          members:{}\n        }\n    }\n      context.global.winkState.groups[bulb.group.name].members[bulb.label]={\n        \"name\": bulb.label,\n        \"object_id\": bulb.id,\n        \"object_type\": \"light_bulbs\"\n      }\n     if (useLiveUpd && CurreTag!==eTag){\n        var postMsg={\n            url:context.global.BlueMixUrlBase+'/red/wink/subscribtions',\n            method:\"POST\",\n                headers: {\n                \"Content-Type\":\"application/json\"\n            },\n            payload:LifBulb \n        }\n     node.send(postMsg);\n     }\n    });\n}\nreturn;",
+    "func": "var lifxLights=msg.payload;\nvar useLiveUpd=('CRYPTO' in context.global ? true:false);\nvar CurreTag=\"\";\nvar eTag;\nif (Object.prototype.toString.call(lifxLights)==='[object Array]'){\n    lifxLights.forEach(function (bulb) {\n      //  node.warn(bulb.label)\n     if (context.global.winkState==='undefined') context.global.winkState={}\n     if (context.global.winkState.light_bulbs==='undefined') context.global.winkState.light_bulbs={}\n     if (bulb.label in context.global.winkState.light_bulbs && useLiveUpd) {\n          var WinkBulb={\n            \"connection\": context.global.winkState.light_bulbs[bulb.label].connection,\n            \"powered\": context.global.winkState.light_bulbs[bulb.label].powered,\n            \"brightness\": context.global.winkState.light_bulbs[bulb.label].brightness,\n            \"hue\" : context.global.winkState.light_bulbs[bulb.label].hue,\n            \"saturation\":context.global.winkState.light_bulbs[bulb.label].saturation,\n            \"temperature\":context.global.winkState.light_bulbs[bulb.label].temperature\n          }\n          CurreTag=context.global.CRYPTO.createHash(\"md5\").update(JSON.stringify(WinkBulb),\"utf8\").digest(\"hex\");\n     }\n     \n     var OrigObject={\n        \"connection\": bulb.connected,\n        \"powered\": (bulb.connected && bulb.power==\"on\" ? true : false),\n        \"brightness\": bulb.brightness,\n        \"hue\" : bulb.color.hue,\n        \"saturation\":bulb.color.saturation,\n        \"temperature\":bulb.color.kelvin\n     };\n     if (useLiveUpd){\n     var LifBulb={\n        \"name\": bulb.label,\n        \"eco_system\": \"LIFX\",\n        \"manufacturer_id\": \"lifx\",\n        \"device_manufacturer\":\"lifx\",\n        \"object_type\": \"light_bulb\",\n        \"object_id\": bulb.id,\n        \"freeboard\": 0,\n        desired_state:{},\n        last_reading:{\n        \"connection\": bulb.connected,\n        \"powered\": (bulb.connected && bulb.power==\"on\" ? true : false),\n        \"brightness\": bulb.brightness,\n        \"hue\" : bulb.color.hue,\n        \"saturation\":bulb.color.saturation,\n        \"temperature\":bulb.color.kelvin\n        }\n     };\n      eTag=context.global.CRYPTO.createHash(\"md5\").update(JSON.stringify(OrigObject),\"utf8\").digest(\"hex\");\n     } else {\n    \n      context.global.winkState.light_bulbs[bulb.label]=OrigObject;\n     }\n     //LifBulb\n     \n     context.global.winkDevCap[bulb.label]=bulb.capabilities\n     //node.warn(bulb.label)\n      if (!('groups' in context.global.winkState)) context.global.winkState.groups={}\n     if (!(bulb.group.name in context.global.winkState.groups)){\n     context.global.winkState.groups[bulb.group.name]={\n         \"name\":bulb.group.name,\n         \"obejct_type\":\"groups\",\n         \"object_id\":bulb.group.id,\n          \"freeboard\": 0,\n          members:{}\n        }\n    }\n      context.global.winkState.groups[bulb.group.name].members[bulb.label]={\n        \"name\": bulb.label,\n        \"object_id\": bulb.id,\n        \"object_type\": \"light_bulbs\"\n      }\n     if (useLiveUpd && CurreTag!==eTag){\n        var postMsg={\n            url:context.global.BlueMixUrlBase+'/red/wink/subscribtions',\n            method:\"POST\",\n                headers: {\n                \"Content-Type\":\"application/json\"\n            },\n            payload:LifBulb \n        }\n     node.send(postMsg);\n     }\n    });\n}\nreturn;",
     "outputs": 1,
     "noerr": 0,
     "x": 642.5,
@@ -1007,8 +994,8 @@
     "func": "function send_ui_note(n_type,n_timeout,n_message){\n    var newMsg={\n        url:context.global.BlueMixUrlBase+'/red/notifications',\n        \"method\": \"POST\",\n        headers: {\n            \"Authorization\":\"Bearer \"+context.global.FREEBOARD_TOKEN\n        },\n        payload:{\n            \"type\":n_type,\n            \"message\":n_message,\n            \"timeout\":n_timeout\n            }\n        };\n        node.send(newMsg);\n}\nvar note_msg=msg.payload.name+(msg.payload.home=='yes' ? ' is home' : ' has left');\nsend_ui_note('information',30000,note_msg)\nreturn;",
     "outputs": 1,
     "noerr": 0,
-    "x": 342.5,
-    "y": 791,
+    "x": 341.5,
+    "y": 760,
     "wires": [
       [
         "95b97762.6a4688"
@@ -1023,8 +1010,8 @@
     "method": "use",
     "ret": "txt",
     "url": "",
-    "x": 482.5,
-    "y": 790,
+    "x": 481.5,
+    "y": 759,
     "wires": [
       []
     ]
@@ -1099,6 +1086,22 @@
     "wires": [
       [
         "663e07b8.99c1f8"
+      ]
+    ]
+  },
+  {
+    "id": "663e07b8.99c1f8",
+    "type": "function",
+    "z": "17b3daf5.e84c25",
+    "name": "create or update config ",
+    "func": "if ((\"error\" in msg.payload && msg.payload.error=='not_found') || msg.db_mode=='update'){\n    node.warn('no app_data exists in cloudant DB or update oeration, saving globals to database')\n    var DBMsg={\n        url:context.global.VCAP_SERVICES.cloudantNoSQLDB[0].credentials.url+\"/winkapp\",\n        method:(msg.db_mode=='update' ? \"PUT\":\"POST\"),\n        headers: \n            {\n                \"Content-Type\":\"application/json\"\n            },\n        payload: {\n            \"_id\":\"app_data\",\n            \"item\":\"app_data\",\n            \"app_cfg\":{\n            motionAdjustTstat: context.global.motionAdjustTstat||false,\n            BlueMixUrlBase:context.global.BlueMixUrlBase,\n            HomeLocation:context.global.HomeLocation,\n            HoursFormat24:context.global.HoursFormat24 || false,\n            LightsNotification:context.global.LightsNotification || false,\n            CustomTabUrl:context.global.CustomTabUrl || '',\n            CustomTabName:context.global.CustomTabName|| ''       \n            }\n        }\n    }\n    if(msg.db_mode=='update' && !(\"error\" in msg.payload && msg.payload.error=='not_found')){\n    DBMsg.url=DBMsg.url+\"/app_data\"    \n    DBMsg.payload._rev=msg.payload._rev;\n    }\n    if ('HomeLocation' in context.global) DBMsg.payload.app_cfg.HomeLocation=context.global.HomeLocation;\n//\tif ('FosCam' in context.global) DBMsg.payload.app_cfg.FosCam=context.global.FosCam;\n//\tif ('SamsungCam' in context.global) DBMsg.payload.app_cfg.SamsungCam=context.global.SamsungCam;\n//\tif ('DlinkCam' in context.global) DBMsg.payload.app_cfg.DlinkCam=context.global.DlinkCam;\n    if ('camera_motion' in context.global) DBMsg.payload.app_cfg.camera_motion=context.global.camera_motion;\n    if ('tab_ui_shortcuts' in context.global) DBMsg.payload.app_cfg.tab_ui_shortcuts=context.global.tab_ui_shortcuts;\n//    if ('netatmo' in context.global) DBMsg.payload.app_cfg.netatmo=context.global.netatmo;\n    if ('winkState' in context.global) DBMsg.payload.app_cfg.winkState=context.global.winkState;\n    if ('LIFX_TOKEN' in context.global) DBMsg.payload.app_cfg.LIFX_TOKEN=context.global.LIFX_TOKEN;\n    if ('IFTTT_TOKEN' in context.global)DBMsg.payload.app_cfg.IFTTT_TOKEN=context.global.IFTTT_TOKEN;\n    if ('forecastIoApiKey' in context.global)DBMsg.payload.app_cfg.forecastIoApiKey=context.global.forecastIoApiKey;\n    if ('InitialStateKey' in context.global)DBMsg.payload.app_cfg.InitialStateKey=context.global.InitialStateKey;\nnode.send(DBMsg);    \n}\nelse {\n    node.warn('config data exists, restoring');\n    for (var key in msg.payload.app_cfg){\n        node.warn('Restoring '+key+' settings')\n        if (key!=='winkState' && key!=='DlinkCam' && key!=='FosCam' && key!=='SamsungCam'){\n            context.global[key]=msg.payload.app_cfg[key];\n        } else if(msg.restore_wink||0===1) {\n            context.global[key]=msg.payload.app_cfg[key];\n        }\n    }\n}    \nreturn;",
+    "outputs": 1,
+    "noerr": 0,
+    "x": 986.5,
+    "y": 958,
+    "wires": [
+      [
+        "a6dc615b.5923a"
       ]
     ]
   },
@@ -1243,8 +1246,8 @@
     "func": "var msg1=context.global.render_home_components('Presence');\nmsg1.method=\"POST\";\nmsg1.url=context.global.BlueMixUrlBase+'/red/wscomms';\nmsg1.headers= {\n    \"Authorization\":\"Bearer \"+context.global.FREEBOARD_TOKEN\n};\nreturn msg1;",
     "outputs": 1,
     "noerr": 0,
-    "x": 347,
-    "y": 743,
+    "x": 346,
+    "y": 712,
     "wires": [
       [
         "b4c28329.4b3d8"
@@ -1259,8 +1262,8 @@
     "method": "use",
     "ret": "txt",
     "url": "",
-    "x": 488.5,
-    "y": 744,
+    "x": 487.5,
+    "y": 713,
     "wires": [
       []
     ]
@@ -1311,7 +1314,7 @@
     "type": "function",
     "z": "17b3daf5.e84c25",
     "name": "",
-    "func": "var effectMsg={};\nvar web_req=(context.global.getCookie('exchange_token',msg.req.headers.cookie)=='0' ? false:true);\nif (msg.payload.iftttkey==context.global.IFTTT_TOKEN || msg.payload.iftttkey==context.global.FREEBOARD_TOKEN) web_req=true;\nif (web_req)\n{\nvar effect=msg.req.originalUrl.split('/').pop();\nnode.warn(effect);\nmsg.statusCode=200;\neffectMsg.payload=msg.payload;\neffectMsg.topic=effect;\nreturn [msg,effectMsg];\n}\nelse {\n    node.warn(\"ifttt messages bad request\")\n     msg.statusCode=403;\n     return [msg,null];\n}\n",
+    "func": "var effectMsg={};\nvar web_req=(context.global.getCookie('exchange_token',msg.req.headers.cookie)=='0' ? false:true);\nif (msg.payload.iftttkey==context.global.IFTTT_TOKEN || msg.payload.iftttkey==context.global.FREEBOARD_TOKEN || (msg.req.headers.authorization && msg.req.headers.authorization==\"Bearer \"+context.global.FREEBOARD_TOKEN)) web_req=true;\nif (web_req)\n{\nvar effect=msg.req.originalUrl.split('/').pop();\nnode.warn(effect);\nmsg.statusCode=200;\neffectMsg.payload=msg.payload;\neffectMsg.topic=effect;\nreturn [msg,effectMsg];\n}\nelse {\n    node.warn(\"ifttt messages bad request\")\n     msg.statusCode=403;\n     return [msg,null];\n}\n",
     "outputs": "2",
     "noerr": 0,
     "x": 586,
@@ -1466,6 +1469,50 @@
     "url": "",
     "x": 1117,
     "y": 334,
+    "wires": [
+      []
+    ]
+  },
+  {
+    "id": "7abee540.85411c",
+    "type": "function",
+    "z": "17b3daf5.e84c25",
+    "name": "",
+    "func": "PresenceSensorMsg={\n    url:context.global.BlueMixUrlBase+'/red/wink/subscribtions',\n    method:\"POST\",\n        headers: {\n        \"Content-Type\":\"application/json\"\n    },\n    payload:{\n      capabilities: { fields: [ { field: 'presence', type: 'boolean' } ] },\n      device_manufacturer: 'node_red_virtual_sensor',\n      hidden_at: null,\n      last_event: \n       { brightness_occurred_at: null,\n         loudness_occurred_at: null,\n         vibration_occurred_at: null },\n      last_reading: \n       { \n           agent_session_id: 'FALSE',\n           connection: true,\n           presence:(msg.payload.home=='yes' ? true : false),\n       },\n      manufacturer_device_model: 'foscam_virtual_motion_sensor',\n      model_name: 'Presense Sensor',\n      \"eco_system\" : \"NODERED\",\n      name: msg.payload.name,\n      object_id: 'Presense_'+msg.payload.name,\n      object_type: 'sensor_pod',\n      radio_type: 'wifi',\n      sensor_pod_id: 'Presense_'+msg.payload.name,\n      triggers: [],\n      units: {},\n      upc_code: 'presence_sensor',\n      upc_id: 'Presense_'+msg.payload.name\n  }\n}\n\nreturn PresenceSensorMsg;",
+    "outputs": 1,
+    "noerr": 0,
+    "x": 781,
+    "y": 783,
+    "wires": [
+      [
+        "cfeab862.301548"
+      ]
+    ]
+  },
+  {
+    "id": "cfeab862.301548",
+    "type": "http request",
+    "z": "17b3daf5.e84c25",
+    "name": "",
+    "method": "use",
+    "ret": "txt",
+    "url": "",
+    "x": 944,
+    "y": 799,
+    "wires": [
+      []
+    ]
+  },
+  {
+    "id": "4e4df7dd.b1b208",
+    "type": "http request",
+    "z": "17b3daf5.e84c25",
+    "name": "",
+    "method": "use",
+    "ret": "txt",
+    "url": "",
+    "x": 1041,
+    "y": 1162,
     "wires": [
       []
     ]
