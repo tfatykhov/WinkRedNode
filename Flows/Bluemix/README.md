@@ -1,4 +1,14 @@
 == UPDATE ==
+02/20/2016
+----------------
+I noticed some updates in wink API which did not happen before.
+They are minor but mostly ui summary and controls page are affected in terms of status is not set properly all the time for lights and binary switches.
+Flow Editor:<br>
+*  Import updated [winkCore.json](winkCore.json)
+*  do not forget to check [duplicate websockets](../../README-WebsocketFix.md)
+*  perform "FULL" deployment<br>
+
+
 02/19/2016
 ----------------
 Added manual snaphsot button for each camera:
