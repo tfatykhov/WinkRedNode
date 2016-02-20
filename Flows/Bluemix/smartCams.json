@@ -1,7 +1,18 @@
 [
   {
-    "id": "24fb029a.db04fe",
+    "id": "3af83c02.c507c4",
+    "type": "comment",
+    "z": "aaa292b.f555d7",
+    "name": "--------------------------------- Dlink Cameras ---------------------------------",
+    "info": "",
+    "x": 249,
+    "y": 44.888885498046875,
+    "wires": []
+  },
+  {
+    "id": "297fd40b.d6802c",
     "type": "inject",
+    "z": "aaa292b.f555d7",
     "name": "",
     "topic": "",
     "payload": "",
@@ -9,37 +20,309 @@
     "repeat": "86400",
     "crontab": "",
     "once": true,
-    "x": 145.89581298828125,
-    "y": 148.88888549804688,
-    "z": "e5f6f0e3.1a091",
+    "x": 104.00001525878906,
+    "y": 98.88888549804688,
     "wires": [
       [
-        "f110b7cd.0eef48"
+        "b4e242cc.4b1dc"
       ]
     ]
   },
   {
-    "id": "c51e390d.3ae1c8",
+    "id": "9ecb4a5c.6134b8",
     "type": "function",
-    "name": "generate samsung request url ",
-    "func": "function delay(ms) {\n        var cur_d = new Date();\n        var cur_ticks = cur_d.getTime();\n        var ms_passed = 0;\n        while(ms_passed < ms) {\n            var d = new Date();\n            var ticks = d.getTime();\n            ms_passed = ticks - cur_ticks;\n         }\n    }\n\nif (typeof(context.global.SamsungCam)!=='undefined'){\n for (var key in context.global.SamsungCam)\n {\n    var camera=context.global.SamsungCam[key]\n    newMsg={}\n    newMsg.topic=key\n    newMsg.model='Samsung'\n    newMsg.url='http://'+camera.hostname+'/cgi-bin/video.cgi?msubmenu=jpg&resolution=5'\n    newMsg.method=\"GET\"\n    node.send(newMsg)\n    node.warn(key);\n    delay(5000);\n }\n}",
+    "z": "aaa292b.f555d7",
+    "name": "generate Dlink request url ",
+    "func": "function sendWithTimeout(m,delay){\n    setTimeout(function(){node.send(m);},delay);\n}      \nvar dlink_mjpeg=['DCS-930L','DCS-930' , 'DCS-931L','DCS-931', 'DCS-932L','DCS-932', 'DCS-933L','DCS-933', 'DCS-5020L','DCS-934L'];\nvar req_crcl=['DCS-931L','DCS-933L','DCS-5020L'];\nif (typeof(context.global.DlinkCam)!=='undefined'){\n var i=0;\n for (var key in context.global.DlinkCam)\n {\n     node.warn('camera  '+key)\n     camera=context.global.DlinkCam[key]\n    if (dlink_mjpeg.indexOf(camera.model)!=-1) cam_type='MJPEG' \n    else cam_type='MICA'\n    context.global.DlinkCam[key].type=cam_type\n    var auth = new Buffer(context.global.DlinkCam[key].uid+':'+context.global.DlinkCam[key].pwd)\n    var auth_str=(req_crcl.indexOf(camera.model)!=-1 ? auth.toString('base64')+'\\r\\n' :  auth.toString('base64'));\n    node.warn('with crcn '+auth.toString('base64')+\"\\r\\n\")\n    newMsg={}\n    newMsg.topic=key\n    newMsg.model=context.global.DlinkCam[key].model\n    newMsg.B64Auth=auth_str\n    newMsg.url=(cam_type=='MICA' ? 'http://'+camera.hostname+'/config/network.cgi' :'http://'+camera.hostname+'/network.cgi')\n    newMsg.headers = {\n        \"Authorization\": \"Basic \"+ auth_str\n//        (context.global.DlinkCam[key].uid+':'+context.global.DlinkCam[key].pwd).tobase64()\n    }\n    newMsg.method=\"GET\";\n    sendWithTimeout(node,newMsg,i);\n    i+=5000;\n  //  delay(5000);\n }\n}",
     "outputs": 1,
     "noerr": 0,
-    "x": 561.8956756591797,
-    "y": 148.88888549804688,
-    "z": "e5f6f0e3.1a091",
+    "x": 491.9998779296875,
+    "y": 99.88888549804688,
     "wires": [
       [
-        "2b1ad343.d4e52c"
+        "c8a4b759.375b48"
       ]
     ]
   },
   {
-    "id": "f110b7cd.0eef48",
+    "id": "c8a4b759.375b48",
+    "type": "http request",
+    "z": "aaa292b.f555d7",
+    "name": "",
+    "method": "use",
+    "ret": "txt",
+    "url": "",
+    "x": 767,
+    "y": 99.88888549804688,
+    "wires": [
+      [
+        "3a276d73.c5d892"
+      ]
+    ]
+  },
+  {
+    "id": "3a276d73.c5d892",
+    "type": "function",
+    "z": "aaa292b.f555d7",
+    "name": "",
+    "func": "if (msg.statusCode=='200'){\n    var CamParams=msg.payload.split('\\r\\n');\n    var cam_name=msg.topic;\n    var camera=context.global.DlinkCam[cam_name]\n    context.global.DlinkCam[cam_name].B64Auth=msg.B64Auth\n    if(typeof(context.global.winkState.cameras)==='undefined') context.global.winkState.cameras={}\n    context.global.winkState.cameras[cam_name]={\n    \"name\": cam_name,\n    \"object_type\": \"cameras\",\n    \"eco_system\" : \"DLINK\",\n    \"object_id\": cam_name.replace(\" \",\"\"),\n    \"freeboard\": 0,\n    \"manufacturer_device_model\":msg.model,\n    \"connection\": true,\n    \"capturing_audio\": true,\n    \"capturing_video\": true,\n    //\"url\": CamUrl=\"Http://admin:\"+context.global.SamsungCam[cam_name].private_key+\"@\"+context.global.SamsungCam[cam_name].hostname+\"/cgi-bin/video.cgi?msubmenu=mjpg\",\n    \"snap_url\":SnapUrl=context.global.BlueMixUrlBase+\"/red/getDlink_snapshot?token=\"+context.global.FREEBOARD_TOKEN+\"&Cameraname=\"+cam_name,\n    \"url\":context.global.BlueMixUrlBase+\"/red/getDlink_snapshot?token=\"+context.global.FREEBOARD_TOKEN+\"&Cameraname=\"+cam_name,\n    \"history_url\": context.global.BlueMixUrlBase+\"/freeboard/cameraSnapshots?token=\"+context.global.FREEBOARD_TOKEN+\"&camera_name=\"+cam_name,\n    //\"http://admin:\"+context.global.SamsungCam[cam_name].private_key+\"@\"+context.global.SamsungCam[cam_name].hostname+\"/cgi-bin/video.cgi?msubmenu=jpg&resolution=3\",\n    \"refresh_time\":30,\n    \"motion\": \"N/A\",\n    \"activities\":[]\n    }\n    \n     msg.url='http://'+camera.hostname+'/config/notify.cgi'\n     msg.method=\"GET\"\n    msg.headers={\n        \"Authorization\": \"Basic \"+ camera.B64Auth\n    }\n    node.send(msg);\n}\nreturn;",
+    "outputs": 1,
+    "noerr": 0,
+    "x": 930.9999847412109,
+    "y": 100.88888549804688,
+    "wires": [
+      [
+        "668e133e.9971ec"
+      ]
+    ]
+  },
+  {
+    "id": "ddf5fb98.220a08",
+    "type": "http in",
+    "z": "aaa292b.f555d7",
+    "name": "",
+    "url": "/red/getDlink_snapshot",
+    "method": "get",
+    "swaggerDoc": "",
+    "x": 135.00001525878906,
+    "y": 164.88888549804688,
+    "wires": [
+      [
+        "6d45ef15.92ba1"
+      ]
+    ]
+  },
+  {
+    "id": "6d45ef15.92ba1",
+    "type": "function",
+    "z": "aaa292b.f555d7",
+    "name": "",
+    "func": "if (msg.payload.token==context.global.FREEBOARD_TOKEN && typeof(msg.payload.Cameraname)!=='undefined'){\n    var cam=msg.payload.Cameraname;\n    if(cam in context.global.winkState.cameras){\n    var camera=context.global.DlinkCam[cam]\n     msg.topic=cam\n     msg.model='Dlink'\n     msg.url=(context.global.DlinkCam[cam].type=='MICA' ? 'http://'+camera.hostname+'/image/jpeg.cgi' :  'http://'+camera.hostname+'/image.jpg')\n     msg.method=\"GET\"\n    msg.headers={\n        \"Authorization\": \"Basic \"+ context.global.DlinkCam[cam].B64Auth\n    }\n        \n    }\n     node.send(msg)\n//     msg.res.send(200,\"OK\");\n}\nreturn;",
+    "outputs": 1,
+    "noerr": 0,
+    "x": 341.0000305175781,
+    "y": 164.88888549804688,
+    "wires": [
+      [
+        "eb66d89.f149928"
+      ]
+    ]
+  },
+  {
+    "id": "eb66d89.f149928",
+    "type": "http request",
+    "z": "aaa292b.f555d7",
+    "name": "",
+    "method": "use",
+    "ret": "bin",
+    "url": "",
+    "x": 518.0000305175781,
+    "y": 164.88888549804688,
+    "wires": [
+      [
+        "3444840f.cbbb7c"
+      ]
+    ]
+  },
+  {
+    "id": "3444840f.cbbb7c",
+    "type": "http response",
+    "z": "aaa292b.f555d7",
+    "name": "",
+    "x": 681.9999847412109,
+    "y": 164.888916015625,
+    "wires": []
+  },
+  {
+    "id": "1144d7f1.eebb28",
+    "type": "inject",
+    "z": "aaa292b.f555d7",
+    "name": "",
+    "topic": "",
+    "payload": "",
+    "payloadType": "str",
+    "repeat": "3",
+    "crontab": "",
+    "once": true,
+    "x": 94.00001525878906,
+    "y": 242.00006103515625,
+    "wires": [
+      [
+        "11996c57.ee6694"
+      ]
+    ]
+  },
+  {
+    "id": "11996c57.ee6694",
+    "type": "function",
+    "z": "aaa292b.f555d7",
+    "name": "",
+    "func": "function delay(ms) {\n        var cur_d = new Date();\n        var cur_ticks = cur_d.getTime();\n        var ms_passed = 0;\n        while(ms_passed < ms) {\n            var d = new Date();\n            var ticks = d.getTime();\n            ms_passed = ticks - cur_ticks;\n         }\n    }\n\nfor (var cam in context.global.DlinkCam){\n    var camera=context.global.DlinkCam[cam]\n    if( 'B64Auth' in camera && camera.B64Auth!=='undefined' && cam in context.global.winkState.sensor_pods){\n     msg.topic=cam\n     msg.url='http://'+camera.hostname+'/config/notify.cgi'\n     msg.method=\"GET\"\n    msg.headers={\n        \"Authorization\": \"Basic \"+ camera.B64Auth\n    }\n    node.send(msg);\n   // delay(300)\n}\n}\nreturn;",
+    "outputs": 1,
+    "noerr": 0,
+    "x": 275.00001525878906,
+    "y": 241.00006103515625,
+    "wires": [
+      [
+        "6a7ed97f.958128"
+      ]
+    ]
+  },
+  {
+    "id": "6a7ed97f.958128",
+    "type": "http request",
+    "z": "aaa292b.f555d7",
+    "name": "",
+    "method": "use",
+    "ret": "txt",
+    "url": "",
+    "x": 471,
+    "y": 239.00006103515625,
+    "wires": [
+      [
+        "3afbe234.c5041e"
+      ]
+    ]
+  },
+  {
+    "id": "3afbe234.c5041e",
+    "type": "function",
+    "z": "aaa292b.f555d7",
+    "name": "",
+    "func": "if (msg.statusCode=='200'){\n    var cam_stat=msg.payload.split('\\r\\n');\n    var new_msg={}\n    new_msg.topic=msg.topic\n    new_msg.payload=(cam_stat[0]=='md1=off' && cam_stat[2]=='pir=off' ? 0 : 1)\n\n}\nreturn new_msg;",
+    "outputs": 1,
+    "noerr": 0,
+    "x": 628,
+    "y": 239.00021362304688,
+    "wires": [
+      [
+        "eb620dc6.149df"
+      ]
+    ]
+  },
+  {
+    "id": "17268204.e8d97e",
+    "type": "function",
+    "z": "aaa292b.f555d7",
+    "name": "",
+    "func": "if (msg.statusCode=='200'){\n    node.warn('adding Dlink camera sensor' + msg.topic)\n    if (typeof(context.global.winkState.sensor_pods)==='undefined') context.global.winkState.sensor_pods={}\n    context.global.winkState.sensor_pods[msg.topic]=\n    {\n    \"name\": msg.topic,\n    \"object_type\": \"sensor_pods\",\n    \"object_id\": msg.model+Math.round(Math.random()*1000).toString(),\n    \"freeboard\": 0,\n    \"connection\": true,\n    \"motion\": false\n    }\n    if(typeof(context.global.winkDevCap)==='undefined') context.global.winkDevCap={}\n    context.global.winkDevCap[msg.topic]=\n    {\n \"sensor_types\":[\n        {\n        \"field\": \"motion\",\n        \"type\": \"boolean\"\n        }\n    ],\n     \"fields\":[\n        {\n        \"field\": \"motion\",\n        \"type\": \"boolean\"\n        }\n    ]\n  }\n}\n              var msg ={\n                \"url\":context.global.BlueMixUrlBase+'/red/retrieve_activities?camera_name='+msg.topic,\n                \"method\": \"GET\",\n                headers: {\n                    \"Authorization\":\"Bearer \"+context.global.FREEBOARD_TOKEN\n                }\n            }\n    node.send(msg)\n\nreturn;",
+    "outputs": 1,
+    "noerr": 0,
+    "x": 1245.0001068115234,
+    "y": 84.88888549804688,
+    "wires": [
+      [
+        "687268e.f978d98"
+      ]
+    ]
+  },
+  {
+    "id": "668e133e.9971ec",
+    "type": "http request",
+    "z": "aaa292b.f555d7",
+    "name": "",
+    "method": "use",
+    "ret": "txt",
+    "url": "",
+    "x": 1090.0000610351562,
+    "y": 84.88888549804688,
+    "wires": [
+      [
+        "17268204.e8d97e"
+      ]
+    ]
+  },
+  {
+    "id": "eb620dc6.149df",
+    "type": "rbe",
+    "z": "aaa292b.f555d7",
+    "name": "filter",
+    "func": "rbe",
+    "gap": "",
+    "x": 786.0000152587891,
+    "y": 240.88894653320312,
+    "wires": [
+      [
+        "c521111.f3adef"
+      ]
+    ]
+  },
+  {
+    "id": "c521111.f3adef",
+    "type": "function",
+    "z": "aaa292b.f555d7",
+    "name": "",
+    "func": "//node.warn('filtered '+msg.payload)\nvar postMsg={\n    url:context.global.BlueMixUrlBase+'/red/wink/subscribtions',\n    method:\"POST\",\n        headers: {\n        \"Content-Type\":\"application/json\"\n    },\n    payload:{\n  capabilities: { sensor_types: [ { field: 'motion', type: 'boolean' } ] },\n  desired_state: {},\n  device_manufacturer: 'Dlink',\n  \"eco_system\" : \"DLINK\",\n  gang_id: null,\n  hidden_at: null,\n  last_event: \n   { brightness_occurred_at: null,\n     loudness_occurred_at: null,\n     vibration_occurred_at: null },\n  last_reading: \n   { \n       agent_session_id: 'FALSE',\n       connection: true,\n       motion: (msg.payload==1 ? true : false),\n   },\n  manufacturer_device_model: 'dlink_virtual_motion_sensor',\n  model_name: 'Motion Sensor',\n  name: msg.topic,\n  object_id: context.global.winkState.sensor_pods[msg.topic].object_id,\n  object_type: 'sensor_pod',\n  radio_type: 'wifi',\n  sensor_pod_id: context.global.winkState.sensor_pods[msg.topic].object_id,\n  triggers: [],\n  units: {},\n  upc_code: 'motion_sensor',\n  upc_id: context.global.winkState.sensor_pods[msg.topic].object_id\n  }\n}\nreturn postMsg;",
+    "outputs": 1,
+    "noerr": 0,
+    "x": 928.9999847412109,
+    "y": 238.88900756835938,
+    "wires": [
+      [
+        "f7fe97be.080168"
+      ]
+    ]
+  },
+  {
+    "id": "f7fe97be.080168",
+    "type": "http request",
+    "z": "aaa292b.f555d7",
+    "name": "",
+    "method": "use",
+    "ret": "obj",
+    "url": "",
+    "x": 1083.0001068115234,
+    "y": 238.88900756835938,
+    "wires": [
+      []
+    ]
+  },
+  {
+    "id": "687268e.f978d98",
+    "type": "http request",
+    "z": "aaa292b.f555d7",
+    "name": "",
+    "method": "use",
+    "ret": "txt",
+    "url": "",
+    "x": 1395.0000915527344,
+    "y": 84.88888549804688,
+    "wires": [
+      []
+    ]
+  },
+  {
+    "id": "e603fa07.19fc08",
+    "type": "catch",
+    "z": "aaa292b.f555d7",
+    "name": "",
+    "x": 82,
+    "y": 437,
+    "wires": [
+      [
+        "c4129632.3bed68"
+      ]
+    ]
+  },
+  {
+    "id": "c4129632.3bed68",
+    "type": "debug",
+    "z": "aaa292b.f555d7",
+    "name": "",
+    "active": true,
+    "console": "false",
+    "complete": "error",
+    "x": 282,
+    "y": 437,
+    "wires": []
+  },
+  {
+    "id": "b4e242cc.4b1dc",
     "type": "delay",
+    "z": "aaa292b.f555d7",
     "name": "",
     "pauseType": "delay",
-    "timeout": "30",
+    "timeout": "1",
     "timeoutUnits": "seconds",
     "rate": "1",
     "rateUnits": "second",
@@ -47,190 +330,12 @@
     "randomLast": "5",
     "randomUnits": "seconds",
     "drop": false,
-    "x": 315.8957061767578,
-    "y": 148.88888549804688,
-    "z": "e5f6f0e3.1a091",
+    "x": 258,
+    "y": 97,
     "wires": [
       [
-        "c51e390d.3ae1c8"
+        "9ecb4a5c.6134b8"
       ]
-    ]
-  },
-  {
-    "id": "2b1ad343.d4e52c",
-    "type": "http request",
-    "name": "",
-    "method": "use",
-    "ret": "txt",
-    "url": "",
-    "x": 799.8957977294922,
-    "y": 148.88888549804688,
-    "z": "e5f6f0e3.1a091",
-    "wires": [
-      [
-        "ba7e655f.458198"
-      ]
-    ]
-  },
-  {
-    "id": "e37ebe29.1c814",
-    "type": "function",
-    "name": "Initialize Samsung",
-    "func": "if (msg.statusCode=='200' && msg.headers[\"content-type\"]=='image/jpeg'){\nvar cam_name=msg.topic;\nif(typeof(context.global.winkState.cameras)==='undefined') context.global.winkState.cameras={}\ncontext.global.winkState.cameras[cam_name]={\n \"name\": cam_name,\n\"object_type\": \"cameras\",\n\"object_id\": cam_name.replace(\" \",\"\"),\n\"freeboard\": 0,\n\"manufacturer_device_model\": \"samsung\",\n\"connection\": true,\n\"capturing_audio\": true,\n\"capturing_video\": true,\n//\"url\": CamUrl=\"Http://admin:\"+context.global.SamsungCam[cam_name].private_key+\"@\"+context.global.SamsungCam[cam_name].hostname+\"/cgi-bin/video.cgi?msubmenu=mjpg\",\n\"snap_url\":SnapUrl=context.global.BlueMixUrlBase+\"/red/get_snapshot?token=\"+context.global.FREEBOARD_TOKEN+\"&Cameraname=\"+cam_name,\n\"history_url\": context.global.BlueMixUrlBase+\"/freeboard/cameraSnapshots?token=\"+context.global.FREEBOARD_TOKEN+\"&camera_name=\"+cam_name,\n\"url\":context.global.BlueMixUrlBase+\"/red/get_snapshot?token=\"+context.global.FREEBOARD_TOKEN+\"&Cameraname=\"+cam_name,\n//\"http://admin:\"+context.global.SamsungCam[cam_name].private_key+\"@\"+context.global.SamsungCam[cam_name].hostname+\"/cgi-bin/video.cgi?msubmenu=jpg&resolution=3\",\n\"refresh_time\":30,\n\"motion\": \"N/A\"\n}\n            var msg ={\n                \"url\":context.global.BlueMixUrlBase+'/red/retrieve_activities?camera_name='+cam_name,\n                \"method\": \"GET\",\n                headers: {\n                    \"Authorization\":\"Bearer \"+context.global.FREEBOARD_TOKEN\n                }\n            }\n    node.send(msg)\n}\nreturn;",
-    "outputs": 1,
-    "noerr": 0,
-    "x": 1376.8959197998047,
-    "y": 148.888916015625,
-    "z": "e5f6f0e3.1a091",
-    "wires": [
-      [
-        "97b3925.f684c7"
-      ]
-    ]
-  },
-  {
-    "id": "ba7e655f.458198",
-    "type": "function",
-    "name": "check digest auth",
-    "func": "var Auth=msg.headers['www-authenticate'];\nvar AuthArr = Auth.split(',');\nvar AuthJ={}\nfor (var i=0;i<AuthArr.length;i++){\n    var item=AuthArr[i].split('=');\n    AuthJ[item[0].trim()]=item[1].replace('\\\"','').replace('\\\"','')\n}\n\nvar ha1_str=\"admin:\"+AuthJ[\"Digest realm\"]+\":\"+context.global.SamsungCam[msg.topic].private_key;\n//node.warn(ha1_str);\nvar HA1=context.global.CRYPTO.createHash(\"md5\").update(ha1_str,\"utf8\").digest(\"hex\");\nvar HA2=context.global.CRYPTO.createHash(\"md5\").update(\"GET:/cgi-bin/video.cgi?msubmenu=jpg&resolution=5\",\"utf8\").digest(\"hex\");\nvar cnonce=context.global.CRYPTO.randomBytes(8).toString('hex');\nvar nc=\"00001\";\n//node.warn(AuthJ);\nvar str_resp=HA1+\":\"+AuthJ.nonce+\":\"+nc+\":\"+cnonce+\":\"+\"auth\"+\":\"+HA2;\n//node.warn(str_resp);\nvar response = context.global.CRYPTO.createHash(\"md5\").update(str_resp,\"utf8\").digest(\"hex\");\n//node.warn(response);\nvar eol=\" \";\nvar Digest='Digest username=\"admin\",' + eol +\n           'realm=\"' + AuthJ[\"Digest realm\"].trim() + '\",' + eol +\n           'qop=\"' + AuthJ.qop.trim() + '\",' + eol +\n           'algorithm=\"MD5\",' + eol +\n           'uri=\"/cgi-bin/video.cgi?msubmenu=jpg&resolution=5\"'+ ',' +  eol +\n           'nonce=\"' + AuthJ.nonce.trim() + '\",' + eol +\n           'cnonce=\"' + cnonce.trim() + '\",'.trim() + eol +\n           'opaque=\"\",' + eol +\n           'nc=\"' + nc + '\",' + eol +\n           'response=\"' + response + '\"';\n//node.warn(Digest);\ndelete msg.headers\ndelete msg.statusCode;\ndelete msg.payload;\nmsg.headers={}\nmsg.headers.Authorization=Digest;\nreturn msg;",
-    "outputs": 1,
-    "noerr": 0,
-    "x": 985.8959808349609,
-    "y": 148.88888549804688,
-    "z": "e5f6f0e3.1a091",
-    "wires": [
-      [
-        "d19fb65c.2e6048"
-      ]
-    ]
-  },
-  {
-    "id": "d19fb65c.2e6048",
-    "type": "http request",
-    "name": "",
-    "method": "use",
-    "ret": "txt",
-    "url": "",
-    "x": 1169.8959197998047,
-    "y": 148.88888549804688,
-    "z": "e5f6f0e3.1a091",
-    "wires": [
-      [
-        "e37ebe29.1c814"
-      ]
-    ]
-  },
-  {
-    "id": "d9c3d688.263c28",
-    "type": "comment",
-    "name": "------------------------------- Samsung smartcam----------------------------------------------",
-    "info": "",
-    "x": 311.8958282470703,
-    "y": 72.88888549804688,
-    "z": "e5f6f0e3.1a091",
-    "wires": []
-  },
-  {
-    "id": "3e8631e7.c179ce",
-    "type": "http in",
-    "name": "",
-    "url": "/red/get_snapshot",
-    "method": "get",
-    "swaggerDoc": "",
-    "x": 148.99998474121094,
-    "y": 210,
-    "z": "e5f6f0e3.1a091",
-    "wires": [
-      [
-        "8fff970e.700068"
-      ]
-    ]
-  },
-  {
-    "id": "8fff970e.700068",
-    "type": "function",
-    "name": "",
-    "func": "if (msg.payload.token==context.global.FREEBOARD_TOKEN && typeof(msg.payload.Cameraname)!=='undefined'){\n    var cam=msg.payload.Cameraname;\n    if(cam in context.global.winkState.cameras){\n    if (cam in context.global.SamsungCam){\n     var camera=context.global.SamsungCam[cam]\n     msg.topic=cam\n     msg.model='Samsung'\n     msg.url='http://'+camera.hostname+'/cgi-bin/video.cgi?msubmenu=jpg&resolution=5'\n     msg.method=\"GET\"\n    }\n    if (cam in context.global.DlinkCam){\n    var camera=context.global.DlinkCam[cam]\n     msg.topic=cam\n     msg.model='Dlink'\n     msg.url='http://'+camera.hostname+'/image/jpeg.cgi'\n     msg.method=\"GET\"\n    msg.headers={\n        \"Authorization\": \"Basic \"+ context.global.DlinkCam[cam].B64Auth\n    }\n        \n    }\n     node.send(msg)\n//     msg.res.send(200,\"OK\");\n    }\n}\nreturn;",
-    "outputs": 1,
-    "noerr": 0,
-    "x": 355,
-    "y": 210,
-    "z": "e5f6f0e3.1a091",
-    "wires": [
-      [
-        "aac5f0e4.553a1"
-      ]
-    ]
-  },
-  {
-    "id": "aac5f0e4.553a1",
-    "type": "http request",
-    "name": "",
-    "method": "use",
-    "ret": "txt",
-    "url": "",
-    "x": 532,
-    "y": 210,
-    "z": "e5f6f0e3.1a091",
-    "wires": [
-      [
-        "664362b9.99bc9c"
-      ]
-    ]
-  },
-  {
-    "id": "664362b9.99bc9c",
-    "type": "function",
-    "name": "check digest auth",
-    "func": "var Auth=msg.headers['www-authenticate'];\nvar AuthArr = Auth.split(',');\nvar AuthJ={}\nfor (var i=0;i<AuthArr.length;i++){\n    var item=AuthArr[i].split('=');\n    AuthJ[item[0].trim()]=item[1].replace('\\\"','').replace('\\\"','')\n}\n\nvar ha1_str=\"admin:\"+AuthJ[\"Digest realm\"]+\":\"+context.global.SamsungCam[msg.topic].private_key;\n//node.warn(ha1_str);\nvar HA1=context.global.CRYPTO.createHash(\"md5\").update(ha1_str,\"utf8\").digest(\"hex\");\nvar HA2=context.global.CRYPTO.createHash(\"md5\").update(\"GET:/cgi-bin/video.cgi?msubmenu=jpg&resolution=5\",\"utf8\").digest(\"hex\");\nvar cnonce=context.global.CRYPTO.randomBytes(8).toString('hex');\nvar nc=\"00001\";\n//node.warn(AuthJ);\nvar str_resp=HA1+\":\"+AuthJ.nonce+\":\"+nc+\":\"+cnonce+\":\"+\"auth\"+\":\"+HA2;\n//node.warn(str_resp);\nvar response = context.global.CRYPTO.createHash(\"md5\").update(str_resp,\"utf8\").digest(\"hex\");\n//node.warn(response);\nvar eol=\" \";\nvar Digest='Digest username=\"admin\",' + eol +\n           'realm=\"' + AuthJ[\"Digest realm\"].trim() + '\",' + eol +\n           'qop=\"' + AuthJ.qop.trim() + '\",' + eol +\n           'algorithm=\"MD5\",' + eol +\n           'uri=\"/cgi-bin/video.cgi?msubmenu=jpg&resolution=5\"'+ ',' +  eol +\n           'nonce=\"' + AuthJ.nonce.trim() + '\",' + eol +\n           'cnonce=\"' + cnonce.trim() + '\",'.trim() + eol +\n           'opaque=\"\",' + eol +\n           'nc=\"' + nc + '\",' + eol +\n           'response=\"' + response + '\"';\n//node.warn(Digest);\ndelete msg.headers\ndelete msg.statusCode;\ndelete msg.payload;\nmsg.headers={}\nmsg.headers.Authorization=Digest;\nreturn msg;",
-    "outputs": 1,
-    "noerr": 0,
-    "x": 745.0001831054688,
-    "y": 210,
-    "z": "e5f6f0e3.1a091",
-    "wires": [
-      [
-        "71c515c4.8e3aec"
-      ]
-    ]
-  },
-  {
-    "id": "71c515c4.8e3aec",
-    "type": "http request",
-    "name": "",
-    "method": "use",
-    "ret": "bin",
-    "url": "",
-    "x": 960.0001220703125,
-    "y": 210,
-    "z": "e5f6f0e3.1a091",
-    "wires": [
-      [
-        "14850f89.eb7af"
-      ]
-    ]
-  },
-  {
-    "id": "14850f89.eb7af",
-    "type": "http response",
-    "name": "",
-    "x": 1132,
-    "y": 211,
-    "z": "e5f6f0e3.1a091",
-    "wires": []
-  },
-  {
-    "id": "97b3925.f684c7",
-    "type": "http request",
-    "name": "",
-    "method": "use",
-    "ret": "txt",
-    "url": "",
-    "x": 1574.8958282470703,
-    "y": 150.88888549804688,
-    "z": "e5f6f0e3.1a091",
-    "wires": [
-      []
     ]
   }
 ]
