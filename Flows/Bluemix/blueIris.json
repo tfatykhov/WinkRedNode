@@ -1,0 +1,277 @@
+[
+  {
+    "id": "861db6af.79e248",
+    "type": "inject",
+    "z": "926f70fe.6d909",
+    "name": "",
+    "topic": "",
+    "payload": "true",
+    "payloadType": "bool",
+    "repeat": "",
+    "crontab": "",
+    "once": false,
+    "x": 107,
+    "y": 54,
+    "wires": [
+      [
+        "bf8d253f.4072d8"
+      ]
+    ]
+  },
+  {
+    "id": "bf8d253f.4072d8",
+    "type": "function",
+    "z": "926f70fe.6d909",
+    "name": "",
+    "func": "    msg.url=context.global.BlueIrisHost+'/json';\n    msg.method='POST';\n    msg.payload={\n        \"cmd\":\"login\"\n    }\n    node.warn(msg.payload)\n    return msg;",
+    "outputs": 1,
+    "noerr": 0,
+    "x": 266,
+    "y": 55,
+    "wires": [
+      [
+        "471273de.b8ed8c"
+      ]
+    ]
+  },
+  {
+    "id": "471273de.b8ed8c",
+    "type": "http request",
+    "z": "926f70fe.6d909",
+    "name": "",
+    "method": "use",
+    "ret": "obj",
+    "url": "",
+    "x": 433,
+    "y": 53,
+    "wires": [
+      [
+        "1f0ff01d.e0f01",
+        "b899783.f476688"
+      ]
+    ]
+  },
+  {
+    "id": "1f0ff01d.e0f01",
+    "type": "function",
+    "z": "926f70fe.6d909",
+    "name": "",
+    "func": " if ('result' in msg.payload && msg.payload.result=='fail') {\n    var session=msg.payload.session;\n    var ha1_str=context.global.BlueIrisUid+':'+msg.payload.session+':'+context.global.BlueIrisPwd;\n    var response=context.global.CRYPTO.createHash(\"md5\").update(ha1_str,\"utf8\").digest(\"hex\");\n    msg.md5resp=response;\n    node.warn('generating hash response: '+ response);\n    delete msg.headers;\n    msg.payload={\n        \"cmd\":\"login\",\n        \"session\":session,\n        \"response\":response\n    }\n    node.send(msg);\n} ",
+    "outputs": "1",
+    "noerr": 0,
+    "x": 431,
+    "y": 104,
+    "wires": [
+      [
+        "471273de.b8ed8c"
+      ]
+    ]
+  },
+  {
+    "id": "b899783.f476688",
+    "type": "function",
+    "z": "926f70fe.6d909",
+    "name": "",
+    "func": "if ('result' in msg.payload && msg.payload.result=='success'){\n    context.global.blueIris=msg.payload.data;\n    var session=msg.payload.session;\n    node.warn(' hash response: '+ msg.md5resp);\n    delete msg.headers;\n    msg.payload={\n        \"cmd\":\"camlist\",\n        \"session\":session,\n        \"response\":msg.md5resp\n    }    \nreturn msg;\n}",
+    "outputs": 1,
+    "noerr": 0,
+    "x": 609,
+    "y": 53,
+    "wires": [
+      [
+        "9339e269.6cc62"
+      ]
+    ]
+  },
+  {
+    "id": "9339e269.6cc62",
+    "type": "http request",
+    "z": "926f70fe.6d909",
+    "name": "",
+    "method": "use",
+    "ret": "obj",
+    "url": "",
+    "x": 765,
+    "y": 53,
+    "wires": [
+      [
+        "394ad37b.c6b52c"
+      ]
+    ]
+  },
+  {
+    "id": "394ad37b.c6b52c",
+    "type": "function",
+    "z": "926f70fe.6d909",
+    "name": "",
+    "func": "if ('result' in msg.payload && msg.payload.result=='success'){\n    var camlist=msg.payload.data;\n    camlist.forEach(function(camera){\n    //node.warn('camera:'+camera.optionDisplay);\n    node.warn(camera)\n    if(camera.optionDisplay.substr(0, 1)!=='+'){\n    var cam_name=camera.optionValue;\n    context.global.winkState.cameras[cam_name]={\n    \"name\": cam_name,\n    \"object_type\": \"cameras\",\n    \"eco_system\" : \"BlueIris\",\n    \"object_id\": cam_name.replace(\" \",\"\"),\n    \"freeboard\": 0,\n    \"manufacturer_device_model\":\"BlueIris camera\",\n    \"connection\": true,\n    \"capturing_audio\": true,\n    \"capturing_video\": true,\n    //\"url\": CamUrl=\"Http://admin:\"+context.global.SamsungCam[cam_name].private_key+\"@\"+context.global.SamsungCam[cam_name].hostname+\"/cgi-bin/video.cgi?msubmenu=mjpg\",\n    \"url\":\"http://timothyr.no-ip.org:81/mjpg/\"+cam_name+\"&user=admin&pw=Dfdbkjy-5\",\n    //\"snap_url\": \"http://timothyr.no-ip.org:81/image/\"+cam_name+\"?q=100&s=100\"+\"&user=admin&pw=Dfdbkjy-5\",\n    \"snap_url\": context.global.BlueMixUrlBase+\"/red/blueiris/\"+cam_name,\n    \"history_url\": context.global.BlueMixUrlBase+\"/freeboard/cameraSnapshots?token=\"+context.global.FREEBOARD_TOKEN+\"&camera_name=\"+cam_name,\n    \"refresh_time\":30,\n    \"motion\": \"N/A\",\n    \"activities\":[]\n    }\n    var newmsg ={\n        \"url\":context.global.BlueMixUrlBase+'/red/retrieve_activities?camera_name='+cam_name,\n        \"method\": \"GET\",\n        headers: {\n            \"Authorization\":\"Bearer \"+context.global.FREEBOARD_TOKEN\n        }\n    }\n    node.send(newmsg)\n    }\n    })\n}\nreturn msg;",
+    "outputs": 1,
+    "noerr": 0,
+    "x": 920,
+    "y": 53,
+    "wires": [
+      [
+        "98d8a135.67276"
+      ]
+    ]
+  },
+  {
+    "id": "bdd343d1.422cc",
+    "type": "http in",
+    "z": "926f70fe.6d909",
+    "name": "",
+    "url": "/red/blueIris/*",
+    "method": "get",
+    "swaggerDoc": "",
+    "x": 116,
+    "y": 233,
+    "wires": [
+      [
+        "cc78f59c.338708"
+      ]
+    ]
+  },
+  {
+    "id": "cc78f59c.338708",
+    "type": "function",
+    "z": "926f70fe.6d909",
+    "name": "",
+    "func": "if (msg.payload.token ==context.global.FREEBOARD_TOKEN || context.global.getCookie('exchange_token',msg.req.headers.cookie)==context.global.FREEBOARD_TOKEN){\n    camName=msg.req.originalUrl.split('/').pop().split('?').shift();\n    msg.method='GET';\n    msg.url=context.global.BlueIrisHost+'/image/'+camName+'?user='+context.global.BlueIrisUid+'&pw='+context.global.BlueIrisPwd+'&q=100&s=100';\nreturn msg;\n}\nreturn;",
+    "outputs": 1,
+    "noerr": 0,
+    "x": 288,
+    "y": 232,
+    "wires": [
+      [
+        "301820d6.cfe7e"
+      ]
+    ]
+  },
+  {
+    "id": "301820d6.cfe7e",
+    "type": "http request",
+    "z": "926f70fe.6d909",
+    "name": "",
+    "method": "use",
+    "ret": "bin",
+    "url": "",
+    "x": 478,
+    "y": 233,
+    "wires": [
+      [
+        "a400f667.5bff08"
+      ]
+    ]
+  },
+  {
+    "id": "a400f667.5bff08",
+    "type": "http response",
+    "z": "926f70fe.6d909",
+    "name": "",
+    "x": 632,
+    "y": 232,
+    "wires": []
+  },
+  {
+    "id": "98d8a135.67276",
+    "type": "http request",
+    "z": "926f70fe.6d909",
+    "name": "",
+    "method": "GET",
+    "ret": "txt",
+    "url": "",
+    "x": 1065,
+    "y": 51,
+    "wires": [
+      []
+    ]
+  },
+  {
+    "id": "99dd61fe.6622a",
+    "type": "http in",
+    "z": "926f70fe.6d909",
+    "name": "",
+    "url": "/red/blueiris/alerts/*",
+    "method": "post",
+    "swaggerDoc": "",
+    "x": 142,
+    "y": 299,
+    "wires": [
+      [
+        "c8aad0b1.37553",
+        "5f783305.a087cc"
+      ]
+    ]
+  },
+  {
+    "id": "c8aad0b1.37553",
+    "type": "function",
+    "z": "926f70fe.6d909",
+    "name": "",
+    "func": "var Camera=msg.req.originalUrl.split('/').pop();\nEvent= {\n    Camera:Camera,\n    motion:msg.payload.motion\n}\nnode.warn(Event);\n\nif ('motion' in msg.payload){\n        var postMsg={\n            url:context.global.BlueMixUrlBase+'/red/wink/subscribtions',\n            method:\"POST\",\n                headers: {\n                \"Content-Type\":\"application/json\"\n            },\n            payload:{\n          capabilities: { fields: [ { field: 'motion', type: 'boolean' } ] },\n          device_manufacturer: 'BlueIris',\n          \"eco_system\" : \"BLUEIRIS\",\n          last_event: \n           { brightness_occurred_at: null,\n             loudness_occurred_at: null,\n             vibration_occurred_at: null },\n          last_reading: \n           { \n               agent_session_id: 'FALSE',\n               connection: true,\n               motion: (msg.payload.motion || msg.payload.motion==\"true\" ? true : false),\n           },\n          manufacturer_device_model: 'blueiris_motion_sensor',\n          model_name: 'Motion Sensor',\n          name:Camera,\n          object_id: Camera+'_BlueIris',\n          object_type: 'sensor_pod',\n          radio_type: 'wifi',\n          sensor_pod_id:Camera+'_BlueIris',\n          triggers: [],\n          units: {},\n          upc_code: 'motion_sensor',\n          upc_id: 'blueiris0001'\n          }\n        }\n        return postMsg;\n}\nreturn;",
+    "outputs": 1,
+    "noerr": 0,
+    "x": 335,
+    "y": 298,
+    "wires": [
+      [
+        "70fc25bc.8f03dc"
+      ]
+    ]
+  },
+  {
+    "id": "70fc25bc.8f03dc",
+    "type": "http request",
+    "z": "926f70fe.6d909",
+    "name": "",
+    "method": "use",
+    "ret": "obj",
+    "url": "",
+    "x": 490,
+    "y": 298,
+    "wires": [
+      []
+    ]
+  },
+  {
+    "id": "5f783305.a087cc",
+    "type": "http response",
+    "z": "926f70fe.6d909",
+    "name": "",
+    "x": 328,
+    "y": 360,
+    "wires": []
+  },
+  {
+    "id": "ed2ec126.12d14",
+    "type": "http in",
+    "z": "926f70fe.6d909",
+    "name": "",
+    "url": "/red/blueiris",
+    "method": "post",
+    "swaggerDoc": "",
+    "x": 120,
+    "y": 160,
+    "wires": [
+      [
+        "756165da.8a9e9c"
+      ]
+    ]
+  },
+  {
+    "id": "756165da.8a9e9c",
+    "type": "function",
+    "z": "926f70fe.6d909",
+    "name": "",
+    "func": "if (msg.payload.token ==context.global.FREEBOARD_TOKEN || context.global.getCookie('exchange_token',msg.req.headers.cookie)==context.global.FREEBOARD_TOKEN){\n    msg.statusCode=200;\n    msg.payload=\"aaa\";\n    node.send(msg);\n}\nreturn;\n",
+    "outputs": 1,
+    "noerr": 0,
+    "x": 173,
+    "y": 106,
+    "wires": [
+      [
+        "bf8d253f.4072d8"
+      ]
+    ]
+  }
+]
