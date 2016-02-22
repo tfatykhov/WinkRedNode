@@ -1,21 +1,5 @@
 [
   {
-    "id": "394ad37b.c6b52c",
-    "type": "function",
-    "z": "926f70fe.6d909",
-    "name": "",
-    "func": "if ('result' in msg.payload && msg.payload.result=='success'){\n    var camlist=msg.payload.data;\n    camlist.forEach(function(camera){\n    if(camera.optionDisplay.substr(0, 1)!=='+'){\n    var cam_name=camera.optionValue;\n    context.global.winkState.cameras[cam_name]={\n    \"name\": cam_name,\n    \"object_type\": \"cameras\",\n    \"eco_system\" : \"BlueIris\",\n    \"object_id\": cam_name.replace(\" \",\"\"),\n    \"freeboard\": 0,\n    \"manufacturer_device_model\":\"BlueIris camera\",\n    \"connection\": true,\n    \"capturing_audio\": true,\n    \"capturing_video\": true,\n    //\"url\": CamUrl=\"Http://admin:\"+context.global.SamsungCam[cam_name].private_key+\"@\"+context.global.SamsungCam[cam_name].hostname+\"/cgi-bin/video.cgi?msubmenu=mjpg\",\n    \"url\":\"http://timothyr.no-ip.org:81/mjpg/\"+cam_name+\"&user=admin&pw=Dfdbkjy-5\",\n    //\"snap_url\": \"http://timothyr.no-ip.org:81/image/\"+cam_name+\"?q=100&s=100\"+\"&user=admin&pw=Dfdbkjy-5\",\n    \"snap_url\": context.global.BlueMixUrlBase+\"/red/blueiris/\"+cam_name,\n    \"history_url\": context.global.BlueMixUrlBase+\"/freeboard/cameraSnapshots?token=\"+context.global.FREEBOARD_TOKEN+\"&camera_name=\"+cam_name,\n    \"refresh_time\":30,\n    \"motion\": \"N/A\",\n    \"activities\":[]\n    }\n    var newmsg ={\n        \"url\":context.global.BlueMixUrlBase+'/red/retrieve_activities?camera_name='+cam_name,\n        \"method\": \"GET\",\n        headers: {\n            \"Authorization\":\"Bearer \"+context.global.FREEBOARD_TOKEN\n        }\n    }\n    node.send(newmsg)\n    }\n    })\n}\nreturn msg;",
-    "outputs": 1,
-    "noerr": 0,
-    "x": 920,
-    "y": 53,
-    "wires": [
-      [
-        "98d8a135.67276"
-      ]
-    ]
-  },
-  {
     "id": "861db6af.79e248",
     "type": "inject",
     "z": "926f70fe.6d909",
@@ -112,6 +96,22 @@
     "wires": [
       [
         "394ad37b.c6b52c"
+      ]
+    ]
+  },
+  {
+    "id": "394ad37b.c6b52c",
+    "type": "function",
+    "z": "926f70fe.6d909",
+    "name": "",
+    "func": "if ('result' in msg.payload && msg.payload.result=='success'){\n    var camlist=msg.payload.data;\n    camlist.forEach(function(camera){\n    if(camera.optionDisplay.substr(0, 1)!=='+'){\n    var cam_name=camera.optionValue;\n    context.global.winkState.cameras[cam_name]={\n    \"name\": cam_name,\n    \"object_type\": \"cameras\",\n    \"eco_system\" : \"BlueIris\",\n    \"object_id\": cam_name.replace(\" \",\"\"),\n    \"freeboard\": 0,\n    \"manufacturer_device_model\":\"BlueIris camera\",\n    \"connection\": true,\n    \"capturing_audio\": true,\n    \"capturing_video\": true,\n    \"url\":context.global.BlueIrisHost+\"/mjpg/\"+cam_name+\"&user=\"+context.global.BlueIrisUid+\"&pw=\"+context.global.BlueIrisPwd,\n    \"snap_url\": context.global.BlueMixUrlBase+\"/red/blueiris/\"+cam_name,\n    \"history_url\": context.global.BlueMixUrlBase+\"/freeboard/cameraSnapshots?token=\"+context.global.FREEBOARD_TOKEN+\"&camera_name=\"+cam_name,\n    \"refresh_time\":30,\n    \"motion\": \"N/A\",\n    \"activities\":[]\n    }\n    var newmsg ={\n        \"url\":context.global.BlueMixUrlBase+'/red/retrieve_activities?camera_name='+cam_name,\n        \"method\": \"GET\",\n        headers: {\n            \"Authorization\":\"Bearer \"+context.global.FREEBOARD_TOKEN\n        }\n    }\n    node.send(newmsg)\n    }\n    })\n}\nreturn msg;",
+    "outputs": 1,
+    "noerr": 0,
+    "x": 920,
+    "y": 53,
+    "wires": [
+      [
+        "98d8a135.67276"
       ]
     ]
   },
