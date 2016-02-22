@@ -1,4 +1,42 @@
 == UPDATE ==
+02/21/2016
+----------------
+Added support for [Blue Iris](http://blueirissoftware.com)<br>
+Please use instructions for Blue Iris on how to set up access from outside your home network.
+Once you set it up you need to know following:
+* HTTPS will not be supported unless you get proper signed certificate. Blue Mix does not like self signed ones
+* you need to turn off "secure only" option since it is not that secure anyway. Blue mix will not expose uid/pwd on the UI and will get image redirected through it servers and will deliver to user endpoint via HTTPS. 
+<img src="images/blue_iris3.png"><br>
+
+I recommend to get some dynamic dns name for this or you will have to change host name if your provide ip address will change.
+Once you configure Blue Iris, you need to:
+
+
+Flow Editor:<br>
+*  Import updated [winkCore.json](winkCore.json)
+*  Import updated [winkIntegration.json](winkIntegration.json)
+*  Import updated [tabletUI.json](tabletUI.json)
+*  Create new tab and import new [blueIris.json](blueIris.json)
+*  do not forget to check [duplicate websockets](../../README-WebsocketFix.md)
+*  perform "FULL" deployment<br>
+
+Once you deployed and app reinitialized navigate to config tab of tablet ui and enter following info:
+<img src="images/blue_iris1.png">
+* host name should be in a form of http://you blue iris ip or host name:port (no backslash at the end)
+* click on "refresh wink data" Once it is done - you should see your cameras in "cameras" tab.
+
+You can also configure motion alerts to be routed to node-red and then being used in robots/notification/etc.
+In Blue Iris software - navigate to camera settings/alerts
+<img src="images/blue_iris4.png">
+check "request from web service" and click configure.<br>
+On next screen you need to put following things:
+<img src="images/blue_iris2.png">
+* url - should be your bluemixapp.winknodered.net/red/blueiris/alerts/Your camera Short Name from BlueIris
+* post text: {"motion":"true"}
+* Make same entries for "request again when trigger is reset" but in this case populate {"motion":"false"} in the post text.
+	* I did not test that option so please let me know if it works or not.
+You should be all set. 
+
 02/20/2016
 ----------------
 I noticed some updates in wink API which did not happen before.
