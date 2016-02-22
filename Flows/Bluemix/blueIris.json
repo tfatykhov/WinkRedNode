@@ -1,5 +1,19 @@
 [
   {
+    "id": "98d8a135.67276",
+    "type": "http request",
+    "z": "926f70fe.6d909",
+    "name": "",
+    "method": "use",
+    "ret": "obj",
+    "url": "",
+    "x": 1065,
+    "y": 51,
+    "wires": [
+      []
+    ]
+  },
+  {
     "id": "861db6af.79e248",
     "type": "inject",
     "z": "926f70fe.6d909",
@@ -7,9 +21,9 @@
     "topic": "",
     "payload": "true",
     "payloadType": "bool",
-    "repeat": "",
+    "repeat": "82800",
     "crontab": "",
-    "once": false,
+    "once": true,
     "x": 107,
     "y": 54,
     "wires": [
@@ -171,20 +185,6 @@
     "x": 632,
     "y": 232,
     "wires": []
-  },
-  {
-    "id": "98d8a135.67276",
-    "type": "http request",
-    "z": "926f70fe.6d909",
-    "name": "",
-    "method": "GET",
-    "ret": "txt",
-    "url": "",
-    "x": 1065,
-    "y": 51,
-    "wires": [
-      []
-    ]
   },
   {
     "id": "99dd61fe.6622a",
