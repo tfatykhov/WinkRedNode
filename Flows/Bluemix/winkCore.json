@@ -7,25 +7,6 @@
     "wholemsg": "false"
   },
   {
-    "id": "b792c9ff.486d38",
-    "type": "inject",
-    "z": "3cc9f29d.c3360e",
-    "name": "",
-    "topic": "",
-    "payload": "",
-    "payloadType": "str",
-    "repeat": "82800",
-    "crontab": "",
-    "once": false,
-    "x": 90.99995422363281,
-    "y": 386,
-    "wires": [
-      [
-        "8551766c.7aae88"
-      ]
-    ]
-  },
-  {
     "id": "61fe1975.9e01e8",
     "type": "function",
     "z": "3cc9f29d.c3360e",
@@ -87,6 +68,25 @@
     "wires": [
       [
         "c407313e.3bf8d"
+      ]
+    ]
+  },
+  {
+    "id": "b792c9ff.486d38",
+    "type": "inject",
+    "z": "3cc9f29d.c3360e",
+    "name": "",
+    "topic": "",
+    "payload": "",
+    "payloadType": "str",
+    "repeat": "82800",
+    "crontab": "",
+    "once": false,
+    "x": 90.99995422363281,
+    "y": 386,
+    "wires": [
+      [
+        "8551766c.7aae88"
       ]
     ]
   },
@@ -1440,7 +1440,7 @@
     "type": "function",
     "z": "3cc9f29d.c3360e",
     "name": "",
-    "func": "msg.payload.token=context.global.FREEBOARD_TOKEN\nmsg.url=context.global.BlueMixUrlBase+\"/red/blueiris\"\nmsg.method=\"POST\"\nreturn msg;",
+    "func": "msg.payload={}\nmsg.payload.token=context.global.FREEBOARD_TOKEN\nmsg.url=context.global.BlueMixUrlBase+\"/red/blueiris\"\nmsg.method=\"POST\"\nreturn msg;",
     "outputs": 1,
     "noerr": 0,
     "x": 550,
@@ -1456,7 +1456,7 @@
     "type": "http request",
     "z": "3cc9f29d.c3360e",
     "name": "",
-    "method": "GET",
+    "method": "use",
     "ret": "txt",
     "url": "",
     "x": 744,
