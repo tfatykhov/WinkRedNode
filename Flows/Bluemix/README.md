@@ -1,6 +1,7 @@
 == UPDATE ==
 02/21/2016
 ----------------
+Bug fixes (robots formatting issue, etc.) <b>Please import first 3 flows even if you do not need blue Iris</b>
 Added support for [Blue Iris](http://blueirissoftware.com)<br>
 Please use instructions for Blue Iris on how to set up access from outside your home network.
 Once you set it up you need to know following:
