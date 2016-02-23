@@ -7,25 +7,6 @@
     "wholemsg": "false"
   },
   {
-    "id": "b792c9ff.486d38",
-    "type": "inject",
-    "z": "3cc9f29d.c3360e",
-    "name": "",
-    "topic": "",
-    "payload": "",
-    "payloadType": "str",
-    "repeat": "82800",
-    "crontab": "",
-    "once": true,
-    "x": 90.99995422363281,
-    "y": 386,
-    "wires": [
-      [
-        "8551766c.7aae88"
-      ]
-    ]
-  },
-  {
     "id": "61fe1975.9e01e8",
     "type": "function",
     "z": "3cc9f29d.c3360e",
@@ -91,6 +72,25 @@
     ]
   },
   {
+    "id": "b792c9ff.486d38",
+    "type": "inject",
+    "z": "3cc9f29d.c3360e",
+    "name": "",
+    "topic": "",
+    "payload": "",
+    "payloadType": "str",
+    "repeat": "82800",
+    "crontab": "",
+    "once": true,
+    "x": 90.99995422363281,
+    "y": 386,
+    "wires": [
+      [
+        "8551766c.7aae88"
+      ]
+    ]
+  },
+  {
     "id": "e37f8bda.1c8078",
     "type": "http request",
     "z": "3cc9f29d.c3360e",
@@ -117,7 +117,7 @@
     "repeat": "86400",
     "crontab": "",
     "once": true,
-    "x": 114,
+    "x": 79,
     "y": 92,
     "wires": [
       [
@@ -134,8 +134,8 @@
     "func": "var uid=context.global.WinkUser.uid;\nvar pwd=context.global.WinkUser.pwd;\nvar newMsg ={\n    \"url\":\"https://winkapi.quirky.com/oauth2/token\",\n    \"method\": \"POST\",\n    headers: {\n        \"Content-Type\":\"application/json\"\n    },\n    payload: {\n        \"client_id\": \"7243d8212e040d75dada47ce68a04c24\",\n        \"client_secret\": \"7d597e496afd6196db8d8738829f5a09\",\n        \"username\": uid,\n        \"password\": pwd,\n        \"grant_type\": \"password\"\n    }\n}\nreturn newMsg;",
     "outputs": 1,
     "noerr": 0,
-    "x": 420,
-    "y": 103,
+    "x": 407,
+    "y": 87,
     "wires": [
       [
         "e37f8bda.1c8078"
@@ -280,11 +280,13 @@
     "url": "/red/wink/subscribtions",
     "method": "post",
     "swaggerDoc": "",
-    "x": 127,
-    "y": 477.0000915527344,
+    "x": 132,
+    "y": 474.0000915527344,
     "wires": [
       [
-        "f9d0dc64.062f2"
+        "f9d0dc64.062f2",
+        "2ff562c8.d00a9e",
+        "12dd25b1.ed22da"
       ]
     ]
   },
@@ -305,7 +307,9 @@
     "x": 252.9999542236328,
     "y": 386,
     "wires": [
-      []
+      [
+        "61fe1975.9e01e8"
+      ]
     ]
   },
   {
@@ -1033,8 +1037,8 @@
     "randomLast": "5",
     "randomUnits": "seconds",
     "drop": false,
-    "x": 250.5,
-    "y": 74,
+    "x": 221.5,
+    "y": 68,
     "wires": [
       [
         "885252a0.77adb"

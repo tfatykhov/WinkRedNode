@@ -30,7 +30,7 @@
         "f82e5584.07d1a8"
       ],
       [
-        "a06a8288.5f958"
+        "a70e02cd.58f2"
       ]
     ]
   },
@@ -77,8 +77,8 @@
     "method": "use",
     "ret": "obj",
     "url": "",
-    "x": 868.5,
-    "y": 244.49993896484375,
+    "x": 1004.5,
+    "y": 249.49993896484375,
     "wires": [
       []
     ]
@@ -499,7 +499,7 @@
     "type": "function",
     "z": "17b3daf5.e84c25",
     "name": "Save Snapshots to db",
-    "func": "function delay(ms) {\n        var cur_d = new Date();\n        var cur_ticks = cur_d.getTime();\n        var ms_passed = 0;\n        while(ms_passed < ms) {\n            var d = new Date();  // Possible memory leak?\n            var ticks = d.getTime();\n            ms_passed = ticks - cur_ticks;\n            // d = null;  // Prevent memory leak?\n        }\n    }\nif ((msg.req.body.uid==context.global.WinkUser.uid && msg.req.body.pwd==context.global.WinkUser.pwd)||context.global.getCookie('exchange_token',msg.req.headers.cookie)==context.global.FREEBOARD_TOKEN || msg.payload.token==context.global.FREEBOARD_TOKEN || (msg.req.headers.authorization && msg.req.headers.authorization==\"Bearer \"+context.global.FREEBOARD_TOKEN)){\nvar msg1=msg;\nvar trigger=msg.payload.object_name;\nvar cam_list=msg.payload.cam_list.split(',');\nmsg1.res.statusCode=\"200\";\nnode.send([msg1,null])\nvar date=new Date()\nfor (var i=0;i<cam_list.length;i++){\n//for (var cam in context.global.winkState.cameras){\n var camera=context.global.winkState.cameras[cam_list[i]]\n var cam=cam_list[i]\nif ('snap_url' in camera && camera.snap_url!=='undefined'){\n    var msg={}\n    msg.url=camera.snap_url\n    msg.method=\"GET\"\n    msg.date=date\n    msg.topic=cam\n    msg.trigger=trigger\n    node.send([null,msg]);\n    delay(400)\n}\n}\n\n} else {\n    msg.statusCode=\"401\";\n    node.send(msg);\n//    msg.res.send(401,\"Bad request\");\n}\nreturn;",
+    "func": "function delay(ms) {\n        var cur_d = new Date();\n        var cur_ticks = cur_d.getTime();\n        var ms_passed = 0;\n        while(ms_passed < ms) {\n            var d = new Date();  // Possible memory leak?\n            var ticks = d.getTime();\n            ms_passed = ticks - cur_ticks;\n            // d = null;  // Prevent memory leak?\n        }\n    }\nif ((msg.req.body.uid==context.global.WinkUser.uid && msg.req.body.pwd==context.global.WinkUser.pwd)||context.global.getCookie('exchange_token',msg.req.headers.cookie)==context.global.FREEBOARD_TOKEN || msg.payload.token==context.global.FREEBOARD_TOKEN || (msg.req.headers.authorization && msg.req.headers.authorization==\"Bearer \"+context.global.FREEBOARD_TOKEN)){\nvar msg1=msg;\nvar trigger=msg.payload.object_name;\nvar cam_list=msg.payload.cam_list.split(',');\nmsg1.res.statusCode=\"200\";\nnode.send([msg1,null])\nvar date=new Date()\nfor (var i=0;i<cam_list.length;i++){\n//for (var cam in context.global.winkState.cameras){\n var camera=context.global.winkState.cameras[cam_list[i]]\n var cam=cam_list[i]\nif ('snap_url' in camera && camera.snap_url!=='undefined'){\n    //var msg={}\n    msg.url=camera.snap_url\n    msg.method=\"GET\"\n    msg.date=date\n    msg.topic=cam\n    msg.trigger=trigger\n    node.send([null,msg]);\n    delay(400)\n}\n}\n\n} else {\n    msg.statusCode=\"401\";\n    node.send(msg);\n//    msg.res.send(401,\"Bad request\");\n}\nreturn;",
     "outputs": "2",
     "noerr": 0,
     "x": 383.1041717529297,
@@ -1423,7 +1423,7 @@
     "y": 297,
     "wires": [
       [
-        "374cb1ec.c8b34e"
+        "deb8a771.214758"
       ]
     ]
   },
@@ -1439,7 +1439,7 @@
     "y": 335,
     "wires": [
       [
-        "374cb1ec.c8b34e"
+        "deb8a771.214758"
       ]
     ]
   },
@@ -1455,7 +1455,7 @@
     "y": 375,
     "wires": [
       [
-        "374cb1ec.c8b34e"
+        "deb8a771.214758"
       ]
     ]
   },
@@ -1467,8 +1467,8 @@
     "method": "use",
     "ret": "obj",
     "url": "",
-    "x": 1117,
-    "y": 334,
+    "x": 1266,
+    "y": 329,
     "wires": [
       []
     ]
@@ -1515,6 +1515,50 @@
     "y": 1162,
     "wires": [
       []
+    ]
+  },
+  {
+    "id": "a70e02cd.58f2",
+    "type": "delay",
+    "z": "17b3daf5.e84c25",
+    "name": "",
+    "pauseType": "rate",
+    "timeout": "5",
+    "timeoutUnits": "seconds",
+    "rate": "1",
+    "rateUnits": "second",
+    "randomFirst": "1",
+    "randomLast": "5",
+    "randomUnits": "seconds",
+    "drop": true,
+    "x": 816,
+    "y": 250,
+    "wires": [
+      [
+        "a06a8288.5f958"
+      ]
+    ]
+  },
+  {
+    "id": "deb8a771.214758",
+    "type": "delay",
+    "z": "17b3daf5.e84c25",
+    "name": "",
+    "pauseType": "rate",
+    "timeout": "5",
+    "timeoutUnits": "seconds",
+    "rate": "1",
+    "rateUnits": "second",
+    "randomFirst": "1",
+    "randomLast": "5",
+    "randomUnits": "seconds",
+    "drop": false,
+    "x": 1087,
+    "y": 329,
+    "wires": [
+      [
+        "374cb1ec.c8b34e"
+      ]
     ]
   }
 ]
