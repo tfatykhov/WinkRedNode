@@ -9,14 +9,8 @@
     "files":["rewritefiles.js","defaults"],
     "license": "MIT",
     "keywords": [ "node-red", "wink" ],
-    "node-red"      : {
-        "defaults"     : {
-            "flow.json": "defaults/flow.json"
-        }
-    },
-    "scripts": {
-        "postinstall": "node rewritefiles.js"
-  },
+     "main": "defaults/w.js",
+
     "author": {
         "name": "Timur Fatykhob",
         "email": "tfatykhov@gmail.com"
