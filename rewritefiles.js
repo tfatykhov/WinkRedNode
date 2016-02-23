@@ -1,5 +1,5 @@
 var fs = require('fs');
-fs.readFile('node_modules/wink-node-red/defaults/flow.json', 'utf8', function (err,data){
+fs.readFile('node_modules/wink-node-red-defaults/defaults/flow.json', 'utf8', function (err,data){
   if (err) {
   return console.log(err);
   }
