@@ -1,0 +1,25 @@
+{
+    "name"          : "wink-node-red-defaults",
+    "version"       : "0.1.11",
+    "description"   : "Default flows for wink-node-red",
+    "repository" : {
+        "type":"git",
+        "url":"https://github.com/tfatykhov/WinkRedNode/new/master"
+    },
+    "license": "MIT",
+    "keywords": [ "node-red", "wink" ],
+    "node-red"      : {
+        "defaults"     : {
+            "flow.json": "defaults/flow.json"
+        }
+    },
+    "author": {
+        "name": "Timur Fatykhob",
+        "email": "tfatykhov@gmail.com"
+    },
+    "contributors": [
+        {
+            "name": "Brian Meissen"
+        }
+    ]
+}
