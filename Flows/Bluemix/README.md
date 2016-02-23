@@ -1,9 +1,9 @@
 == UPDATE ==
-02/23/2016
+02/23/2016 
 -----------------
-After an issue yesterday I had to request new api keys for node-red project as well as make some additional filtering to prevent wink server overflowing:
+After an issue yesterday I had to request new api keys for node-red project as well as make some additional filtering to prevent wink server overflowing. Latest changes have been applied at 5:05 P.M on 02/23/2016:
 
-<b>Required changes or app will not function</b><br>
+<b>Required changes or app will not function if you updated flows before 5:05 P.M on 02/23/2016 you need to re-deploy winkCore flow </b><br>
 Bluemix git console:<br>
 *  copy contents of [package.json](package.json) and update same file in your configuration with it contents.
 *  add following line to the bluemix-settings.js inside functionGlobalContext section<br>
