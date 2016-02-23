@@ -17,7 +17,9 @@
         "node-red-node-pushbullet":"0.x",
         "node-red-contrib-later":"~0.x",
         "node-red-contrib-async":"~0.x",
-        "suncalc":"git://github.com/mourner/suncalc.git"
+        "suncalc":"git://github.com/mourner/suncalc.git",
+        "node-red-contrib-ui":"~1.X",
+        "winknodered":"git://github.com/tfatykhov/WinkRedNode.git"
     },
     "engines": {
         "node": "~4.x"
