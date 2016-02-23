@@ -1,15 +1,14 @@
 {
-    "name"          : "wink-node-red-defaults",
+    "name"          : "winkNodeRed",
     "version"       : "0.1.11",
-    "description"   : "Default flows for wink-node-red",
+    "description"   : "Default for wink-node-red",
     "repository" : {
         "type":"git",
         "url":"https://github.com/tfatykhov/WinkRedNode/new/master"
     },
-    "files":["rewritefiles.js","defaults"],
+    "files":["defaults"],
     "license": "MIT",
-    "keywords": [ "node-red", "wink" ],
-     "main": "defaults/w.js",
+    "main": "defaults/w.js",
 
     "author": {
         "name": "Timur Fatykhob",
