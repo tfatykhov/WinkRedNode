@@ -76,6 +76,8 @@ var settings = module.exports = {
     //	           }
     ,VCAP_SERVICES: JSON.parse(process.env.VCAP_SERVICES)
     ,CRYPTO: crp
+    ,SunCalc : require("suncalc")
+    ,wnr : require("winknodered")    
 //    ,useRobots: true // Uncomment this line if you plan to use BMeissen's Robot flow.
     // uncomment lines below if you want your cameras to record snapshots based on motion
        
