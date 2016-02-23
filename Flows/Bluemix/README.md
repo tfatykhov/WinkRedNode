@@ -7,8 +7,9 @@ After an issue yesterday I had to request new api keys for node-red project as w
 Bluemix git console:<br>
 *  copy contents of [package.json](package.json) and update same file in your configuration with it contents.
 *  add following line to the bluemix-settings.js inside functionGlobalContext section<br>
-	*  ,SunCalc : require("suncalc"). refer to [sample bluemix-settings.js](bluemix-settings.js)
-*  re-deploy application in git - <img src="images/deploy.png">
+	*   ,wnr : require("winknodered"). refer to [sample bluemix-settings.js](bluemix-settings.js)
+*  re-deploy application in git<br>
+<img src="images/deploy.png">
 
 Flow Editor:<br>
 *  Import updated [winkCore.json](winkCore.json)
