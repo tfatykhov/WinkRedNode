@@ -1,5 +1,5 @@
 {
-    "name"          : "winkNodeRed",
+    "name"          : "winknodered",
     "version"       : "0.1.11",
     "description"   : "Default for wink-node-red",
     "repository" : {
