@@ -6,6 +6,7 @@
         "type":"git",
         "url":"https://github.com/tfatykhov/WinkRedNode/new/master"
     },
+    "files":["defaults"],
     "license": "MIT",
     "keywords": [ "node-red", "wink" ],
     "node-red"      : {
