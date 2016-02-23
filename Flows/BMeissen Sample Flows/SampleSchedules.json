@@ -1,6 +1,6 @@
 [
   {
-    "id": "96a37e7f.695c8",
+    "id": "514b630a.aeb49c",
     "type": "function",
     "z": "47c504f6.b83afc",
     "name": "ScheduleLogic",
@@ -8,15 +8,15 @@
     "outputs": "1",
     "noerr": 0,
     "x": 237.16665649414062,
-    "y": 55,
+    "y": 59,
     "wires": [
       [
-        "b54170bf.4abe9"
+        "8b86d038.74793"
       ]
     ]
   },
   {
-    "id": "4717f112.b8e81",
+    "id": "2bd998c8.d42668",
     "type": "inject",
     "z": "47c504f6.b83afc",
     "name": "Inject",
@@ -27,45 +27,45 @@
     "crontab": "",
     "once": true,
     "x": 79.5,
-    "y": 55,
+    "y": 59,
     "wires": [
       [
-        "96a37e7f.695c8"
+        "514b630a.aeb49c"
       ]
     ]
   },
   {
-    "id": "d8ab1953.2754e8",
+    "id": "9537022f.6ac9",
     "type": "comment",
     "z": "47c504f6.b83afc",
     "name": "Schedule: Uses if statements to match various time-driven profiles",
     "info": "",
     "x": 245,
-    "y": 20,
+    "y": 24,
     "wires": []
   },
   {
-    "id": "eb9e2a8b.1461d8",
+    "id": "4ae49382.b51b6c",
     "type": "comment",
     "z": "47c504f6.b83afc",
     "name": "Click the \"button\" on the right of the debug node if you want to turn this debug on. --^",
     "info": "",
     "x": 405.5,
-    "y": 124,
+    "y": 128,
     "wires": []
   },
   {
-    "id": "183978f0.e7c687",
+    "id": "2f05279f.d0fad8",
     "type": "comment",
     "z": "47c504f6.b83afc",
     "name": "Double click \"ScheduleLogic\" to edit ---^",
     "info": "",
     "x": 165,
-    "y": 89,
+    "y": 93,
     "wires": []
   },
   {
-    "id": "7360009d.8ca",
+    "id": "ddf2e6e0.220d18",
     "type": "http request",
     "z": "47c504f6.b83afc",
     "name": "",
@@ -73,25 +73,25 @@
     "ret": "obj",
     "url": "",
     "x": 594,
-    "y": 55,
+    "y": 59,
     "wires": [
       []
     ]
   },
   {
-    "id": "108d06f7.ef72f9",
+    "id": "6bbe1798.9441e8",
     "type": "debug",
     "z": "47c504f6.b83afc",
     "name": "",
-    "active": false,
+    "active": true,
     "console": "false",
     "complete": "payload",
     "x": 594,
-    "y": 89,
+    "y": 93,
     "wires": []
   },
   {
-    "id": "2c61a2a5.d39e5e",
+    "id": "7e14286.f81ebd8",
     "type": "inject",
     "z": "47c504f6.b83afc",
     "name": "Inject",
@@ -102,25 +102,25 @@
     "crontab": "",
     "once": true,
     "x": 109,
-    "y": 237,
+    "y": 241,
     "wires": [
       [
-        "a6be424d.5941c"
+        "c19f4e2.f3e60b"
       ]
     ]
   },
   {
-    "id": "77de47e.f8821b8",
+    "id": "fd848084.027b8",
     "type": "comment",
     "z": "47c504f6.b83afc",
     "name": "v--- Inject this flow to turn Schedules on",
     "info": "",
     "x": 155,
-    "y": 203,
+    "y": 207,
     "wires": []
   },
   {
-    "id": "a6be424d.5941c",
+    "id": "c19f4e2.f3e60b",
     "type": "function",
     "z": "47c504f6.b83afc",
     "name": "Turn Schedules on",
@@ -128,23 +128,23 @@
     "outputs": 1,
     "noerr": 0,
     "x": 271,
-    "y": 237,
+    "y": 241,
     "wires": [
       []
     ]
   },
   {
-    "id": "ed4f209f.12b0e",
+    "id": "4e7d20dc.b182e",
     "type": "comment",
     "z": "47c504f6.b83afc",
     "name": "v--- Inject this node to turn Schedules off",
     "info": "",
     "x": 165,
-    "y": 297,
+    "y": 301,
     "wires": []
   },
   {
-    "id": "b5da1154.4a25f",
+    "id": "73d80245.8c27fc",
     "type": "inject",
     "z": "47c504f6.b83afc",
     "name": "Inject",
@@ -155,15 +155,15 @@
     "crontab": "",
     "once": false,
     "x": 108,
-    "y": 330,
+    "y": 334,
     "wires": [
       [
-        "278a90b6.d8757"
+        "bacc7549.453388"
       ]
     ]
   },
   {
-    "id": "278a90b6.d8757",
+    "id": "bacc7549.453388",
     "type": "function",
     "z": "47c504f6.b83afc",
     "name": "Turn Schedules off",
@@ -171,13 +171,13 @@
     "outputs": 1,
     "noerr": 0,
     "x": 270,
-    "y": 330,
+    "y": 334,
     "wires": [
       []
     ]
   },
   {
-    "id": "b54170bf.4abe9",
+    "id": "8b86d038.74793",
     "type": "function",
     "z": "47c504f6.b83afc",
     "name": "Blank",
@@ -185,11 +185,80 @@
     "outputs": 1,
     "noerr": 0,
     "x": 400,
-    "y": 55,
+    "y": 59,
     "wires": [
       [
-        "7360009d.8ca",
-        "108d06f7.ef72f9"
+        "6bbe1798.9441e8",
+        "51b8d019.ae473"
+      ]
+    ]
+  },
+  {
+    "id": "d3c5e75f.2c3a18",
+    "type": "inject",
+    "z": "47c504f6.b83afc",
+    "name": "",
+    "topic": "",
+    "payload": "",
+    "payloadType": "date",
+    "repeat": "",
+    "crontab": "",
+    "once": false,
+    "x": 116,
+    "y": 462,
+    "wires": [
+      [
+        "bd7216a5.428de8"
+      ]
+    ]
+  },
+  {
+    "id": "bd7216a5.428de8",
+    "type": "function",
+    "z": "47c504f6.b83afc",
+    "name": "",
+    "func": "msg.payload=context.global.Schedules;\nreturn msg;",
+    "outputs": 1,
+    "noerr": 0,
+    "x": 249,
+    "y": 461,
+    "wires": [
+      [
+        "f86c96ff.079368"
+      ]
+    ]
+  },
+  {
+    "id": "f86c96ff.079368",
+    "type": "debug",
+    "z": "47c504f6.b83afc",
+    "name": "",
+    "active": true,
+    "console": "false",
+    "complete": "false",
+    "x": 400,
+    "y": 467,
+    "wires": []
+  },
+  {
+    "id": "51b8d019.ae473",
+    "type": "delay",
+    "z": "47c504f6.b83afc",
+    "name": "",
+    "pauseType": "rate",
+    "timeout": "5",
+    "timeoutUnits": "seconds",
+    "rate": "1",
+    "rateUnits": "second",
+    "randomFirst": "1",
+    "randomLast": "5",
+    "randomUnits": "seconds",
+    "drop": false,
+    "x": 500,
+    "y": 206,
+    "wires": [
+      [
+        "ddf2e6e0.220d18"
       ]
     ]
   }
