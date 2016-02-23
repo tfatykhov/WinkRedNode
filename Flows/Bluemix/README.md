@@ -3,7 +3,7 @@
 -----------------
 After an issue yesterday I had to request new api keys for node-red project as well as make some additional filtering to prevent wink server overflowing:
 
-<b>Required changes or app will not function</b>
+<b>Required changes or app will not function</b><br>
 Bluemix git console:<br>
 *  copy contents of [package.json](package.json) and update same file in your configuration with it contents.
 *  add following line to the bluemix-settings.js inside functionGlobalContext section<br>
