@@ -1,4 +1,22 @@
 == UPDATE ==
+02/23/2016
+-----------------
+After an issue yesterday I had to request new api keys for node-red project as well as make some additional filtering to prevent wink server overflowing:
+
+<b>Required changes or app will not function</b>
+Bluemix git console:<br>
+*  copy contents of [package.json](package.json) and update same file in your configuration with it contents.
+*  add following line to the bluemix-settings.js inside functionGlobalContext section<br>
+	*  ,SunCalc : require("suncalc"). refer to [sample bluemix-settings.js](bluemix-settings.js)
+*  re-deploy application 
+
+Flow Editor:<br>
+*  Import updated [winkCore.json](winkCore.json)
+*  Import updated [winkIntegration.json](winkIntegration.json)
+*  Import updated [tabletUI.json](tabletUI.json)
+*  do not forget to check [duplicate websockets](../../README-WebsocketFix.md)
+*  perform "FULL" deployment<br>
+
 02/22/2016
 -----------------
 We had an issue earlier today when because of some fault device one of node-red application overflooded wink servers with data so I added a throttling mechanism that will prevent excessive messages to wink servers to 1 per second otherwise they can temorarely suspend access.<br>
