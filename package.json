@@ -1,6 +1,6 @@
 {
     "name"          : "winknodered",
-    "version"       : "0.1.12",
+    "version"       : "0.1.13",
     "description"   : "Default for wink-node-red",
     "repository" : {
         "type":"git",
@@ -11,7 +11,7 @@
     "main": "defaults/w.js",
 
     "author": {
-        "name": "Timur Fatykhob",
+        "name": "Timur Fatykhobv",
         "email": "tfatykhov@gmail.com"
     },
     "contributors": [
