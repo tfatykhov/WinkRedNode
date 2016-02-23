@@ -1,4 +1,17 @@
 == UPDATE ==
+02/22/2016
+-----------------
+We had an issue earlier today when because of some fault device one of node-red application overflooded wink servers with data so I added a throttling mechanism that will prevent excessive messages to wink servers to 1 per second otherwise they can temorarely suspend access.<br>
+<b>please perform ASAP</b>
+Flow Editor:<br>
+*  Import updated [winkCore.json](winkCore.json)
+*  Import updated [winkIntegration.json](winkIntegration.json)
+*  Import updated [tabletUI.json](tabletUI.json)
+*  do not forget to check [duplicate websockets](../../README-WebsocketFix.md)
+*  perform "FULL" deployment<br>
+
+
+
 02/21/2016
 ----------------
 Bug fixes (robots formatting issue, etc.) <b>Please import first 3 flows even if you do not need blue Iris</b><br>
