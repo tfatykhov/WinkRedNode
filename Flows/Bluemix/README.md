@@ -1,4 +1,22 @@
 == UPDATE ==
+02/24/2016
+-----------------
+<b>This update only required if you have WInk API key/Secret. If not, this update today not required</b><br>
+Ability to provide your own Wink API key/secret pair. Since we have temp throttling by wink (several days to make sure everything works OK) I added ability to populate your own WINK key which you can request through wink support site<br>
+[Wink Support](https://wink.zendesk.com/hc/en-us/requests/new)<br>
+
+Navigate to tab ui/configuration page and enter Client ID and Secret provided by Wink.<br>
+<img src="images/controls_tab_w.png"><br>
+
+Click Submit and then Refresh Wink Data. After this your node-red will use your own Key.
+Flow Editor:<br>
+*  Import updated [winkCore.json](winkCore.json)
+*  Import updated [winkIntegration.json](winkIntegration.json)
+*  Import updated [tabletUI.json](tabletUI.json)
+*  do not forget to check [duplicate websockets](../../README-WebsocketFix.md)
+*  perform "FULL" deployment<br>
+
+
 02/23/2016 
 -----------------
 After an issue yesterday I had to request new api keys for node-red project as well as make some additional filtering to prevent wink server overflowing. Latest changes have been applied at 5:05 P.M on 02/23/2016:
