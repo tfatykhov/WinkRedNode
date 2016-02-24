@@ -8,14 +8,14 @@ wnr.pct = function(value) {
     return ((value > 1.0 ? value : value * 100).toFixed(0) + '%');
 };
 
-wnr.send_ui_note = function(cntxt,n_type,n_timeout,n_message,obj_id){
+wnr.send_ui_note = function(n_type,n_timeout,n_message,obj_id){
     var obj=obj_id||null;
     try{
     var newMsg={
-        url:cntxt.BlueMixUrlBase+'/red/notifications',
+        url:context.global.BlueMixUrlBase+'/red/notifications',
         "method": "POST",
         headers: {
-            "Authorization":"Bearer "+cntxt.FREEBOARD_TOKEN
+            "Authorization":"Bearer "+context.global.FREEBOARD_TOKEN
         },
         payload:{
             "id":obj,
@@ -31,19 +31,19 @@ wnr.send_ui_note = function(cntxt,n_type,n_timeout,n_message,obj_id){
     }
 };
 
-wnr.checkPresence = function(cntxt) {
+wnr.checkPresence = function() {
     var i=0;
-    if (typeof(cntxt.Presence) ==='undefined') return false;
-    for (var key in cntxt.Presence){
-        if (cntxt.Presence[key].home==='yes' || cntxt.Presence[key].home===true) i++;
+    if (typeof(context.global.Presence) ==='undefined') return false;
+    for (var key in context.global.Presence){
+        if (context.global.Presence[key].home==='yes' || context.global.Presence[key].home===true) i++;
     }
     return (i>0 ? true : false);
 };
 
-wnr.isHomeOccupied = function(cntxt) {
-    if (typeof cntxt.winkState.groups['.sensors'].motion!=='undefined'){ motionSensors = cntxt.winkState.groups['.sensors'].motion.or; } else { motionSensors = false; }
-    if (typeof cntxt.winkState.groups['.sensors'].occupied!=='undefined'){ occupancySensors = cntxt.winkState.groups['.sensors'].occupied.or; } else { occupancySensors = false; }
-    return ((motionSensors || occupancySensors || cntxt.checkPresence()) ? true : false);
+wnr.isHomeOccupied = function() {
+    if (typeof context.global.winkState.groups['.sensors'].motion!=='undefined'){ motionSensors = context.global.winkState.groups['.sensors'].motion.or; } else { motionSensors = false; }
+    if (typeof context.global.winkState.groups['.sensors'].occupied!=='undefined'){ occupancySensors = context.global.winkState.groups['.sensors'].occupied.or; } else { occupancySensors = false; }
+    return ((motionSensors || occupancySensors || context.global.checkPresence()) ? true : false);
 };
 
 
@@ -53,16 +53,16 @@ wnr.isObject = function(val) {
     return ( (typeof (val) === 'function') || (typeof (val) === 'object') );
 };
 
-wnr.cleanWinkState = function(cntxt){
-    for (var wink_obj in cntxt.winkState){
-          if (wnr.isObject(cntxt.winkState[wink_obj]) && wink_obj.indexOf('Updates')==-1) {
-            for (var wink_device in cntxt.winkState[wink_obj]) {
-               if('eco_system' in cntxt.winkState[wink_obj][wink_device] && cntxt.winkState[wink_obj][wink_device].eco_system=='WINK'){
+wnr.cleanWinkState = function(){
+    for (var wink_obj in context.global.winkState){
+          if (wnr.isObject(context.global.winkState[wink_obj]) && wink_obj.indexOf('Updates')==-1) {
+            for (var wink_device in context.global.winkState[wink_obj]) {
+               if('eco_system' in context.global.winkState[wink_obj][wink_device] && context.global.winkState[wink_obj][wink_device].eco_system=='WINK'){
                    node.warn('               resetting object '+wink_device);
-                   delete cntxt.winkState[wink_obj][wink_device];
+                   delete context.global.winkState[wink_obj][wink_device];
                }
             }
-            if (Object.keys(cntxt.winkState[wink_obj]).length===0) delete cntxt.winkState[wink_obj];
+            if (Object.keys(context.global.winkState[wink_obj]).length===0) delete context.global.winkState[wink_obj];
         }
     }
 };
@@ -76,7 +76,7 @@ wnr.badRobot = function(robot){
     return invalidCause || ifNotUser;
 };
 
-wnr.getWinkState = function (cntxt,body) {
+wnr.getWinkState = function (body) {
     var results, updateP;
 
     updateP = !body.data;
@@ -87,7 +87,7 @@ wnr.getWinkState = function (cntxt,body) {
         //node.warn(result.object_type+" "+ result.object_id+" "+result.name) //for debugging
         type = result.object_type;
         if (type=='camera' && result.manufacturer_device_model=='canary' ) return;
-        if ('effects' in result && cntxt.badRobot(result)) return;
+        if ('effects' in result && context.global.badRobot(result)) return;
         if ('last_reading' in result && 'powering_mode' in result.last_reading && result.last_reading.powering_mode=='none') return;
         if ('object_type' in result && result.object_type=='group' && result.members.length===0) return;
         if (type) {
@@ -108,47 +108,47 @@ wnr.getWinkState = function (cntxt,body) {
 
             }
         }
-        if (!cntxt.winkState[type]) cntxt.winkState[type] = {};
+        if (!context.global.winkState[type]) context.global.winkState[type] = {};
 
-        if ((!!cntxt.winkState[type][key]) && type!=='groups' && (cntxt.winkState[type][key].object_id != result.object_id)) {
+        if ((!!context.global.winkState[type][key]) && type!=='groups' && (context.global.winkState[type][key].object_id != result.object_id)) {
             key += ' (#' + result.object_id + ')';
         }
 
-        if (!(key in cntxt.winkState[type])) cntxt.winkState[type][key] ={};
-        cntxt.winkState[type][key].eco_system=result.eco_system || 'WINK';
-        cntxt.winkState[type][key].name=result.name || key;
-        cntxt.winkState[type][key].object_type=type;
-        cntxt.winkState[type][key].object_id=result.object_id;
-        if (result.device_manufacturer) cntxt.winkState[type][key].device_manufacturer=result.device_manufacturer;
-        cntxt.winkState[type][key].freeboard=0;
+        if (!(key in context.global.winkState[type])) context.global.winkState[type][key] ={};
+        context.global.winkState[type][key].eco_system=result.eco_system || 'WINK';
+        context.global.winkState[type][key].name=result.name || key;
+        context.global.winkState[type][key].object_type=type;
+        context.global.winkState[type][key].object_id=result.object_id;
+        if (result.device_manufacturer) context.global.winkState[type][key].device_manufacturer=result.device_manufacturer;
+        context.global.winkState[type][key].freeboard=0;
         if (result.savings_goal){
-         cntxt.winkState[type][key].savings_goal=result.savings_goal ;
-         cntxt.winkState[type][key].nose_color=result.nose_color;
+         context.global.winkState[type][key].savings_goal=result.savings_goal ;
+         context.global.winkState[type][key].nose_color=result.nose_color;
         }
         if (result.lat_lng) {
             if ((result.lat_lng[0] === 0) && (result.lat_lng[1] === 0)) result.lat_lng = [null, null];
-            cntxt.winkState[type][key].coordinates = result.lat_lng;
+            context.global.winkState[type][key].coordinates = result.lat_lng;
         }
         if ('effects' in result && result.causes.length>0){
-           cntxt.winkState[type][key].creating_actor_type=result.creating_actor_type;
-           cntxt.winkState[type][key].automation_mode=result.automation_mode;
-           cntxt.winkState[type][key].effects=result.effects;
-           cntxt.winkState[type][key].causes=result.causes;
-           cntxt.winkState[type][key].restrictions=result.restrictions;
+           context.global.winkState[type][key].creating_actor_type=result.creating_actor_type;
+           context.global.winkState[type][key].automation_mode=result.automation_mode;
+           context.global.winkState[type][key].effects=result.effects;
+           context.global.winkState[type][key].causes=result.causes;
+           context.global.winkState[type][key].restrictions=result.restrictions;
         }
 
         // Add group membership
         if (type=="groups" && result.name.substring(0,1)!=="." && result.name.substring(0,1)!=="@")
         {
             if (result.members && result.members.length>0) {
-                cntxt.winkState[type][key].members = {};
+                context.global.winkState[type][key].members = {};
                 for (i=0; i<result.members.length; i++) {
                     var light_type= (result.members[i].object_type == 'binary_switch' ? 'binary_switches' : result.members[i].object_type+'s');
-                    for (var name in cntxt.winkState[light_type])
+                    for (var name in context.global.winkState[light_type])
                     {
-                        if (cntxt.winkState[light_type][name].object_id == result.members[i].object_id)
+                        if (context.global.winkState[light_type][name].object_id == result.members[i].object_id)
                         {
-                            cntxt.winkState[type][key].members[name] = {
+                            context.global.winkState[type][key].members[name] = {
                                     name:name,
                                     object_id:result.members[i].object_id,
                                     object_type:light_type
@@ -161,60 +161,60 @@ wnr.getWinkState = function (cntxt,body) {
         }
 
         if (type=='cameras' && result.manufacturer_device_model!=='canary' ){
-//        if (typeof(cntxt.winkState[type][key].activities)==='undefined') cntxt.winkState[type][key].activities=[]
-        cntxt.winkState[type][key].manufacturer_device_model = result.manufacturer_device_model;
-        cntxt.winkState[type][key].url = cntxt.BlueMixUrlBase+"/freeboard/camera?token="+cntxt.FREEBOARD_TOKEN+"&id="+cntxt.winkState.cameras[key].object_id+"&model="+cntxt.winkState.cameras[key].manufacturer_device_model;
-        cntxt.winkState[type][key].snap_url = cntxt.BlueMixUrlBase+"/freeboard/camera?token="+cntxt.FREEBOARD_TOKEN+"&id="+cntxt.winkState.cameras[key].object_id+"&model="+cntxt.winkState.cameras[key].manufacturer_device_model;
-        cntxt.winkState[type][key].history_url = cntxt.BlueMixUrlBase+"/freeboard/cameraSnapshots?token="+cntxt.FREEBOARD_TOKEN+"&camera_name="+key;
-        cntxt.winkState[type][key].refresh_time=30;
+//        if (typeof(context.global.winkState[type][key].activities)==='undefined') context.global.winkState[type][key].activities=[]
+        context.global.winkState[type][key].manufacturer_device_model = result.manufacturer_device_model;
+        context.global.winkState[type][key].url = context.global.BlueMixUrlBase+"/freeboard/camera?token="+context.global.FREEBOARD_TOKEN+"&id="+context.global.winkState.cameras[key].object_id+"&model="+context.global.winkState.cameras[key].manufacturer_device_model;
+        context.global.winkState[type][key].snap_url = context.global.BlueMixUrlBase+"/freeboard/camera?token="+context.global.FREEBOARD_TOKEN+"&id="+context.global.winkState.cameras[key].object_id+"&model="+context.global.winkState.cameras[key].manufacturer_device_model;
+        context.global.winkState[type][key].history_url = context.global.BlueMixUrlBase+"/freeboard/cameraSnapshots?token="+context.global.FREEBOARD_TOKEN+"&camera_name="+key;
+        context.global.winkState[type][key].refresh_time=30;
         }
 
         readings = result.last_reading;
         for (prop in readings) {
             len = prop.length;
             if ((prop.indexOf('desired_') === -1) && (prop.lastIndexOf('_at') !== (len - 3))) {
-                cntxt.winkState[type][key][prop] = readings[prop];
+                context.global.winkState[type][key][prop] = readings[prop];
             }
         }
         if (type=='door_bells') {
-            if (!('sensor_pods' in cntxt.winkState)) cntxt.winkState.sensor_pods={};
-            cntxt.winkState.sensor_pods[key]=cntxt.winkState[type][key];
-            cntxt.winkState.sensor_pods[key].object_type='sensor_pods';
+            if (!('sensor_pods' in context.global.winkState)) context.global.winkState.sensor_pods={};
+            context.global.winkState.sensor_pods[key]=context.global.winkState[type][key];
+            context.global.winkState.sensor_pods[key].object_type='sensor_pods';
         }
         reading_aggregations = result.reading_aggregation;
         for (agg_prop in reading_aggregations) {
-            cntxt.winkState[type][key][agg_prop]=reading_aggregations[agg_prop];
+            context.global.winkState[type][key][agg_prop]=reading_aggregations[agg_prop];
         }
 
         capabilities = result.capabilities;
         for (capb in capabilities) {
-            if(!cntxt.winkDevCap[key]) cntxt.winkDevCap[key]={};
-            if(!cntxt.winkDevCap[key][capb]) cntxt.winkDevCap[key][capb]={};
-          cntxt.winkDevCap[key][capb]=capabilities[capb];
+            if(!context.global.winkDevCap[key]) context.global.winkDevCap[key]={};
+            if(!context.global.winkDevCap[key][capb]) context.global.winkDevCap[key][capb]={};
+          context.global.winkDevCap[key][capb]=capabilities[capb];
         }
 
         outlets = result.outlets;
         for (outl in outlets) {
-         if (!cntxt.winkState[type][outlets[outl].name]) cntxt.winkState[type][outlets[outl].name] = {};
-        cntxt.winkState[type][outlets[outl].name]=outlets[outl];
+         if (!context.global.winkState[type][outlets[outl].name]) context.global.winkState[type][outlets[outl].name] = {};
+        context.global.winkState[type][outlets[outl].name]=outlets[outl];
         }
 
 
-        if (!!result.linked_service_id) cntxt.winkState[type][key].connection = !result.invalidated_at;
+        if (!!result.linked_service_id) context.global.winkState[type][key].connection = !result.invalidated_at;
 
         if (!updateP) return;
-        if (!cntxt.winkState.lastUpdates) cntxt.winkState.lastUpdates = [];
+        if (!context.global.winkState.lastUpdates) context.global.winkState.lastUpdates = [];
         if (type!=='groups'){
-        cntxt.winkState[type][key].timestamp = new Date();
-        cntxt.winkState.lastUpdates.splice(0, 0, cntxt.winkState[type][key]);
-        if (cntxt.winkState.lastUpdates.length > 15) cntxt.winkState.lastUpdates.pop();
+        context.global.winkState[type][key].timestamp = new Date();
+        context.global.winkState.lastUpdates.splice(0, 0, context.global.winkState[type][key]);
+        if (context.global.winkState.lastUpdates.length > 15) context.global.winkState.lastUpdates.pop();
         }
         //addind special array for motion sensors to check how often they occur
-        if (type == "sensor_pods" && typeof (cntxt.winkState[type][key].motion) !== 'undefined') {
-        cntxt.winkState[type][key].timestamp= new Date();
-        if (!cntxt.winkState.motionUpdates) cntxt.winkState.motionUpdates=[];
-        cntxt.winkState.motionUpdates.splice(0, 0, cntxt.winkState[type][key]);
-        if (cntxt.winkState.motionUpdates.length > 30) cntxt.winkState.motionUpdates.pop();
+        if (type == "sensor_pods" && typeof (context.global.winkState[type][key].motion) !== 'undefined') {
+        context.global.winkState[type][key].timestamp= new Date();
+        if (!context.global.winkState.motionUpdates) context.global.winkState.motionUpdates=[];
+        context.global.winkState.motionUpdates.splice(0, 0, context.global.winkState[type][key]);
+        if (context.global.winkState.motionUpdates.length > 30) context.global.winkState.motionUpdates.pop();
         }
 
     });
@@ -222,31 +222,31 @@ wnr.getWinkState = function (cntxt,body) {
 
 //global functions to generate wink cmd message for various objects
 
-wnr.takeCameraSnapshot = function(cntxt,camera,event){
+wnr.takeCameraSnapshot = function(camera,event){
     var cameraMsg={};
-    if (camera in cntxt.winkState.cameras){
+    if (camera in context.global.winkState.cameras){
         cameraMsg ={
-        "url":cntxt.BlueMixUrlBase+'/red/save_images?cam_list='+camera+'&object_name='+event,
+        "url":context.global.BlueMixUrlBase+'/red/save_images?cam_list='+camera+'&object_name='+event,
         "method": "GET",
             headers: {
-                "Authorization":"Bearer "+cntxt.FREEBOARD_TOKEN
+                "Authorization":"Bearer "+context.global.FREEBOARD_TOKEN
             }
         };
     }
     return cameraMsg;
 };
 
-wnr.executeEffectCMD = function(cntxt,effect,o_name,o_type,min,max,period,repeat,delay){
-   if ('new_version' in context.global && cntxt.new_version){
+wnr.executeEffectCMD = function(effect,o_name,o_type,min,max,period,repeat,delay){
+   if ('new_version' in context.global && context.global.new_version){
     var EffectMsg;
     switch (effect.toLowerCase()){
         case 'fadein':
         case 'fadeout':
         EffectMsg = {
-            "url":cntxt.BlueMixUrlBase+'/red/ifttt/effects/'+effect.toLowerCase(),
+            "url":context.global.BlueMixUrlBase+'/red/ifttt/effects/'+effect.toLowerCase(),
             method: "POST",
             headers: {
-                "Authorization":"Bearer "+cntxt.FREEBOARD_TOKEN
+                "Authorization":"Bearer "+context.global.FREEBOARD_TOKEN
             },
             payload:{
                 "winkName":o_name,
@@ -259,10 +259,10 @@ wnr.executeEffectCMD = function(cntxt,effect,o_name,o_type,min,max,period,repeat
         break;
         case 'pulse':
                 EffectMsg = {
-            "url":cntxt.BlueMixUrlBase+'/red/ifttt/effects/'+effect.toLowerCase(),
+            "url":context.global.BlueMixUrlBase+'/red/ifttt/effects/'+effect.toLowerCase(),
             method: "POST",
             headers: {
-                "Authorization":"Bearer "+cntxt.FREEBOARD_TOKEN
+                "Authorization":"Bearer "+context.global.FREEBOARD_TOKEN
             },
             payload:{
                 "winkName":o_name,
@@ -279,20 +279,20 @@ wnr.executeEffectCMD = function(cntxt,effect,o_name,o_type,min,max,period,repeat
    } else return;
 };
 
-wnr.executeWinkCMD = function (cntxt,winkName,type,cmd,level) {
-if ('new_version' in context.global && cntxt.new_version){
+wnr.executeWinkCMD = function (winkName,type,cmd,level) {
+if ('new_version' in context.global && context.global.new_version){
 var WinkCMDmsg;
 //node.warn(winkName+' '+type+' '+cmd)
 try {
 switch (type.toLowerCase()) {
 /*case 'garage':
-if (winkName in cntxt.winkState.garage_doors)
+if (winkName in context.global.winkState.garage_doors)
 {
    WinkCMDmsg ={
-    "url":"https://winkapi.quirky.com/garage_doors/"+cntxt.winkState.garage_doors[winkName].object_id,
+    "url":"https://winkapi.quirky.com/garage_doors/"+context.global.winkState.garage_doors[winkName].object_id,
     "method": "PUT",
     headers: {
-        "Authorization":"Bearer "+cntxt.WinkToken,
+        "Authorization":"Bearer "+context.global.WinkToken,
         "Content-Type":"application/json"
     },
     payload: {
@@ -304,13 +304,13 @@ if (winkName in cntxt.winkState.garage_doors)
 }
 break;*/
 case 'robot':
-if (winkName in cntxt.winkState.robots)
+if (winkName in context.global.winkState.robots)
 {
    WinkCMDmsg ={
-    "url":"https://winkapi.quirky.com/robots/"+cntxt.winkState.robots[winkName].object_id,
+    "url":"https://winkapi.quirky.com/robots/"+context.global.winkState.robots[winkName].object_id,
     "method": "PUT",
     headers: {
-        "Authorization":"Bearer "+cntxt.WinkToken,
+        "Authorization":"Bearer "+context.global.WinkToken,
         "Content-Type":"application/json"
     },
     payload: {
@@ -322,13 +322,13 @@ if (winkName in cntxt.winkState.robots)
 }
 break;
 case 'lock':
-if (winkName in cntxt.winkState.locks)
+if (winkName in context.global.winkState.locks)
 {
    WinkCMDmsg ={
-    "url":"https://winkapi.quirky.com/locks/"+cntxt.winkState.locks[winkName].object_id,
+    "url":"https://winkapi.quirky.com/locks/"+context.global.winkState.locks[winkName].object_id,
     "method": "PUT",
     headers: {
-        "Authorization":"Bearer "+cntxt.WinkToken,
+        "Authorization":"Bearer "+context.global.WinkToken,
         "Content-Type":"application/json"
     },
     payload: {
@@ -340,14 +340,14 @@ if (winkName in cntxt.winkState.locks)
 }
 break;
 case 'light':
-if ('light_bulbs' in cntxt.winkState && winkName in cntxt.winkState.light_bulbs){
-    if(cntxt.winkState.light_bulbs[winkName].device_manufacturer=="lifx")
+if ('light_bulbs' in context.global.winkState && winkName in context.global.winkState.light_bulbs){
+    if(context.global.winkState.light_bulbs[winkName].device_manufacturer=="lifx")
     {
         WinkCMDmsg ={
-            "url":"https://api.lifx.com/v1/lights/id:"+cntxt.winkState.light_bulbs[winkName].object_id+"/state",
+            "url":"https://api.lifx.com/v1/lights/id:"+context.global.winkState.light_bulbs[winkName].object_id+"/state",
             "method": "PUT",
             headers: {
-                "Authorization": "Bearer "+cntxt.LIFX_TOKEN,
+                "Authorization": "Bearer "+context.global.LIFX_TOKEN,
                 "Content-Type":"application/json"
             },
             payload: {
@@ -359,10 +359,10 @@ if ('light_bulbs' in cntxt.winkState && winkName in cntxt.winkState.light_bulbs)
     }
     else {
  WinkCMDmsg ={
-    "url":"https://winkapi.quirky.com/light_bulbs/"+cntxt.winkState.light_bulbs[winkName].object_id,
+    "url":"https://winkapi.quirky.com/light_bulbs/"+context.global.winkState.light_bulbs[winkName].object_id,
     "method": "PUT",
     headers: {
-        "Authorization":"Bearer "+cntxt.WinkToken,
+        "Authorization":"Bearer "+context.global.WinkToken,
         "Content-Type":"application/json"
     },
     payload: {
@@ -373,12 +373,12 @@ if ('light_bulbs' in cntxt.winkState && winkName in cntxt.winkState.light_bulbs)
     }
  };
 }
-} else if('binary_switches' in cntxt.winkState && winkName in cntxt.winkState.binary_switches){
+} else if('binary_switches' in context.global.winkState && winkName in context.global.winkState.binary_switches){
  WinkCMDmsg ={
-    "url":"https://winkapi.quirky.com/binary_switches/"+cntxt.winkState.binary_switches[winkName].object_id,
+    "url":"https://winkapi.quirky.com/binary_switches/"+context.global.winkState.binary_switches[winkName].object_id,
     "method": "PUT",
     headers: {
-        "Authorization":"Bearer "+cntxt.WinkToken,
+        "Authorization":"Bearer "+context.global.WinkToken,
         "Content-Type":"application/json"
     },
     payload: {
@@ -387,12 +387,12 @@ if ('light_bulbs' in cntxt.winkState && winkName in cntxt.winkState.light_bulbs)
         }
     }
 };
-} else if('powerstrips' in cntxt.winkState && winkName in cntxt.winkState.powerstrips && cntxt.winkState.powerstrips[winkName].object_type==='outlet'){
+} else if('powerstrips' in context.global.winkState && winkName in context.global.winkState.powerstrips && context.global.winkState.powerstrips[winkName].object_type==='outlet'){
  WinkCMDmsg ={
-    "url":"https://winkapi.quirky.com/outlets/"+cntxt.winkState.powerstrips[winkName].object_id,
+    "url":"https://winkapi.quirky.com/outlets/"+context.global.winkState.powerstrips[winkName].object_id,
     "method": "PUT",
     headers: {
-        "Authorization":"Bearer "+cntxt.WinkToken,
+        "Authorization":"Bearer "+context.global.WinkToken,
         "Content-Type":"application/json"
     },
     payload: {
@@ -404,13 +404,13 @@ if ('light_bulbs' in cntxt.winkState && winkName in cntxt.winkState.light_bulbs)
 }
 break;
 case 'group':
-if (winkName in cntxt.winkState.groups){
-//node.warn(cntxt.winkState.groups[winkName]);
+if (winkName in context.global.winkState.groups){
+//node.warn(context.global.winkState.groups[winkName]);
  WinkCMDmsg ={
-    "url":"https://winkapi.quirky.com/groups/"+cntxt.winkState.groups[winkName].object_id+"/activate",
+    "url":"https://winkapi.quirky.com/groups/"+context.global.winkState.groups[winkName].object_id+"/activate",
     "method": "POST",
     headers: {
-        "Authorization":"Bearer "+cntxt.WinkToken,
+        "Authorization":"Bearer "+context.global.WinkToken,
         "Content-Type":"application/json"
     },
     payload: {
@@ -423,12 +423,12 @@ if (winkName in cntxt.winkState.groups){
  }
 break;
 case 'shortcut':
-if (winkName in cntxt.winkState.scenes){
+if (winkName in context.global.winkState.scenes){
  WinkCMDmsg ={
-    "url":"https://winkapi.quirky.com/scenes/"+cntxt.winkState.scenes[winkName].object_id+"/activate",
+    "url":"https://winkapi.quirky.com/scenes/"+context.global.winkState.scenes[winkName].object_id+"/activate",
     "method": "POST",
     headers: {
-        "Authorization":"Bearer "+cntxt.WinkToken,
+        "Authorization":"Bearer "+context.global.WinkToken,
         "Content-Type":"application/json"
     }
   };
@@ -447,7 +447,7 @@ catch (error){
 };
 
 
-wnr.genKey=function(s){
+wnr.genKey = function(s){
     var str="";
     for (i=0;i<s.length;i++){
         str+=String.fromCharCode(~s[i]);
@@ -455,23 +455,23 @@ wnr.genKey=function(s){
     return str || null;
 };
 
-cntxt.algorithm = 'aes-256-ctr';
+wnr.algorithm = 'aes-256-ctr';
 
-cntxt.encrypt=function(cntxt,text){
-  var cipher = cntxt.CRYPTO.createCipher(cntxt.algorithm,cntxt.FREEBOARD_TOKEN);
+wnr.encrypt = function(text){
+  var cipher = context.global.CRYPTO.createCipher(context.global.algorithm,context.global.FREEBOARD_TOKEN);
   var crypted = cipher.update(text,'utf8','hex');
   crypted += cipher.final('hex');
   return crypted;
 };
 
-cntxt.decrypt=function(cntxt,text){
-  var decipher = cntxt.CRYPTO.createDecipher(cntxt.algorithm,cntxt.FREEBOARD_TOKEN);
+wnr.decrypt = function(text){
+  var decipher = context.global.CRYPTO.createDecipher(context.global.algorithm,context.global.FREEBOARD_TOKEN);
   var dec = decipher.update(text,'hex','utf8');
   dec += decipher.final('utf8');
   return dec;
 };
 
-wnr.getCookie=function(cname,req_cookies) {
+wnr.getCookie = function(cname,req_cookies) {
     var name = cname + "=";
     if (typeof(req_cookies) !=='undefined' ){
     var ca = req_cookies.split(';');
@@ -499,7 +499,7 @@ wnr.getBISession = function (req_cookies)
 	}
  };
 
-wnr.render_home_components = function(cntxt,grp) {
+wnr.render_home_components = function(grp) {
     var pct = function(value) {
     return ((value > 1.0 ? value : value * 100).toFixed(0) + '%');
     };
@@ -507,22 +507,22 @@ wnr.render_home_components = function(cntxt,grp) {
     return (typeof value === 'number' ? (value.toFixed(1) + 'C / ' + ((value * 1.8) + 32).toFixed(1) + 'F') : '');
     };
 
-    var all=cntxt.winkState.groups['.all'];
-    var l=cntxt.winkState.groups['@lights'];
-    var doors = ('@door_sensors' in cntxt.winkState.groups ? cntxt.winkState.groups['@door_sensors'].opened : false);
-    var sdoors = ('@sliding_door_sensors' in cntxt.winkState.groups ? cntxt.winkState.groups['@sliding_door_sensors'].opened : false);
-    var cab_doors = ('@cabinet_sensors' in cntxt.winkState.groups ? cntxt.winkState.groups['@cabinet_sensors'].opened :false);
-    var windows = ('@window_sensors' in cntxt.winkState.groups ? cntxt.winkState.groups['@window_sensors'].opened : false);
-    //var g_doors = ('@garage_door_sensors' in cntxt.winkState.groups ? cntxt.winkState.groups['@garage_door_sensors'].opened : false);
-    if ('garage_doors' in cntxt.winkState){
+    var all=context.global.winkState.groups['.all'];
+    var l=context.global.winkState.groups['@lights'];
+    var doors = ('@door_sensors' in context.global.winkState.groups ? context.global.winkState.groups['@door_sensors'].opened : false);
+    var sdoors = ('@sliding_door_sensors' in context.global.winkState.groups ? context.global.winkState.groups['@sliding_door_sensors'].opened : false);
+    var cab_doors = ('@cabinet_sensors' in context.global.winkState.groups ? context.global.winkState.groups['@cabinet_sensors'].opened :false);
+    var windows = ('@window_sensors' in context.global.winkState.groups ? context.global.winkState.groups['@window_sensors'].opened : false);
+    //var g_doors = ('@garage_door_sensors' in context.global.winkState.groups ? context.global.winkState.groups['@garage_door_sensors'].opened : false);
+    if ('garage_doors' in context.global.winkState){
         var g_doors={
             'and':false,
             'or': false,
             'true_count':0,
             'false_count':0
         };
-        for (var gd in cntxt.winkState.garage_doors){
-            if (cntxt.winkState.garage_doors[gd].position>0){
+        for (var gd in context.global.winkState.garage_doors){
+            if (context.global.winkState.garage_doors[gd].position>0){
                 g_doors.and=true;
                 g_doors.or=true;
                 g_doors.true_count++;
@@ -542,7 +542,7 @@ wnr.render_home_components = function(cntxt,grp) {
     }
     if (grp==='.all' || grp.indexOf('_sensors')!=-1 || grp==='garage_door')
     {
-         if ('temperature' in cntxt.winkState.groups['.all']){
+         if ('temperature' in context.global.winkState.groups['.all']){
             NewMsg.payload.home_components.push(
                 {
                     type:'temperature',
@@ -552,7 +552,7 @@ wnr.render_home_components = function(cntxt,grp) {
                     icon_color:(all.temperature.average<10 || all.temperature.average > 50 ? 'detail-warning' : 'detail-ok')
                 });
         }
-        if ('humidity' in cntxt.winkState.groups['.all']){
+        if ('humidity' in context.global.winkState.groups['.all']){
             NewMsg.payload.home_components.push(
                 {
                     type:'humidity',
@@ -562,7 +562,7 @@ wnr.render_home_components = function(cntxt,grp) {
                     icon_color:(all.humidity.average < 0.1 || all.humidity.average > 90 ? 'detail-warning' : 'detail-ok')
                 });
         }
-        if ('smoke_detected' in cntxt.winkState.groups['.all']){
+        if ('smoke_detected' in context.global.winkState.groups['.all']){
             NewMsg.payload.home_components.push(
                 {
                     type:'smoke_detected',
@@ -580,7 +580,7 @@ wnr.render_home_components = function(cntxt,grp) {
                     icon_color:(all.co_detected.and || all.co_detected.or ? "detail-danger" : "detail-ok"),
                 });
         }
-        if ('liquid_detected' in cntxt.winkState.groups['.all'])
+        if ('liquid_detected' in context.global.winkState.groups['.all'])
         {
             NewMsg.payload.home_components.push(
                 {
@@ -591,7 +591,7 @@ wnr.render_home_components = function(cntxt,grp) {
                 icon_color:(all.liquid_detected.and || all.liquid_detected.or ?  "detail-danger" : "detail-ok")
             });
         }
-        if ('motion' in cntxt.winkState.groups['.all']){
+        if ('motion' in context.global.winkState.groups['.all']){
             NewMsg.payload.home_components.push(
                 {
                     type:'motion',
@@ -601,7 +601,7 @@ wnr.render_home_components = function(cntxt,grp) {
                     icon_color:(all.motion.and || all.motion.or ?  'detail-warning' : 'detail-ok')
                 });
         }
-        if ('locked' in cntxt.winkState.groups['.all']){
+        if ('locked' in context.global.winkState.groups['.all']){
             NewMsg.payload.home_components.push(
                 {
                     type:'locked',
@@ -613,7 +613,7 @@ wnr.render_home_components = function(cntxt,grp) {
         };
 
         if (doors || sdoors ||cab_doors){
-//      if ('opened' in cntxt.winkState.groups['@sliding_door_sensors'] || 'opened' in cntxt.winkState.groups['@door_sensors'] || 'opened' in cntxt.winkState.groups['@cabinet_sensors']){
+//      if ('opened' in context.global.winkState.groups['@sliding_door_sensors'] || 'opened' in context.global.winkState.groups['@door_sensors'] || 'opened' in context.global.winkState.groups['@cabinet_sensors']){
             NewMsg.payload.home_components.push(
                 {
                     type:'d_opened',
@@ -624,7 +624,7 @@ wnr.render_home_components = function(cntxt,grp) {
                 });
         }
         if (cab_doors){
-//      if ('opened' in cntxt.winkState.groups['@sliding_door_sensors'] || 'opened' in cntxt.winkState.groups['@door_sensors'] || 'opened' in cntxt.winkState.groups['@cabinet_sensors']){
+//      if ('opened' in context.global.winkState.groups['@sliding_door_sensors'] || 'opened' in context.global.winkState.groups['@door_sensors'] || 'opened' in context.global.winkState.groups['@cabinet_sensors']){
             NewMsg.payload.home_components.push(
                 {
                     type:'c_opened',
@@ -634,7 +634,7 @@ wnr.render_home_components = function(cntxt,grp) {
                     icon_color:(cab_doors.and || cab_doors.or ?  'detail-warning' : 'detail-ok')
                 });
         }
-        if ('@window_sensors' in cntxt.winkState.groups && 'opened' in cntxt.winkState.groups['@window_sensors']){
+        if ('@window_sensors' in context.global.winkState.groups && 'opened' in context.global.winkState.groups['@window_sensors']){
             NewMsg.payload.home_components.push(
                 {
                     type:'w_opened',
@@ -645,7 +645,7 @@ wnr.render_home_components = function(cntxt,grp) {
                 });
         }
         if (g_doors){
-//      if ('opened' in cntxt.winkState.groups['@sliding_door_sensors'] || 'opened' in cntxt.winkState.groups['@door_sensors'] || 'opened' in cntxt.winkState.groups['@cabinet_sensors']){
+//      if ('opened' in context.global.winkState.groups['@sliding_door_sensors'] || 'opened' in context.global.winkState.groups['@door_sensors'] || 'opened' in context.global.winkState.groups['@cabinet_sensors']){
             NewMsg.payload.home_components.push(
                 {
                     type:'g_opened',
@@ -655,7 +655,7 @@ wnr.render_home_components = function(cntxt,grp) {
                     icon_color:(g_doors.and || g_doors.or ?  'detail-warning' : 'detail-ok')
                 });
         }
-        if ('light_bulbs' in cntxt.winkState || 'binary_switches' in cntxt.winkState){
+        if ('light_bulbs' in context.global.winkState || 'binary_switches' in context.global.winkState){
                 NewMsg.payload.home_components.push(
                     {
                     type:'lights',
@@ -665,7 +665,7 @@ wnr.render_home_components = function(cntxt,grp) {
                     icon_color:(l.powered.and || l.powered.or ? 'detail-warning' : 'detail-ok')
                     });
         }
-        if ('remaining' in cntxt.winkState.groups['.all']){
+        if ('remaining' in context.global.winkState.groups['.all']){
             //node.warn('adding trippers')
             NewMsg.payload.home_components.push(
                 {
@@ -676,7 +676,7 @@ wnr.render_home_components = function(cntxt,grp) {
                     icon_color:(all.remaining.min <0.10  ?  'detail-danger' : all.remaining.min <=0.50 ? 'detail-warning' : 'detail-ok')
                 });
         }
-        if ('battery' in cntxt.winkState.groups['.all']){
+        if ('battery' in context.global.winkState.groups['.all']){
         //node.warn('adding trippers')
         NewMsg.payload.home_components.push(
             {
@@ -687,19 +687,19 @@ wnr.render_home_components = function(cntxt,grp) {
                 icon_color:(all.battery.min <0.10  ?  'detail-danger' : all.battery.min <=0.50  ?  'detail-warning' : 'detail-ok')
             });
         }
-        if ('Presence' in context.global && Object.getOwnPropertyNames(cntxt.Presence).length > 0){
+        if ('Presence' in context.global && Object.getOwnPropertyNames(context.global.Presence).length > 0){
         NewMsg.payload.home_components.push(
             {
                 type:'presense',
-                icon:'wi wi-home-icon '+(cntxt.checkPresence()  ? 'cicon-building_full': 'cicon-building_emtpy'),
+                icon:'wi wi-home-icon '+(context.global.checkPresence()  ? 'cicon-building_full': 'cicon-building_emtpy'),
                 label:"Presence",
-                value:(cntxt.checkPresence()  ? "Occupied" : "Empty"),
-                icon_color:(cntxt.checkPresence()   ?  'detail-ok' : 'detail-warning')
+                value:(context.global.checkPresence()  ? "Occupied" : "Empty"),
+                icon_color:(context.global.checkPresence()   ?  'detail-ok' : 'detail-warning')
             });
         }
     }
     if (grp=='@lights') {
-        if ('light_bulbs' in cntxt.winkState || 'binary_switches' in cntxt.winkState){
+        if ('light_bulbs' in context.global.winkState || 'binary_switches' in context.global.winkState){
                 NewMsg.payload.home_components.push(
                     {
                     type:'lights',
@@ -711,14 +711,14 @@ wnr.render_home_components = function(cntxt,grp) {
         }
     }
     if (grp=='Presence'){
-        if ('Presence' in context.global && Object.getOwnPropertyNames(cntxt.Presence).length > 0){
+        if ('Presence' in context.global && Object.getOwnPropertyNames(context.global.Presence).length > 0){
         NewMsg.payload.home_components.push(
             {
                 type:'presense',
-                icon:'wi wi-home-icon '+(cntxt.checkPresence()  ? 'cicon-building_full': 'cicon-building_emtpy'),
+                icon:'wi wi-home-icon '+(context.global.checkPresence()  ? 'cicon-building_full': 'cicon-building_emtpy'),
                 label:"Presence",
-                value:(cntxt.checkPresence()  ? "Occupied" : "Empty"),
-                icon_color:(cntxt.checkPresence()   ?  'detail-ok' : 'detail-warning')
+                value:(context.global.checkPresence()  ? "Occupied" : "Empty"),
+                icon_color:(context.global.checkPresence()   ?  'detail-ok' : 'detail-warning')
             });
         }
     }
