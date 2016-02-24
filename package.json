@@ -1,6 +1,6 @@
 {
     "name"          : "winknodered",
-    "version"       : "0.1.14",
+    "version"       : "0.1.15",
     "description"   : "Default for wink-node-red",
     "repository" : {
         "type":"git",
