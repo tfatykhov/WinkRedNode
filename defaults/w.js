@@ -730,7 +730,7 @@ wnr.sendWithTimeout = function(node1,m,delay){
 };
 
 if (typeof define === 'function' && define.amd) define(wnr);
-else if (typeof module !== 'undefined') module.exports = wnr();
+else if (typeof module !== 'undefined') module.exports = wnr;
 else window.wnr = wnr;
-});
+}());
 
