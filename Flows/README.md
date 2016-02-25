@@ -1,6 +1,6 @@
 ## UPDATE
- Flows in this folder are for learning purposes only. 
  For latest working version of the app go to [Bluemix Folder](Bluemix). 
+
 
 
 ## How to deploy a Node-RED flow
