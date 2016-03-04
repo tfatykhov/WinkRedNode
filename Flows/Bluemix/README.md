@@ -1,4 +1,22 @@
 == UPDATE ==
+03/04/2016
+* Garage doors are back for robots but still disabled in UI.<br>
+* Per request from a user, added mobile push notifications (same as ui) via pushbullet. In order to set this up you will need pushbullet API key which you can easily get. Just go to pushbullet.com, create or log in to your account, then navigate to Settings - Account, scroll down until you will see "generate Access token" button.<br>
+<img src="images/pbullet_1.png"><br>
+Copy the value and add it to the config tab "Pushbullet key"<br>
+<img src="images/pbullet_2.png"><br>
+As you can see config tab is re-designed a bit. so open "Apllication Settings" section and check what do you want to send to the phone <img src="images/pbullet_3.png"><br>
+ Then click "submit"<br>
+
+
+Flow Editor:<br>
+*  Import updated [winkCore.json](winkCore.json)
+*  Import updated [winkIntegration.json](winkIntegration.json)
+*  Import updated [tabletUI.json](tabletUI.json)
+*  do not forget to check [duplicate websockets](../../README-WebsocketFix.md)
+*  perform "FULL" deployment<br>
+
+
 02/24/2016
 -----------------
 <b>This update only required if you have WInk API key/Secret. If not, this update today not required</b><br>
