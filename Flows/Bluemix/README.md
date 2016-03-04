@@ -1,5 +1,13 @@
+== Main app pages ==
+-
+https://(your_app_name).mybluemix.net/freeboard/ui - main UI page<br>
+https://(your_app_name).mybluemix.net/freeboard/winkboard - sample freeboard 1<br>
+https://(your_app_name).mybluemix.net/freeboard/winkboardautogroup - sample freeboard <br>
+
 == UPDATE ==
+-
 03/04/2016
+------------
 * Garage doors are back for robots but still disabled in UI.<br>
 * Per request from a user, added mobile push notifications (same as ui) via pushbullet. In order to set this up you will need pushbullet API key which you can easily get. Just go to pushbullet.com, create or log in to your account, then navigate to Settings - Account, scroll down until you will see "generate Access token" button.<br>
 <img src="images/pbullet_1.png"><br>
