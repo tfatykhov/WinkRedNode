@@ -1,5 +1,21 @@
 [
   {
+    "id": "663e07b8.99c1f8",
+    "type": "function",
+    "z": "17b3daf5.e84c25",
+    "name": "create or update config ",
+    "func": "if ((\"error\" in msg.payload && msg.payload.error=='not_found') || msg.db_mode=='update'){\n    node.warn('no app_data exists in cloudant DB or update oeration, saving globals to database')\n    var DBMsg={\n        url:context.global.VCAP_SERVICES.cloudantNoSQLDB[0].credentials.url+\"/winkapp\",\n        method:(msg.db_mode=='update' ? \"PUT\":\"POST\"),\n        headers: \n            {\n                \"Content-Type\":\"application/json\"\n            },\n        payload: {\n            \"_id\":\"app_data\",\n            \"item\":\"app_data\",\n            \"app_cfg\":{\n            motionAdjustTstat: context.global.motionAdjustTstat||false,\n            BlueMixUrlBase:context.global.BlueMixUrlBase,\n            HomeLocation:context.global.HomeLocation,\n            HoursFormat24:context.global.HoursFormat24 || false,\n            LightsNotification:context.global.LightsNotification || false,\n            LightsNotificationM:context.global.LightsNotificationM || false,\n            SensorsNotificationM:context.global.SensorsNotificationM || false,            \n            CustomTabUrl:context.global.CustomTabUrl || '',\n            CustomTabName:context.global.CustomTabName|| '',\n            BlueIrisHost:context.global.BlueIrisHost,\n            BlueIrisUid:context.global.BlueIrisUid,\n            BlueIrisPwd:context.global.BlueIrisPwd,\n            wink_id:context.global.wink_id,\n            wink_secret:context.global.wink_secret\n            }\n        }\n    }\n    if(msg.db_mode=='update' && !(\"error\" in msg.payload && msg.payload.error=='not_found')){\n    DBMsg.url=DBMsg.url+\"/app_data\"    \n    DBMsg.payload._rev=msg.payload._rev;\n    }\n    if ('HomeLocation' in context.global) DBMsg.payload.app_cfg.HomeLocation=context.global.HomeLocation;\n//\tif ('FosCam' in context.global) DBMsg.payload.app_cfg.FosCam=context.global.FosCam;\n//\tif ('SamsungCam' in context.global) DBMsg.payload.app_cfg.SamsungCam=context.global.SamsungCam;\n//\tif ('DlinkCam' in context.global) DBMsg.payload.app_cfg.DlinkCam=context.global.DlinkCam;\n    if ('camera_motion' in context.global) DBMsg.payload.app_cfg.camera_motion=context.global.camera_motion;\n    if ('tab_ui_shortcuts' in context.global) DBMsg.payload.app_cfg.tab_ui_shortcuts=context.global.tab_ui_shortcuts;\n//    if ('netatmo' in context.global) DBMsg.payload.app_cfg.netatmo=context.global.netatmo;\n    if ('winkState' in context.global) DBMsg.payload.app_cfg.winkState=context.global.winkState;\n    if ('LIFX_TOKEN' in context.global) DBMsg.payload.app_cfg.LIFX_TOKEN=context.global.LIFX_TOKEN;\n    if ('IFTTT_TOKEN' in context.global)DBMsg.payload.app_cfg.IFTTT_TOKEN=context.global.IFTTT_TOKEN;\n    if ('forecastIoApiKey' in context.global)DBMsg.payload.app_cfg.forecastIoApiKey=context.global.forecastIoApiKey;\n    if ('InitialStateKey' in context.global)DBMsg.payload.app_cfg.InitialStateKey=context.global.InitialStateKey;\n    if ('PushBulletKey' in context.global)DBMsg.payload.app_cfg.PushBulletKey=context.global.PushBulletKey;    \nnode.send(DBMsg);    \n}\nelse {\n    node.warn('config data exists, restoring');\n    for (var key in msg.payload.app_cfg){\n        node.warn('Restoring '+key+' settings')\n        if (key!=='winkState' && key!=='DlinkCam' && key!=='FosCam' && key!=='SamsungCam'){\n            context.global[key]=msg.payload.app_cfg[key];\n        } else if(msg.restore_wink||0===1) {\n            context.global[key]=msg.payload.app_cfg[key];\n        }\n    }\n}    \nreturn;",
+    "outputs": 1,
+    "noerr": 0,
+    "x": 986.5,
+    "y": 958,
+    "wires": [
+      [
+        "a6dc615b.5923a"
+      ]
+    ]
+  },
+  {
     "id": "f33ac51c.0cc538",
     "type": "function",
     "z": "17b3daf5.e84c25",
@@ -75,12 +91,14 @@
     "z": "17b3daf5.e84c25",
     "name": "",
     "method": "use",
-    "ret": "obj",
+    "ret": "txt",
     "url": "",
     "x": 1004.5,
     "y": 249.49993896484375,
     "wires": [
-      []
+      [
+        "bd8d687.f427298"
+      ]
     ]
   },
   {
@@ -961,7 +979,7 @@
     "type": "function",
     "z": "17b3daf5.e84c25",
     "name": "",
-    "func": "var lifxLights=msg.payload;\nvar useLiveUpd=('CRYPTO' in context.global ? true:false);\nvar CurreTag=\"\";\nvar eTag;\nif (Object.prototype.toString.call(lifxLights)==='[object Array]'){\n    lifxLights.forEach(function (bulb) {\n      //  node.warn(bulb.label)\n     if (context.global.winkState==='undefined') context.global.winkState={}\n     if (context.global.winkState.light_bulbs==='undefined') context.global.winkState.light_bulbs={}\n     if (bulb.label in context.global.winkState.light_bulbs && useLiveUpd) {\n          var WinkBulb={\n            \"connection\": context.global.winkState.light_bulbs[bulb.label].connection,\n            \"powered\": context.global.winkState.light_bulbs[bulb.label].powered,\n            \"brightness\": context.global.winkState.light_bulbs[bulb.label].brightness,\n            \"hue\" : context.global.winkState.light_bulbs[bulb.label].hue,\n            \"saturation\":context.global.winkState.light_bulbs[bulb.label].saturation,\n            \"temperature\":context.global.winkState.light_bulbs[bulb.label].temperature\n          }\n          CurreTag=context.global.CRYPTO.createHash(\"md5\").update(JSON.stringify(WinkBulb),\"utf8\").digest(\"hex\");\n     }\n     \n     var OrigObject={\n        \"connection\": bulb.connected,\n        \"powered\": (bulb.connected && bulb.power==\"on\" ? true : false),\n        \"brightness\": bulb.brightness,\n        \"hue\" : bulb.color.hue,\n        \"saturation\":bulb.color.saturation,\n        \"temperature\":bulb.color.kelvin\n     };\n     if (useLiveUpd){\n     var LifBulb={\n        \"name\": bulb.label,\n        \"eco_system\": \"LIFX\",\n        \"manufacturer_id\": \"lifx\",\n        \"device_manufacturer\":\"lifx\",\n        \"object_type\": \"light_bulb\",\n        \"object_id\": bulb.id,\n        \"freeboard\": 0,\n        desired_state:{},\n        last_reading:{\n        \"connection\": bulb.connected,\n        \"powered\": (bulb.connected && bulb.power==\"on\" ? true : false),\n        \"brightness\": bulb.brightness,\n        \"hue\" : bulb.color.hue,\n        \"saturation\":bulb.color.saturation,\n        \"temperature\":bulb.color.kelvin\n        }\n     };\n      eTag=context.global.CRYPTO.createHash(\"md5\").update(JSON.stringify(OrigObject),\"utf8\").digest(\"hex\");\n     } else {\n    \n      context.global.winkState.light_bulbs[bulb.label]=OrigObject;\n     }\n     //LifBulb\n     \n     context.global.winkDevCap[bulb.label]=bulb.capabilities\n     //node.warn(bulb.label)\n      if (!('groups' in context.global.winkState)) context.global.winkState.groups={}\n     if (!(bulb.group.name in context.global.winkState.groups)){\n     context.global.winkState.groups[bulb.group.name]={\n         \"name\":bulb.group.name,\n         \"obejct_type\":\"groups\",\n         \"object_id\":bulb.group.id,\n          \"freeboard\": 0,\n          members:{}\n        }\n    }\n      context.global.winkState.groups[bulb.group.name].members[bulb.label]={\n        \"name\": bulb.label,\n        \"object_id\": bulb.id,\n        \"object_type\": \"light_bulbs\"\n      }\n     if (useLiveUpd && CurreTag!==eTag){\n        var postMsg={\n            url:context.global.BlueMixUrlBase+'/red/wink/subscribtions',\n            method:\"POST\",\n                headers: {\n                \"Content-Type\":\"application/json\"\n            },\n            payload:LifBulb \n        }\n     node.send(postMsg);\n     }\n    });\n}\nreturn;",
+    "func": "var lifxLights=msg.payload;\nvar useLiveUpd=('CRYPTO' in context.global ? true:false);\nvar CurreTag=\"\";\nvar eTag;\nif (Object.prototype.toString.call(lifxLights)==='[object Array]'){\n    lifxLights.forEach(function (bulb) {\n      //  node.warn(bulb.label)\n     //if (!(' winkState' in context.global)) context.global.winkState={}\n//     if (!('light_bulbs' in context.global.winkState)) context.global.winkState.light_bulbs={}\n     if (bulb.label in context.global.winkState.light_bulbs && useLiveUpd) {\n          var WinkBulb={\n            \"connection\": context.global.winkState.light_bulbs[bulb.label].connection,\n            \"powered\": context.global.winkState.light_bulbs[bulb.label].powered,\n            \"brightness\": context.global.winkState.light_bulbs[bulb.label].brightness,\n            \"hue\" : context.global.winkState.light_bulbs[bulb.label].hue,\n            \"saturation\":context.global.winkState.light_bulbs[bulb.label].saturation,\n            \"temperature\":context.global.winkState.light_bulbs[bulb.label].temperature\n          }\n          CurreTag=context.global.CRYPTO.createHash(\"md5\").update(JSON.stringify(WinkBulb),\"utf8\").digest(\"hex\");\n     }\n     \n     var OrigObject={\n        \"connection\": bulb.connected,\n        \"powered\": (bulb.connected && bulb.power==\"on\" ? true : false),\n        \"brightness\": bulb.brightness,\n        \"hue\" : bulb.color.hue,\n        \"saturation\":bulb.color.saturation,\n        \"temperature\":bulb.color.kelvin\n     };\n     if (useLiveUpd){\n     var LifBulb={\n        \"name\": bulb.label,\n        \"eco_system\": \"LIFX\",\n        \"manufacturer_id\": \"lifx\",\n        \"device_manufacturer\":\"lifx\",\n        \"object_type\": \"light_bulb\",\n        \"object_id\": bulb.id,\n        \"freeboard\": 0,\n        desired_state:{},\n        last_reading:{\n        \"connection\": bulb.connected,\n        \"powered\": (bulb.connected && bulb.power==\"on\" ? true : false),\n        \"brightness\": bulb.brightness,\n        \"hue\" : bulb.color.hue,\n        \"saturation\":bulb.color.saturation,\n        \"temperature\":bulb.color.kelvin\n        }\n     };\n      eTag=context.global.CRYPTO.createHash(\"md5\").update(JSON.stringify(OrigObject),\"utf8\").digest(\"hex\");\n     } else {\n    \n      context.global.winkState.light_bulbs[bulb.label]=OrigObject;\n     }\n     //LifBulb\n     \n     context.global.winkDevCap[bulb.label]=bulb.capabilities\n     //node.warn(bulb.label)\n      if (!('groups' in context.global.winkState)) context.global.winkState.groups={}\n     if (!(bulb.group.name in context.global.winkState.groups)){\n     context.global.winkState.groups[bulb.group.name]={\n         \"name\":bulb.group.name,\n         \"obejct_type\":\"groups\",\n         \"object_id\":bulb.group.id,\n          \"freeboard\": 0,\n          members:{}\n        }\n    }\n      context.global.winkState.groups[bulb.group.name].members[bulb.label]={\n        \"name\": bulb.label,\n        \"object_id\": bulb.id,\n        \"object_type\": \"light_bulbs\"\n      }\n     if (useLiveUpd && CurreTag!==eTag){\n        var postMsg={\n            url:context.global.BlueMixUrlBase+'/red/wink/subscribtions',\n            method:\"POST\",\n                headers: {\n                \"Content-Type\":\"application/json\"\n            },\n            payload:LifBulb \n        }\n     node.send(postMsg);\n     }\n    });\n}\nreturn;",
     "outputs": 1,
     "noerr": 0,
     "x": 642.5,
@@ -1086,22 +1104,6 @@
     "wires": [
       [
         "663e07b8.99c1f8"
-      ]
-    ]
-  },
-  {
-    "id": "663e07b8.99c1f8",
-    "type": "function",
-    "z": "17b3daf5.e84c25",
-    "name": "create or update config ",
-    "func": "if ((\"error\" in msg.payload && msg.payload.error=='not_found') || msg.db_mode=='update'){\n    node.warn('no app_data exists in cloudant DB or update oeration, saving globals to database')\n    var DBMsg={\n        url:context.global.VCAP_SERVICES.cloudantNoSQLDB[0].credentials.url+\"/winkapp\",\n        method:(msg.db_mode=='update' ? \"PUT\":\"POST\"),\n        headers: \n            {\n                \"Content-Type\":\"application/json\"\n            },\n        payload: {\n            \"_id\":\"app_data\",\n            \"item\":\"app_data\",\n            \"app_cfg\":{\n            motionAdjustTstat: context.global.motionAdjustTstat||false,\n            BlueMixUrlBase:context.global.BlueMixUrlBase,\n            HomeLocation:context.global.HomeLocation,\n            HoursFormat24:context.global.HoursFormat24 || false,\n            LightsNotification:context.global.LightsNotification || false,\n            CustomTabUrl:context.global.CustomTabUrl || '',\n            CustomTabName:context.global.CustomTabName|| '',\n            BlueIrisHost:context.global.BlueIrisHost,\n            BlueIrisUid:context.global.BlueIrisUid,\n            BlueIrisPwd:context.global.BlueIrisPwd,\n            wink_id:context.global.wink_id,\n            wink_secret:context.global.wink_secret\n            }\n        }\n    }\n    if(msg.db_mode=='update' && !(\"error\" in msg.payload && msg.payload.error=='not_found')){\n    DBMsg.url=DBMsg.url+\"/app_data\"    \n    DBMsg.payload._rev=msg.payload._rev;\n    }\n    if ('HomeLocation' in context.global) DBMsg.payload.app_cfg.HomeLocation=context.global.HomeLocation;\n//\tif ('FosCam' in context.global) DBMsg.payload.app_cfg.FosCam=context.global.FosCam;\n//\tif ('SamsungCam' in context.global) DBMsg.payload.app_cfg.SamsungCam=context.global.SamsungCam;\n//\tif ('DlinkCam' in context.global) DBMsg.payload.app_cfg.DlinkCam=context.global.DlinkCam;\n    if ('camera_motion' in context.global) DBMsg.payload.app_cfg.camera_motion=context.global.camera_motion;\n    if ('tab_ui_shortcuts' in context.global) DBMsg.payload.app_cfg.tab_ui_shortcuts=context.global.tab_ui_shortcuts;\n//    if ('netatmo' in context.global) DBMsg.payload.app_cfg.netatmo=context.global.netatmo;\n    if ('winkState' in context.global) DBMsg.payload.app_cfg.winkState=context.global.winkState;\n    if ('LIFX_TOKEN' in context.global) DBMsg.payload.app_cfg.LIFX_TOKEN=context.global.LIFX_TOKEN;\n    if ('IFTTT_TOKEN' in context.global)DBMsg.payload.app_cfg.IFTTT_TOKEN=context.global.IFTTT_TOKEN;\n    if ('forecastIoApiKey' in context.global)DBMsg.payload.app_cfg.forecastIoApiKey=context.global.forecastIoApiKey;\n    if ('InitialStateKey' in context.global)DBMsg.payload.app_cfg.InitialStateKey=context.global.InitialStateKey;\nnode.send(DBMsg);    \n}\nelse {\n    node.warn('config data exists, restoring');\n    for (var key in msg.payload.app_cfg){\n        node.warn('Restoring '+key+' settings')\n        if (key!=='winkState' && key!=='DlinkCam' && key!=='FosCam' && key!=='SamsungCam'){\n            context.global[key]=msg.payload.app_cfg[key];\n        } else if(msg.restore_wink||0===1) {\n            context.global[key]=msg.payload.app_cfg[key];\n        }\n    }\n}    \nreturn;",
-    "outputs": 1,
-    "noerr": 0,
-    "x": 986.5,
-    "y": 958,
-    "wires": [
-      [
-        "a6dc615b.5923a"
       ]
     ]
   },
@@ -1435,8 +1437,8 @@
     "func": "var max=parseInt(msg.payload.max) || 0 //0-100\nvar min=parseInt(msg.payload.min) || 0  //0-100\nvar period=parseInt(msg.payload.period) ||0 //in secondsdd\nvar delay=parseInt(msg.payload.step_time) || 5; //in seconds\nvar timeout_adjust=0;\nnode.warn(msg.payload);\ngen_msg=function(winkName,type,level){\n    var WinkCMDmsg = context.global.executeWinkCMD(winkName,type,(level > 0 ? 'on' : 'off'),level);\n    node.send(WinkCMDmsg);\n};\nfunction doWithTimeout(i,delay){\n    setTimeout(function(){gen_msg(msg.payload.winkName,msg.payload.type,i);},delay)\n}\nif (max>min && ((msg.payload.type=='light' && msg.payload.winkName in context.global.winkState.light_bulbs) || msg.payload.type=='group')){\n    var step=Math.round((max-min)/period*delay)-1;\n    if (step<1) step=1;\n    var i=0;\n    var curr_br;\n    do {\n    \ttimeout_adjust++;\n    \tcurr_br=max-i;\n        doWithTimeout(curr_br,timeout_adjust*delay*1000);\n        i+=step;\n    } while(max-i>=min);\n    timeout_adjust++;\n    if (curr_br>min) doWithTimeout(min,timeout_adjust*delay*1000);\n}\nreturn;\n",
     "outputs": 1,
     "noerr": 0,
-    "x": 893,
-    "y": 335,
+    "x": 889,
+    "y": 336,
     "wires": [
       [
         "deb8a771.214758"
@@ -1560,5 +1562,17 @@
         "374cb1ec.c8b34e"
       ]
     ]
+  },
+  {
+    "id": "bd8d687.f427298",
+    "type": "debug",
+    "z": "17b3daf5.e84c25",
+    "name": "",
+    "active": false,
+    "console": "false",
+    "complete": "true",
+    "x": 1206,
+    "y": 251,
+    "wires": []
   }
 ]
