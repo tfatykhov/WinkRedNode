@@ -1,21 +1,5 @@
 [
   {
-    "id": "663e07b8.99c1f8",
-    "type": "function",
-    "z": "17b3daf5.e84c25",
-    "name": "create or update config ",
-    "func": "if ((\"error\" in msg.payload && msg.payload.error=='not_found') || msg.db_mode=='update'){\n    node.warn('no app_data exists in cloudant DB or update oeration, saving globals to database')\n    var DBMsg={\n        url:context.global.VCAP_SERVICES.cloudantNoSQLDB[0].credentials.url+\"/winkapp\",\n        method:(msg.db_mode=='update' ? \"PUT\":\"POST\"),\n        headers: \n            {\n                \"Content-Type\":\"application/json\"\n            },\n        payload: {\n            \"_id\":\"app_data\",\n            \"item\":\"app_data\",\n            \"app_cfg\":{\n            motionAdjustTstat: context.global.motionAdjustTstat||false,\n            BlueMixUrlBase:context.global.BlueMixUrlBase,\n            HomeLocation:context.global.HomeLocation,\n            HoursFormat24:context.global.HoursFormat24 || false,\n            LightsNotification:context.global.LightsNotification || false,\n            LightsNotificationM:context.global.LightsNotificationM || false,\n            SensorsNotificationM:context.global.SensorsNotificationM || false,            \n            CustomTabUrl:context.global.CustomTabUrl || '',\n            CustomTabName:context.global.CustomTabName|| '',\n            BlueIrisHost:context.global.BlueIrisHost,\n            BlueIrisUid:context.global.BlueIrisUid,\n            BlueIrisPwd:context.global.BlueIrisPwd,\n            wink_id:context.global.wink_id,\n            wink_secret:context.global.wink_secret\n            }\n        }\n    }\n    if(msg.db_mode=='update' && !(\"error\" in msg.payload && msg.payload.error=='not_found')){\n    DBMsg.url=DBMsg.url+\"/app_data\"    \n    DBMsg.payload._rev=msg.payload._rev;\n    }\n    if ('HomeLocation' in context.global) DBMsg.payload.app_cfg.HomeLocation=context.global.HomeLocation;\n//\tif ('FosCam' in context.global) DBMsg.payload.app_cfg.FosCam=context.global.FosCam;\n//\tif ('SamsungCam' in context.global) DBMsg.payload.app_cfg.SamsungCam=context.global.SamsungCam;\n//\tif ('DlinkCam' in context.global) DBMsg.payload.app_cfg.DlinkCam=context.global.DlinkCam;\n    if ('camera_motion' in context.global) DBMsg.payload.app_cfg.camera_motion=context.global.camera_motion;\n    if ('tab_ui_shortcuts' in context.global) DBMsg.payload.app_cfg.tab_ui_shortcuts=context.global.tab_ui_shortcuts;\n//    if ('netatmo' in context.global) DBMsg.payload.app_cfg.netatmo=context.global.netatmo;\n    if ('winkState' in context.global) DBMsg.payload.app_cfg.winkState=context.global.winkState;\n    if ('LIFX_TOKEN' in context.global) DBMsg.payload.app_cfg.LIFX_TOKEN=context.global.LIFX_TOKEN;\n    if ('IFTTT_TOKEN' in context.global)DBMsg.payload.app_cfg.IFTTT_TOKEN=context.global.IFTTT_TOKEN;\n    if ('forecastIoApiKey' in context.global)DBMsg.payload.app_cfg.forecastIoApiKey=context.global.forecastIoApiKey;\n    if ('InitialStateKey' in context.global)DBMsg.payload.app_cfg.InitialStateKey=context.global.InitialStateKey;\n    if ('PushBulletKey' in context.global)DBMsg.payload.app_cfg.PushBulletKey=context.global.PushBulletKey;    \nnode.send(DBMsg);    \n}\nelse {\n    node.warn('config data exists, restoring');\n    for (var key in msg.payload.app_cfg){\n        node.warn('Restoring '+key+' settings')\n        if (key!=='winkState' && key!=='DlinkCam' && key!=='FosCam' && key!=='SamsungCam'){\n            context.global[key]=msg.payload.app_cfg[key];\n        } else if(msg.restore_wink||0===1) {\n            context.global[key]=msg.payload.app_cfg[key];\n        }\n    }\n}    \nreturn;",
-    "outputs": 1,
-    "noerr": 0,
-    "x": 986.5,
-    "y": 958,
-    "wires": [
-      [
-        "a6dc615b.5923a"
-      ]
-    ]
-  },
-  {
     "id": "f33ac51c.0cc538",
     "type": "function",
     "z": "17b3daf5.e84c25",
@@ -36,7 +20,7 @@
     "type": "function",
     "z": "17b3daf5.e84c25",
     "name": "",
-    "func": "if ('wnr' in context.global){\nvar WinkCMDmsg={};\nvar web_req=(context.global.getCookie('exchange_token',msg.req.headers.cookie)=='0' ? false:true);\n\nif (msg.payload.iftttkey==context.global.IFTTT_TOKEN || msg.payload.iftttkey==context.global.FREEBOARD_TOKEN) web_req=true;\nif (web_req)\n{\n    if ('ifttt' in  msg.payload)\n    {\n      context.global.ifttt=(msg.payload.ifttt.toLowerCase()==\"on\" ? true:false)\n      msg.res.StatusCode=200;\n      return [msg];\n    }\n    if ('winkName' in msg.payload)\n    {\n//    node.warn('Name '+msg.payload.winkName)\n    if ('cmd' in msg.payload)\n    {\n        cmd=msg.payload.cmd\n    } else cmd='on' \n    if ('level' in msg.payload)\n    {\n        level=msg.payload.level\n    }  else level= (cmd.toLowerCase() =='on' ? 100 : 0)\n//    node.warn(level)\n    WinkCMDmsg = context.global.executeWinkCMD(msg.payload.winkName,msg.payload.type,msg.payload.cmd,level);\n    msg.statusCode=200;\n//    node.warn('Message '+ JSON.stringify(WinkCMDmsg))\n    }\n    if ('nodeRedVar' in msg.payload) {\n        if ('value' in msg.payload) value=msg.payload.value \n        else value = true;\n    context.global[msg.payload.nodeRedVar]=value;\n    WinkCMDmsg=context.global.send_ui_note('information',30000,'Variable '+msg.payload.nodeRedVar+' set to: '+context.global[msg.payload.nodeRedVar],null);\n    }\n}\nelse {\n    node.warn(\"ifttt messages bad request\")\n     msg.statusCode=403;\n     return [msg,null];\n}\nif (WinkCMDmsg!==\"\")\n{\n    return [msg,WinkCMDmsg];\n}\nelse\n{\nreturn [msg,null];\n}\n} else return [msg,null];",
+    "func": "if ('wnr' in context.global){\nvar WinkCMDmsg={};\nvar web_req=(context.global.getCookie('exchange_token',msg.req.headers.cookie)=='0' ? false:true);\n\nif (msg.payload.iftttkey==context.global.IFTTT_TOKEN || msg.payload.iftttkey==context.global.FREEBOARD_TOKEN) web_req=true;\nif (web_req)\n{\n    if ('ifttt' in  msg.payload)\n    {\n      context.global.ifttt=(msg.payload.ifttt.toLowerCase()==\"on\" ? true:false)\n      msg.res.StatusCode=200;\n      return [msg];\n    }\n    if ('winkName' in msg.payload)\n    {\n//    node.warn('Name '+msg.payload.winkName)\n    if ('cmd' in msg.payload)\n    {\n        cmd=msg.payload.cmd\n    } else cmd='on' \n    if ('level' in msg.payload)\n    {\n        level=msg.payload.level\n    }  else level= (cmd.toLowerCase() =='on' ? 100 : 0)\n//    node.warn(level)\n    WinkCMDmsg = context.global.executeWinkCMD(msg.payload.winkName,msg.payload.type,msg.payload.cmd,level);\n    msg.statusCode=200;\n//    node.warn('Message '+ JSON.stringify(WinkCMDmsg))\n    }\n    if ('nodeRedVar' in msg.payload) {\n        if ('value' in msg.payload) value=msg.payload.value \n        else value = true;\n    context.global[msg.payload.nodeRedVar]=value;\n    WinkCMDmsg=context.global.send_ui_note('information',30000,'Variable '+msg.payload.nodeRedVar+' set to: '+context.global[msg.payload.nodeRedVar],null);\n    WinkCMDmsg.topic=msg.payload.nodeRedVar;\n    WinkCMDmsg.var_val=value;    \n    }\n}\nelse {\n    node.warn(\"ifttt messages bad request\")\n     msg.statusCode=403;\n     return [msg,null];\n}\nif (WinkCMDmsg!==\"\")\n{\n    return [msg,WinkCMDmsg];\n}\nelse\n{\nreturn [msg,null];\n}\n} else return [msg,null];",
     "outputs": "2",
     "noerr": 0,
     "x": 632.5,
@@ -46,7 +30,7 @@
         "f82e5584.07d1a8"
       ],
       [
-        "a70e02cd.58f2"
+        "aecb037d.5135"
       ]
     ]
   },
@@ -71,7 +55,7 @@
     "type": "http response",
     "z": "17b3daf5.e84c25",
     "name": "",
-    "x": 836.5,
+    "x": 787.5,
     "y": 208.49993896484375,
     "wires": []
   },
@@ -93,8 +77,8 @@
     "method": "use",
     "ret": "txt",
     "url": "",
-    "x": 1004.5,
-    "y": 249.49993896484375,
+    "x": 1148.5,
+    "y": 245.49993896484375,
     "wires": [
       [
         "bd8d687.f427298"
@@ -249,7 +233,7 @@
     "type": "function",
     "z": "17b3daf5.e84c25",
     "name": "",
-    "func": "var currDate= new Date();\ncurr_presence=context.global.checkPresence()\nif (msg.payload.new_value!=='ERROR' && msg.payload.new_value!==msg.payload.old_value){\n    if('old_presence' in  msg.payload){\n        var HistP={}\n        HistP.timestamp=new Date();\n        HistP.offset=context.global.Weather.Offset\n        HistP.details=msg.payload.old_presence\n        node.warn(HistP)\n        context.global.PresenceHistory.unshift(HistP)\n    }\n    if (context.global.PresenceHistory.length > 15) context.global.PresenceHistory.pop();\n\n    var currDate= new Date();\n    var currHours=currDate.getHours();\n    var currMins=currDate.getMinutes();\n    currHours=currHours+context.global.Weather.Offset;\n    if ((currHours > context.global.Weather.SunriseHour && currHours < context.global.Weather.SunsetHour) || (currHours==context.global.Weather.SunsetHour && currMins <context.global.Weather.SunsetMin))\n    {\n        var timeFrame=\"DAY\";\n    }\n    else {\n        var timeFrame=\"NIGHT\";\n    }    \n    var scene_name=(msg.payload.new_value ? 'PRESENCE' : 'NO PRESENCE')+(timeFrame=='NIGHT' ? ' '+timeFrame : '');\n    for (var key in context.global.winkState.scenes){\n        if ( context.global.winkState.scenes[key].name.toUpperCase()==scene_name)\n        {\n            var newMsg ={\n            \"url\":\"https://winkapi.quirky.com/scenes/\"+context.global.winkState.scenes[key].object_id+\"/activate\",\n            \"method\": \"POST\",\n            headers: {\n                \"Authorization\":\"Bearer \"+context.global.WinkToken,\n                \"Content-Type\":\"application/json\"\n                }\n            }\n        node.send(newMsg)\n        return;\n        }\n    }\n}\nreturn;",
+    "func": "var currDate= new Date();\ncurr_presence=context.global.checkPresence()\nif (msg.payload.new_value!=='ERROR' && msg.payload.new_value!==msg.payload.old_value){\n    if('old_presence' in  msg.payload){\n        var HistP={}\n        HistP.timestamp=new Date();\n        HistP.offset=context.global.Weather.Offset\n        HistP.details=msg.payload.old_presence\n//        node.warn(HistP)\n        context.global.PresenceHistory.unshift(HistP)\n    }\n    if (context.global.PresenceHistory.length > 15) context.global.PresenceHistory.pop();\n\n    var currDate= new Date();\n    var currHours=currDate.getHours();\n    var currMins=currDate.getMinutes();\n    currHours=currHours+context.global.Weather.Offset;\n    if ((currHours > context.global.Weather.SunriseHour && currHours < context.global.Weather.SunsetHour) || (currHours==context.global.Weather.SunsetHour && currMins <context.global.Weather.SunsetMin))\n    {\n        var timeFrame=\"DAY\";\n    }\n    else {\n        var timeFrame=\"NIGHT\";\n    }    \n    var scene_name=(msg.payload.new_value ? 'PRESENCE' : 'NO PRESENCE')+(timeFrame=='NIGHT' ? ' '+timeFrame : '');\n    for (var key in context.global.winkState.scenes){\n        if ( context.global.winkState.scenes[key].name.toUpperCase()==scene_name)\n        {\n            var newMsg ={\n            \"url\":\"https://winkapi.quirky.com/scenes/\"+context.global.winkState.scenes[key].object_id+\"/activate\",\n            \"method\": \"POST\",\n            headers: {\n                \"Authorization\":\"Bearer \"+context.global.WinkToken,\n                \"Content-Type\":\"application/json\"\n                }\n            }\n        node.send(newMsg)\n        return;\n        }\n    }\n}\nreturn;",
     "outputs": 1,
     "noerr": 0,
     "x": 780.8958129882812,
@@ -517,11 +501,11 @@
     "type": "function",
     "z": "17b3daf5.e84c25",
     "name": "Save Snapshots to db",
-    "func": "function delay(ms) {\n        var cur_d = new Date();\n        var cur_ticks = cur_d.getTime();\n        var ms_passed = 0;\n        while(ms_passed < ms) {\n            var d = new Date();  // Possible memory leak?\n            var ticks = d.getTime();\n            ms_passed = ticks - cur_ticks;\n            // d = null;  // Prevent memory leak?\n        }\n    }\nif ((msg.req.body.uid==context.global.WinkUser.uid && msg.req.body.pwd==context.global.WinkUser.pwd)||context.global.getCookie('exchange_token',msg.req.headers.cookie)==context.global.FREEBOARD_TOKEN || msg.payload.token==context.global.FREEBOARD_TOKEN || (msg.req.headers.authorization && msg.req.headers.authorization==\"Bearer \"+context.global.FREEBOARD_TOKEN)){\nvar msg1=msg;\nvar trigger=msg.payload.object_name;\nvar cam_list=msg.payload.cam_list.split(',');\nmsg1.res.statusCode=\"200\";\nnode.send([msg1,null])\nvar date=new Date()\nfor (var i=0;i<cam_list.length;i++){\n//for (var cam in context.global.winkState.cameras){\n var camera=context.global.winkState.cameras[cam_list[i]]\n var cam=cam_list[i]\nif ('snap_url' in camera && camera.snap_url!=='undefined'){\n    //var msg={}\n    msg.url=camera.snap_url\n    msg.method=\"GET\"\n    msg.date=date\n    msg.topic=cam\n    msg.trigger=trigger\n    node.send([null,msg]);\n    delay(400)\n}\n}\n\n} else {\n    msg.statusCode=\"401\";\n    node.send(msg);\n//    msg.res.send(401,\"Bad request\");\n}\nreturn;",
+    "func": "if ((msg.req.body.uid==context.global.WinkUser.uid && msg.req.body.pwd==context.global.WinkUser.pwd)||context.global.getCookie('exchange_token',msg.req.headers.cookie)==context.global.FREEBOARD_TOKEN || msg.payload.token==context.global.FREEBOARD_TOKEN || (msg.req.headers.authorization && msg.req.headers.authorization==\"Bearer \"+context.global.FREEBOARD_TOKEN)){\nvar msg1=msg;\nvar trigger=msg.payload.object_name;\nvar cam_list=msg.payload.cam_list.split(',');\nmsg1.res.statusCode=\"200\";\nnode.send([msg1,null]);\nvar date=new Date();\nvar delay=0;\nfor (var i=0;i<cam_list.length;i++){\n//for (var cam in context.global.winkState.cameras){\n var camera=context.global.winkState.cameras[cam_list[i]];\n var cam=cam_list[i];\nif ('snap_url' in camera && camera.snap_url!=='undefined'){\n    //var msg={}\n    msg.url=camera.snap_url;\n    msg.method=\"GET\";\n    msg.date=date;\n    msg.topic=cam;\n    msg.trigger=trigger;\n    context.global.sendWithTimeout(node,[null,msg],delay);\n    delay+=500;\n}\n}\n\n} else {\n    msg.statusCode=\"401\";\n    node.send(msg);\n//    msg.res.send(401,\"Bad request\");\n}\nreturn;",
     "outputs": "2",
     "noerr": 0,
-    "x": 383.1041717529297,
-    "y": 1214.8332824707031,
+    "x": 404.10418701171875,
+    "y": 1214.833251953125,
     "wires": [
       [
         "90dbb5dc.6f2448"
@@ -555,8 +539,8 @@
     "func": "//if (typeof (context.global.ImageArchive)=== 'undefined') {\n//    context.global.ImageArchive = {}\n//}\n//     for (var n in context.global.winkState.cameras){\n//        if (!(n in context.global.ImageArchive)) context.global.ImageArchive[n]=[]\n//    }\n\n//node.warn('Saving image from '+msg.topic)\n//node.warn(bitmap);\nvar DBmsg={\n         url:context.global.VCAP_SERVICES.cloudantNoSQLDB[0].credentials.url+\"/winkapp\",\n        topic:msg.trigger,\n        method:\"POST\",\n        headers: \n            {\n                \"Content-Type\":\"application/json\"\n            },\n        payload: {\n            \"_id\":msg.topic+'|'+msg.date.getTime()+'|'+msg.trigger,\n            \"key\":\"Snapshot\",\n            \"cameraName\":msg.topic,\n            \"timestamp\":msg.date.getTime(),\n            \"trigger\":msg.trigger,\n            \"fileName\":\"CameraImage.jpg\",\n           \"_attachments\":\n                {\n                    \"CameraImage.jpg\":\n                    {\n                        \"content_type\":\"image/jpeg\",\n                        \"data\":msg.payload.toString('base64')\n                    }\n                }        \n        } \n}\n\n//context.global.ImageArchive[msg.topic].splice(0,0,camObj);\n//if (context.global.ImageArchive[msg.topic].length>10) context.global.ImageArchive[msg.topic].pop()\nreturn DBmsg;",
     "outputs": "1",
     "noerr": 0,
-    "x": 764.1041870117188,
-    "y": 1218.8332824707031,
+    "x": 798.1041259765625,
+    "y": 1220.8332824707031,
     "wires": [
       [
         "2a6a2531.d595da"
@@ -571,8 +555,8 @@
     "method": "use",
     "ret": "obj",
     "url": "",
-    "x": 926.0000610351562,
-    "y": 1219.72216796875,
+    "x": 960,
+    "y": 1221.72216796875,
     "wires": [
       [
         "74973457.8b68cc"
@@ -587,7 +571,7 @@
     "url": "/red/save_images",
     "method": "get",
     "swaggerDoc": "",
-    "x": 157.6042022705078,
+    "x": 131.6042022705078,
     "y": 1214.72216796875,
     "wires": [
       [
@@ -612,8 +596,8 @@
     "func": "if ('ok' in msg.payload && msg.payload.ok){\n    var cameraname=msg.payload.id.split('|')[0];\n    var tstamp=msg.payload.id.split('|')[1];\n    //node.warn('Camera - ' + cameraname)\n    if (typeof(context.global.winkState.cameras[cameraname].activities)==='undefined') context.global.winkState.cameras[cameraname].activities=[]\n    var cam_act={\n        id:msg.payload.rev,\n        cloudant_id:msg.payload.id,\n        category:\"cuepoint\",\n        cuepoint_id:Math.round(tstamp/1000),\n        trigger:msg.topic,\n        snapshot_url:context.global.BlueMixUrlBase+\"/red/camera_history?img_id=\"+msg.payload.id\n    }\n   context.global.winkState.cameras[cameraname].activities.splice(0,0,cam_act);\n   if (context.global.winkState.cameras[cameraname].activities.length>15){\n    for (var i=15; i<context.global.winkState.cameras[cameraname].activities.length;i++){\n    var doc_id=context.global.winkState.cameras[cameraname].activities[i].cloudant_id\n    var rev=context.global.winkState.cameras[cameraname].activities[i].id\n    if(typeof(doc_id)!=='undefined'){\n    var DBmsg={\n         topic:cameraname,\n         position:i,\n         url:context.global.VCAP_SERVICES.cloudantNoSQLDB[0].credentials.url+\"/winkapp/\"+doc_id+\"?rev=\"+rev,\n        method:\"DELETE\"\n    }\n    node.send(DBmsg);\n    }\n   }\n   }\n}\nreturn;",
     "outputs": 1,
     "noerr": 0,
-    "x": 1106.0000610351562,
-    "y": 1215.72216796875,
+    "x": 1140,
+    "y": 1217.72216796875,
     "wires": [
       [
         "505311ce.afacf"
@@ -805,7 +789,7 @@
     "type": "debug",
     "z": "17b3daf5.e84c25",
     "name": "",
-    "active": true,
+    "active": false,
     "console": "false",
     "complete": "false",
     "x": 427.25,
@@ -1104,6 +1088,22 @@
     "wires": [
       [
         "663e07b8.99c1f8"
+      ]
+    ]
+  },
+  {
+    "id": "663e07b8.99c1f8",
+    "type": "function",
+    "z": "17b3daf5.e84c25",
+    "name": "create or update config ",
+    "func": "if ((\"error\" in msg.payload && msg.payload.error=='not_found') || msg.db_mode=='update'){\n    node.warn('no app_data exists in cloudant DB or update oeration, saving globals to database')\n    var DBMsg={\n        url:context.global.VCAP_SERVICES.cloudantNoSQLDB[0].credentials.url+\"/winkapp\",\n        method:(msg.db_mode=='update' ? \"PUT\":\"POST\"),\n        headers: \n            {\n                \"Content-Type\":\"application/json\"\n            },\n        payload: {\n            \"_id\":\"app_data\",\n            \"item\":\"app_data\",\n            \"app_cfg\":{\n            motionAdjustTstat: context.global.motionAdjustTstat||false,\n            BlueMixUrlBase:context.global.BlueMixUrlBase,\n            HomeLocation:context.global.HomeLocation,\n            HoursFormat24:context.global.HoursFormat24 || false,\n            LightsNotification:context.global.LightsNotification || false,\n            LightsNotificationM:context.global.LightsNotificationM || false,\n            SensorsNotificationM:context.global.SensorsNotificationM || false,    \n            Schedules:context.global.Schedules || false,\n            VacationMode:context.global.VacationMode || false,            \n            CustomTabUrl:context.global.CustomTabUrl || '',\n            CustomTabName:context.global.CustomTabName|| '',\n            BlueIrisHost:context.global.BlueIrisHost,\n            BlueIrisUid:context.global.BlueIrisUid,\n            BlueIrisPwd:context.global.BlueIrisPwd,\n            wink_id:context.global.wink_id,\n            wink_secret:context.global.wink_secret\n            }\n        }\n    }\n    if(msg.db_mode=='update' && !(\"error\" in msg.payload && msg.payload.error=='not_found')){\n    DBMsg.url=DBMsg.url+\"/app_data\"    \n    DBMsg.payload._rev=msg.payload._rev;\n    }\n    if ('HomeLocation' in context.global) DBMsg.payload.app_cfg.HomeLocation=context.global.HomeLocation;\n//\tif ('FosCam' in context.global) DBMsg.payload.app_cfg.FosCam=context.global.FosCam;\n//\tif ('SamsungCam' in context.global) DBMsg.payload.app_cfg.SamsungCam=context.global.SamsungCam;\n//\tif ('DlinkCam' in context.global) DBMsg.payload.app_cfg.DlinkCam=context.global.DlinkCam;\n    if ('camera_motion' in context.global) DBMsg.payload.app_cfg.camera_motion=context.global.camera_motion;\n    if ('tab_ui_shortcuts' in context.global) DBMsg.payload.app_cfg.tab_ui_shortcuts=context.global.tab_ui_shortcuts;\n//    if ('netatmo' in context.global) DBMsg.payload.app_cfg.netatmo=context.global.netatmo;\n    if ('winkState' in context.global) DBMsg.payload.app_cfg.winkState=context.global.winkState;\n    if ('LIFX_TOKEN' in context.global) DBMsg.payload.app_cfg.LIFX_TOKEN=context.global.LIFX_TOKEN;\n    if ('IFTTT_TOKEN' in context.global)DBMsg.payload.app_cfg.IFTTT_TOKEN=context.global.IFTTT_TOKEN;\n    if ('forecastIoApiKey' in context.global)DBMsg.payload.app_cfg.forecastIoApiKey=context.global.forecastIoApiKey;\n    if ('InitialStateKey' in context.global)DBMsg.payload.app_cfg.InitialStateKey=context.global.InitialStateKey;\n    if ('PushBulletKey' in context.global)DBMsg.payload.app_cfg.PushBulletKey=context.global.PushBulletKey;    \nnode.send(DBMsg);    \n}\nelse {\n    node.warn('config data exists, restoring');\n    for (var key in msg.payload.app_cfg){\n        node.warn('Restoring '+key+' settings')\n        if (key!=='winkState' && key!=='DlinkCam' && key!=='FosCam' && key!=='SamsungCam'){\n            context.global[key]=msg.payload.app_cfg[key];\n        } else if(msg.restore_wink||0===1) {\n            context.global[key]=msg.payload.app_cfg[key];\n        }\n    }\n}    \nreturn;",
+    "outputs": 1,
+    "noerr": 0,
+    "x": 986.5,
+    "y": 958,
+    "wires": [
+      [
+        "a6dc615b.5923a"
       ]
     ]
   },
@@ -1533,8 +1533,8 @@
     "randomLast": "5",
     "randomUnits": "seconds",
     "drop": false,
-    "x": 816,
-    "y": 250,
+    "x": 960,
+    "y": 246,
     "wires": [
       [
         "a06a8288.5f958"
@@ -1571,8 +1571,62 @@
     "active": false,
     "console": "false",
     "complete": "true",
-    "x": 1206,
-    "y": 251,
+    "x": 1350,
+    "y": 247,
+    "wires": []
+  },
+  {
+    "id": "aecb037d.5135",
+    "type": "function",
+    "z": "17b3daf5.e84c25",
+    "name": "",
+    "func": "var t=msg.topic;\nnode.send(msg);\nif ('topic' in msg){\n    var wsMsg={};\n    wsMsg.payload={\n        varName:t,\n        varVal:context.global[t]\n    }\n    wsMsg.method=\"POST\";\n    wsMsg.url=context.global.BlueMixUrlBase+'/red/wscomms';\n    wsMsg.headers= {\n        \"Authorization\":\"Bearer \"+context.global.FREEBOARD_TOKEN\n    };    \n    node.send(wsMsg);\n/*    \n    if (t=='VacationMode' && context.global.VacationMode=='on'){\n        delete wsMsg.headers;        \n        wsMsg.method=\"POST\";\n        wsMsg.url=context.global.BlueMixUrlBase+'/red/vacation_init';\n        wsMsg.headers= {\n            \"Authorization\":\"Bearer \"+context.global.FREEBOARD_TOKEN\n        };\n        context.global.sendWithTimeout(node,wsMsg,4000);\n    }\n*/\n} \nreturn;",
+    "outputs": 1,
+    "noerr": 0,
+    "x": 786,
+    "y": 248,
+    "wires": [
+      [
+        "a70e02cd.58f2"
+      ]
+    ]
+  },
+  {
+    "id": "77cdc5d7.88323c",
+    "type": "http in",
+    "z": "17b3daf5.e84c25",
+    "name": "activate VacMode",
+    "url": "/red/vacation_init",
+    "method": "post",
+    "swaggerDoc": "",
+    "x": 128,
+    "y": 1630,
+    "wires": [
+      [
+        "9f5ff097.60a01",
+        "d8feb3be.27015"
+      ]
+    ]
+  },
+  {
+    "id": "9f5ff097.60a01",
+    "type": "debug",
+    "z": "17b3daf5.e84c25",
+    "name": "",
+    "active": false,
+    "console": "false",
+    "complete": "false",
+    "x": 323,
+    "y": 1630,
+    "wires": []
+  },
+  {
+    "id": "d8feb3be.27015",
+    "type": "http response",
+    "z": "17b3daf5.e84c25",
+    "name": "",
+    "x": 309,
+    "y": 1685,
     "wires": []
   }
 ]
