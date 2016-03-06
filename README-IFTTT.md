@@ -110,6 +110,10 @@ Example:<br>
 variable will be set on the global context.<br>
 taking the example above you should call that variable in your node-red function as <b>context.global.Timer</b><br>
  <b>Please use a single word for a variable name and make it alhpanumeric (no spaces or special characters).</b>
+ 
+ Following global variables are supported out of the box:
+ 1. context.global.Schedules. values : on/off<br>
+ 2. context.global.VacationMode. values : on/off<br>
   
 FadeIn/FadeOut/Pulse effects for dimmable lights and groups
 --------------------------------------------------------------
