@@ -6,6 +6,28 @@ https://(your_app_name).mybluemix.net/freeboard/winkboardautogroup - sample free
 
 == UPDATE ==
 -
+03/06/2016
+------------
+* Added buttons to summary page to activate/deactivate Schedules and Vacation Mode.<br>
+* 
+<img src="images/newModes.png"><br>
+
+* Vacation mode is a first drop so no random lights yet but it will turn on phone notification for all connected devices via pushbullet irregadles of manual settings and when motion is detected every camera in the app will automatically take a snapshot. I will continue to work on additional settings but it takes more time than I thought.
+* Fixes for blueIris to remove error message
+
+Required changes:<br>
+Bluemix git console:<br>
+*  re-deploy application 
+
+Flow Editor:<br>
+*  Import updated [winkCore.json](winkCore.json)
+*  Import updated [winkIntegration.json](winkIntegration.json)
+*  Import updated [tabletUI.json](tabletUI.json)
+*  Import updated [blueIris.json](blueIris.json)
+*  do not forget to check [duplicate websockets](../../README-WebsocketFix.md)
+*  perform "FULL" deployment<br>
+
+
 03/04/2016
 ------------
 * Garage doors are back for robots but still disabled in UI.<br>
