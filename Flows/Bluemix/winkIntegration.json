@@ -81,7 +81,8 @@
     "y": 245.49993896484375,
     "wires": [
       [
-        "bd8d687.f427298"
+        "bd8d687.f427298",
+        "aa984060.5567c"
       ]
     ]
   },
@@ -1628,5 +1629,35 @@
     "x": 309,
     "y": 1685,
     "wires": []
+  },
+  {
+    "id": "aa984060.5567c",
+    "type": "function",
+    "z": "17b3daf5.e84c25",
+    "name": "",
+    "func": "var msg1={}\nmsg1.url=context.global.BlueMixUrlBase+'/red/update_app_cfg';\nmsg1.method=\"POST\";\nmsg1.headers= {\n    \"Authorization\":\"Bearer \"+context.global.FREEBOARD_TOKEN\n};\nmsg1.payload={\n   db_mode:\"update\"\n}\nreturn msg1;",
+    "outputs": 1,
+    "noerr": 0,
+    "x": 1320,
+    "y": 195,
+    "wires": [
+      [
+        "32e326dc.cd1cda"
+      ]
+    ]
+  },
+  {
+    "id": "32e326dc.cd1cda",
+    "type": "http request",
+    "z": "17b3daf5.e84c25",
+    "name": "",
+    "method": "use",
+    "ret": "obj",
+    "url": "",
+    "x": 1468,
+    "y": 195,
+    "wires": [
+      []
+    ]
   }
 ]
