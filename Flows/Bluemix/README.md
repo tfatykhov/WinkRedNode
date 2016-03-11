@@ -6,6 +6,28 @@ https://(your_app_name).mybluemix.net/freeboard/winkboardautogroup - sample free
 
 == UPDATE ==
 -
+03/11/2016
+------------
+Vacation mode additions:
+* Supported locks will turn vacation mode.
+* Supported locs will activate tamper alarm.
+* If presence is configured - Presence can turn vacation mode off automatically (stop random lights effect). Lock mode has to be canged manually back to normal.
+* Selected light bulbs (including LIFX) will be randomly set to on, off or dim.<br>
+
+<img src="images/vacation_mode.png"><br>
+
+Required changes:<br>
+Bluemix git console:<br>
+*  re-deploy application 
+
+Flow Editor:<br>
+*  Import updated [winkCore.json](winkCore.json)
+*  Import updated [winkIntegration.json](winkIntegration.json)
+*  Import updated [tabletUI.json](tabletUI.json)
+*  Import updated [blueIris.json](blueIris.json)
+*  do not forget to check [duplicate websockets](../../README-WebsocketFix.md)
+*  perform "FULL" deployment<br>
+
 03/06/2016
 ------------
 * Added buttons to summary page to activate/deactivate Schedules and Vacation Mode.<br>
