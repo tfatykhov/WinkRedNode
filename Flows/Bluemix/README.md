@@ -11,7 +11,7 @@ https://(your_app_name).mybluemix.net/freeboard/winkboardautogroup - sample free
 Vacation mode additions:
 * Supported locks will turn vacation mode.
 * Supported locks will activate tamper alarm.
-* If presence is configured - Presence can turn vacation mode off automatically (stop random lights effect). Lock mode has to be canged manually back to normal.
+* If presence is configured - Presence can turn vacation mode off automatically (stop random lights effect). Lock mode has to be changed manually back to normal.
 * Selected light bulbs (including LIFX) will be randomly set to on, off or dim between sunset hour and 1 a.m<br>
 
 <img src="images/vacation_mode.png"><br>
