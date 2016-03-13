@@ -8,6 +8,19 @@ https://(your_app_name).mybluemix.net/freeboard/winkboardautogroup - sample free
 -
 03/11/2016
 ------------
+Vacation mode small update:
+* binary switches are in the list
+* color scheme changes for config pages<br>
+<img src="images/vacation_mode_drk.png"><br>
+
+
+Flow Editor:<br>
+*  Import updated [tabletUI.json](tabletUI.json)<br>
+*  perform "Modified Flows" deployment<br>
+
+
+03/11/2016
+------------
 Vacation mode additions:
 * Supported locks will turn vacation mode.
 * Supported locks will activate tamper alarm.
