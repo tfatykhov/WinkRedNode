@@ -6,6 +6,21 @@ https://(your_app_name).mybluemix.net/freeboard/winkboardautogroup - sample free
 
 == UPDATE ==
 -
+03/13/2016
+------------
+* Added config option to turn data flow to IFTTT.
+* Added some help pages for configuration tabs.<br>
+<img src="images/cfg_hlp1.png"><br><br>
+<img src="images/cfg_hlp2.png"><br>
+
+Flow Editor:<br>
+*  Import updated [winkCore.json](winkCore.json)
+*  Import updated [winkIntegration.json](winkIntegration.json)
+*  Import updated [tabletUI.json](tabletUI.json)
+*  do not forget to check [duplicate websockets](../../README-WebsocketFix.md)
+*  perform "FULL" deployment<br>
+
+
 03/11/2016
 ------------
 Vacation mode small update:
