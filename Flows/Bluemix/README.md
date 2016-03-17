@@ -15,6 +15,9 @@ entry for the api key added to config tab<br>
 After update you should see BloomSky Data in MultiSensor section on Details tab:
 <img src="images/bloomsky1.png"><br>
 
+You will also see latest sky image on cameras tab. Screenshots/history also works
+
+
 Flow Editor:<br>
 *  Import updated [winkCore.json](winkCore.json)
 *  Import updated [winkIntegration.json](winkIntegration.json)
