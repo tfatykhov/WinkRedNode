@@ -6,6 +6,26 @@ https://(your_app_name).mybluemix.net/freeboard/winkboardautogroup - sample free
 
 == UPDATE ==
 -
+
+03/13/2016
+------------
+BloomSky integration
+entry for the api key added to config tab<br>
+<img src="images/bloomsky2.png"><br><br>
+After update you should see BloomSky Data in MultiSensor section on Details tab:
+<img src="images/bloomsky1.png"><br>
+
+Flow Editor:<br>
+*  Import updated [winkCore.json](winkCore.json)
+*  Import updated [winkIntegration.json](winkIntegration.json)
+*  Import updated [tabletUI.json](tabletUI.json)
+*  do not forget to check [duplicate websockets](../../README-WebsocketFix.md)
+*  perform "FULL" deployment<br>
+
+Bluemix git console:<br>
+*  re-deploy application 
+
+
 03/13/2016
 ------------
 * Added config option to turn data flow to IFTTT.
