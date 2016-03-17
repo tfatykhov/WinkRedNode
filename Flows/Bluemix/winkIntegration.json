@@ -204,7 +204,7 @@
     "type": "function",
     "z": "17b3daf5.e84c25",
     "name": "Update Presence entry",
-    "func": "pr_msg={};\n//if (typeof context.global.PresenceHistory === 'undefined') context.global.PresenceHistory=[]\npr_msg.payload={old_value:context.global.checkPresence()}\nif (msg.payload.iftttkey==context.global.IFTTT_TOKEN)\n{\n    if (context.global.DEBUG) node.warn(msg.payload.name+' '+msg.payload.home)\n    if (typeof(context.global.Presence) === 'undefined'){\n    context.global.Presence = {}\n    } else pr_msg.payload.old_presence=context.global.Presence;\n    if (msg.payload.name !=='undefined'){\n        if (!context.global.Presence[msg.payload.name]) context.global.Presence[msg.payload.name]={}\n            context.global.Presence[msg.payload.name].home=msg.payload.home\n        }\n    msg.StatusCode=200;\n    pr_msg.payload.new_value=context.global.checkPresence();\n}\nelse {\n    if (context.global.DEBUG) node.warn(\"presense, bad request\")\n     msg.StatusCode=403;\n     pr_msg.payload.new_value='ERROR';\n}\nreturn [msg,pr_msg];",
+    "func": "pr_msg={};\n//if (typeof context.global.PresenceHistory === 'undefined') context.global.PresenceHistory=[]\npr_msg.payload={old_value:context.global.checkPresence()}\nif (msg.payload.iftttkey==context.global.IFTTT_TOKEN)\n{\n    node.warn(msg.payload.name+' '+msg.payload.home)\n    if (typeof(context.global.Presence) === 'undefined'){\n    context.global.Presence = {}\n    } else pr_msg.payload.old_presence=context.global.Presence;\n    if (msg.payload.name !=='undefined'){\n        if (!context.global.Presence[msg.payload.name]) context.global.Presence[msg.payload.name]={}\n            context.global.Presence[msg.payload.name].home=msg.payload.home\n        }\n    msg.StatusCode=200;\n    pr_msg.payload.new_value=context.global.checkPresence();\n}\nelse {\n    node.warn(\"presense, bad request\")\n     msg.StatusCode=403;\n     pr_msg.payload.new_value='ERROR';\n}\nreturn [msg,pr_msg];",
     "outputs": "2",
     "noerr": 0,
     "x": 408,
@@ -331,7 +331,7 @@
     "type": "function",
     "z": "17b3daf5.e84c25",
     "name": "",
-    "func": " var PresenceBkup={\n    Presence: context.global.Presence,\n    PresenceDetail: context.global.PresenceDetail,\n    PresenceHistory: context.global.PresenceHistory\n }\n    var DBMsg={\n        url:context.global.VCAP_SERVICES.cloudantNoSQLDB[0].credentials.url+\"/winkapp\",\n        method:\"POST\",\n        headers: \n            {\n                \"Content-Type\":\"application/json\"\n            },\n        payload: {\n            \"_id\":\"winkPresence\",\n            \"item\":\"Presence\",\n            \"Presence\":PresenceBkup\n        }\n    } \n \n \n //if (msg.payload.total_rows > 0  && msg.payload.rows.map(function(e) { return e.id; }).indexOf('winkPresence')!=-1){\n  if ('_rev' in msg.payload){   \n if (context.global.DEBUG) node.warn('Presence record exists... updating');\n DBMsg.method=\"PUT\";\n DBMsg.url=DBMsg.url+\"/winkPresence\"\n DBMsg.payload._rev=msg.payload._rev;\n //msg.payload.rows.map(function(e) {if(e.id==\"winkPresence\") return e.value._rev; })[0];\n }\nreturn DBMsg;",
+    "func": " var PresenceBkup={\n    Presence: context.global.Presence,\n    PresenceDetail: context.global.PresenceDetail,\n    PresenceHistory: context.global.PresenceHistory\n }\n    var DBMsg={\n        url:context.global.VCAP_SERVICES.cloudantNoSQLDB[0].credentials.url+\"/winkapp\",\n        method:\"POST\",\n        headers: \n            {\n                \"Content-Type\":\"application/json\"\n            },\n        payload: {\n            \"_id\":\"winkPresence\",\n            \"item\":\"Presence\",\n            \"Presence\":PresenceBkup\n        }\n    } \n \n \n //if (msg.payload.total_rows > 0  && msg.payload.rows.map(function(e) { return e.id; }).indexOf('winkPresence')!=-1){\n  if ('_rev' in msg.payload){   \n node.warn('record exists... updating');\n DBMsg.method=\"PUT\";\n DBMsg.url=DBMsg.url+\"/winkPresence\"\n DBMsg.payload._rev=msg.payload._rev;\n //msg.payload.rows.map(function(e) {if(e.id==\"winkPresence\") return e.value._rev; })[0];\n }\nreturn DBMsg;",
     "outputs": 1,
     "noerr": 0,
     "x": 1059.6041870117188,
@@ -888,8 +888,8 @@
     "type": "catch",
     "z": "17b3daf5.e84c25",
     "name": "",
-    "x": 90.5,
-    "y": 1807,
+    "x": 128.5,
+    "y": 2088,
     "wires": [
       [
         "8131f2dd.7ece1"
@@ -904,8 +904,8 @@
     "active": true,
     "console": "false",
     "complete": "error",
-    "x": 290.5,
-    "y": 1807,
+    "x": 328.5,
+    "y": 2088,
     "wires": []
   },
   {
@@ -1097,7 +1097,7 @@
     "type": "function",
     "z": "17b3daf5.e84c25",
     "name": "create or update config ",
-    "func": "if ((\"error\" in msg.payload && msg.payload.error=='not_found') || msg.db_mode=='update'){\n    if (context.global.DEBUG) node.warn((\"error\" in msg.payload && msg.payload.error=='not_found' ? 'Save Data: no app_data exists in cloudant DB creating and saving globals to database' : ' Save Data: updating globals in database'))\n    var DBMsg={\n        url:context.global.VCAP_SERVICES.cloudantNoSQLDB[0].credentials.url+\"/winkapp\",\n        method:(msg.db_mode=='update' ? \"PUT\":\"POST\"),\n        headers: \n            {\n                \"Content-Type\":\"application/json\"\n            },\n        payload: {\n            \"_id\":\"app_data\",\n            \"item\":\"app_data\",\n            \"app_cfg\":{\n            ifttt:context.global.ifttt || false,\n            vaca_delay:context.global.vaca_delay || 15,    \n            vaca_wnr_schedules_off: context.global.vaca_wnr_schedules_off|| false,\n            vaca_userPresence: context.global.vaca_userPresence || false,\n            vaca_light_bulbs : context.global.vaca_light_bulbs || [],\n            vaca_binary_switches : context.global.vaca_binary_switches || [],\n            vaca_locks_vac:context.global.vaca_locks_vac || false,\n            motionAdjustTstat: context.global.motionAdjustTstat||false,\n            BlueMixUrlBase:context.global.BlueMixUrlBase,\n            HomeLocation:context.global.HomeLocation,\n            HoursFormat24:context.global.HoursFormat24 || false,\n            LightsNotification:context.global.LightsNotification || false,\n            LightsNotificationM:context.global.LightsNotificationM || false,\n            SensorsNotificationM:context.global.SensorsNotificationM || false,    \n            Schedules:context.global.Schedules || false,\n            VacationMode:context.global.VacationMode || false,            \n            CustomTabUrl:context.global.CustomTabUrl || '',\n            CustomTabName:context.global.CustomTabName|| '',\n            BlueIrisHost:context.global.BlueIrisHost,\n            BlueIrisUid:context.global.BlueIrisUid,\n            BlueIrisPwd:context.global.BlueIrisPwd,\n            wink_id:context.global.wink_id,\n            wink_secret:context.global.wink_secret\n            }\n        }\n    }\n    if(msg.db_mode=='update' && !(\"error\" in msg.payload && msg.payload.error=='not_found')){\n    DBMsg.url=DBMsg.url+\"/app_data\"    \n    DBMsg.payload._rev=msg.payload._rev;\n    }\n    \n    if ('HomeLocation' in context.global) DBMsg.payload.app_cfg.HomeLocation=context.global.HomeLocation;\n//\tif ('FosCam' in context.global) DBMsg.payload.app_cfg.FosCam=context.global.FosCam;\n//\tif ('SamsungCam' in context.global) DBMsg.payload.app_cfg.SamsungCam=context.global.SamsungCam;\n//\tif ('DlinkCam' in context.global) DBMsg.payload.app_cfg.DlinkCam=context.global.DlinkCam;\n    if ('camera_motion' in context.global) DBMsg.payload.app_cfg.camera_motion=context.global.camera_motion;\n    if ('tab_ui_shortcuts' in context.global) DBMsg.payload.app_cfg.tab_ui_shortcuts=context.global.tab_ui_shortcuts;\n//    if ('netatmo' in context.global) DBMsg.payload.app_cfg.netatmo=context.global.netatmo;\n    if ('winkState' in context.global) DBMsg.payload.app_cfg.winkState=context.global.winkState;\n    if ('LIFX_TOKEN' in context.global) DBMsg.payload.app_cfg.LIFX_TOKEN=context.global.LIFX_TOKEN;\n    if ('IFTTT_TOKEN' in context.global)DBMsg.payload.app_cfg.IFTTT_TOKEN=context.global.IFTTT_TOKEN;\n    if ('forecastIoApiKey' in context.global)DBMsg.payload.app_cfg.forecastIoApiKey=context.global.forecastIoApiKey;\n    if ('InitialStateKey' in context.global)DBMsg.payload.app_cfg.InitialStateKey=context.global.InitialStateKey;\n    if ('PushBulletKey' in context.global)DBMsg.payload.app_cfg.PushBulletKey=context.global.PushBulletKey;    \nnode.send(DBMsg);    \n}\nelse {\n        if (context.global.DEBUG ) node.warn('config data exists, restoring');\n    for (var key in msg.payload.app_cfg){\n            if (context.global.DEBUG ) node.warn('Restoring '+key+' settings')\n        if (key!=='winkState' && key!=='DlinkCam' && key!=='FosCam' && key!=='SamsungCam'){\n            context.global[key]=msg.payload.app_cfg[key];\n        } else if(msg.restore_wink||0===1) {\n            context.global[key]=msg.payload.app_cfg[key];\n        }\n    }\n}    \nreturn;",
+    "func": "if ((\"error\" in msg.payload && msg.payload.error=='not_found') || msg.db_mode=='update'){\n    node.warn((\"error\" in msg.payload && msg.payload.error=='not_found' ? 'Save Data: no app_data exists in cloudant DB creating and saving globals to database' : ' Save Data: updating globals in database'))\n    var DBMsg={\n        url:context.global.VCAP_SERVICES.cloudantNoSQLDB[0].credentials.url+\"/winkapp\",\n        method:(msg.db_mode=='update' ? \"PUT\":\"POST\"),\n        headers: \n            {\n                \"Content-Type\":\"application/json\"\n            },\n        payload: {\n            \"_id\":\"app_data\",\n            \"item\":\"app_data\",\n            \"app_cfg\":{\n            vaca_delay:context.global.vaca_delay || 15,    \n            vaca_wnr_schedules_off: context.global.vaca_wnr_schedules_off|| false,\n            vaca_usePresence: context.global.vaca_usePresence || false,\n            vaca_light_bulbs : context.global.vaca_light_bulbs || [],\n            vaca_binary_switches : context.global.vaca_binary_switches || [],\n            vaca_locks_vac:context.global.vaca_locks_vac || false,\n            motionAdjustTstat: context.global.motionAdjustTstat||false,\n            BlueMixUrlBase:context.global.BlueMixUrlBase,\n            HomeLocation:context.global.HomeLocation,\n            HoursFormat24:context.global.HoursFormat24 || false,\n            LightsNotification:context.global.LightsNotification || false,\n            LightsNotificationM:context.global.LightsNotificationM || false,\n            SensorsNotificationM:context.global.SensorsNotificationM || false,    \n            Schedules:context.global.Schedules || false,\n            VacationMode:context.global.VacationMode || false,            \n            CustomTabUrl:context.global.CustomTabUrl || '',\n            CustomTabName:context.global.CustomTabName|| '',\n            BlueIrisHost:context.global.BlueIrisHost,\n            BlueIrisUid:context.global.BlueIrisUid,\n            BlueIrisPwd:context.global.BlueIrisPwd,\n            wink_id:context.global.wink_id,\n            wink_secret:context.global.wink_secret,\n            BloomskyKey:context.global.BloomskyKey || ''\n            }\n        }\n    }\n    if(msg.db_mode=='update' && !(\"error\" in msg.payload && msg.payload.error=='not_found')){\n    DBMsg.url=DBMsg.url+\"/app_data\"    \n    DBMsg.payload._rev=msg.payload._rev;\n    }\n    \n    if ('HomeLocation' in context.global) DBMsg.payload.app_cfg.HomeLocation=context.global.HomeLocation;\n//\tif ('FosCam' in context.global) DBMsg.payload.app_cfg.FosCam=context.global.FosCam;\n//\tif ('SamsungCam' in context.global) DBMsg.payload.app_cfg.SamsungCam=context.global.SamsungCam;\n//\tif ('DlinkCam' in context.global) DBMsg.payload.app_cfg.DlinkCam=context.global.DlinkCam;\n    if ('camera_motion' in context.global) DBMsg.payload.app_cfg.camera_motion=context.global.camera_motion;\n    if ('tab_ui_shortcuts' in context.global) DBMsg.payload.app_cfg.tab_ui_shortcuts=context.global.tab_ui_shortcuts;\n//    if ('netatmo' in context.global) DBMsg.payload.app_cfg.netatmo=context.global.netatmo;\n    if ('winkState' in context.global) DBMsg.payload.app_cfg.winkState=context.global.winkState;\n    if ('LIFX_TOKEN' in context.global) DBMsg.payload.app_cfg.LIFX_TOKEN=context.global.LIFX_TOKEN;\n    if ('IFTTT_TOKEN' in context.global)DBMsg.payload.app_cfg.IFTTT_TOKEN=context.global.IFTTT_TOKEN;\n    if ('forecastIoApiKey' in context.global)DBMsg.payload.app_cfg.forecastIoApiKey=context.global.forecastIoApiKey;\n    if ('InitialStateKey' in context.global)DBMsg.payload.app_cfg.InitialStateKey=context.global.InitialStateKey;\n    if ('PushBulletKey' in context.global)DBMsg.payload.app_cfg.PushBulletKey=context.global.PushBulletKey;    \nnode.send(DBMsg);    \n}\nelse {\n        if (context.global.DEBUG ) node.warn('config data exists, restoring');\n    for (var key in msg.payload.app_cfg){\n            if (context.global.DEBUG ) node.warn('Restoring '+key+' settings')\n        if (key!=='winkState' && key!=='DlinkCam' && key!=='FosCam' && key!=='SamsungCam'){\n            context.global[key]=msg.payload.app_cfg[key];\n        } else if(msg.restore_wink||0===1) {\n            context.global[key]=msg.payload.app_cfg[key];\n        }\n    }\n}    \nreturn;",
     "outputs": 1,
     "noerr": 0,
     "x": 986.5,
@@ -1317,7 +1317,7 @@
     "type": "function",
     "z": "17b3daf5.e84c25",
     "name": "",
-    "func": "var effectMsg={};\nvar web_req=(context.global.getCookie('exchange_token',msg.req.headers.cookie)=='0' ? false:true);\nif (msg.payload.iftttkey==context.global.IFTTT_TOKEN || msg.payload.iftttkey==context.global.FREEBOARD_TOKEN || (msg.req.headers.authorization && msg.req.headers.authorization==\"Bearer \"+context.global.FREEBOARD_TOKEN)) web_req=true;\nif (web_req)\n{\nvar effect=msg.req.originalUrl.split('/').pop();\nif (context.global.DEBUG) node.warn(effect);\nmsg.statusCode=200;\neffectMsg.payload=msg.payload;\neffectMsg.topic=effect;\nreturn [msg,effectMsg];\n}\nelse {\n    node.warn(\"ifttt messages bad request\")\n     msg.statusCode=403;\n     return [msg,null];\n}\n",
+    "func": "var effectMsg={};\nvar web_req=(context.global.getCookie('exchange_token',msg.req.headers.cookie)=='0' ? false:true);\nif (msg.payload.iftttkey==context.global.IFTTT_TOKEN || msg.payload.iftttkey==context.global.FREEBOARD_TOKEN || (msg.req.headers.authorization && msg.req.headers.authorization==\"Bearer \"+context.global.FREEBOARD_TOKEN)) web_req=true;\nif (web_req)\n{\nvar effect=msg.req.originalUrl.split('/').pop();\nnode.warn(effect);\nmsg.statusCode=200;\neffectMsg.payload=msg.payload;\neffectMsg.topic=effect;\nreturn [msg,effectMsg];\n}\nelse {\n    node.warn(\"ifttt messages bad request\")\n     msg.statusCode=403;\n     return [msg,null];\n}\n",
     "outputs": "2",
     "noerr": 0,
     "x": 586,
@@ -1419,7 +1419,7 @@
     "type": "function",
     "z": "17b3daf5.e84c25",
     "name": "fadein",
-    "func": "var max=parseInt(msg.payload.max) || 0; //0-100\nvar min=parseInt(msg.payload.min) || 0;  //0-100\nvar period=parseInt(msg.payload.period) ||0; //in secondsdd\nvar delay=parseInt(msg.payload.step_time) || 5; //in seconds\nvar timeout_adjust=0;\ngen_msg=function(winkName,type,level,timestamp){\n    var WinkCMDmsg = context.global.executeWinkCMD(winkName,type,(level > 0 ? 'on' : 'off'),level);\n    node.send(WinkCMDmsg);\n//    for (var v in context.global.timedOutCmd){\n//        t=context.global.timedOutCmd[v];\n//        clearTimeout(t.timeOutId);\n//        delete context.global.timedOutCmd[v];\n//    }\n};\nfunction doWithTimeout(i,delay){\n    var ind=Date.now();\n    if (!('timedOutCmd' in context.global)) context.global.timedOutCmd={};\n    var timeoutId=setTimeout(function(){gen_msg(msg.payload.winkName,msg.payload.type,i,ind);},delay);\n    if (context.global.DEBUG) node.warn(timeoutId);\n    context.global.timedOutCmd[ind]={\n        \"object\":msg.payload.winkName,\n        \"type\":msg.payload.type,\n        \"timeOutId\":timeoutId\n    };\n            if (context.global.DEBUG) node.warn(context.global.timedOutCmd);\n}\nif (max>min && ((msg.payload.type=='light' && msg.payload.winkName in context.global.winkState.light_bulbs) || msg.payload.type=='group')){\n    var step=Math.round((max-min)/period*delay)-1;\n    if (step<1) step=1;\n    var i=1;\n    var curr_br=min;\n    do {\n    \ttimeout_adjust++;\n    \tcurr_br=min+i;\n        doWithTimeout(curr_br,timeout_adjust*delay*1000);\n        i+=step;\n    } while(min+i<max);\n    timeout_adjust++;\n    if (curr_br<max) doWithTimeout(max,timeout_adjust*delay*1000);\n}\nreturn;",
+    "func": "var max=parseInt(msg.payload.max) || 0; //0-100\nvar min=parseInt(msg.payload.min) || 0;  //0-100\nvar period=parseInt(msg.payload.period) ||0; //in secondsdd\nvar delay=parseInt(msg.payload.step_time) || 5; //in seconds\nvar timeout_adjust=0;\ngen_msg=function(winkName,type,level,timestamp){\n    var WinkCMDmsg = context.global.executeWinkCMD(winkName,type,(level > 0 ? 'on' : 'off'),level);\n    node.send(WinkCMDmsg);\n    for (var v in context.global.timedOutCmd){\n        t=context.global.timedOutCmd[v];\n        clearTimeout(t.timeOutId);\n        delete context.global.timedOutCmd[v];\n    }\n};\nfunction doWithTimeout(i,delay){\n    var ind=Date.now();\n    if (!('timedOutCmd' in context.global)) context.global.timedOutCmd={};\n    var timeoutId=setTimeout(function(){gen_msg(msg.payload.winkName,msg.payload.type,i,ind);},delay);\n    if (context.global.DEBUG) node.warn(timeoutId);\n    context.global.timedOutCmd[ind]={\n        \"object\":msg.payload.winkName,\n        \"type\":msg.payload.type,\n        \"timeOutId\":timeoutId\n    };\n}\nif (max>min && ((msg.payload.type=='light' && msg.payload.winkName in context.global.winkState.light_bulbs) || msg.payload.type=='group')){\n    var step=Math.round((max-min)/period*delay)-1;\n    if (step<1) step=1;\n    var i=1;\n    var curr_br=min;\n    do {\n    \ttimeout_adjust++;\n    \tcurr_br=min+i;\n        doWithTimeout(curr_br,timeout_adjust*delay*1000);\n        i+=step;\n    } while(min+i<max);\n    timeout_adjust++;\n    if (curr_br<max) doWithTimeout(max,timeout_adjust*delay*1000);\n}\nreturn;",
     "outputs": 1,
     "noerr": 0,
     "x": 888,
@@ -1435,7 +1435,7 @@
     "type": "function",
     "z": "17b3daf5.e84c25",
     "name": "fadeout",
-    "func": "var max=parseInt(msg.payload.max) || 0 //0-100\nvar min=parseInt(msg.payload.min) || 0  //0-100\nvar period=parseInt(msg.payload.period) ||0 //in secondsdd\nvar delay=parseInt(msg.payload.step_time) || 5; //in seconds\nvar timeout_adjust=0;\nnode.warn(msg.payload);\ngen_msg=function(winkName,type,level,timestamp){\n    var WinkCMDmsg = context.global.executeWinkCMD(winkName,type,(level > 0 ? 'on' : 'off'),level);\n    node.send(WinkCMDmsg);\n//    for (var v in context.global.timedOutCmd){\n//        t=context.global.timedOutCmd[v];\n//        clearTimeout(t.timeOutId);\n//        delete context.global.timedOutCmd[v];\n//    }\n};\nfunction doWithTimeout(i,delay){\n    var ind=Date.now();\n    if (!('timedOutCmd' in context.global)) context.global.timedOutCmd={};\n    var timeoutId=setTimeout(function(){gen_msg(msg.payload.winkName,msg.payload.type,i,ind);},delay);\n    if (context.global.DEBUG) node.warn(timeoutId);\n    context.global.timedOutCmd[ind]={\n        \"object\":msg.payload.winkName,\n        \"type\":msg.payload.type,\n        \"timeOutId\":timeoutId\n    };\n            if (context.global.DEBUG) node.warn(context.global.timedOutCmd);\n}\nif (max>min && ((msg.payload.type=='light' && msg.payload.winkName in context.global.winkState.light_bulbs) || msg.payload.type=='group')){\n    var step=Math.round((max-min)/period*delay)-1;\n    if (step<1) step=1;\n    var i=0;\n    var curr_br;\n    do {\n    \ttimeout_adjust++;\n    \tcurr_br=max-i;\n        doWithTimeout(curr_br,timeout_adjust*delay*1000);\n        i+=step;\n    } while(max-i>=min);\n    timeout_adjust++;\n    if (curr_br>min) doWithTimeout(min,timeout_adjust*delay*1000);\n}\nreturn;\n",
+    "func": "var max=parseInt(msg.payload.max) || 0 //0-100\nvar min=parseInt(msg.payload.min) || 0  //0-100\nvar period=parseInt(msg.payload.period) ||0 //in secondsdd\nvar delay=parseInt(msg.payload.step_time) || 5; //in seconds\nvar timeout_adjust=0;\nnode.warn(msg.payload);\ngen_msg=function(winkName,type,level,timestamp){\n    var WinkCMDmsg = context.global.executeWinkCMD(winkName,type,(level > 0 ? 'on' : 'off'),level);\n    node.send(WinkCMDmsg);\n    for (var v in context.global.timedOutCmd){\n        t=context.global.timedOutCmd[v];\n        clearTimeout(t.timeOutId);\n        delete context.global.timedOutCmd[v];\n    }\n};\nfunction doWithTimeout(i,delay){\n    var ind=Date.now();\n    if (!('timedOutCmd' in context.global)) context.global.timedOutCmd={};\n    var timeoutId=setTimeout(function(){gen_msg(msg.payload.winkName,msg.payload.type,i,ind);},delay);\n    if (context.global.DEBUG) node.warn(timeoutId);\n    context.global.timedOutCmd[ind]={\n        \"object\":msg.payload.winkName,\n        \"type\":msg.payload.type,\n        \"timeOutId\":timeoutId\n    };\n}\nif (max>min && ((msg.payload.type=='light' && msg.payload.winkName in context.global.winkState.light_bulbs) || msg.payload.type=='group')){\n    var step=Math.round((max-min)/period*delay)-1;\n    if (step<1) step=1;\n    var i=0;\n    var curr_br;\n    do {\n    \ttimeout_adjust++;\n    \tcurr_br=max-i;\n        doWithTimeout(curr_br,timeout_adjust*delay*1000);\n        i+=step;\n    } while(max-i>=min);\n    timeout_adjust++;\n    if (curr_br>min) doWithTimeout(min,timeout_adjust*delay*1000);\n}\nreturn;\n",
     "outputs": 1,
     "noerr": 0,
     "x": 889,
@@ -1451,7 +1451,7 @@
     "type": "function",
     "z": "17b3daf5.e84c25",
     "name": "pulse",
-    "func": "var max=parseInt(msg.payload.max) || 0 //0-100\nvar min=parseInt(msg.payload.min) || 0  //0-100\nvar repeat=parseInt(msg.payload.repeat) ||0 //in secondsdd\nvar delay=parseInt(msg.payload.step_time) || 5; //in seconds\nvar timeout_adjust=0;\nif (context.global.DEBUG) node.warn(msg.payload);\ngen_msg=function(winkName,type,level,timestamp){\n    var WinkCMDmsg = context.global.executeWinkCMD(winkName,type,(level > 0 ? 'on' : 'off'),level);\n    node.send(WinkCMDmsg);\n//    for (var v in context.global.timedOutCmd){\n//        t=context.global.timedOutCmd[v];\n//        clearTimeout(t.timeOutId);\n//        delete context.global.timedOutCmd[v];\n//    }\n};\nfunction doWithTimeout(i,delay){\n    var ind=Date.now();\n    if (!('timedOutCmd' in context.global)) context.global.timedOutCmd={};\n    var timeoutId=setTimeout(function(){gen_msg(msg.payload.winkName,msg.payload.type,i,ind);},delay);\n    if (context.global.DEBUG) node.warn(timeoutId);\n    context.global.timedOutCmd[ind]={\n        \"object\":msg.payload.winkName,\n        \"type\":msg.payload.type,\n        \"timeOutId\":timeoutId\n    };\n        if (context.global.DEBUG) node.warn(context.global.timedOutCmd);\n}\nif (msg.payload.winkName in context.global.winkState.binary_switches){\n    min=0;\n    max=100;\n}\n    var i=0;\n    var curr_br;\n    do {\n    \tif (timeout_adjust>0) timeout_adjust++;\n    \tcurr_br=min;\n        doWithTimeout(curr_br,timeout_adjust*delay*1000);\n        timeout_adjust++;\n    \tcurr_br=max;\n        doWithTimeout(curr_br,timeout_adjust*delay*1000);\n        i++;\n    } while(i<repeat);\nreturn;\n",
+    "func": "var max=parseInt(msg.payload.max) || 0 //0-100\nvar min=parseInt(msg.payload.min) || 0  //0-100\nvar repeat=parseInt(msg.payload.repeat) ||0 //in secondsdd\nvar delay=parseInt(msg.payload.step_time) || 5; //in seconds\nvar timeout_adjust=0;\nif (context.global.DEBUG) node.warn(msg.payload);\ngen_msg=function(winkName,type,level,timestamp){\n    var WinkCMDmsg = context.global.executeWinkCMD(winkName,type,(level > 0 ? 'on' : 'off'),level);\n    node.send(WinkCMDmsg);\n    for (var v in context.global.timedOutCmd){\n        t=context.global.timedOutCmd[v];\n        clearTimeout(t.timeOutId);\n        delete context.global.timedOutCmd[v];\n    }\n};\nfunction doWithTimeout(i,delay){\n    var ind=Date.now();\n    if (!('timedOutCmd' in context.global)) context.global.timedOutCmd={};\n    var timeoutId=setTimeout(function(){gen_msg(msg.payload.winkName,msg.payload.type,i,ind);},delay);\n    if (context.global.DEBUG) node.warn(timeoutId);\n    context.global.timedOutCmd[ind]={\n        \"object\":msg.payload.winkName,\n        \"type\":msg.payload.type,\n        \"timeOutId\":timeoutId\n    };\n        node.warn(context.global.timedOutCmd);\n}\nif (msg.payload.winkName in context.global.winkState.binary_switches){\n    min=0;\n    max=100;\n}\n    var i=0;\n    var curr_br;\n    do {\n    \ttimeout_adjust++;\n    \tcurr_br=min;\n        doWithTimeout(curr_br,timeout_adjust*delay*1000);\n        timeout_adjust++;\n    \tcurr_br=max;\n        doWithTimeout(curr_br,timeout_adjust*delay*1000);\n        i++;\n    } while(i<repeat);\nreturn;\n",
     "outputs": 1,
     "noerr": 0,
     "x": 882,
@@ -1844,6 +1844,132 @@
     "y": 1723,
     "wires": [
       []
+    ]
+  },
+  {
+    "id": "4898c648.30f658",
+    "type": "inject",
+    "z": "17b3daf5.e84c25",
+    "name": "",
+    "topic": "",
+    "payload": "",
+    "payloadType": "date",
+    "repeat": "300",
+    "crontab": "",
+    "once": true,
+    "x": 121,
+    "y": 1903,
+    "wires": [
+      [
+        "ac50f685.881848"
+      ]
+    ]
+  },
+  {
+    "id": "ecbbdd00.64439",
+    "type": "http request",
+    "z": "17b3daf5.e84c25",
+    "name": "",
+    "method": "use",
+    "ret": "obj",
+    "url": "",
+    "x": 652,
+    "y": 1890,
+    "wires": [
+      [
+        "300236aa.21064a",
+        "7c403ddc.90a3a4"
+      ]
+    ]
+  },
+  {
+    "id": "9ad09df7.6aefb",
+    "type": "function",
+    "z": "17b3daf5.e84c25",
+    "name": "",
+    "func": "if ('BloomskyKey' in context.global && context.global.BloomskyKey!=='' ){\nvar msg1={}\nmsg1.url='https://api.bloomsky.com/api/skydata/?unit=intl';\nmsg1.method=\"GET\";\nmsg1.headers= {\n    \"Authorization\":context.global.BloomskyKey\n};\nreturn msg1;\n}",
+    "outputs": 1,
+    "noerr": 0,
+    "x": 455,
+    "y": 1889,
+    "wires": [
+      [
+        "ecbbdd00.64439"
+      ]
+    ]
+  },
+  {
+    "id": "300236aa.21064a",
+    "type": "debug",
+    "z": "17b3daf5.e84c25",
+    "name": "",
+    "active": false,
+    "console": "false",
+    "complete": "payload",
+    "x": 826,
+    "y": 1889,
+    "wires": []
+  },
+  {
+    "id": "7c403ddc.90a3a4",
+    "type": "function",
+    "z": "17b3daf5.e84c25",
+    "name": "",
+    "func": "if (msg.statusCode=='200') {\n    data_set=msg.payload;\n    i=0;\n    data_set.forEach(function(dev){\n       var weatherData=dev.Data;\n       if (context.global.DEBUG){\n           node.warn('device '+ dev.DeviceName);           \n           node.warn('temperature: '+ weatherData.Temperature);\n           node.warn('humidity: '+ weatherData.Humidity);\n           node.warn('night: '+ weatherData.Night);\n           node.warn('rain: '+ weatherData.Rain);\n           node.warn('pressure: '+ weatherData.Pressure);       \n           node.warn('luminance: '+ weatherData.Luminance);   \n           node.warn('uvindex: ' + weatherData.UVIndex);\n       }\n        var postMsg={\n            url:context.global.BlueMixUrlBase+'/red/wink/subscribtions',\n            method:\"POST\",\n                headers: {\n                \"Content-Type\":\"application/json\"\n            },\n            payload:{\n          capabilities: { fields: [ \n              { field: 'temperature', type: 'float' },\n              { field: 'humidity', type: 'percentage' },\n              { field: 'timeframe', type: 'boolean' },\n              { field: 'rain', type: 'boolean' },\n              { field: 'pressure', type: 'float' },\n              { field: 'luminance', type: 'float' },\n              { field: 'uvindex', type: 'float' }\n              ] },\n          device_manufacturer: 'BloomSky',\n          \"eco_system\" : \"BLOOMSKY\",\n          last_event: \n           { brightness_occurred_at: null,\n             loudness_occurred_at: null,\n             vibration_occurred_at: null },\n          last_reading: \n           { \n                agent_session_id: 'FALSE',\n                connection: true,\n                'temperature': weatherData.Temperature,\n                'humidity': weatherData.Humidity,\n                'timeframe': weatherData.Night,\n                'rain': weatherData.Rain,\n                'pressure': weatherData.Pressure,\n                'luminance': weatherData.Luminance,   \n                'uvindex': weatherData.UVIndex\n           },\n          manufacturer_device_model: 'bloomsky_weather_sensor',\n          model_name: 'Weather Sensor',\n          name:dev.DeviceName,\n          object_id: dev.DeviceName+'_BloomSky',\n          object_type: 'sensor_pod',\n          radio_type: 'wifi',\n          sensor_pod_id:dev.DeviceName+'_BloomSky',\n          triggers: [],\n          units: {},\n          upc_code: dev.DeviceName+'_weather_sensor',\n          upc_id: 'BloomSky_'+i\n          }\n        };\n    context.global.sendWithTimeout(node,postMsg,i*2000);\n    i++;\n    });\n}",
+    "outputs": 1,
+    "noerr": 0,
+    "x": 769,
+    "y": 1963,
+    "wires": [
+      [
+        "fe919fc4.7ea63"
+      ]
+    ]
+  },
+  {
+    "id": "fe919fc4.7ea63",
+    "type": "http request",
+    "z": "17b3daf5.e84c25",
+    "name": "",
+    "method": "use",
+    "ret": "obj",
+    "url": "",
+    "x": 935,
+    "y": 1961,
+    "wires": [
+      []
+    ]
+  },
+  {
+    "id": "8e2e3d65.5e13b",
+    "type": "comment",
+    "z": "17b3daf5.e84c25",
+    "name": "Integration with BloomSky ---------------------------------------------------------------------------------------",
+    "info": "",
+    "x": 335,
+    "y": 1829,
+    "wires": []
+  },
+  {
+    "id": "ac50f685.881848",
+    "type": "delay",
+    "z": "17b3daf5.e84c25",
+    "name": "",
+    "pauseType": "delay",
+    "timeout": "15",
+    "timeoutUnits": "seconds",
+    "rate": "1",
+    "rateUnits": "second",
+    "randomFirst": "1",
+    "randomLast": "5",
+    "randomUnits": "seconds",
+    "drop": false,
+    "x": 293,
+    "y": 1897,
+    "wires": [
+      [
+        "9ad09df7.6aefb"
+      ]
     ]
   }
 ]
