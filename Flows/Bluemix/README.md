@@ -28,6 +28,18 @@ Flow Editor:<br>
 Bluemix git console:<br>
 *  re-deploy application 
 
+You can use following global variables:
+
+context.global.Weather.Bloomsky:{<br>
+			"Rain": false,<br>
+			"Night": false,<br>
+			"Luminance": 3455,<br>
+			"Humidity": 38,<br>
+			"Pressure": 991,<br>
+			"UVIndex": "1",<br>
+			"TemperatureC": 15.95,<br>
+			"TemperatureF": 61<br>
+}
 
 03/13/2016
 ------------
