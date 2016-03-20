@@ -6,6 +6,16 @@ https://(your_app_name).mybluemix.net/freeboard/winkboardautogroup - sample free
 
 == UPDATE ==
 -
+03/20/2016
+------------
+* small bug fixes
+* WNR robots on/off switch in configuration/application settings
+ 
+Flow Editor:<br>
+*  Import updated [winkIntegration.json](winkIntegration.json)
+*  Import updated [tabletUI.json](tabletUI.json)
+
+
 
 03/13/2016
 ------------
