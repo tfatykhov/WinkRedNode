@@ -51,30 +51,8 @@ Once created, you'll be taken to the Git Hub repository which includes all of yo
 In the "MyWinkNodeRed" git hub repository that was created, there are three files to be edited. Bluemix-settings.js, manifest.yml, and package.json. We'll walk you through editing each of the 3 files in the following steps. You'll make these changes using the web-based file editor in the Git Hub repository for your application. **Just like any file editor, when you're finished editing a file, click "File" and then "Save"**
 
 #### bluemix-settings.js
-In `bluemix-settings.js`, look for this line:
-
-        functionGlobalContext: { },
-
-and replace it with these lines: (remember to change <b>MyWinkNodeRed</b> part to the app name you selected during BlueMix configuration
-
-        functionGlobalContext: {
-              WinkUser         : { uid : "your Wink username"
-                                 , pwd : "your Wink password"
-                                 }
-            , BlueMixUrlBase   : "https://MyWinkNodeRed.mybluemix.net"
-            , forecastIoApiKey : "your API key"
-            , HomeLocation     : { lon : "the longitude of your home location"
-                                 , lat : "the lattitude of your home location"
-                                 }
-            , FREEBOARD_TOKEN  : "pseudo-random-string"
-            , IFTTT_TOKEN: "your IFTTT secret key"
-            , motionAdjustTstat: true
-            , CRYPTO:  require("crypto")
-            , VCAP_SERVICES: JSON.parse(process.env.VCAP_SERVICES)
-        },
-
-* to get an API key for `forecast.io` go [here](https://developer.forecast.io).
-* to get an IFTTT token go to http://ifttt.com/maker and look for secret key strinkg
+In `bluemix-settings.js` delete all contents and copy everything from this file
+* [https://github.com/tfatykhov/WinkRedNode/blob/master/Flows/Bluemix/bluemix-settings.js](https://github.com/tfatykhov/WinkRedNode/blob/master/Flows/Bluemix/bluemix-settings.js)
 
 **Remember to use "File" -> "Save" so your changes are saved.**
 
@@ -86,7 +64,7 @@ In 'manifest.yml', below the line:
 add these three lines:
 
           env:
-            NODE_RED_USERNAME: another-pseudo-random-string
+            NODE_RED_USERNAME: another-pseudo-random-string 
             NODE_RED_PASSWORD: and-another-pseudo-random-string
 
 e.g.,
