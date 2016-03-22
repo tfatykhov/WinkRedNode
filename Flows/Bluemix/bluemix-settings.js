@@ -14,7 +14,6 @@
  * limitations under the License.
  **/
 // !!!!DO NOT CHANHGE ANYTHING BELOW THIS LINE!!!
-var crp = require("crypto");
 var path = require("path");
 var when = require("when");
 
@@ -51,44 +50,12 @@ var settings = module.exports = {
     httpStatic: path.join(__dirname,"public"),
    // !!!!Please put your settingx instead of XXX in the section below and remove comments if you use that api (remove //) !!!
    functionGlobalContext: {
-	WinkUser: {"uid":"XXX","pwd":"XXXX"}
-	,BlueMixUrlBase: "https://XXXX.mybluemix.net"
-//	,forecastIoApiKey: "XXXXX"
-	,FREEBOARD_TOKEN: "XXXXX"
-//	,IFTTT_TOKEN: "XXXX"
-//	,LIFX_TOKEN: "XXXX"
-//	,motionAdjustTstat: true
-//	,InitialStateKey: "XXX"
-	,HomeLocation: { "lat":"XXXX","lon":"XXXX"}
-    
-       // uncomment next lines if you have specific camera models   
-	
-    // ,FosCam: {
-	//	"FosCam1": {"hostname":"XXXX:XXX","uid":"XXX","pwd":"XXXX"} //forFI89X series
-	//	,"FosCam98": {"hostname":"fy5299.myfoscam.org:8090","uid":"XXXX","pwd":"XXX","model":"HD"} //for FI98X series
-	//	    }
-	//,SamsungCam: {
-	//	"BasementCam" : {"hostname":"timothyr.no-ip.org:1883","private_key":"Dfdbkjy5"}
-    //             }
-	//,DlinkCam: {
-	//	"DCS942L" : {"hostname":"XXX:XXX","uid":"XXXX","pwd":"XXXXX","model":"DCS-942L"}
-	//	,"DCS934L" : {"hostname":"XXXX","uid":"XXXX","pwd":"XXXX","model":"DCS-934L"}
-    //	           }
+    WinkUser: {"uid":"XXX","pwd":"XXXX"} //please put your actual wink user id and password repacing XXXX
+    ,BlueMixUrlBase: "https://XXXX.mybluemix.net" //please put your node-red app name that you created in prior steps
     ,VCAP_SERVICES: JSON.parse(process.env.VCAP_SERVICES)
-    ,CRYPTO: crp
+    ,CRYPTO: require("crypto")
     ,SunCalc : require("suncalc")
     ,wnr : require("winknodered")    
-//    ,useRobots: true // Uncomment this line if you plan to use BMeissen's Robot flow.
-    // uncomment lines below if you want your cameras to record snapshots based on motion
-       
-    //,camera_motion: {
-    //	"Camera":["Camera"]
-    //	,"Basement Sensor":["BasementCam"]
-    //	,"Living room sensor":["Camera"]
-    //	,"foscam":["FosCam1","DCS942L","DCS934L"]
-    //}
-    // put proper shorcut names with same letter case asin wink app
-    ,"tab_ui_shortcuts":["Shortcut 1","Shortcut 2","Shortcut 3","Shortcut 4","Shortcut 5","Shortcut 6"]
  },    
 // !!!!DO NOT CHANHGE ANYTHING BELOW THIS LINE!!!
     storageModule: require("./couchstorage")
