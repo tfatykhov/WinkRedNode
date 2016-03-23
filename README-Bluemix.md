@@ -53,6 +53,7 @@ In the "MyWinkNodeRed" git hub repository that was created, there are three file
 #### bluemix-settings.js
 In `bluemix-settings.js` delete all contents and copy everything from this file
  [https://github.com/tfatykhov/WinkRedNode/blob/master/Flows/Bluemix/bluemix-settings.js](https://github.com/tfatykhov/WinkRedNode/blob/master/Flows/Bluemix/bluemix-settings.js)
+ * Find following line ` WinkUser: {"uid":"XXX","pwd":"XXXX"}` and relpace XXX with your actual wink app user id and password
  * Find following line  `,BlueMixUrlBase: "https://XXXX.mybluemix.net"` and replace XXX with your actuall application name that you created above. **_this step is essential for app to function properly_**
 
 
