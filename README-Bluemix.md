@@ -53,8 +53,7 @@ In the "MyWinkNodeRed" git hub repository that was created, there are three file
 #### bluemix-settings.js
 In `bluemix-settings.js` delete all contents and copy everything from this file
  [https://github.com/tfatykhov/WinkRedNode/blob/master/Flows/Bluemix/bluemix-settings.js](https://github.com/tfatykhov/WinkRedNode/blob/master/Flows/Bluemix/bluemix-settings.js)
- 
-*<b>!</b> Find following line  `,BlueMixUrlBase: "https://XXXX.mybluemix.net"` and replace XXX with your actuall application name that you created above.
+ * Find following line  `,BlueMixUrlBase: "https://XXXX.mybluemix.net"` and replace XXX with your actuall application name that you created above. **_this step is essential for app to function properly_**
 
 
 **Remember to use "File" -> "Save" so your changes are saved.**
