@@ -54,8 +54,7 @@ In the "MyWinkNodeRed" git hub repository that was created, there are three file
 In `bluemix-settings.js` delete all contents and copy everything from this file
  [https://github.com/tfatykhov/WinkRedNode/blob/master/Flows/Bluemix/bluemix-settings.js](https://github.com/tfatykhov/WinkRedNode/blob/master/Flows/Bluemix/bluemix-settings.js)
  * Find following line ` WinkUser: {"uid":"XXX","pwd":"XXXX"}` and relpace XXX with your actual wink app user id and password
- * Find following line  `,BlueMixUrlBase: "https://XXXX.mybluemix.net"` and replace XXX with your actuall application name that you created above. **_this step is essential for app to function properly_**
-
+ * Find following line  `,BlueMixUrlBase: "https://XXXX.mybluemix.net"` and replace XXX with your actuall application name that you created above. 
 
 **Remember to use "File" -> "Save" so your changes are saved.**
 
@@ -105,6 +104,8 @@ When you're done the entire file should look something like: ((remember to chang
 * [https://github.com/tfatykhov/WinkRedNode/blob/master/Flows/Bluemix/package.json](https://github.com/tfatykhov/WinkRedNode/blob/master/Flows/Bluemix/package.json)
 
 **Remember to use "File" -> "Save" so your changes are saved.**
+
+**_All changes mentioned above are essential for app to function properly_**
 
 ### Updating the application after editing the files
 Once you're done editing the three files above, click the icon on the left hand side which resembles an upside down Rachio icon, you can see it highlighted in white on the below photo.
