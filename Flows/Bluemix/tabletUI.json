@@ -1,24 +1,174 @@
 [
   {
-    "id": "eb83dcbf.6a067",
-    "type": "function",
-    "z": "763654c7.cdd86c",
+    "id": "d468b6.474fc748",
+    "type": "http in",
+    "z": "811c60ec.7ee3a",
     "name": "",
-    "func": "if ((msg.req.body.uid==context.global.WinkUser.uid && msg.req.body.pwd==context.global.WinkUser.pwd) || msg.payload.token==context.global.FREEBOARD_TOKEN){\nmsg.statusCode=\"200\";\n//msg.res.cookie('exchange_token',context.global.FREEBOARD_TOKEN);\nmsg.headers={\n    \"Set-Cookie\":\"exchange_token=\"+context.global.FREEBOARD_TOKEN+'; Path=/'\n}\n//msg.res.winktoken=context.global.FREEBOARD_TOKEN;\nmsg.payload.pwd_str=context.global.FREEBOARD_TOKEN;\nmsg.payload.ui_shortcuts=[]\nif ('cameras' in context.global.winkState) msg.payload.cameras=true; else msg.payload.cameras=false;\nif ('robots' in context.global.winkState) msg.payload.robots=true; else msg.payload.robots=false;\nif ('CustomTabUrl' in context.global && context.global.CustomTabUrl!=='') {\n    msg.payload.custom_tab=true; \n    msg.payload.CustomTabUrl=context.global.CustomTabUrl;\n    msg.payload.CustomTabName=context.global.CustomTabName || 'My Tab';\n}\n    else msg.payload.custom_tab=false;\nfor (var i=0;i<6;i++){\n    msg.payload.ui_shortcuts[i]={}\n    if ('tab_ui_shortcuts' in context.global && context.global.tab_ui_shortcuts[i]!=='undefined'){\n        msg.payload.ui_shortcuts[i].name=context.global.tab_ui_shortcuts[i];\n        msg.payload.ui_shortcuts[i].shortuct=context.global.tab_ui_shortcuts[i];\n        } else {\n        msg.payload.ui_shortcuts[i].name='Shortcut '+i;\n        msg.payload.ui_shortcuts[i].shortuct='#';\n        }\n    }\nmsg.payload.ifttt_token=(context.global.IFTTT_TOKEN!=='undefined' ? context.global.IFTTT_TOKEN : context.global.FREEBOARD_TOKEN) ;\n//if ('camera_name' in msg.payload && msg.payload.camera_name!=='undefined') msg.payload.camera_name=msg.req.body.camera_name\n} else {\nmsg.res.statusCode=\"403\";\n}\nreturn msg;",
+    "url": "/freeboard/MyFamily",
+    "method": "get",
+    "swaggerDoc": "",
+    "x": 123,
+    "y": 1202,
+    "wires": [
+      [
+        "f45e08ec.d5e448"
+      ]
+    ]
+  },
+  {
+    "id": "9975bd04.57f3c",
+    "type": "function",
+    "z": "811c60ec.7ee3a",
+    "name": "GenLocationMap",
+    "func": "//if(msg.req.headers.authorization && msg.req.headers.authorization==\"Bearer \"+context.global.FREEBOARD_TOKEN){\nif ((msg.req.body.uid==context.global.WinkUser.uid && msg.req.body.pwd==context.global.WinkUser.pwd) ||context.global.getCookie('exchange_token',msg.req.headers.cookie)==context.global.FREEBOARD_TOKEN || msg.payload.token==context.global.FREEBOARD_TOKEN){\n//if (true){\nmsg.statusCode=\"200\";\nmsg.payload.pwd_str=context.global.FREEBOARD_TOKEN;\nmsg.payload.ifttt_token=context.global.FREEBOARD_TOKEN;\nmsg.payload.home_location={lat:context.global.HomeLocation.lat,lng:context.global.HomeLocation.lon};\ngeo_locations=[];\nfor (var geo in context.global.winkState.sensor_pods){\n    //node.warn(geo);\n    if(geo.indexOf('Geo')!=-1){\n    var geo_s=context.global.winkState.sensor_pods[geo];        \n    geo_locations.push({\n        name:geo_s.name.split('_')[0],\n        id:geo_s.object_id,\n        lat:geo_s.lat,\n        lng:geo_s.lon\n    });\n   }\n}\nmsg.payload.geo_locations=geo_locations;\nmsg.res.statusCode=\"200\";\nif (msg.topic=='json'){\n    var Etag=\"\";\n    if ('CRYPTO' in context.global) Etag=context.global.CRYPTO.createHash(\"md5\").update(JSON.stringify(msg.payload),\"utf8\").digest(\"hex\");\n    msg.headers={\n      'Content-Type': 'application/json',\n      'ETag': Etag\n    };\n}\n} else {\nmsg.statusCode=\"403\";\n}\nreturn msg;",
+    "outputs": 1,
+    "noerr": 0,
+    "x": 521,
+    "y": 1226,
+    "wires": [
+      [
+        "2cafd5fb.58d34a"
+      ]
+    ]
+  },
+  {
+    "id": "e2bfb608.96b748",
+    "type": "http response",
+    "z": "811c60ec.7ee3a",
+    "name": "",
+    "x": 989,
+    "y": 1222,
+    "wires": []
+  },
+  {
+    "id": "5b209f1c.85a59",
+    "type": "template",
+    "z": "811c60ec.7ee3a",
+    "name": "",
+    "field": "",
+    "fieldType": "msg",
+    "format": "handlebars",
+    "syntax": "mustache",
+    "template": "<!DOCTYPE html>\n<html>\n  <head>\n    <meta charset=\"utf-8\">\n\t<meta name=\"mobile-web-app-capable\" content=\"yes\">\n    <meta name=\"apple-mobile-web-app-capable\" content=\"yes\" />\n    <meta name=\"apple-mobile-web-app-status-bar-style\" content=\"black\" />\n    <meta name=\"viewport\" content = \"width = device-width, initial-scale = 1.0, user-scalable = yes\" />\n    <title>Cameras control</title>\n\n    <link rel=\"stylesheet\" type=\"text/css\" href=\"bootstrap/css/bootstrap.min.css\" />\n    <link rel=\"stylesheet\" type=\"text/css\" href=\"font-awesome/css/font-awesome.min.css\" />\n    <link rel=\"stylesheet\" type=\"text/css\" href=\"css/local.css\" />\n    <style>\n        ::-webkit-scrollbar {\n            width: 12px;\n        }\n         \n        ::-webkit-scrollbar-track {\n            -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.3); \n            border-radius: 10px;\n        }\n         \n        ::-webkit-scrollbar-thumb {\n            border-radius: 10px;\n            -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.5); \n        }\n\n      html, body {\n        height: 100%;\n        margin: 0;\n        padding: 0;\n      }\n      #map {\n        height: 100%;\n      }\n    </style>\n    <script src=\"https://maps.googleapis.com/maps/api/js?key=AIzaSyBscuO_7CupdIdn3xIT7fnCh7clEvgeiqE\"></script>\n    <script type=\"text/javascript\" src=\"js/jquery-1.10.2.min.js\"></script>\n    <script type=\"text/javascript\" src=\"bootstrap/js/bootstrap.min.js\" async></script>\n    <script type=\"text/javascript\" src=\"js/jquery.noty.packaged.min.js\" async></script>\n    <script type=\"text/javascript\" src=\"js/eModalBl.min.js\" async></script>    \n    <script>\n      function initialize() {\n        var home ={lat:{{payload.home_location.lat}},lng:{{payload.home_location.lng}} }\n        //{ lat: 12.97, lng: 77.59 };\n        var map = new google.maps.Map(document.getElementById('map'), {\n          zoom: 12,\n          center: home\n        });\n\n        // Add a marker at the center of the map.\n        addMarker(home, map,'Home');\n      {{#payload.geo_locations}}\n       addMarker({lat:{{lat}},lng:{{lng}}},map,'{{name}}');\n      {{/payload.geo_locations}}    \n      };\n\n      // Adds a marker to the map.\n      function addMarker(location, map,label) {\n        // Add the marker at the clicked location, and add the next-available label\n        // from the array of alphabetical characters.\n          marker = new google.maps.Marker({\n          position: location,\n          label: label,\n          map: map\n        });\n        Markers[label]={\"marker\":marker};\n      };\nfunction moveMarker(marker,lat,lng ) {\n    marker.setPosition(new google.maps.LatLng(lat, lng));\n}\nfunction executeQuery() {\n        $.ajax({\n        url: 'myfamilyjson',\n        method: 'GET',\n        ifModified:true,\n//        dataType: 'JSON',\n        headers: {\n//        'Authorization':'Bearer {{payload.pwd_str}}',\n        'Content-Type':'application/json',\n        'If-None-Match':$eTag\n        },\n        success: function(data,status, xhr) {\n            if (xhr.status===200){\n                var geo_markers=data.geo_locations;// JSON.parse(data);\n                $eTag=xhr.getResponseHeader('Etag');\n                for(var i=0;i<geo_markers.length;i++){\n                    var g=geo_markers[i];\n                    moveMarker(Markers[g.name].marker,g.lat,g.lng);\n                }\n            }\n        } \n  });\n};\n    $(document).ready(function() {\n    Markers={};\n    $eTag=\"sasd12312sdfsdf=\"; \n    google.maps.event.addDomListener(window, 'load', initialize);\n    setInterval(executeQuery, 12000);    \n    });\n    </script>\n  </head>\n<body>\n<div id=\"map\"></div>\n</body>\n</html>\n<!-- data-angleOffset=-125 data-angleArc=250 -->",
+    "x": 844,
+    "y": 1192,
+    "wires": [
+      [
+        "e2bfb608.96b748"
+      ]
+    ]
+  },
+  {
+    "id": "9f854b58.7ee4b8",
+    "type": "http in",
+    "z": "811c60ec.7ee3a",
+    "name": "",
+    "url": "/freeboard/MyFamilyjson",
+    "method": "get",
+    "swaggerDoc": "",
+    "x": 125,
+    "y": 1268,
+    "wires": [
+      [
+        "a80e4b03.177b28"
+      ]
+    ]
+  },
+  {
+    "id": "f45e08ec.d5e448",
+    "type": "function",
+    "z": "811c60ec.7ee3a",
+    "name": "",
+    "func": "msg.topic='page';\nreturn msg;",
+    "outputs": 1,
+    "noerr": 0,
+    "x": 324,
+    "y": 1203,
+    "wires": [
+      [
+        "9975bd04.57f3c"
+      ]
+    ]
+  },
+  {
+    "id": "a80e4b03.177b28",
+    "type": "function",
+    "z": "811c60ec.7ee3a",
+    "name": "",
+    "func": "msg.topic='json';\nreturn msg;",
+    "outputs": 1,
+    "noerr": 0,
+    "x": 304,
+    "y": 1272,
+    "wires": [
+      [
+        "9975bd04.57f3c"
+      ]
+    ]
+  },
+  {
+    "id": "2cafd5fb.58d34a",
+    "type": "switch",
+    "z": "811c60ec.7ee3a",
+    "name": "",
+    "property": "topic",
+    "propertyType": "msg",
+    "rules": [
+      {
+        "t": "eq",
+        "v": "page",
+        "vt": "str"
+      },
+      {
+        "t": "else"
+      }
+    ],
+    "checkall": "true",
+    "outputs": 2,
+    "x": 692,
+    "y": 1226,
+    "wires": [
+      [
+        "5b209f1c.85a59"
+      ],
+      [
+        "5964882.d14c878"
+      ]
+    ]
+  },
+  {
+    "id": "5964882.d14c878",
+    "type": "json",
+    "z": "811c60ec.7ee3a",
+    "name": "",
+    "x": 850,
+    "y": 1246,
+    "wires": [
+      [
+        "e2bfb608.96b748"
+      ]
+    ]
+  },
+  {
+    "id": "176304c0.42120b",
+    "type": "function",
+    "z": "811c60ec.7ee3a",
+    "name": "",
+    "func": "if ((msg.req.body.uid==context.global.WinkUser.uid && msg.req.body.pwd==context.global.WinkUser.pwd) || msg.payload.token==context.global.FREEBOARD_TOKEN){\nmsg.statusCode=\"200\";\n//msg.res.cookie('exchange_token',context.global.FREEBOARD_TOKEN);\nmsg.headers={\n    \"Set-Cookie\":\"exchange_token=\"+context.global.FREEBOARD_TOKEN+'; Path=/'\n}\n//msg.res.winktoken=context.global.FREEBOARD_TOKEN;\nmsg.payload.pwd_str=context.global.FREEBOARD_TOKEN;\nmsg.payload.ui_shortcuts=[]\nif ('cameras' in context.global.winkState) msg.payload.cameras=true; else msg.payload.cameras=false;\nif ('robots' in context.global.winkState) msg.payload.robots=true; else msg.payload.robots=false;\n   msg.payload.geo=false;\nif ('sensor_pods' in context.global.winkState) {\n    for (var v in context.global.winkState.sensor_pods){\n        if (v.indexOf('Geo') !=-1) { \n            msg.payload.geo=true;\n            break;\n        }\n    }\n}\nif ('CustomTabUrl' in context.global && context.global.CustomTabUrl!=='') {\n    msg.payload.custom_tab=true; \n    msg.payload.CustomTabUrl=context.global.CustomTabUrl;\n    msg.payload.CustomTabName=context.global.CustomTabName || 'My Tab';\n}\n    else msg.payload.custom_tab=false;\nfor (var i=0;i<6;i++){\n    msg.payload.ui_shortcuts[i]={}\n    if ('tab_ui_shortcuts' in context.global && context.global.tab_ui_shortcuts[i]!=='undefined'){\n        msg.payload.ui_shortcuts[i].name=context.global.tab_ui_shortcuts[i];\n        msg.payload.ui_shortcuts[i].shortuct=context.global.tab_ui_shortcuts[i];\n        } else {\n        msg.payload.ui_shortcuts[i].name='Shortcut '+i;\n        msg.payload.ui_shortcuts[i].shortuct='#';\n        }\n    }\nmsg.payload.ifttt_token=(context.global.IFTTT_TOKEN!=='undefined' ? context.global.IFTTT_TOKEN : context.global.FREEBOARD_TOKEN) ;\n//if ('camera_name' in msg.payload && msg.payload.camera_name!=='undefined') msg.payload.camera_name=msg.req.body.camera_name\n} else {\nmsg.res.statusCode=\"403\";\n}\nreturn msg;",
     "outputs": 1,
     "noerr": 0,
     "x": 341,
     "y": 66,
     "wires": [
       [
-        "d2bd4107.f00f3"
+        "9cb44887.a08d58"
       ]
     ]
   },
   {
-    "id": "dab646a0.dc8ba8",
+    "id": "a052cb72.7b3668",
     "type": "http in",
-    "z": "763654c7.cdd86c",
+    "z": "811c60ec.7ee3a",
     "name": "",
     "url": "/freeboard/ui",
     "method": "post",
@@ -27,41 +177,41 @@
     "y": 66.99996948242188,
     "wires": [
       [
-        "eb83dcbf.6a067"
+        "176304c0.42120b"
       ]
     ]
   },
   {
-    "id": "8ad468f3.306fd8",
+    "id": "6aeda80f.022ee8",
     "type": "template",
-    "z": "763654c7.cdd86c",
+    "z": "811c60ec.7ee3a",
     "name": "",
     "field": "",
     "fieldType": "msg",
     "format": "handlebars",
     "syntax": "mustache",
-    "template": "<!DOCTYPE html>\n<!--<html lang=\"en\" manifest=\"manifest.cache\"> -->\n<html>\n<head>\n    <meta charset=\"utf-8\">\n\t<meta name=\"mobile-web-app-capable\" content=\"yes\">\n    <meta name=\"apple-mobile-web-app-capable\" content=\"yes\" />\n    <meta name=\"apple-mobile-web-app-status-bar-style\" content=\"black\" />\n    <meta name=\"viewport\" content = \"width = device-width, initial-scale = 1.0, user-scalable = yes\" />\n    <title>Home Dashboard</title>\n\n    <link rel=\"stylesheet\" type=\"text/css\" href=\"bootstrap/css/bootstrap.min.css\" />\n    <link rel=\"stylesheet\" type=\"text/css\" href=\"font-awesome/css/font-awesome.min.css\" />\n    \n    <link rel=\"stylesheet\" type=\"text/css\" href=\"css/local.css\" />\n    <link rel=\"stylesheet\" type=\"text/css\" href=\"css/animate.css\" />\n   \n   \n   \n    <link rel=\"shortcut icon\" href=\"assets/img/main_ico_02.png\">\n    <script type=\"text/javascript\" src=\"js/jquery-1.10.2.min.js\"></script>\n    <script type=\"text/javascript\" src=\"bootstrap/js/bootstrap.min.js\" async></script>\n    <script type=\"text/javascript\" src=\"js/jquery.noty.packaged.min.js\" async></script>\n    <!-- you need to include the shieldui css and js assets in order for the charts to work -->\n    <!--<script type=\"text/javascript\" src=\"https://www.prepbootstrap.com/Content/js/gridData.js\" async></script> -->\n    <style>\n    .spinner {\n  display: inline-block;\n  opacity: 0;\n  width: 0;\n\n  -webkit-transition: opacity 0.25s, width 0.25s;\n  -moz-transition: opacity 0.25s, width 0.25s;\n  -o-transition: opacity 0.25s, width 0.25s;\n  transition: opacity 0.25s, width 0.25s;\n}\n\n.has-spinner.active {\n  cursor:progress;\n}\n\n.has-spinner.active .spinner {\n  opacity: 1;\n  width: auto; /* This doesn't work, just fix for unkown width elements */\n}\n\n.has-spinner.btn-mini.active .spinner {\n    width: 10px;\n}\n\n.has-spinner.btn-small.active .spinner {\n    width: 13px;\n}\n\n.has-spinner.btn.active .spinner {\n    width: 16px;\n}\n\n.has-spinner.btn-large.active .spinner {\n    width: 19px;\n}\n.mainbody {\n        background-color: rgb(0, 0, 0);\n}\n</style>\n</head>\n<body>\n     <div class=\"col-xs-12 col-md-12 mainbody\" id=\"mainbody\">\n                    <header>\n                        <ul id=\"tabs\" class=\"nav nav-tabs lg-nav-justified md-nav-justified\">\n                            <li class=\"active\">\n                                <a data-toggle=\"tab\" href=\"#Dashboard0\">Summary</a>\n                            </li>                            \n                            <li class=\"\">\n                                <a data-toggle=\"tab\" href=\"#Dashboard1\">Details</a>\n                            </li>\n                            {{#payload.cameras}}\n                            <li class=\"hidden-xs\">\n                                <a data-toggle=\"tab\" href=\"#Dashboard2\">Cameras</a>\n                            </li>\n                            {{/payload.cameras}}\n                              <li class=\"\">\n                                <a data-toggle=\"tab\" href=\"#Dashboard3\">Controls</a>\n                            </li>\n                            {{#payload.robots}}\n                            <li class=\"hidden-xs\">\n                                <a data-toggle=\"tab\" href=\"#RobotsDashboard\">Robots</a>\n                            </li>\n                            {{/payload.robots}}                            \n                            {{#payload.custom_tab}}\n                            <li class=\"hidden-xs\">\n                                <a data-toggle=\"tab\" href=\"#CustomDashboard\">{{payload.CustomTabName}}</a>\n                            </li>\n                            {{/payload.custom_tab}}\n                            <li class=\"hidden-xs hidden-sm hidden-md\">\n                                <a data-toggle=\"tab\" href=\"#Config\">Configuration</a>\n                            </li>\n                        </ul>\n                    </header>\n                    <div class=\"body tab-content\">\n                        <div class=\"tab-pane fade active in\" id=\"Dashboard0\">\n<!--                                <iframe frameBorder=\"0\" seamless=\"seamless\" allowtransparency=\"true\" id=\"Iframe0\" src=\"TopRow\" width=\"100%\"></iframe> -->\n                                <iframe frameBorder=\"0\" seamless=\"seamless\" allowtransparency=\"true\" id=\"Iframe0\" src=\"mySummary\" width=\"100%\"></iframe>                                \n                                    {{#payload.ui_shortcuts}}\n                                        <div class=\"col-sm-2 col-md-2 hidden-xs\"> \n                                            <button id=\"{{name}}\" type=\"button\" class=\"btn btn-primary  btn-block has-spinner\" style=\"margin-bottom:4px;white-space:normal;\">\n                                                <div style=\"overflow: hidden;text-overflow: ellipsis;display: inline;\">\n                                                <span class=\"spinner\"><i class=\"fa fa-spinner fa-spin\"></i></span>\n                                                {{name}}</div>\n                                            </button>\n                                       </div>\n                                     {{/payload.ui_shortcuts}}\n                        </div>\n                        <div class=\"tab-pane fade in\" id=\"Dashboard1\">\n                                <iframe frameBorder=\"0\" allowtransparency=\"true\" id=\"freeboard1\" src=\"winkautogroup\"  width=\"100%\" seamless=\"seamless\"></iframe>\n                        </div>\n                        {{#payload.cameras}}\n                        <div class=\"tab-pane fade in\"  id=\"Dashboard2\">\n                            <iframe frameBorder=\"0\" allowtransparency=\"true\" id=\"freeboard2\" src=\"mycameras\"  width=\"100%\" seamless=\"seamless\"></iframe>\n                        </div>\n                        {{/payload.cameras}}\n                        <div class=\"tab-pane fade in\" id=\"Dashboard3\">\n                        <!--<div class=\"col-xs-12\" style=\"height:4px;\"></div> -->\n                        <div class=\"container-fluid\">\n                        <div class=\"panel-group\" id=\"accordion\" role=\"tablist\" aria-multiselectable=\"true\">\n                          <div class=\"panel panel-primary\">\n                            <div class=\"panel-heading\" role=\"tab\" id=\"headingOne\">\n                              <h5 class=\"panel-title\">\n                                <a role=\"button\" data-toggle=\"collapse\" data-parent=\"#accordion\" href=\"#collapseOne\" aria-expanded=\"true\" aria-controls=\"collapseOne\">\n                                    <span class=\"fa fa-lightbulb-o\" aria-hidden=\"true\"></span>\n                                    Lights and Switches\n                                </a>\n                              </h5>\n                            </div>\n                            <div id=\"collapseOne\" class=\"panel-collapse collapse in\" role=\"tabpanel\" aria-labelledby=\"headingOne\">\n                              <div class=\"panel-body\" clearfix style=\"border : 1px;\">     \n                             <iframe frameBorder=\"0\" allowtransparency=\"true\" id=\"freeboard3\" src=\"lightcontrols\"  width=\"100%\" seamless=\"seamless\" style=\" border : 0; -webkit-background-size: cover; -moz-background-size: cover; -o-background-size: cover; background-size: cover\"></iframe>\n                             </div>\n                              </div> \n                             </div>\n                              <div class=\"panel panel-primary\" clearfix style=\"background:none;\">\n                                <div class=\"panel-heading\" role=\"tab\" id=\"headingTwo\">\n                                  <h5 class=\"panel-title\">\n                                    <a class=\"collapsed\" role=\"button\" data-toggle=\"collapse\" data-parent=\"#accordion\" href=\"#collapseTwo\" aria-expanded=\"false\" aria-controls=\"collapseTwo\">\n                                    <!--   <p class=\"text-nowrap\"> -->\n                                        <span class=\"fa fa-lock\" aria-hidden=\"true\"></span>  \n                                        Locks and Garage Doors\n                                    <!--  </p>  -->\n                                    </a>\n                                  </h5>\n                                </div>\n                                <div id=\"collapseTwo\" class=\"panel-collapse collapse\" role=\"tabpanel\" aria-labelledby=\"headingTwo\">\n                                  <div class=\"panel-body\">\n                                   <iframe frameBorder=\"0\" allowtransparency=\"true\" id=\"freeboard3L\" src=\"lockcontrols\"  width=\"100%\" seamless=\"seamless\" style=\" border : 0; -webkit-background-size: cover; -moz-background-size: cover; -o-background-size: cover; background-size: cover\"></iframe>\n                                  </div>\n                                </div>\n                              </div>\n                            </div>\n                         </div>\n                        </div>\n                        {{#payload.robots}}\n                        <div class=\"tab-pane fade in\"  id=\"RobotsDashboard\">\n                            <iframe frameBorder=\"0\" allowtransparency=\"true\" id=\"robots_tab\" src=\"RobotControls\" width=\"100%\" seamless=\"seamless\"></iframe>\n                        </div>\n                        {{/payload.robots}}                           \n                        {{#payload.custom_tab}}\n                        <div class=\"tab-pane fade in\"  id=\"CustomDashboard\">\n                            <iframe frameBorder=\"0\" allowtransparency=\"true\" id=\"custom_tab\" src=\"{{payload.CustomTabUrl}}\" width=\"100%\" seamless=\"seamless\"></iframe>\n                        </div>\n                        {{/payload.custom_tab}}                        \n                        <div class=\"tab-pane fade in hidden-xs hidden-s hidden-md\" id=\"Config\" >\n                                <iframe frameBorder=\"0\" allowtransparency=\"true\" id=\"Controls\" src=\"getconfig\"  width=\"100%\" seamless=\"seamless\"></iframe>\n                        </div>\n            </div>\n    </div>\n    <!-- /#wrapper -->\n\n    <script type=\"text/javascript\">\n    function getCookie(cname) {\n    var name = cname + \"=\";\n    var ca = document.cookie.split(';');\n    for(var i=0; i<ca.length; i++) {\n        var c = ca[i];\n        while (c.charAt(0)==' ') c = c.substring(1);\n        if (c.indexOf(name) == 0) return c.substring(name.length,c.length);\n    }\n    return \"\";\n}\n\n        jQuery(function ($) {\n            $Curr_Tab=$(\"ul#tabs li.active\")[0].lastElementChild.hash;\n            $('.panel-collapse').css('background','black');\n            $(\"#Iframe0\").css('height', $( window ).height()-100);\n            $(\"#freeboard1\").css('height', $( window ).height()-75);\n            {{#payload.cameras}}\n            $(\"#freeboard2\").css('height', $( window ).height()-75);\n            {{/payload.cameras}}\n            {{#payload.robots}}\n            $(\"#robots_tab\").css('height', $( window ).height()-75);\n            {{/payload.robots}}              \n            {{#payload.custom_tab}}\n            $(\"#custom_tab\").css('height', $( window ).height()-75);\n            {{/payload.custom_tab}}            \n             $(\"#freeboard3\").css('height', $( window ).height()-215);\n             $(\"#freeboard3L\").css('height', $( window ).height()-235);\n             $( \"#Controls\" ).css('height', $( window ).height()-75);\n             $( \"#Controls\" ).css('width', \"100%\");\n             $(\"#mainbody\").css('background',\"#111\");\n        });        \n            $( window ).resize(function () {\n                //console.log('window got resized '+$( window ).height());\n                //console.log('freeboard height '+$( \"#freeboard2\" ).height());\n                $(\"#Iframe0\").css('height', $( window ).height()-100);\n                $(\"#Iframe0\").css('width',\"100%\");\n                $( \"#freeboard1\" ).css('height', $( window ).height()-75);\n                $( \"#freeboard1\" ).css('width', \"100%\");\n                {{#payload.cameras}}\n                $( \"#freeboard2\" ).css('height', $( window ).height()-75);\n                $( \"#freeboard2\" ).css('width', \"100%\");\n                {{/payload.cameras}}\n                {{#payload.robots}}\n                $(\"#robots_tab\").css('height', $( window ).height()-75);\n                $( \"#robots_tab\" ).css('width', \"100%\");    \n                {{/payload.robots}}                \n                {{#payload.custom_tab}}\n                $(\"#custom_tab\").css('height', $( window ).height()-75);\n                $( \"#custom_tab\" ).css('width', \"100%\");            \n                {{/payload.custom_tab}}                 \n                $( \"#freeboard3\" ).css('height', $( window ).height()-215);\n                $(\"#freeboard3L\").css('height', $( window ).height()-235);\n                $( \"#freeboard3\" ).css('width', \"100%\");\n                $( \"#freeboard3L\" ).css('width', \"100%\");\n                $( \"#Controls\" ).css('height', $( window ).height()-75);\n                $( \"#Controls\" ).css('width', \"100%\");                \n           });\n        $(\".btn-block\").click(function(){\n            var me=$(this);\n            $(this).toggleClass('active').removeClass('btn-primary').addClass('btn-warning');\n            $.post( \"/red/ifttt\", {\"winkName\":this.id,\"type\":\"shortcut\",\"cmd\":\"\",\"level\":\"\" , \"iftttkey\" : getCookie('exchange_token')}).done(function(data) {\n             setTimeout(function(){ me.toggleClass('active').removeClass('btn-warning').addClass('btn-primary'); }, 3000);\n            });\n        });\n        $(document).on('shown.bs.tab', 'a[data-toggle=\"tab\"]', function (e) {\n          $Curr_Tab=e.target.hash;\n    });\n    </script>\n</body>\n</html>\n",
+    "template": "<!DOCTYPE html>\n<!--<html lang=\"en\" manifest=\"manifest.cache\"> -->\n<html>\n<head>\n    <meta charset=\"utf-8\">\n\t<meta name=\"mobile-web-app-capable\" content=\"yes\">\n    <meta name=\"apple-mobile-web-app-capable\" content=\"yes\" />\n    <meta name=\"apple-mobile-web-app-status-bar-style\" content=\"black\" />\n    <meta name=\"viewport\" content = \"width = device-width, initial-scale = 1.0, user-scalable = yes\" />\n    <title>Home Dashboard</title>\n\n    <link rel=\"stylesheet\" type=\"text/css\" href=\"bootstrap/css/bootstrap.min.css\" />\n    <link rel=\"stylesheet\" type=\"text/css\" href=\"font-awesome/css/font-awesome.min.css\" />\n    \n    <link rel=\"stylesheet\" type=\"text/css\" href=\"css/local.css\" />\n    <link rel=\"stylesheet\" type=\"text/css\" href=\"css/animate.css\" />\n   \n   \n   \n    <link rel=\"shortcut icon\" href=\"assets/img/main_ico_02.png\">\n    <script type=\"text/javascript\" src=\"js/jquery-1.10.2.min.js\"></script>\n    <script type=\"text/javascript\" src=\"bootstrap/js/bootstrap.min.js\" async></script>\n    <script type=\"text/javascript\" src=\"js/jquery.noty.packaged.min.js\" async></script>\n    <!-- you need to include the shieldui css and js assets in order for the charts to work -->\n    <!--<script type=\"text/javascript\" src=\"https://www.prepbootstrap.com/Content/js/gridData.js\" async></script> -->\n    <style>\n    .spinner {\n  display: inline-block;\n  opacity: 0;\n  width: 0;\n\n  -webkit-transition: opacity 0.25s, width 0.25s;\n  -moz-transition: opacity 0.25s, width 0.25s;\n  -o-transition: opacity 0.25s, width 0.25s;\n  transition: opacity 0.25s, width 0.25s;\n}\n\n.has-spinner.active {\n  cursor:progress;\n}\n\n.has-spinner.active .spinner {\n  opacity: 1;\n  width: auto; /* This doesn't work, just fix for unkown width elements */\n}\n\n.has-spinner.btn-mini.active .spinner {\n    width: 10px;\n}\n\n.has-spinner.btn-small.active .spinner {\n    width: 13px;\n}\n\n.has-spinner.btn.active .spinner {\n    width: 16px;\n}\n\n.has-spinner.btn-large.active .spinner {\n    width: 19px;\n}\n.mainbody {\n        background-color: rgb(0, 0, 0);\n}\n</style>\n</head>\n<body>\n     <div class=\"col-xs-12 col-md-12 mainbody\" id=\"mainbody\">\n                    <header>\n                        <ul id=\"tabs\" class=\"nav nav-tabs lg-nav-justified md-nav-justified\">\n                            <li class=\"active\">\n                                <a data-toggle=\"tab\" href=\"#Dashboard0\">Summary</a>\n                            </li>                            \n                            <li class=\"\">\n                                <a data-toggle=\"tab\" href=\"#Dashboard1\">Details</a>\n                            </li>\n                            {{#payload.cameras}}\n                            <li class=\"hidden-xs\">\n                                <a data-toggle=\"tab\" href=\"#Dashboard2\">Cameras</a>\n                            </li>\n                            {{/payload.cameras}}\n                              <li class=\"\">\n                                <a data-toggle=\"tab\" href=\"#Dashboard3\">Controls</a>\n                            </li>\n                            {{#payload.robots}}\n                            <li class=\"hidden-xs\">\n                                <a data-toggle=\"tab\" href=\"#RobotsDashboard\">Robots</a>\n                            </li>\n                            {{/payload.robots}}                            \n                            {{#payload.custom_tab}}\n                            <li class=\"hidden-xs\">\n                                <a data-toggle=\"tab\" href=\"#CustomDashboard\">{{payload.CustomTabName}}</a>\n                            </li>\n                            {{/payload.custom_tab}}\n                            \n                            {{#payload.geo}}\n                            <li class=\"\">\n                                <a data-toggle=\"tab\" href=\"#Family\">My Family</a>\n                            </li>\n                            {{/payload.geo}}                            \n                            \n                            <li class=\"hidden-xs hidden-sm hidden-md\">\n                                <a data-toggle=\"tab\" href=\"#Config\">Configuration</a>\n                            </li>\n                        </ul>\n                    </header>\n                    <div class=\"body tab-content\">\n                        <div class=\"tab-pane fade active in\" id=\"Dashboard0\">\n<!--                                <iframe frameBorder=\"0\" seamless=\"seamless\" allowtransparency=\"true\" id=\"Iframe0\" src=\"TopRow\" width=\"100%\"></iframe> -->\n                                <iframe frameBorder=\"0\" seamless=\"seamless\" allowtransparency=\"true\" id=\"Iframe0\" src=\"mySummary\" width=\"100%\"></iframe>                                \n                                    {{#payload.ui_shortcuts}}\n                                        <div class=\"col-sm-2 col-md-2 hidden-xs\"> \n                                            <button id=\"{{name}}\" type=\"button\" class=\"btn btn-primary  btn-block has-spinner\" style=\"margin-bottom:4px;white-space:normal;\">\n                                                <div style=\"overflow: hidden;text-overflow: ellipsis;display: inline;\">\n                                                <span class=\"spinner\"><i class=\"fa fa-spinner fa-spin\"></i></span>\n                                                {{name}}</div>\n                                            </button>\n                                       </div>\n                                     {{/payload.ui_shortcuts}}\n                        </div>\n                        <div class=\"tab-pane fade in\" id=\"Dashboard1\">\n                                <iframe frameBorder=\"0\" allowtransparency=\"true\" id=\"freeboard1\" src=\"winkautogroup\"  width=\"100%\" seamless=\"seamless\"></iframe>\n                        </div>\n                        {{#payload.cameras}}\n                        <div class=\"tab-pane fade in\"  id=\"Dashboard2\">\n                            <iframe frameBorder=\"0\" allowtransparency=\"true\" id=\"freeboard2\" src=\"mycameras\"  width=\"100%\" seamless=\"seamless\"></iframe>\n                        </div>\n                        {{/payload.cameras}}\n                        <div class=\"tab-pane fade in\" id=\"Dashboard3\">\n                        <!--<div class=\"col-xs-12\" style=\"height:4px;\"></div> -->\n                        <div class=\"container-fluid\">\n                        <div class=\"panel-group\" id=\"accordion\" role=\"tablist\" aria-multiselectable=\"true\">\n                          <div class=\"panel panel-primary\">\n                            <div class=\"panel-heading\" role=\"tab\" id=\"headingOne\">\n                              <h5 class=\"panel-title\">\n                                <a role=\"button\" data-toggle=\"collapse\" data-parent=\"#accordion\" href=\"#collapseOne\" aria-expanded=\"true\" aria-controls=\"collapseOne\">\n                                    <span class=\"fa fa-lightbulb-o\" aria-hidden=\"true\"></span>\n                                    Lights and Switches\n                                </a>\n                              </h5>\n                            </div>\n                            <div id=\"collapseOne\" class=\"panel-collapse collapse in\" role=\"tabpanel\" aria-labelledby=\"headingOne\">\n                              <div class=\"panel-body\" clearfix style=\"border : 1px;\">     \n                             <iframe frameBorder=\"0\" allowtransparency=\"true\" id=\"freeboard3\" src=\"lightcontrols\"  width=\"100%\" seamless=\"seamless\" style=\" border : 0; -webkit-background-size: cover; -moz-background-size: cover; -o-background-size: cover; background-size: cover\"></iframe>\n                             </div>\n                              </div> \n                             </div>\n                              <div class=\"panel panel-primary\" clearfix style=\"background:none;\">\n                                <div class=\"panel-heading\" role=\"tab\" id=\"headingTwo\">\n                                  <h5 class=\"panel-title\">\n                                    <a class=\"collapsed\" role=\"button\" data-toggle=\"collapse\" data-parent=\"#accordion\" href=\"#collapseTwo\" aria-expanded=\"false\" aria-controls=\"collapseTwo\">\n                                    <!--   <p class=\"text-nowrap\"> -->\n                                        <span class=\"fa fa-lock\" aria-hidden=\"true\"></span>  \n                                        Locks and Garage Doors\n                                    <!--  </p>  -->\n                                    </a>\n                                  </h5>\n                                </div>\n                                <div id=\"collapseTwo\" class=\"panel-collapse collapse\" role=\"tabpanel\" aria-labelledby=\"headingTwo\">\n                                  <div class=\"panel-body\">\n                                   <iframe frameBorder=\"0\" allowtransparency=\"true\" id=\"freeboard3L\" src=\"lockcontrols\"  width=\"100%\" seamless=\"seamless\" style=\" border : 0; -webkit-background-size: cover; -moz-background-size: cover; -o-background-size: cover; background-size: cover\"></iframe>\n                                  </div>\n                                </div>\n                              </div>\n                            </div>\n                         </div>\n                        </div>\n                        {{#payload.robots}}\n                        <div class=\"tab-pane fade in\"  id=\"RobotsDashboard\">\n                            <iframe frameBorder=\"0\" allowtransparency=\"true\" id=\"robots_tab\" src=\"RobotControls\" width=\"100%\" seamless=\"seamless\"></iframe>\n                        </div>\n                        {{/payload.robots}}                           \n                        {{#payload.custom_tab}}\n                        <div class=\"tab-pane fade in\"  id=\"CustomDashboard\">\n                            <iframe frameBorder=\"0\" allowtransparency=\"true\" id=\"custom_tab\" src=\"{{payload.CustomTabUrl}}\" width=\"100%\" seamless=\"seamless\"></iframe>\n                        </div>\n                        {{/payload.custom_tab}}                        \n                        {{#payload.geo}}\n                        <div class=\"tab-pane fade in\"  id=\"Family\">\n                            <iframe frameBorder=\"0\" allowtransparency=\"true\" id=\"family\" src=\"MyFamily\" width=\"100%\" seamless=\"seamless\"></iframe>\n                        </div>\n                        {{/payload.geo}}                        \n                        <div class=\"tab-pane fade in hidden-xs hidden-s hidden-md\" id=\"Config\" >\n                                <iframe frameBorder=\"0\" allowtransparency=\"true\" id=\"Controls\" src=\"getconfig\"  width=\"100%\" seamless=\"seamless\"></iframe>\n                        </div>\n            </div>\n    </div>\n    <!-- /#wrapper -->\n\n    <script type=\"text/javascript\">\n    function getCookie(cname) {\n    var name = cname + \"=\";\n    var ca = document.cookie.split(';');\n    for(var i=0; i<ca.length; i++) {\n        var c = ca[i];\n        while (c.charAt(0)==' ') c = c.substring(1);\n        if (c.indexOf(name) == 0) return c.substring(name.length,c.length);\n    }\n    return \"\";\n}\n\n        jQuery(function ($) {\n            $Curr_Tab=$(\"ul#tabs li.active\")[0].lastElementChild.hash;\n            $('.panel-collapse').css('background','black');\n            $(\"#Iframe0\").css('height', $( window ).height()-100);\n            $(\"#freeboard1\").css('height', $( window ).height()-75);\n            {{#payload.cameras}}\n            $(\"#freeboard2\").css('height', $( window ).height()-75);\n            {{/payload.cameras}}\n            {{#payload.robots}}\n            $(\"#robots_tab\").css('height', $( window ).height()-75);\n            {{/payload.robots}}              \n            {{#payload.custom_tab}}\n            $(\"#custom_tab\").css('height', $( window ).height()-75);\n            {{/payload.custom_tab}}  \n            {{#payload.geo}}\n            $(\"#family\").css('height', $( window ).height()-75);\n            {{/payload.geo}}              \n             $(\"#freeboard3\").css('height', $( window ).height()-215);\n             $(\"#freeboard3L\").css('height', $( window ).height()-235);\n             $( \"#Controls\" ).css('height', $( window ).height()-75);\n             $( \"#Controls\" ).css('width', \"100%\");\n             $(\"#mainbody\").css('background',\"#111\");\n        });        \n            $( window ).resize(function () {\n                //console.log('window got resized '+$( window ).height());\n                //console.log('freeboard height '+$( \"#freeboard2\" ).height());\n                $(\"#Iframe0\").css('height', $( window ).height()-100);\n                $(\"#Iframe0\").css('width',\"100%\");\n                $( \"#freeboard1\" ).css('height', $( window ).height()-75);\n                $( \"#freeboard1\" ).css('width', \"100%\");\n                {{#payload.cameras}}\n                $( \"#freeboard2\" ).css('height', $( window ).height()-75);\n                $( \"#freeboard2\" ).css('width', \"100%\");\n                {{/payload.cameras}}\n                {{#payload.robots}}\n                $(\"#robots_tab\").css('height', $( window ).height()-75);\n                $( \"#robots_tab\" ).css('width', \"100%\");    \n                {{/payload.robots}}                \n                {{#payload.custom_tab}}\n                $(\"#custom_tab\").css('height', $( window ).height()-75);\n                $( \"#custom_tab\" ).css('width', \"100%\");            \n                {{/payload.custom_tab}}    \n                {{#payload.geo}}\n                $(\"#family\").css('height', $( window ).height()-75);\n                $( \"#family\" ).css('width', \"100%\");            \n                {{/payload.geo}}                    \n                $( \"#freeboard3\" ).css('height', $( window ).height()-215);\n                $(\"#freeboard3L\").css('height', $( window ).height()-235);\n                $( \"#freeboard3\" ).css('width', \"100%\");\n                $( \"#freeboard3L\" ).css('width', \"100%\");\n                $( \"#Controls\" ).css('height', $( window ).height()-75);\n                $( \"#Controls\" ).css('width', \"100%\");                \n           });\n        $(\".btn-block\").click(function(){\n            var me=$(this);\n            $(this).toggleClass('active').removeClass('btn-primary').addClass('btn-warning');\n            $.post( \"/red/ifttt\", {\"winkName\":this.id,\"type\":\"shortcut\",\"cmd\":\"\",\"level\":\"\" , \"iftttkey\" : getCookie('exchange_token')}).done(function(data) {\n             setTimeout(function(){ me.toggleClass('active').removeClass('btn-warning').addClass('btn-primary'); }, 3000);\n            });\n        });\n        $(document).on('shown.bs.tab', 'a[data-toggle=\"tab\"]', function (e) {\n          $Curr_Tab=e.target.hash;\n    });\n    </script>\n</body>\n</html>\n",
     "x": 815,
     "y": 59,
     "wires": [
       [
-        "611d1b43.38ef94"
+        "7d983589.d8aacc"
       ]
     ]
   },
   {
-    "id": "611d1b43.38ef94",
+    "id": "7d983589.d8aacc",
     "type": "http response",
-    "z": "763654c7.cdd86c",
+    "z": "811c60ec.7ee3a",
     "name": "",
     "x": 957,
     "y": 89,
     "wires": []
   },
   {
-    "id": "6603cc03.5e4694",
+    "id": "d69d000.22f69",
     "type": "template",
-    "z": "763654c7.cdd86c",
+    "z": "811c60ec.7ee3a",
     "name": "",
     "field": "payload",
     "fieldType": "msg",
@@ -72,23 +222,23 @@
     "y": 122,
     "wires": [
       [
-        "a4054698.b0a618"
+        "d1adc8a8.cae468"
       ]
     ]
   },
   {
-    "id": "a4054698.b0a618",
+    "id": "d1adc8a8.cae468",
     "type": "http response",
-    "z": "763654c7.cdd86c",
+    "z": "811c60ec.7ee3a",
     "name": "",
     "x": 487,
     "y": 122,
     "wires": []
   },
   {
-    "id": "402353e8.51722c",
+    "id": "c5a5c41f.3c73f8",
     "type": "http in",
-    "z": "763654c7.cdd86c",
+    "z": "811c60ec.7ee3a",
     "name": "",
     "url": "/freeboard/UI",
     "method": "get",
@@ -97,14 +247,14 @@
     "y": 119,
     "wires": [
       [
-        "6603cc03.5e4694"
+        "d69d000.22f69"
       ]
     ]
   },
   {
-    "id": "d2bd4107.f00f3",
+    "id": "9cb44887.a08d58",
     "type": "switch",
-    "z": "763654c7.cdd86c",
+    "z": "811c60ec.7ee3a",
     "name": "",
     "property": "statusCode",
     "rules": [
@@ -123,17 +273,17 @@
     "y": 63,
     "wires": [
       [
-        "ac40a4b4.92f538"
+        "9125669e.0bc8a8"
       ],
       [
-        "fa9e6ee7.5659c"
+        "e89bc7b4.cc75b8"
       ]
     ]
   },
   {
-    "id": "fa9e6ee7.5659c",
+    "id": "e89bc7b4.cc75b8",
     "type": "template",
-    "z": "763654c7.cdd86c",
+    "z": "811c60ec.7ee3a",
     "name": "",
     "field": "payload",
     "fieldType": "msg",
@@ -144,14 +294,14 @@
     "y": 112,
     "wires": [
       [
-        "611d1b43.38ef94"
+        "7d983589.d8aacc"
       ]
     ]
   },
   {
-    "id": "ac40a4b4.92f538",
+    "id": "9125669e.0bc8a8",
     "type": "function",
-    "z": "763654c7.cdd86c",
+    "z": "811c60ec.7ee3a",
     "name": "",
     "func": "msg.payload.freeboard_token=context.global.FREEBOARD_TOKEN\nreturn msg;",
     "outputs": 1,
@@ -160,14 +310,14 @@
     "y": 58,
     "wires": [
       [
-        "8ad468f3.306fd8"
+        "6aeda80f.022ee8"
       ]
     ]
   },
   {
-    "id": "1901c6d7.c01529",
+    "id": "d0f58715.bf4248",
     "type": "http in",
-    "z": "763654c7.cdd86c",
+    "z": "811c60ec.7ee3a",
     "name": "",
     "url": "/red/getGroupsJson",
     "method": "get",
@@ -176,36 +326,36 @@
     "y": 359.5,
     "wires": [
       [
-        "fe70668e.37cea8"
+        "4ae2cc6a.8f8304"
       ]
     ]
   },
   {
-    "id": "54a9fcfb.f35864",
+    "id": "8f3558ca.50cc98",
     "type": "http response",
-    "z": "763654c7.cdd86c",
+    "z": "811c60ec.7ee3a",
     "name": "",
     "x": 835.5,
     "y": 358.5,
     "wires": []
   },
   {
-    "id": "9e9cc68a.f1f518",
+    "id": "379410e1.9d6e6",
     "type": "json",
-    "z": "763654c7.cdd86c",
+    "z": "811c60ec.7ee3a",
     "name": "",
     "x": 670.5,
     "y": 359.5,
     "wires": [
       [
-        "54a9fcfb.f35864"
+        "8f3558ca.50cc98"
       ]
     ]
   },
   {
-    "id": "c7622882.297498",
+    "id": "47027320.46d5ec",
     "type": "http in",
-    "z": "763654c7.cdd86c",
+    "z": "811c60ec.7ee3a",
     "name": "",
     "url": "/freeboard/LightControl",
     "method": "get",
@@ -214,27 +364,27 @@
     "y": 566,
     "wires": [
       [
-        "64d9a6c3.c9d018"
+        "e6c6d387.4c4e4"
       ]
     ]
   },
   {
-    "id": "cf58bcea.e8445",
+    "id": "7cacf071.a39bf",
     "type": "json",
-    "z": "763654c7.cdd86c",
+    "z": "811c60ec.7ee3a",
     "name": "",
     "x": 823,
     "y": 563,
     "wires": [
       [
-        "f9a03dd9.24c92"
+        "92eab1b7.a7c6c"
       ]
     ]
   },
   {
-    "id": "43600d1a.8f2534",
+    "id": "a7f3eec2.7b0ab",
     "type": "comment",
-    "z": "763654c7.cdd86c",
+    "z": "811c60ec.7ee3a",
     "name": "Main page---------------------------------------",
     "info": "",
     "x": 165,
@@ -242,9 +392,9 @@
     "wires": []
   },
   {
-    "id": "b0b1955f.7c6b18",
+    "id": "672194e5.138d0c",
     "type": "template",
-    "z": "763654c7.cdd86c",
+    "z": "811c60ec.7ee3a",
     "name": "",
     "field": "",
     "fieldType": "msg",
@@ -255,23 +405,23 @@
     "y": 406,
     "wires": [
       [
-        "fa6af6ad.084b48"
+        "18896b79.bddf75"
       ]
     ]
   },
   {
-    "id": "fa6af6ad.084b48",
+    "id": "18896b79.bddf75",
     "type": "http response",
-    "z": "763654c7.cdd86c",
+    "z": "811c60ec.7ee3a",
     "name": "",
     "x": 847.5,
     "y": 412,
     "wires": []
   },
   {
-    "id": "72b08cfa.2ee654",
+    "id": "2656867.83adc7a",
     "type": "function",
-    "z": "763654c7.cdd86c",
+    "z": "811c60ec.7ee3a",
     "name": "",
     "func": "if ((msg.req.body.uid==context.global.WinkUser.uid && msg.req.body.pwd==context.global.WinkUser.pwd)||context.global.getCookie('exchange_token',msg.req.headers.cookie)==context.global.FREEBOARD_TOKEN || msg.payload.token==context.global.FREEBOARD_TOKEN){\nmsg.res.statusCode=\"200\";\nmsg.payload={\"pwd_str\":context.global.FREEBOARD_TOKEN}\n} else {\nmsg.res.statusCode=\"403\";\n}\nreturn msg;",
     "outputs": 1,
@@ -280,14 +430,14 @@
     "y": 422,
     "wires": [
       [
-        "5ed58980.28d518"
+        "cc666ce2.937eb"
       ]
     ]
   },
   {
-    "id": "52f50422.ef47bc",
+    "id": "adec18d9.02a038",
     "type": "http in",
-    "z": "763654c7.cdd86c",
+    "z": "811c60ec.7ee3a",
     "name": "",
     "url": "/freeboard/winkautogroup",
     "method": "get",
@@ -296,14 +446,14 @@
     "y": 422,
     "wires": [
       [
-        "72b08cfa.2ee654"
+        "2656867.83adc7a"
       ]
     ]
   },
   {
-    "id": "5ed58980.28d518",
+    "id": "cc666ce2.937eb",
     "type": "switch",
-    "z": "763654c7.cdd86c",
+    "z": "811c60ec.7ee3a",
     "name": "",
     "property": "res.statusCode",
     "rules": [
@@ -322,17 +472,17 @@
     "y": 423,
     "wires": [
       [
-        "b0b1955f.7c6b18"
+        "672194e5.138d0c"
       ],
       [
-        "324afcc2.f76e44"
+        "8d909ef0.3bc67"
       ]
     ]
   },
   {
-    "id": "324afcc2.f76e44",
+    "id": "8d909ef0.3bc67",
     "type": "template",
-    "z": "763654c7.cdd86c",
+    "z": "811c60ec.7ee3a",
     "name": "",
     "field": "payload",
     "fieldType": "msg",
@@ -343,14 +493,14 @@
     "y": 445,
     "wires": [
       [
-        "fa6af6ad.084b48"
+        "18896b79.bddf75"
       ]
     ]
   },
   {
-    "id": "9460005d.6f425",
+    "id": "2f67ff5f.fce0e",
     "type": "comment",
-    "z": "763654c7.cdd86c",
+    "z": "811c60ec.7ee3a",
     "name": "Summary page---------------------------------------",
     "info": "",
     "x": 201,
@@ -358,9 +508,9 @@
     "wires": []
   },
   {
-    "id": "be64be73.001a3",
+    "id": "6d6a0c6.2378af4",
     "type": "comment",
-    "z": "763654c7.cdd86c",
+    "z": "811c60ec.7ee3a",
     "name": "details page---------------------------------------",
     "info": "",
     "x": 179,
@@ -368,9 +518,9 @@
     "wires": []
   },
   {
-    "id": "fe7ba62c.b21988",
+    "id": "85f0663e.e268f8",
     "type": "comment",
-    "z": "763654c7.cdd86c",
+    "z": "811c60ec.7ee3a",
     "name": "Controls page---------------------------------------",
     "info": "",
     "x": 183,
@@ -378,9 +528,9 @@
     "wires": []
   },
   {
-    "id": "69d1253.cd168dc",
+    "id": "da0e4f8d.eba11",
     "type": "http in",
-    "z": "763654c7.cdd86c",
+    "z": "811c60ec.7ee3a",
     "name": "",
     "url": "/freeboard/MyCameras",
     "method": "get",
@@ -389,14 +539,14 @@
     "y": 867,
     "wires": [
       [
-        "1c49a803.296348"
+        "f3f00c68.97fab"
       ]
     ]
   },
   {
-    "id": "1c49a803.296348",
+    "id": "f3f00c68.97fab",
     "type": "function",
-    "z": "763654c7.cdd86c",
+    "z": "811c60ec.7ee3a",
     "name": "GenCameras",
     "func": "//if(msg.req.headers.authorization && msg.req.headers.authorization==\"Bearer \"+context.global.FREEBOARD_TOKEN){\nif ((msg.req.body.uid==context.global.WinkUser.uid && msg.req.body.pwd==context.global.WinkUser.pwd) ||context.global.getCookie('exchange_token',msg.req.headers.cookie)==context.global.FREEBOARD_TOKEN || msg.payload.token==context.global.FREEBOARD_TOKEN){\n//if (true){\nmsg.statusCode=\"200\";\nmsg.payload.pwd_str=context.global.FREEBOARD_TOKEN;\nmsg.payload.ifttt_token=context.global.FREEBOARD_TOKEN;\ncameras=[]\nfor (var cam in context.global.winkState.cameras){\n    var camera=context.global.winkState.cameras[cam];\n    if(camera.device_manufacturer!='canary'){\n    cameras.push({\n        name:camera.name,\n        id:camera.object_id,\n        connection:camera.connection,\n        url:camera.snap_url,\n        history_url:camera.history_url,\n        refresh_interval:30\n    });\n   }\n}\nmsg.payload.cameras=cameras;\nmsg.res.statusCode=\"200\";\n} else {\nmsg.statusCode=\"403\";\n}\nreturn msg;",
     "outputs": 1,
@@ -405,14 +555,14 @@
     "y": 866,
     "wires": [
       [
-        "2da336ad.b3cf3a"
+        "dde8c433.883f58"
       ]
     ]
   },
   {
-    "id": "2da336ad.b3cf3a",
+    "id": "dde8c433.883f58",
     "type": "template",
-    "z": "763654c7.cdd86c",
+    "z": "811c60ec.7ee3a",
     "name": "",
     "field": "",
     "fieldType": "msg",
@@ -423,23 +573,23 @@
     "y": 866,
     "wires": [
       [
-        "ddc0ea1.cafac18"
+        "b17d8ef5.a1711"
       ]
     ]
   },
   {
-    "id": "ddc0ea1.cafac18",
+    "id": "b17d8ef5.a1711",
     "type": "http response",
-    "z": "763654c7.cdd86c",
+    "z": "811c60ec.7ee3a",
     "name": "",
     "x": 714,
     "y": 865,
     "wires": []
   },
   {
-    "id": "8b783ba1.2c6188",
+    "id": "b34acccf.cd0eb",
     "type": "comment",
-    "z": "763654c7.cdd86c",
+    "z": "811c60ec.7ee3a",
     "name": "Cameras page---------------------------------------",
     "info": "",
     "x": 183.5,
@@ -447,9 +597,9 @@
     "wires": []
   },
   {
-    "id": "2f0642e0.0078ee",
+    "id": "7e6d2fae.084b7",
     "type": "http in",
-    "z": "763654c7.cdd86c",
+    "z": "811c60ec.7ee3a",
     "name": "",
     "url": "/freeboard/cam_history",
     "method": "get",
@@ -458,14 +608,14 @@
     "y": 916,
     "wires": [
       [
-        "90367088.1c41"
+        "632904b9.7768ec"
       ]
     ]
   },
   {
-    "id": "90367088.1c41",
+    "id": "632904b9.7768ec",
     "type": "function",
-    "z": "763654c7.cdd86c",
+    "z": "811c60ec.7ee3a",
     "name": "",
     "func": "if (msg.payload.token ==context.global.FREEBOARD_TOKEN || context.global.getCookie('exchange_token',msg.req.headers.cookie)==context.global.FREEBOARD_TOKEN){\n    msg.statusCode=\"200\";\n    var cam_array=[]\n    if ( 'camera_name' in msg.payload && msg.payload.camera_name!=='' && 'activities' in context.global.winkState.cameras[msg.payload.camera_name]){\n        for (var i=0;i<context.global.winkState.cameras[msg.payload.camera_name].activities.length;i++){\n            var activity=context.global.winkState.cameras[msg.payload.camera_name].activities[i];\n             var datetime=new Date(activity.cuepoint_id*1000+context.global.Weather.Offset*60*60*1000);\n            cam_array.push({\n            position:i,\n            is_active:(i===0 ? true:false),\n            title_tm: datetime.toLocaleTimeString(),\n            title_dt: datetime.toLocaleDateString(),\n            //toString(\"dddd, MMMM dd, yyyy h:mm:ss tt\"),\n            img_url:activity.snapshot_url\n            });\n        }\n    msg.payload.cam_activities=cam_array;\n    if (!('headers' in msg)) msg.headers={}\n    msg.headers['Cache-Control']=\"max-age=0,no-cache,no-store,post-check=0,pre-check=0\"\n    } \n} else {\n    msg.statusCode=\"403\";   \n    }\nreturn msg;\n",
     "outputs": 1,
@@ -474,14 +624,14 @@
     "y": 915,
     "wires": [
       [
-        "d7938054.b4c72"
+        "baae61d7.fdb"
       ]
     ]
   },
   {
-    "id": "d7938054.b4c72",
+    "id": "baae61d7.fdb",
     "type": "template",
-    "z": "763654c7.cdd86c",
+    "z": "811c60ec.7ee3a",
     "name": "",
     "field": "",
     "fieldType": "msg",
@@ -492,48 +642,48 @@
     "y": 915,
     "wires": [
       [
-        "94b84cdd.ffae9"
+        "f4e2fae4.90a438"
       ]
     ]
   },
   {
-    "id": "94b84cdd.ffae9",
+    "id": "f4e2fae4.90a438",
     "type": "http response",
-    "z": "763654c7.cdd86c",
+    "z": "811c60ec.7ee3a",
     "name": "",
     "x": 684,
     "y": 915,
     "wires": []
   },
   {
-    "id": "e78ea330.9f78",
+    "id": "43f09c86.d772b4",
     "type": "catch",
-    "z": "763654c7.cdd86c",
+    "z": "811c60ec.7ee3a",
     "name": "",
-    "x": 91,
-    "y": 1283,
+    "x": 76,
+    "y": 1427,
     "wires": [
       [
-        "a1fd02b7.6f573"
+        "c7fe164d.2e0a38"
       ]
     ]
   },
   {
-    "id": "a1fd02b7.6f573",
+    "id": "c7fe164d.2e0a38",
     "type": "debug",
-    "z": "763654c7.cdd86c",
+    "z": "811c60ec.7ee3a",
     "name": "",
     "active": false,
     "console": "false",
     "complete": "error",
-    "x": 291,
-    "y": 1283,
+    "x": 278,
+    "y": 1451,
     "wires": []
   },
   {
-    "id": "32b58842.673298",
+    "id": "cad2fe07.99e79",
     "type": "http in",
-    "z": "763654c7.cdd86c",
+    "z": "811c60ec.7ee3a",
     "name": "",
     "url": "/freeboard/MySummary",
     "method": "get",
@@ -542,14 +692,14 @@
     "y": 211,
     "wires": [
       [
-        "1a427c2f.0d61e4"
+        "27f7ca4c.3638d6"
       ]
     ]
   },
   {
-    "id": "301f9ba1.6f24d4",
+    "id": "2a72e4eb.2f3f3c",
     "type": "function",
-    "z": "763654c7.cdd86c",
+    "z": "811c60ec.7ee3a",
     "name": "GenSummary",
     "func": "var pct = function(value) {\n    return ((value > 1.0 ? value : value * 100).toFixed(0) + '%')\n}\nvar dual_temp = function (value) {\n    return (typeof value === 'number' ? (value.toFixed(1) + 'C / ' + ((value * 1.8) + 32).toFixed(1) + 'F') : '')\n}\nif ((msg.req.body.uid==context.global.WinkUser.uid && msg.req.body.pwd==context.global.WinkUser.pwd)||context.global.getCookie('exchange_token',msg.req.headers.cookie)==context.global.FREEBOARD_TOKEN || msg.payload.token==context.global.FREEBOARD_TOKEN){\n//if (true){\nmsg.statusCode=\"200\";\nmsg.payload={}\n//msg.payload.pwd_str=context.global.FREEBOARD_TOKEN;\n//msg.payload.ifttt_token=context.global.FREEBOARD_TOKEN;\nmsg.payload.home_lat=('HomeLocation' in context.global ? context.global.HomeLocation.lat : null);\nmsg.payload.home_lon=('HomeLocation' in context.global ? context.global.HomeLocation.lon : null);\nmsg.payload.weather=context.global.Weather || null;\nmsg.payload.HoursFormat24=context.global.HoursFormat24 || false;\nmsg.payload.Schedules=('Schedules' in context.global && context.global.Schedules=='on' ? true : false);\nmsg.payload.VacationMode=('VacationMode' in context.global && context.global.VacationMode=='on' ? true : false);\n//msg.payload.lights=context.global.winkState.groups['@lights'];\n//msg.payload.wholeHouse=context.global.winkState.groups['.all'];\nvar all=context.global.winkState.groups['.all'];\nvar l=context.global.winkState.groups['@lights'];\nmsg.payload.home_components=[];\n//msg.payload.hasLocks=false;\n//msg.payload.hasCoAlarms=false;\n//msg.payload.hasLights=false;\nvar Wmsg = context.global.render_home_components('.all');\nmsg.payload.home_components=Wmsg.payload.home_components;\nmsg.res.statusCode=\"200\";\nif (msg.topic=='json'){\n    var Etag=\"\";\n    if ('CRYPTO' in context.global) Etag=context.global.CRYPTO.createHash(\"md5\").update(JSON.stringify(msg.payload),\"utf8\").digest(\"hex\");\n    msg.headers={\n      'Content-Type': 'application/json',\n      'ETag': Etag\n    };\n}\n} else {\nmsg.res.statusCode=\"403\";\n}\nreturn msg;",
     "outputs": 1,
@@ -558,14 +708,14 @@
     "y": 245,
     "wires": [
       [
-        "3c5b6120.3d105e"
+        "abb2b4e4.899828"
       ]
     ]
   },
   {
-    "id": "2d9de272.895ede",
+    "id": "62ba1d25.d51e74",
     "type": "template",
-    "z": "763654c7.cdd86c",
+    "z": "811c60ec.7ee3a",
     "name": "",
     "field": "",
     "fieldType": "msg",
@@ -576,23 +726,23 @@
     "y": 231,
     "wires": [
       [
-        "a298d1fd.d0c93"
+        "a19e1c1.4a0d4e"
       ]
     ]
   },
   {
-    "id": "a298d1fd.d0c93",
+    "id": "a19e1c1.4a0d4e",
     "type": "http response",
-    "z": "763654c7.cdd86c",
+    "z": "811c60ec.7ee3a",
     "name": "",
     "x": 1009,
     "y": 247,
     "wires": []
   },
   {
-    "id": "b694f5a2.1d0f08",
+    "id": "18378f28.a60191",
     "type": "http in",
-    "z": "763654c7.cdd86c",
+    "z": "811c60ec.7ee3a",
     "name": "",
     "url": "/freeboard/LockControls",
     "method": "get",
@@ -601,14 +751,14 @@
     "y": 617,
     "wires": [
       [
-        "2581ad74.4a0aa2"
+        "9ad1ee43.d9b7e"
       ]
     ]
   },
   {
-    "id": "fa4bf56.a863808",
+    "id": "ed6ac571.91faf8",
     "type": "function",
-    "z": "763654c7.cdd86c",
+    "z": "811c60ec.7ee3a",
     "name": "GenLocks",
     "func": "//if(msg.req.headers.authorization && msg.req.headers.authorization==\"Bearer \"+context.global.FREEBOARD_TOKEN){\nif ((msg.req.body.uid==context.global.WinkUser.uid && msg.req.body.pwd==context.global.WinkUser.pwd)||context.global.getCookie('exchange_token',msg.req.headers.cookie)==context.global.FREEBOARD_TOKEN || msg.payload.token==context.global.FREEBOARD_TOKEN){\n//if (true){\nmsg.statusCode=\"200\";\nmsg.headers={'Cache-Control':\"max-age=0,no-cache,no-store,post-check=0,pre-check=0\"};\nmsg.payload.pwd_str=context.global.FREEBOARD_TOKEN;\nmsg.payload.ifttt_token=context.global.FREEBOARD_TOKEN;\nmsg.payload.haveLLocks=false\nvar locks=[]\nif ('locks' in context.global.winkState){\n        for (var l_lock in context.global.winkState.locks){\n            var lock=context.global.winkState.locks[l_lock];\n            locks.push({\n            name:lock.name,\n            object_type:lock.object_type,\n            //class_name:'dial '+bulb.object_id,\n            object_id:lock.object_id,\n            isLock:(lock.object_type==='locks' ? true:false),\n            locked:lock.locked,\n            not_locked:!lock.locked\n        });\n    }\n    msg.payload.haveLocks=true\n}\n/*\nif ('garage_doors' in context.global.winkState){\n        for (var l_lock in context.global.winkState.garage_doors){\n            var lock=context.global.winkState.garage_doors[l_lock];\n            locks.push({\n            name:lock.name,\n            object_type:lock.object_type,            \n            //class_name:'dial '+bulb.object_id,\n            object_id:lock.object_id,\n            locked:(lock.position>0 ? false:true),\n            not_locked:(lock.position>0 ? true:false)\n        });\n    }\n    msg.payload.haveLocks=true\n}\n*/\nmsg.payload.locks=locks;\nif (msg.topic=='json'){\n    var Etag=\"\";\n    if ('CRYPTO' in context.global) Etag=context.global.CRYPTO.createHash(\"md5\").update(JSON.stringify(msg.payload),\"utf8\").digest(\"hex\");\n    msg.headers={\n      'Content-Type': 'application/json',\n      'ETag': Etag\n    };\n}\n} else {\nmsg.statusCode=\"403\";\n}\nreturn msg;",
     "outputs": 1,
@@ -617,14 +767,14 @@
     "y": 643,
     "wires": [
       [
-        "37e8c4b7.f39fbc"
+        "50edf171.82862"
       ]
     ]
   },
   {
-    "id": "a5197a01.cfe428",
+    "id": "3c35dbdb.f1b924",
     "type": "template",
-    "z": "763654c7.cdd86c",
+    "z": "811c60ec.7ee3a",
     "name": "",
     "field": "",
     "fieldType": "msg",
@@ -635,14 +785,14 @@
     "y": 620,
     "wires": [
       [
-        "43fb6c60.876874"
+        "c331b5ce.ae9958"
       ]
     ]
   },
   {
-    "id": "c0f06bd7.993b78",
+    "id": "b3e23e0.291e7c",
     "type": "http in",
-    "z": "763654c7.cdd86c",
+    "z": "811c60ec.7ee3a",
     "name": "",
     "url": "/freeboard/LockData",
     "method": "get",
@@ -651,89 +801,36 @@
     "y": 660,
     "wires": [
       [
-        "9d16b132.f146a"
+        "cd670f1e.5f2"
       ]
     ]
   },
   {
-    "id": "185acdb4.551362",
+    "id": "bf69ad0f.ec4ec",
     "type": "json",
-    "z": "763654c7.cdd86c",
+    "z": "811c60ec.7ee3a",
     "name": "",
     "x": 832,
     "y": 675,
     "wires": [
       [
-        "43fb6c60.876874"
+        "c331b5ce.ae9958"
       ]
     ]
   },
   {
-    "id": "43fb6c60.876874",
+    "id": "c331b5ce.ae9958",
     "type": "http response",
-    "z": "763654c7.cdd86c",
+    "z": "811c60ec.7ee3a",
     "name": "",
     "x": 973,
     "y": 649,
     "wires": []
   },
   {
-    "id": "e513dc55.046f",
+    "id": "ee9a162e.1394d8",
     "type": "http in",
-    "z": "763654c7.cdd86c",
-    "name": "",
-    "url": "/freeboard/manifest.cache1",
-    "method": "get",
-    "swaggerDoc": "",
-    "x": 175,
-    "y": 1229,
-    "wires": [
-      [
-        "aff33a14.4da228"
-      ]
-    ]
-  },
-  {
-    "id": "aff33a14.4da228",
-    "type": "template",
-    "z": "763654c7.cdd86c",
-    "name": "",
-    "field": "payload",
-    "fieldType": "msg",
-    "format": "text",
-    "syntax": "mustache",
-    "template": "CACHE MANIFEST\n# Ver 9.00.43\n\n# Add the entire internet to the \"white list\" of sites that may be accessed by this site.\n# This is needed for TypeKit and Google Analytics\n\nNETWORK:\n/freeboard/*\n/red/camera_history\nlightcontrols\nlockcontrols\ncam_history\nmysummary\n*.jpg\n*\n\n# The following files are explicitly cached -\nCACHE:\n//netdna.bootstrapcdn.com/font-awesome/3.2.1/css/font-awesome.css\nbootstrap/css/bootstrap.min.css\nbootstrap/css/bootstrap-toggle.min.css\nfont-awesome/css/font-awesome.min.css\ncss/local.css\ncss/animate.min.css\ncss/freeboard.min.css\njs/freeboard.thirdparty.min.js\nassets/js/jquery.knob.min.js\njs/jquery-1.10.2.min.js\njs/jquery.noty.packaged.min.js\nbootstrap/js/bootstrap.min.js\nbootstrap/js/bootstrap-toggle.min.js\njs/eModalBl.min.js\njs/freeboard.js\njs/freeboard.plugins.min.js\nlib/js/thirdparty/wink.js\nplugins/thirdparty/jquery.sparkline.min.js\nassets/img/main_ico_02.png\nfonts/glyphicons-halflings-regular.woff\nbootstrap/fonts/glyphicons-halflings-regular.woff2\nfont-awesome/fonts/fontawesome-webfont.woff",
-    "x": 472,
-    "y": 1229,
-    "wires": [
-      [
-        "3b025217.71706e"
-      ]
-    ]
-  },
-  {
-    "id": "3b025217.71706e",
-    "type": "http response",
-    "z": "763654c7.cdd86c",
-    "name": "",
-    "x": 695,
-    "y": 1227,
-    "wires": []
-  },
-  {
-    "id": "79be39ea.fe2528",
-    "type": "comment",
-    "z": "763654c7.cdd86c",
-    "name": "Cache manifest-----------------------------------",
-    "info": "",
-    "x": 184,
-    "y": 1179,
-    "wires": []
-  },
-  {
-    "id": "2e012258.f9ba9e",
-    "type": "http in",
-    "z": "763654c7.cdd86c",
+    "z": "811c60ec.7ee3a",
     "name": "",
     "url": "/freeboard/LightControls",
     "method": "get",
@@ -742,14 +839,14 @@
     "y": 527,
     "wires": [
       [
-        "fbddffb3.2a55e"
+        "f5f1c3f.459cb4"
       ]
     ]
   },
   {
-    "id": "e04f2fcf.923c2",
+    "id": "d4c43570.b1c278",
     "type": "function",
-    "z": "763654c7.cdd86c",
+    "z": "811c60ec.7ee3a",
     "name": "GenLights",
     "func": "//if(msg.req.headers.authorization && msg.req.headers.authorization==\"Bearer \"+context.global.FREEBOARD_TOKEN){\nif ((msg.req.body.uid==context.global.WinkUser.uid && msg.req.body.pwd==context.global.WinkUser.pwd) || context.global.getCookie('exchange_token',msg.req.headers.cookie)==context.global.FREEBOARD_TOKEN || msg.payload.token==context.global.FREEBOARD_TOKEN){\n//if (true){\n//node.warn( context.global.getCookie('exchange_token',msg.req.headers.cookie));\nmsg.statusCode=\"200\";\nmsg.headers={'Cache-Control':\"max-age=0,no-cache,no-store,post-check=0,pre-check=0\"};\nmsg.payload.pwd_str=context.global.FREEBOARD_TOKEN;\nmsg.payload.ifttt_token=context.global.FREEBOARD_TOKEN;\nmsg.payload.haveLights=false;\nvar lights=[];\nif ('light_bulbs' in context.global.winkState){\n        for (var l_bulb in context.global.winkState.light_bulbs){\n            var bulb=context.global.winkState.light_bulbs[l_bulb];\n            lights.push({\n            name:bulb.name,\n            class_name:'dial '+bulb.object_id,\n            object_id:bulb.object_id,\n            powered:bulb.powered,\n            not_powered:!bulb.powered,\n            step:1,\n            brightness:Math.round(bulb.brightness*100)\n        });\n    }\n    msg.payload.haveLights=true;\n}\nif ('binary_switches' in context.global.winkState){\n    for (var bswitch in context.global.winkState.binary_switches){\n        var bulb=context.global.winkState.binary_switches[bswitch];\n        lights.push({\n            name:bulb.name,\n            class_name:'dial '+bulb.object_id,\n            object_id:bulb.object_id,\n            powered:bulb.powered,\n            step:100,\n            brightness:(bulb.powered ? 100:0)\n        });\n}\n    msg.payload.haveLights=true;\n}\n\nif ('powerstrips' in context.global.winkState){\n    for (var bswitch in context.global.winkState.powerstrips){\n        var bulb=context.global.winkState.powerstrips[bswitch];\n        if (bulb.object_type==='outlet'){\n        lights.push({\n            name:bulb.name,\n            class_name:'dial '+bulb.object_id,\n            object_id:bulb.object_id,\n            powered:bulb.powered,\n            step:100,\n            brightness:(bulb.powered ? 100:0)\n        });\n    }\n}\n    msg.payload.haveLights=true;\n}\nmsg.payload.lights=lights;\nif (msg.topic=='json'){\n    var Etag=\"\";\n    if ('CRYPTO' in context.global) Etag=context.global.CRYPTO.createHash(\"md5\").update(JSON.stringify(msg.payload),\"utf8\").digest(\"hex\");\n    msg.headers={\n      'Content-Type': 'application/json',\n      'ETag': Etag\n    };\n}\n} else {\nmsg.statusCode=\"403\";\n}\nreturn msg;",
     "outputs": 1,
@@ -758,14 +855,14 @@
     "y": 548,
     "wires": [
       [
-        "c2f8d210.9c407"
+        "b95592d0.b3e6f"
       ]
     ]
   },
   {
-    "id": "c4714b37.1676f8",
+    "id": "9f1f047f.3b6eb8",
     "type": "template",
-    "z": "763654c7.cdd86c",
+    "z": "811c60ec.7ee3a",
     "name": "",
     "field": "",
     "fieldType": "msg",
@@ -776,32 +873,32 @@
     "y": 525,
     "wires": [
       [
-        "f9a03dd9.24c92"
+        "92eab1b7.a7c6c"
       ]
     ]
   },
   {
-    "id": "f9a03dd9.24c92",
+    "id": "92eab1b7.a7c6c",
     "type": "http response",
-    "z": "763654c7.cdd86c",
+    "z": "811c60ec.7ee3a",
     "name": "",
     "x": 967,
     "y": 548,
     "wires": []
   },
   {
-    "id": "91caf533.61b1d8",
+    "id": "ae203f82.5e8f5",
     "type": "http response",
-    "z": "763654c7.cdd86c",
+    "z": "811c60ec.7ee3a",
     "name": "",
     "x": 719,
     "y": 1015,
     "wires": []
   },
   {
-    "id": "8ec7ba65.713758",
+    "id": "fcd240da.8a574",
     "type": "http in",
-    "z": "763654c7.cdd86c",
+    "z": "811c60ec.7ee3a",
     "name": "",
     "url": "/freeboard/getConfig",
     "method": "get",
@@ -810,30 +907,30 @@
     "y": 1013,
     "wires": [
       [
-        "a5c85d8f.e2c43"
+        "91d59164.4dbcd"
       ]
     ]
   },
   {
-    "id": "a5c85d8f.e2c43",
+    "id": "91d59164.4dbcd",
     "type": "function",
-    "z": "763654c7.cdd86c",
+    "z": "811c60ec.7ee3a",
     "name": "Throw Config Data",
-    "func": "if (msg.payload.token ==context.global.FREEBOARD_TOKEN || context.global.getCookie('exchange_token',msg.req.headers.cookie)==context.global.FREEBOARD_TOKEN){\n//if (true){\n// text fields array\nint_txt_fields=[];\ntxt_fields=[];\n\ncheckDevCap=function(dev_fields){\n    var result=false\n    dev_fields.forEach(function(dev_field){\n     if(dev_field.field=='vacation_mode_enabled' || dev_field.field=='alarm_mode'){\n        result=true;\n     }\n    });\n    return result;\n};\n\nint_txt_fields.push({\n    type:\"text\",\n    item:\"wink_id\",\n    label:\"Wink Client ID\",\n    isCheck:false,\n    value : context.global.wink_id || \"\" \n});\n\nint_txt_fields.push({\n    type:\"text\",\n    item:\"wink_secret\",\n    label:\"Wink Client Secret\",\n    isCheck:false,\n    value : context.global.wink_secret || \"\" \n});\n\n\nint_txt_fields.push({\n    type:\"text\",\n    item:\"lat\",\n    label:\"Home Lattitude\",\n    isCheck:false,\n    value :('HomeLocation' in context.global ?  context.global.HomeLocation.lat : \"\" )\n});\n\nint_txt_fields.push({\n    type:\"text\",\n    item:\"lon\",\n    label:\"Home Longtitude\",\n    isCheck:false,\n    value :('HomeLocation' in context.global ?  context.global.HomeLocation.lon : \"\" )\n});\n\nint_txt_fields.push({\n    type:\"text\",    \n    item:\"FREEBOARD_TOKEN\",\n    label:\"Application Access Token\",\n    isCheck:false,\n    value: context.global.FREEBOARD_TOKEN || \"\" \n});\n\n\n\nint_txt_fields.push({\n    type:\"text\",\n    item:\"forecastIoApiKey\",\n    label:\"Forecast.io API Key\",\n    isCheck:false,\n    value : context.global.forecastIoApiKey || \"\" \n});\n//txt_fields.push({\n//    type:\"text\",    \n//    item:\"FREEBOARD_TOKEN\",\n//    label:\"Freeboard Token\",\n//    value: context.global.FREEBOARD_TOKEN || \"\" \n//});\nint_txt_fields.push({\n    type:\"text\",    \n    item:\"IFTTT_TOKEN\",\n    label:\"IFTTT Token\",\n    isCheck:false,\n    value: context.global.IFTTT_TOKEN || \"\" \n});\nint_txt_fields.push({\n    type:\"text\",\n    item:\"LIFX_TOKEN\",\n    label:\"Lifx API Key\",\n    isCheck:false,\n    value: context.global.LIFX_TOKEN || \"\" \n});\nint_txt_fields.push({\n    type:\"text\",\n    item:\"InitialStateKey\",\n    label:\"InitialState.com API Key\",\n    isCheck:false,\n    value: context.global.InitialStateKey ||\"\"\n});\n\nint_txt_fields.push({\n    type:\"text\",\n    item:\"BloomskyKey\",\n    label:\"Bloomsky API Key\",\n    isCheck:false,\n    value: context.global.BloomskyKey ||\"\"\n});\n\nint_txt_fields.push({\n    type:\"text\",\n    item:\"PushBulletKey\",\n    label:\"PushBullet API Key\",\n    isCheck:false,\n    value: context.global.PushBulletKey ||\"\"\n});\n\n\nint_txt_fields.push({\n    type:\"text\",\n    item:\"BlueIrisHost\",\n    label:\"Blue Iris url\",\n    isCheck:false,\n    value: context.global.BlueIrisHost ||\"\"\n});\n\nint_txt_fields.push({\n    type:\"text\",\n    item:\"BlueIrisUid\",\n    label:\"Blue Iris user Id\",\n    isCheck:false,\n    value: context.global.BlueIrisUid ||\"\"\n});\n\n\nint_txt_fields.push({\n    type:\"password\",\n    item:\"BlueIrisPwd\",\n    label:\"Blue Iris user Password\",\n    isCheck:false,\n    value: context.global.BlueIrisPwd ||\"\"\n});\n\ntxt_fields.push({\n    type:\"checkbox\",    \n    item:\"motionAdjustTstat\",\n    label:\"Motion affects thermostat\",\n    isCheck:true,\n    value: context.global.motionAdjustTstat || false\n});\n\ntxt_fields.push({\n    type:\"checkbox\",    \n    item:\"HoursFormat24\",\n    label:\"Use 24 hours time format\",\n    isCheck:true,\n    value: context.global.HoursFormat24 || false\n});\n\ntxt_fields.push({\n    type:\"checkbox\",    \n    item:\"LightsNotification\",\n    label:\"Show Light Changes in the log\",\n    isCheck:true,    \n    value: context.global.LightsNotification || false\n});\ntxt_fields.push({\n    type:\"checkbox\",    \n    item:\"LightsNotificationM\",\n    label:\"Send Lights Notification via Pushbullet\",\n    isCheck:true,    \n    value: context.global.LightsNotificationM || false\n});\n\ntxt_fields.push({\n    type:\"checkbox\",    \n    item:\"SensorsNotificationM\",\n    label:\"Send Sensors Notification via Pushbullet\",\n    isCheck:true,    \n    value: context.global.SensorsNotificationM || false\n});\n\n\ntxt_fields.push({\n    type:\"checkbox\",    \n    item:\"ifttt\",\n    label:\"Send data to IFTTT\",\n    isCheck:true,    \n    value: context.global.ifttt || false\n});\n\ntxt_fields.push({\n    type:\"checkbox\",    \n    item:\"useRobots\",\n    label:\"WNR Robots\",\n    isCheck:true,    \n    value: context.global.useRobots || false\n});\n\n\ntxt_fields.push({\n    type:\"text\",\n    item:\"CustomTabName\",\n    label:\"Custom Tab Name\",\n    value: context.global.CustomTabName ||\"\"\n});\n\ntxt_fields.push({\n    type:\"text\",\n    item:\"CustomTabUrl\",\n    label:\"Custom Tab Url\",\n    value: context.global.CustomTabUrl ||\"\"\n});\n\n\n/*\ntxt_fields.push({\n    type:\"text\",\n    item:\"note_timeout\",\n    label:\"Note message timeoue (white),sec\",\n    value: context.global.note_timeout ||\"15\"\n});\n\ntxt_fields.push({\n    type:\"text\",\n    item:\"info_timeout\",\n    label:\"Info message timeout (blue),sec\",\n    value: context.global.info_timeout ||\"60\"\n});\n\ntxt_fields.push({\n    type:\"text\",\n    item:\"warning_timeout\",\n    label:\"Warning message timeout (yellow)\",\n    value: context.global.warning_timeout ||\"90\"\n});\n\ntxt_fields.push({\n    type:\"text\",\n    item:\"weather_timeout\",\n    label:\"InitialState.com Api Key\",\n    value: context.global.weather_timeout ||\"40\"\n});\n*/\nmsg.payload.int_txt_fields=int_txt_fields;\nmsg.payload.txt_fields=txt_fields;\nmsg.payload.scenes=[]\nfor (var s in context.global.winkState.scenes){\n    var scene=context.global.winkState.scenes[s];\n    if ('name' in scene){\n    msg.payload.scenes.push({\n        name:scene.name,\n        id:scene.id,\n        selected:(context.global.tab_ui_shortcuts.indexOf(scene.name)!=-1 ? true : false)\n    });\n    } else node.warn(scene);\n}\nmsg.payload.vaca_settings=[];\n\nmsg.payload.vaca_settings.push({\n    type:\"text\",    \n    item:\"vaca_delay\",\n    label:\"Delay befor activation (minutes)\",\n    value: context.global.vaca_delay || 15\n});\n\nif ('Presence' in context.global){\nmsg.payload.vaca_settings.push({\n    type:\"checkbox\",    \n    item:\"vaca_usePresence\",\n    label:\"Use Presence to turn mode off\",\n    isCheck:true,    \n    value: context.global.vaca_usePresence || false\n});\n}\n/*\nmsg.payload.vaca_settings.push({\n    type:\"checkbox\",    \n    item:\"vaca_wnr_schedules_off\",\n    label:\"Turn WNR schedules off\",\n    isCheck:true,    \n    value: context.global.vaca_wnr_schedules_off || false\n});\n*/\nvar VacModeLock=false;\nif('winkState' in context.global && 'winkDevCap' in context.global && 'locks' in context.global.winkState){\n     for (var l in context.global.winkState.locks){\n        var fields=context.global.winkDevCap[l].fields;\n        if (checkDevCap(fields)) { \n            VacModeLock=true; \n            break;\n        }\n    }\n}\nif (VacModeLock){\n    msg.payload.vaca_settings.push({\n        type:\"checkbox\",    \n        item:\"vaca_locks_vac\",\n        label:\"Turn on locks vacation mode\",\n        isCheck:true,    \n        value: context.global.vaca_locks_vac || false\n    });\n}\n\nmsg.payload.vaca_light_bulbs=[];\nfor (var l in context.global.winkState.light_bulbs){\n    var light=context.global.winkState.light_bulbs[l];\n    if ('name' in light){\n    msg.payload.vaca_light_bulbs.push({\n        name:light.name,\n        id:light.id,\n        selected:('vaca_light_bulbs' in context.global && context.global.vaca_light_bulbs.indexOf(light.name)!=-1 ? true : false)\n    });\n    } else node.warn(light);\n}\n\nfor (var l in context.global.winkState.binary_switches){\n    var light=context.global.winkState.binary_switches[l];\n    if ('name' in light){\n    msg.payload.vaca_light_bulbs.push({\n        name:light.name,\n        id:light.id,\n        selected:('vaca_light_bulbs' in context.global && context.global.vaca_light_bulbs.indexOf(light.name)!=-1 ? true : false)\n    });\n    } else node.warn(light);\n} \nif ('groups' in context.global.winkState){\n    msg.payload.vaca_groups=[];\n    for (var g in context.global.winkState.groups){\n        var group=context.global.winkState.groups[g];\n        if ('name' in group){\n        msg.payload.vaca_groups.push({\n            name:group.name,\n            id:group.id,\n            selected:('vaca_groups' in context.global && context.global.vaca_groups.indexOf(group.name)!=-1 ? true : false)\n        });\n        } else node.warn(group);\n    }\n}\n\ntxt_area_fields=[];\n\ntxt_area_fields.push({FosCam : JSON.stringify(context.global.foscam || \"\")});\ntxt_area_fields.push({SamsungCam : JSON.stringify(context.global.SamsungCam || \"\")});\ntxt_area_fields.push({DlinkCam : JSON.stringify(context.global.DlinkCam || \"\")});\ntxt_area_fields.push({camera_motion : JSON.stringify(context.global.camera_motion || \"\")});\n//txt_area_fields.push({tab_ui_shortcuts : JSON.stringify(context.global.tab_ui_shortcuts || \"\")});\nmsg.payload.txt_area_fields=txt_area_fields;\n\nmsg.statusCode=\"200\";\nreturn msg;\n}\nelse\n{\n    //msg.payload=\"Not Authorized\";\n   msg.statusCode=\"403\";\n   return msg;\n//   msg.res.send(\"403\",\"Forbidden\");\n//  return;\n}\n",
+    "func": "if (msg.payload.token ==context.global.FREEBOARD_TOKEN || context.global.getCookie('exchange_token',msg.req.headers.cookie)==context.global.FREEBOARD_TOKEN){\n//if (true){\n// text fields array\nint_txt_fields=[];\ntxt_fields=[];\n\ncheckDevCap=function(dev_fields){\n    var result=false\n    dev_fields.forEach(function(dev_field){\n     if(dev_field.field=='vacation_mode_enabled' || dev_field.field=='alarm_mode'){\n        result=true;\n     }\n    });\n    return result;\n};\n\nint_txt_fields.push({\n    type:\"text\",\n    item:\"wink_id\",\n    label:\"Wink Client ID\",\n    isCheck:false,\n    value : context.global.wink_id || \"\" \n});\n\nint_txt_fields.push({\n    type:\"text\",\n    item:\"wink_secret\",\n    label:\"Wink Client Secret\",\n    isCheck:false,\n    value : context.global.wink_secret || \"\" \n});\n\n\nint_txt_fields.push({\n    type:\"text\",\n    item:\"lat\",\n    label:\"Home Lattitude\",\n    isCheck:false,\n    value :('HomeLocation' in context.global ?  context.global.HomeLocation.lat : \"\" )\n});\n\nint_txt_fields.push({\n    type:\"text\",\n    item:\"lon\",\n    label:\"Home Longtitude\",\n    isCheck:false,\n    value :('HomeLocation' in context.global ?  context.global.HomeLocation.lon : \"\" )\n});\n\nint_txt_fields.push({\n    type:\"text\",    \n    item:\"BlueMixUrlBase\",\n    label:\"BlueMix URL base\",\n    isCheck:false,\n    value: context.global.BlueMixUrlBase || \"\" \n});\n\nint_txt_fields.push({\n    type:\"text\",    \n    item:\"FREEBOARD_TOKEN\",\n    label:\"Application Access Token\",\n    isCheck:false,\n    value: context.global.FREEBOARD_TOKEN || \"\" \n});\n\n\n\nint_txt_fields.push({\n    type:\"text\",\n    item:\"forecastIoApiKey\",\n    label:\"Forecast.io API Key\",\n    isCheck:false,\n    value : context.global.forecastIoApiKey || \"\" \n});\n//txt_fields.push({\n//    type:\"text\",    \n//    item:\"FREEBOARD_TOKEN\",\n//    label:\"Freeboard Token\",\n//    value: context.global.FREEBOARD_TOKEN || \"\" \n//});\nint_txt_fields.push({\n    type:\"text\",    \n    item:\"IFTTT_TOKEN\",\n    label:\"IFTTT Token\",\n    isCheck:false,\n    value: context.global.IFTTT_TOKEN || \"\" \n});\nint_txt_fields.push({\n    type:\"text\",\n    item:\"LIFX_TOKEN\",\n    label:\"Lifx API Key\",\n    isCheck:false,\n    value: context.global.LIFX_TOKEN || \"\" \n});\nint_txt_fields.push({\n    type:\"text\",\n    item:\"InitialStateKey\",\n    label:\"InitialState.com API Key\",\n    isCheck:false,\n    value: context.global.InitialStateKey ||\"\"\n});\n\nint_txt_fields.push({\n    type:\"text\",\n    item:\"BloomskyKey\",\n    label:\"Bloomsky API Key\",\n    isCheck:false,\n    value: context.global.BloomskyKey ||\"\"\n});\n\nint_txt_fields.push({\n    type:\"text\",\n    item:\"PushBulletKey\",\n    label:\"PushBullet API Key\",\n    isCheck:false,\n    value: context.global.PushBulletKey ||\"\"\n});\n\n\nint_txt_fields.push({\n    type:\"text\",\n    item:\"BlueIrisHost\",\n    label:\"Blue Iris url\",\n    isCheck:false,\n    value: context.global.BlueIrisHost ||\"\"\n});\n\nint_txt_fields.push({\n    type:\"text\",\n    item:\"BlueIrisUid\",\n    label:\"Blue Iris user Id\",\n    isCheck:false,\n    value: context.global.BlueIrisUid ||\"\"\n});\n\n\nint_txt_fields.push({\n    type:\"password\",\n    item:\"BlueIrisPwd\",\n    label:\"Blue Iris user Password\",\n    isCheck:false,\n    value: context.global.BlueIrisPwd ||\"\"\n});\n\ntxt_fields.push({\n    type:\"checkbox\",    \n    item:\"motionAdjustTstat\",\n    label:\"Motion affects thermostat\",\n    isCheck:true,\n    value: context.global.motionAdjustTstat || false\n});\n\ntxt_fields.push({\n    type:\"checkbox\",    \n    item:\"HoursFormat24\",\n    label:\"Use 24 hours time format\",\n    isCheck:true,\n    value: context.global.HoursFormat24 || false\n});\n\ntxt_fields.push({\n    type:\"checkbox\",    \n    item:\"LightsNotification\",\n    label:\"Show Light Changes in the log\",\n    isCheck:true,    \n    value: context.global.LightsNotification || false\n});\ntxt_fields.push({\n    type:\"checkbox\",    \n    item:\"LightsNotificationM\",\n    label:\"Send Lights Notification via Pushbullet\",\n    isCheck:true,    \n    value: context.global.LightsNotificationM || false\n});\n\ntxt_fields.push({\n    type:\"checkbox\",    \n    item:\"SensorsNotificationM\",\n    label:\"Send Sensors Notification via Pushbullet\",\n    isCheck:true,    \n    value: context.global.SensorsNotificationM || false\n});\n\n\ntxt_fields.push({\n    type:\"checkbox\",    \n    item:\"ifttt\",\n    label:\"Send data to IFTTT\",\n    isCheck:true,    \n    value: context.global.ifttt || false\n});\n\ntxt_fields.push({\n    type:\"checkbox\",    \n    item:\"useRobots\",\n    label:\"WNR Robots\",\n    isCheck:true,    \n    value: context.global.useRobots || false\n});\n\n\ntxt_fields.push({\n    type:\"text\",\n    item:\"CustomTabName\",\n    label:\"Custom Tab Name\",\n    value: context.global.CustomTabName ||\"\"\n});\n\ntxt_fields.push({\n    type:\"text\",\n    item:\"CustomTabUrl\",\n    label:\"Custom Tab Url\",\n    value: context.global.CustomTabUrl ||\"\"\n});\n\n\n/*\ntxt_fields.push({\n    type:\"text\",\n    item:\"note_timeout\",\n    label:\"Note message timeoue (white),sec\",\n    value: context.global.note_timeout ||\"15\"\n});\n\ntxt_fields.push({\n    type:\"text\",\n    item:\"info_timeout\",\n    label:\"Info message timeout (blue),sec\",\n    value: context.global.info_timeout ||\"60\"\n});\n\ntxt_fields.push({\n    type:\"text\",\n    item:\"warning_timeout\",\n    label:\"Warning message timeout (yellow)\",\n    value: context.global.warning_timeout ||\"90\"\n});\n\ntxt_fields.push({\n    type:\"text\",\n    item:\"weather_timeout\",\n    label:\"InitialState.com Api Key\",\n    value: context.global.weather_timeout ||\"40\"\n});\n*/\nmsg.payload.int_txt_fields=int_txt_fields;\nmsg.payload.txt_fields=txt_fields;\nmsg.payload.scenes=[]\nfor (var s in context.global.winkState.scenes){\n    var scene=context.global.winkState.scenes[s];\n    if ('name' in scene){\n    msg.payload.scenes.push({\n        name:scene.name,\n        id:scene.id,\n        selected:(context.global.tab_ui_shortcuts.indexOf(scene.name)!=-1 ? true : false)\n    });\n    } else node.warn(scene);\n}\nmsg.payload.vaca_settings=[];\n\nmsg.payload.vaca_settings.push({\n    type:\"text\",    \n    item:\"vaca_delay\",\n    label:\"Delay befor activation (minutes)\",\n    value: context.global.vaca_delay || 15\n});\n\nif ('Presence' in context.global){\nmsg.payload.vaca_settings.push({\n    type:\"checkbox\",    \n    item:\"vaca_usePresence\",\n    label:\"Use Presence to turn mode off\",\n    isCheck:true,    \n    value: context.global.vaca_usePresence || false\n});\n}\n/*\nmsg.payload.vaca_settings.push({\n    type:\"checkbox\",    \n    item:\"vaca_wnr_schedules_off\",\n    label:\"Turn WNR schedules off\",\n    isCheck:true,    \n    value: context.global.vaca_wnr_schedules_off || false\n});\n*/\nvar VacModeLock=false;\nif('winkState' in context.global && 'winkDevCap' in context.global && 'locks' in context.global.winkState){\n     for (var l in context.global.winkState.locks){\n        var fields=context.global.winkDevCap[l].fields;\n        if (checkDevCap(fields)) { \n            VacModeLock=true; \n            break;\n        }\n    }\n}\nif (VacModeLock){\n    msg.payload.vaca_settings.push({\n        type:\"checkbox\",    \n        item:\"vaca_locks_vac\",\n        label:\"Turn on locks vacation mode\",\n        isCheck:true,    \n        value: context.global.vaca_locks_vac || false\n    });\n}\n\nmsg.payload.vaca_light_bulbs=[];\nfor (var l in context.global.winkState.light_bulbs){\n    var light=context.global.winkState.light_bulbs[l];\n    if ('name' in light){\n    msg.payload.vaca_light_bulbs.push({\n        name:light.name,\n        id:light.id,\n        selected:('vaca_light_bulbs' in context.global && context.global.vaca_light_bulbs.indexOf(light.name)!=-1 ? true : false)\n    });\n    } else node.warn(light);\n}\n\nfor (var l in context.global.winkState.binary_switches){\n    var light=context.global.winkState.binary_switches[l];\n    if ('name' in light){\n    msg.payload.vaca_light_bulbs.push({\n        name:light.name,\n        id:light.id,\n        selected:('vaca_light_bulbs' in context.global && context.global.vaca_light_bulbs.indexOf(light.name)!=-1 ? true : false)\n    });\n    } else node.warn(light);\n} \nif ('groups' in context.global.winkState){\n    msg.payload.vaca_groups=[];\n    for (var g in context.global.winkState.groups){\n        var group=context.global.winkState.groups[g];\n        if ('name' in group){\n        msg.payload.vaca_groups.push({\n            name:group.name,\n            id:group.id,\n            selected:('vaca_groups' in context.global && context.global.vaca_groups.indexOf(group.name)!=-1 ? true : false)\n        });\n        } else node.warn(group);\n    }\n}\n\ntxt_area_fields=[];\n\ntxt_area_fields.push({FosCam : JSON.stringify(context.global.foscam || \"\")});\ntxt_area_fields.push({SamsungCam : JSON.stringify(context.global.SamsungCam || \"\")});\ntxt_area_fields.push({DlinkCam : JSON.stringify(context.global.DlinkCam || \"\")});\ntxt_area_fields.push({camera_motion : JSON.stringify(context.global.camera_motion || \"\")});\n//txt_area_fields.push({tab_ui_shortcuts : JSON.stringify(context.global.tab_ui_shortcuts || \"\")});\nmsg.payload.txt_area_fields=txt_area_fields;\n\nmsg.statusCode=\"200\";\nreturn msg;\n}\nelse\n{\n    //msg.payload=\"Not Authorized\";\n   msg.statusCode=\"403\";\n   return msg;\n//   msg.res.send(\"403\",\"Forbidden\");\n//  return;\n}\n",
     "outputs": 1,
     "noerr": 0,
     "x": 376.4999694824219,
     "y": 1014,
     "wires": [
       [
-        "c4ce34a5.b029b8"
+        "a7639d20.a84bd"
       ]
     ]
   },
   {
-    "id": "d1f1514c.01ae",
+    "id": "853aecb.a31201",
     "type": "http in",
-    "z": "763654c7.cdd86c",
+    "z": "811c60ec.7ee3a",
     "name": "",
     "url": "/freeboard/save_cfg",
     "method": "post",
@@ -842,15 +939,15 @@
     "y": 1068,
     "wires": [
       [
-        "3e6955d5.b0300a",
-        "1000bc08.325674"
+        "c5bbc498.546828",
+        "c34c3f74.fadab"
       ]
     ]
   },
   {
-    "id": "3e6955d5.b0300a",
+    "id": "c5bbc498.546828",
     "type": "function",
-    "z": "763654c7.cdd86c",
+    "z": "811c60ec.7ee3a",
     "name": "",
     "func": "if (msg.payload.token ==context.global.FREEBOARD_TOKEN || context.global.getCookie('exchange_token',msg.req.headers.cookie)==context.global.FREEBOARD_TOKEN){\n    msg.statusCode=200;\n    for (var v in msg.payload){\n    if (v=='FREEBOARD_TOKEN' && msg.payload.FREEBOARD_TOKEN==='') msg.payload.FREEBOARD_TOKEN=context.global.generate_token('FREEBOARD_TOKEN');\n    if (v=='lat'){\n        if (typeof (context.global.HomeLocation) === 'undefined') context.global.HomeLocation={};\n        context.global.HomeLocation.lat=msg.payload['lat'];\n    } else if (v=='lon'){\n        if (typeof (context.global.HomeLocation) === 'undefined') context.global.HomeLocation={};\n        context.global.HomeLocation.lon=msg.payload['lon'];\n    }\n    else    context.global[v]=msg.payload[v];\n    }\n    if (!('motionAdjustTstat' in msg.payload)) context.global.motionAdjustTstat=false;\n    else context.global.motionAdjustTstat=true;\n    if (!('HoursFormat24' in msg.payload)) context.global.HoursFormat24=false;\n    else context.global.HoursFormat24=true;\n    \n    if (!('LightsNotification' in msg.payload)) context.global.LightsNotification=false;\n    else context.global.LightsNotification=true;\n    \n    if (!('LightsNotificationM' in msg.payload)) context.global.LightsNotificationM=false;\n    else context.global.LightsNotificationM=true;\n    \n    if (!('useRobots' in msg.payload)) context.global.useRobots=false;\n    else context.global.useRobots=true;\n    \n    if (!('SensorsNotificationM' in msg.payload)) context.global.SensorsNotificationM=false;\n    else context.global.SensorsNotificationM=true;\n    \n    if (!('vaca_usePresence' in msg.payload)) context.global.vaca_usePresence=false;\n    else context.global.vaca_usePresence=true;   \n    \n    if (!('vaca_wnr_schedules_off' in msg.payload)) context.global.vaca_wnr_schedules_off=false;\n    else context.global.vaca_wnr_schedules_off=true;\n\n    if (!('vaca_locks_vac' in msg.payload)) context.global.vaca_locks_vac=false;\n    else context.global.vaca_locks_vac=true;\n    \n      \n    \n}\nmsg.url=context.global.BlueMixUrlBase+'/red/update_app_cfg';\nmsg.method=\"POST\";\nmsg.headers= {\n    \"Authorization\":\"Bearer \"+context.global.FREEBOARD_TOKEN\n};\nmsg.payload={\n   db_mode:\"update\"\n}\nnode.send(msg)\n\n\n",
     "outputs": "1",
@@ -859,24 +956,24 @@
     "y": 1069,
     "wires": [
       [
-        "500e4955.588f08",
-        "e8520403.055798"
+        "ec9f5788.7584e8",
+        "13775015.77a4e"
       ]
     ]
   },
   {
-    "id": "500e4955.588f08",
+    "id": "ec9f5788.7584e8",
     "type": "http response",
-    "z": "763654c7.cdd86c",
+    "z": "811c60ec.7ee3a",
     "name": "",
     "x": 521,
     "y": 1104,
     "wires": []
   },
   {
-    "id": "e8520403.055798",
+    "id": "13775015.77a4e",
     "type": "http request",
-    "z": "763654c7.cdd86c",
+    "z": "811c60ec.7ee3a",
     "name": "",
     "method": "use",
     "ret": "txt",
@@ -888,9 +985,9 @@
     ]
   },
   {
-    "id": "14c2db7.f777625",
+    "id": "3c9ea770.713f98",
     "type": "http in",
-    "z": "763654c7.cdd86c",
+    "z": "811c60ec.7ee3a",
     "name": "",
     "url": "/freeboard/MySummaryJson",
     "method": "get",
@@ -899,14 +996,14 @@
     "y": 268,
     "wires": [
       [
-        "388b839c.666d4c"
+        "b7c5c793.f2d5a8"
       ]
     ]
   },
   {
-    "id": "1a427c2f.0d61e4",
+    "id": "27f7ca4c.3638d6",
     "type": "function",
-    "z": "763654c7.cdd86c",
+    "z": "811c60ec.7ee3a",
     "name": "",
     "func": "msg.topic='page';\nreturn msg;",
     "outputs": 1,
@@ -915,14 +1012,14 @@
     "y": 214,
     "wires": [
       [
-        "301f9ba1.6f24d4"
+        "2a72e4eb.2f3f3c"
       ]
     ]
   },
   {
-    "id": "388b839c.666d4c",
+    "id": "b7c5c793.f2d5a8",
     "type": "function",
-    "z": "763654c7.cdd86c",
+    "z": "811c60ec.7ee3a",
     "name": "",
     "func": "msg.topic='json';\nreturn msg;",
     "outputs": 1,
@@ -931,14 +1028,14 @@
     "y": 267,
     "wires": [
       [
-        "301f9ba1.6f24d4"
+        "2a72e4eb.2f3f3c"
       ]
     ]
   },
   {
-    "id": "3c5b6120.3d105e",
+    "id": "abb2b4e4.899828",
     "type": "switch",
-    "z": "763654c7.cdd86c",
+    "z": "811c60ec.7ee3a",
     "name": "",
     "property": "topic",
     "propertyType": "msg",
@@ -958,31 +1055,31 @@
     "y": 245,
     "wires": [
       [
-        "2d9de272.895ede",
-        "be0cb5f9.148858"
+        "62ba1d25.d51e74",
+        "4950f12e.1b2e3"
       ],
       [
-        "c8b2d248.bd6b2"
+        "cbe7d8ba.ae06b8"
       ]
     ]
   },
   {
-    "id": "c8b2d248.bd6b2",
+    "id": "cbe7d8ba.ae06b8",
     "type": "json",
-    "z": "763654c7.cdd86c",
+    "z": "811c60ec.7ee3a",
     "name": "",
     "x": 851,
     "y": 272,
     "wires": [
       [
-        "a298d1fd.d0c93"
+        "a19e1c1.4a0d4e"
       ]
     ]
   },
   {
-    "id": "fe70668e.37cea8",
+    "id": "4ae2cc6a.8f8304",
     "type": "function",
-    "z": "763654c7.cdd86c",
+    "z": "811c60ec.7ee3a",
     "name": "Generate Freeboard by Group",
     "func": "if (msg.payload.auth ==context.global.FREEBOARD_TOKEN){\nvar pane_idx = {};\nvar freeboard = {}\nvar bulbs = 0;\nfreeboard.version=\"2\";\nfreeboard.allow_edit=false;\nfreeboard.panes=[];\nfreeboard.plugins= [];\nvar i=0;\n\nfor (var key in context.global.winkState.sensor_pods)\n{\n    if (typeof context.global.winkState.sensor_pods[key].motion !== 'undefined') \n    { \n        if( typeof pane_idx.motion !=='undefined') \n        {\n            pane_id=pane_idx.motion; //motion\n        } else\n        {\n            freeboard.panes.push(  {\n                \"title\":\"Motion Sensors\",\n                \"width\": 1,\n                \"row\": {\n                    \"3\": 1\n                },\n                \"col\": {\n                    \"3\": 1\n                },\n                \"col_width\": 1,\n                widgets:[]\n            });\n            pane_idx.motion=i;\n            pane_id=i;\n            i++;\n        }\n    } else if (typeof context.global.winkState.sensor_pods[key].opened !== 'undefined') \n    {\n        if( typeof pane_idx.trippers !=='undefined') \n        {\n            pane_id=pane_idx.trippers; //motion\n        } else\n        {\n            freeboard.panes.push(  {\n                \"title\":\"Trippers\",\n                \"width\": 1,\n                \"row\": {\n                    \"3\": 1\n                },\n                \"col\": {\n                    \"3\": 1\n                },\n                \"col_width\": 1,\n                widgets:[]\n            });\n            pane_idx.trippers=i;\n            pane_id=i;\n            i++;\n        }\n\n    }\n    else\n    {\n        //other sensors pane\n        if( typeof pane_idx.other !=='undefined') \n        {\n            pane_id=pane_idx.other; //motion\n        } else\n        {\n            freeboard.panes.push(  {\n                \"title\":\"Multi Sensors\",\n                \"width\": 1,\n                \"row\": {\n                    \"3\": 1\n                },\n                \"col\": {\n                    \"3\": 1\n                },\n                \"col_width\": 1,\n                widgets:[]\n            });\n            pane_idx.other=i;\n            pane_id=i;\n            i++;\n        }\n    }\n    if(key in context.global.winkDevCap && context.global.winkDevCap[key].fields)\n    {\n        for (s=0; s<context.global.winkDevCap[key].fields.length;s++)\n        {\n            var field=context.global.winkDevCap[key].fields[s].field\n            if( context.global.winkState.sensor_pods[key][field] !== null)\n            {\n/*                if (field=='coordinates') {\n                    freeboard.panes[pane_id].widgets.push(\n                     {\n                         \"type\": \"google_map\",\n                         \"settings\": \n                          {\n                            lat:'datasources[\\\"Node-Red\\\"][\\\"WinkData\\\"][\\\"sensor_pods\\\"][\\\"' + key + '\\\"][\\\"lat\\\"]',\n                            lon:'datasources[\\\"Node-Red\\\"][\\\"WinkData\\\"][\\\"sensor_pods\\\"][\\\"' + key + '\\\"][\\\"lon\\\"]'\n                          }\n                     });\n                }\n                else {*/\n                freeboard.panes[pane_id].widgets.push(\n                 {\n                     \"type\": \"indicator\",\n                     \"settings\": \n                      {\n                          \"title\":key + \" \" + field.replace(\"_\",\" \").replace(/opened|detected|motion|occupied|state/,\"\"),\n                          \"value\":\"wink.indicator.value(datasources[\\\"Node-Red\\\"] && datasources[\\\"Node-Red\\\"][\\\"WinkData\\\"][\\\"sensor_pods\\\"][\\\"\" + key + \"\\\"],\\\"\" + field +\"\\\")\",\n                          \"on_text\":\"wink.indicator.on_text(datasources[\\\"Node-Red\\\"] && datasources[\\\"Node-Red\\\"][\\\"WinkData\\\"][\\\"sensor_pods\\\"][\\\"\" + key + \"\\\"],\\\"\" + field +\"\\\")\",\n                          \"off_text\":\"wink.indicator.off_text(datasources[\\\"Node-Red\\\"] && datasources[\\\"Node-Red\\\"][\\\"WinkData\\\"][\\\"sensor_pods\\\"][\\\"\" + key + \"\\\"],\\\"\" + field +\"\\\")\",\n                          \"style_element\":\"wink.indicator.style_element(datasources[\\\"Node-Red\\\"] && datasources[\\\"Node-Red\\\"][\\\"WinkData\\\"][\\\"sensor_pods\\\"][\\\"\" + key + \"\\\"],\\\"\" + field +\"\\\")\"\n                      }\n                 });\n//                } \n            }\n      }\n   }\n} //end sensor pods\n//i=0;\n\nfor (var key in context.global.winkState.groups)\n{\n    if(key.substring(0,1)!==\".\" && key.substring(0,1)!==\"@\" && context.global.winkState.groups[key].members)\n    {\n        freeboard.panes.push(  {\n            \"title\":context.global.winkState.groups[key].name + \" -  Lights and Switches\",\n            \"width\": 1,\n            \"row\": {\n                \"3\": 1\n            },\n            \"col\": {\n                \"3\": 1\n            },\n            \"col_width\": 1,\n            widgets:[]\n        });\n        pane_idx.key=i;\n        pane_id=i;\n        i++;\n        \n        for (var light_bulbs in context.global.winkState.groups[key].members)\n        {\n            light_type=context.global.winkState.groups[key].members[light_bulbs].object_type\n            freeboard.panes[pane_id].widgets.push(\n            {\n                \"type\": \"indicator\",\n                \"settings\": {\n                \"title\":light_bulbs,\n                \"value\":\"wink.indicator.value(datasources[\\\"Node-Red\\\"] && datasources[\\\"Node-Red\\\"][\\\"WinkData\\\"][\\\"\"+light_type+\"\\\"][\\\"\" + light_bulbs + \"\\\"])\",\n                \"on_text\":\"wink.indicator.on_text(datasources[\\\"Node-Red\\\"] && datasources[\\\"Node-Red\\\"][\\\"WinkData\\\"][\\\"\"+light_type+\"\\\"][\\\"\" + light_bulbs + \"\\\"])\",\n                \"off_text\":\"wink.indicator.off_text(datasources[\\\"Node-Red\\\"] && datasources[\\\"Node-Red\\\"][\\\"WinkData\\\"][\\\"\"+light_type+\"\\\"][\\\"\" + light_bulbs + \"\\\"])\",\n                \"style_element\":\"wink.indicator.style_element(datasources[\\\"Node-Red\\\"] && datasources[\\\"Node-Red\\\"][\\\"WinkData\\\"][\\\"\"+light_type+\"\\\"][\\\"\" + light_bulbs + \"\\\"])\"\n                }\n            })\n            bulbs++;\n            context.global.winkState[light_type][light_bulbs].freeboard = 1;\n        }\n    }\n}\n\n\n\nfor (var key in context.global.winkState.binary_switches){\nif (context.global.winkState.binary_switches[key].freeboard && context.global.winkState.binary_switches[key].freeboard!=1)\n{\n    if( typeof pane_idx.lights !=='undefined') \n    {\n        pane_id=pane_idx.lights; //motion\n    } else\n    {\n        freeboard.panes.push(  {\n            \"title\":\"Switches\",\n            \"width\": 1,\n            \"row\": {\n                \"3\": 1\n            },\n            \"col\": {\n                \"3\": 1\n            },\n            \"col_width\": 1,\n            widgets:[]\n        });\n        pane_idx.lights=i;\n        pane_id=i;\n        i++;\n    }\n  \n    freeboard.panes[pane_id].widgets.push(\n    {\n    \"type\": \"indicator\",\n    \"settings\": {\n        \"title\":key,\n        \"value\":\"wink.indicator.value(datasources[\\\"Node-Red\\\"] && datasources[\\\"Node-Red\\\"][\\\"WinkData\\\"][\\\"binary_switches\\\"][\\\"\" + key + \"\\\"])\",\n        \"on_text\":\"wink.indicator.on_text(datasources[\\\"Node-Red\\\"] && datasources[\\\"Node-Red\\\"][\\\"WinkData\\\"][\\\"binary_switches\\\"][\\\"\" + key + \"\\\"])\",\n        \"off_text\":\"wink.indicator.off_text(datasources[\\\"Node-Red\\\"] && datasources[\\\"Node-Red\\\"][\\\"WinkData\\\"][\\\"binary_switches\\\"][\\\"\" + key + \"\\\"])\",\n        \"style_element\":\"wink.indicator.style_element(datasources[\\\"Node-Red\\\"] && datasources[\\\"Node-Red\\\"][\\\"WinkData\\\"][\\\"binary_switches\\\"][\\\"\" + key + \"\\\"])\"\n    }\n})\n}\n}// end bin switches\n\n\nfor (var key in context.global.winkState.light_bulbs){\nif (context.global.winkState.light_bulbs[key].freeboard && context.global.winkState.light_bulbs[key].freeboard!=1)\n{\n    if( typeof pane_idx.lights !=='undefined') \n    {\n        pane_id=pane_idx.lights; //motion\n    } else\n    {\n        freeboard.panes.push(  {\n            \"title\":\"Lights and Switches\",\n            \"width\": 1,\n            \"row\": {\n                \"3\": 1\n            },\n            \"col\": {\n                \"3\": 1\n            },\n            \"col_width\": 1,\n            widgets:[]\n        });\n        pane_idx.lights=i;\n        pane_id=i;\n        i++;\n    }\n    freeboard.panes[pane_id].widgets.push(\n    {\n        \"type\": \"indicator\",\n        \"settings\": {\n            \"title\":key,\n            \"value\":\"wink.indicator.value(datasources[\\\"Node-Red\\\"] && datasources[\\\"Node-Red\\\"][\\\"WinkData\\\"][\\\"light_bulbs\\\"][\\\"\" + key + \"\\\"])\",\n            \"on_text\":\"wink.indicator.on_text(datasources[\\\"Node-Red\\\"] && datasources[\\\"Node-Red\\\"][\\\"WinkData\\\"][\\\"light_bulbs\\\"][\\\"\" + key + \"\\\"])\",\n            \"off_text\":\"wink.indicator.off_text(datasources[\\\"Node-Red\\\"] && datasources[\\\"Node-Red\\\"][\\\"WinkData\\\"][\\\"light_bulbs\\\"][\\\"\" + key + \"\\\"])\",\n            \"style_element\":\"wink.indicator.style_element(datasources[\\\"Node-Red\\\"] && datasources[\\\"Node-Red\\\"][\\\"WinkData\\\"][\\\"light_bulbs\\\"][\\\"\" + key + \"\\\"])\"\n        }\n    })\n}\n} // end light bulbs\n\n\nfor (var key in context.global.winkState.powerstrips)\n{\n    if( typeof pane_idx.powerstrips !=='undefined') \n    {\n        pane_id=pane_idx.powerstrips; //motion\n    } else\n    {\n        freeboard.panes.push(  {\n            \"title\":\"Powerstrips\",\n            \"width\": 1,\n            \"row\": {\n                \"3\": 1\n            },\n            \"col\": {\n                \"3\": 1\n            },\n            \"col_width\": 1,\n            widgets:[]\n        });\n        pane_idx.powerstrips=i;\n        pane_id=i;\n        i++;\n    }\n    if (typeof context.global.winkState.powerstrips[key].powered !== 'undefined'){\n    freeboard.panes[pane_id].widgets.push(\n    {\n        \"type\": \"indicator\",\n        \"settings\": {\n            \"title\":key,\n            \"value\":\"wink.indicator.value(datasources[\\\"Node-Red\\\"] && datasources[\\\"Node-Red\\\"][\\\"WinkData\\\"][\\\"powerstrips\\\"][\\\"\" + key + \"\\\"])\",\n            \"on_text\":\"wink.indicator.on_text(datasources[\\\"Node-Red\\\"] && datasources[\\\"Node-Red\\\"][\\\"WinkData\\\"][\\\"powerstrips\\\"][\\\"\" + key + \"\\\"])\",\n            \"off_text\":\"wink.indicator.off_text(datasources[\\\"Node-Red\\\"] && datasources[\\\"Node-Red\\\"][\\\"WinkData\\\"][\\\"powerstrips\\\"][\\\"\" + key + \"\\\"])\",\n            \"style_element\":\"wink.indicator.style_element(datasources[\\\"Node-Red\\\"] && datasources[\\\"Node-Red\\\"][\\\"WinkData\\\"][\\\"powerstrips\\\"][\\\"\" + key + \"\\\"])\"\n        }\n    })\n    }\n} // end light bulbs\n\nfor (var key in context.global.winkState.locks)\n{\n    if( typeof pane_idx.locks !=='undefined') \n    {\n        pane_id=pane_idx.locks; //motion\n    } else\n    {\n        freeboard.panes.push(  {\n            \"title\":\"Locks\",\n            \"width\": 1,\n            \"row\": {\n                \"3\": 1\n            },\n            \"col\": {\n                \"3\": 1\n            },\n            \"col_width\": 1,\n            widgets:[]\n        });\n        pane_idx.locks=i;\n        pane_id=i;\n        i++;\n    }\n    freeboard.panes[pane_id].widgets.push(\n{\n    \"type\": \"indicator\",\n    \"settings\": {\n        \"title\":key,\n        \"value\":\"wink.indicator.value(datasources[\\\"Node-Red\\\"] && datasources[\\\"Node-Red\\\"][\\\"WinkData\\\"][\\\"locks\\\"][\\\"\" + key + \"\\\"])\",\n        \"on_text\":\"wink.indicator.on_text(datasources[\\\"Node-Red\\\"] && datasources[\\\"Node-Red\\\"][\\\"WinkData\\\"][\\\"locks\\\"][\\\"\" + key + \"\\\"])\",\n        \"off_text\":\"wink.indicator.off_text(datasources[\\\"Node-Red\\\"] && datasources[\\\"Node-Red\\\"][\\\"WinkData\\\"][\\\"locks\\\"][\\\"\" + key + \"\\\"])\",\n        \"style_element\":\"wink.indicator.style_element(datasources[\\\"Node-Red\\\"] && datasources[\\\"Node-Red\\\"][\\\"WinkData\\\"][\\\"locks\\\"][\\\"\" + key + \"\\\"])\"\n    }\n})\n    if (typeof context.global.winkState.locks[key].battery !== 'undefined')\n    {\n        freeboard.panes[pane_id].widgets.push(\n{\n    \"type\": \"indicator\",\n    \"settings\": {\n        \"title\":key + \" battery\",\n        \"value\":\"wink.indicator.value(datasources[\\\"Node-Red\\\"] && datasources[\\\"Node-Red\\\"][\\\"WinkData\\\"][\\\"locks\\\"][\\\"\" + key + \"\\\"],\\\"battery\\\")\",\n        \"on_text\":\"wink.indicator.on_text(datasources[\\\"Node-Red\\\"] && datasources[\\\"Node-Red\\\"][\\\"WinkData\\\"][\\\"locks\\\"][\\\"\" + key + \"\\\"],\\\"battery\\\")\",\n        \"off_text\":\"wink.indicator.off_text(datasources[\\\"Node-Red\\\"] && datasources[\\\"Node-Red\\\"][\\\"WinkData\\\"][\\\"locks\\\"][\\\"\" + key + \"\\\"],\\\"battery\\\")\",\n        \"style_element\":\"wink.indicator.style_element(datasources[\\\"Node-Red\\\"] && datasources[\\\"Node-Red\\\"][\\\"WinkData\\\"][\\\"locks\\\"][\\\"\" + key + \"\\\"],\\\"battery\\\")\"\n    }\n})\n}\n} //end locks\nfor (var key in context.global.winkState.smoke_detectors)\n{\n    if( typeof pane_idx.smoke !=='undefined') \n    {\n        pane_id=pane_idx.smoke; //motion\n    } else\n    {\n        freeboard.panes.push(  {\n            \"title\":\"Smoke Detectors\",\n            \"width\": 1,\n            \"row\": {\n                \"3\": 1\n            },\n            \"col\": {\n                \"3\": 1\n            },\n            \"col_width\": 1,\n            widgets:[]\n        });\n        pane_idx.smoke=i;\n        pane_id=i;\n        i++;\n    }\n    freeboard.panes[pane_id].widgets.push(\n{\n    \"type\": \"indicator\",\n    \"settings\": {\n        \"title\":key + (context.global.winkState.smoke_detectors[key].connection ? \" Smoke\" : \" Offline\"),\n        \"value\":\"wink.indicator.value(datasources[\\\"Node-Red\\\"] && datasources[\\\"Node-Red\\\"][\\\"WinkData\\\"][\\\"smoke_detectors\\\"][\\\"\" + key + \"\\\"],\\\"smoke_detected\\\")\",\n        \"on_text\":\"wink.indicator.on_text(datasources[\\\"Node-Red\\\"] && datasources[\\\"Node-Red\\\"][\\\"WinkData\\\"][\\\"smoke_detectors\\\"][\\\"\" + key + \"\\\"],\\\"smoke_detected\\\")\",\n        \"off_text\":\"wink.indicator.off_text(datasources[\\\"Node-Red\\\"] && datasources[\\\"Node-Red\\\"][\\\"WinkData\\\"][\\\"smoke_detectors\\\"][\\\"\" + key + \"\\\"],\\\"smoke_detected\\\")\",\n        \"style_element\":\"wink.indicator.style_element(datasources[\\\"Node-Red\\\"] && datasources[\\\"Node-Red\\\"][\\\"WinkData\\\"][\\\"smoke_detectors\\\"][\\\"\" + key + \"\\\"],\\\"smoke_detected\\\")\"\n    }\n})\n    \n    freeboard.panes[pane_id].widgets.push(\n{\n    \"type\": \"indicator\",\n    \"settings\": {\n        \"title\":key + (context.global.winkState.smoke_detectors[key].connection ? \" CO2\" : \" Offline\"),\n        \"value\":\"wink.indicator.value(datasources[\\\"Node-Red\\\"] && datasources[\\\"Node-Red\\\"][\\\"WinkData\\\"][\\\"smoke_detectors\\\"][\\\"\" + key + \"\\\"],\\\"co_detected\\\")\",\n        \"on_text\":\"wink.indicator.on_text(datasources[\\\"Node-Red\\\"] && datasources[\\\"Node-Red\\\"][\\\"WinkData\\\"][\\\"smoke_detectors\\\"][\\\"\" + key + \"\\\"],\\\"co_detected\\\")\",\n        \"off_text\":\"wink.indicator.off_text(datasources[\\\"Node-Red\\\"] && datasources[\\\"Node-Red\\\"][\\\"WinkData\\\"][\\\"smoke_detectors\\\"][\\\"\" + key + \"\\\"],\\\"co_detected\\\")\",\n        \"style_element\":\"wink.indicator.style_element(datasources[\\\"Node-Red\\\"] && datasources[\\\"Node-Red\\\"][\\\"WinkData\\\"][\\\"smoke_detectors\\\"][\\\"\" + key + \"\\\"],\\\"co_detected\\\")\"\n    }\n})\nif (typeof context.global.winkState.smoke_detectors[key].battery !== 'undefined')\n    {\n        freeboard.panes[pane_id].widgets.push(\n{\n    \"type\": \"indicator\",\n    \"settings\": {\n        \"title\":key + \" battery\",\n        \"value\":\"wink.indicator.value(datasources[\\\"Node-Red\\\"] && datasources[\\\"Node-Red\\\"][\\\"WinkData\\\"][\\\"smoke_detectors\\\"][\\\"\" + key + \"\\\"],\\\"battery\\\")\",\n        \"on_text\":\"wink.indicator.on_text(datasources[\\\"Node-Red\\\"] && datasources[\\\"Node-Red\\\"][\\\"WinkData\\\"][\\\"smoke_detectors\\\"][\\\"\" + key + \"\\\"],\\\"battery\\\")\",\n        \"off_text\":\"wink.indicator.off_text(datasources[\\\"Node-Red\\\"] && datasources[\\\"Node-Red\\\"][\\\"WinkData\\\"][\\\"smoke_detectors\\\"][\\\"\" + key + \"\\\"],\\\"battery\\\")\",\n        \"style_element\":\"wink.indicator.style_element(datasources[\\\"Node-Red\\\"] && datasources[\\\"Node-Red\\\"][\\\"WinkData\\\"][\\\"smoke_detectors\\\"][\\\"\" + key + \"\\\"],\\\"battery\\\")\"\n    }\n})\n}\n} //end smoke detectors\n\nfor (var key in context.global.winkState.thermostats)\n{\n    if( typeof pane_idx.tstats !=='undefined') \n    {\n        pane_id=pane_idx.tstats; //motion\n    } else\n    {\n        freeboard.panes.push(  {\n            \"title\":\"Thermostats\",\n            \"width\": 1,\n            \"row\": {\n                \"3\": 1\n            },\n            \"col\": {\n                \"3\": 1\n            },\n            \"col_width\": 1,\n            widgets:[]\n        });\n        pane_idx.tstats=i;\n        pane_id=i;\n        i++;\n    }\n\n//added so thermostats without max_set_point won't show [ecobee sensor compatibility]\nif (context.global.winkState.thermostats[key].max_set_point>0)\n{\n    freeboard.panes[pane_id].widgets.push(\n    {\n        \"type\": \"indicator\",\n        \"settings\": {\n            \"title\":key,\n            \"value\":\"wink.indicator.value(datasources[\\\"Node-Red\\\"] && datasources[\\\"Node-Red\\\"][\\\"WinkData\\\"][\\\"thermostats\\\"][\\\"\" + key + \"\\\"],\\\"mode\\\")\",\n            \"on_text\":\"wink.indicator.on_text(datasources[\\\"Node-Red\\\"] && datasources[\\\"Node-Red\\\"][\\\"WinkData\\\"][\\\"thermostats\\\"][\\\"\" + key + \"\\\"],\\\"mode\\\")\",\n            \"off_text\":\"wink.indicator.off_text(datasources[\\\"Node-Red\\\"] && datasources[\\\"Node-Red\\\"][\\\"WinkData\\\"][\\\"thermostats\\\"][\\\"\" + key + \"\\\"],\\\"mode\\\")\",\n            \"style_element\":\"wink.indicator.style_element(datasources[\\\"Node-Red\\\"] && datasources[\\\"Node-Red\\\"][\\\"WinkData\\\"][\\\"thermostats\\\"][\\\"\" + key + \"\\\"],\\\"mode\\\")\"\n        }\n    })\n}\n//if (typeof context.global.winkState.thermostats[key].users_away !== 'undefined')\n//    {\nfreeboard.panes[pane_id].widgets.push(\n{\n    \"type\": \"indicator\",\n    \"settings\": {\n        \"title\":key+\" Current temperature\",\n        \"value\":\"wink.indicator.value(datasources[\\\"Node-Red\\\"] && datasources[\\\"Node-Red\\\"][\\\"WinkData\\\"][\\\"thermostats\\\"][\\\"\" + key + \"\\\"],\\\"temperature\\\")\",\n        \"on_text\":\"wink.indicator.on_text(datasources[\\\"Node-Red\\\"] && datasources[\\\"Node-Red\\\"][\\\"WinkData\\\"][\\\"thermostats\\\"][\\\"\" + key + \"\\\"],\\\"temperature\\\")\",\n        \"off_text\":\"wink.indicator.off_text(datasources[\\\"Node-Red\\\"] && datasources[\\\"Node-Red\\\"][\\\"WinkData\\\"][\\\"thermostats\\\"][\\\"\" + key + \"\\\"],\\\"temperature\\\")\",\n        \"style_element\":\"wink.indicator.style_element(datasources[\\\"Node-Red\\\"] && datasources[\\\"Node-Red\\\"][\\\"WinkData\\\"][\\\"thermostats\\\"][\\\"\" + key + \"\\\"],\\\"temperature\\\")\"\n    }\n})\n//}\n} //end thermostats\n\nfor (var key in context.global.winkState.air_conditioners)\n{\n    if( typeof pane_idx.air_con !=='undefined') \n    {\n        pane_id=pane_idx.air_con; //motion\n    } else\n    {\n        freeboard.panes.push(  {\n            \"title\":\"Air Conditioners\",\n            \"width\": 1,\n            \"row\": {\n                \"3\": 1\n            },\n            \"col\": {\n                \"3\": 1\n            },\n            \"col_width\": 1,\n            widgets:[]\n        });\n        pane_idx.air_con=i;\n        pane_id=i;\n        i++;\n    }\n    freeboard.panes[pane_id].widgets.push(\n{\n    \"type\": \"indicator\",\n    \"settings\": {\n        \"title\":key,\n        \"value\":\"wink.indicator.value(datasources[\\\"Node-Red\\\"] && datasources[\\\"Node-Red\\\"][\\\"WinkData\\\"][\\\"air_conditioners\\\"][\\\"\" + key + \"\\\"])\",\n        \"on_text\":\"wink.indicator.on_text(datasources[\\\"Node-Red\\\"] && datasources[\\\"Node-Red\\\"][\\\"WinkData\\\"][\\\"air_conditioners\\\"][\\\"\" + key + \"\\\"])\",\n        \"off_text\":\"wink.indicator.off_text(datasources[\\\"Node-Red\\\"] && datasources[\\\"Node-Red\\\"][\\\"WinkData\\\"][\\\"air_conditioners\\\"][\\\"\" + key + \"\\\"])\",\n        \"style_element\":\"wink.indicator.style_element(datasources[\\\"Node-Red\\\"] && datasources[\\\"Node-Red\\\"][\\\"WinkData\\\"][\\\"air_conditioners\\\"][\\\"\" + key + \"\\\"])\"\n    }\n})\nfreeboard.panes[pane_id].widgets.push(\n{\n    \"type\": \"indicator\",\n    \"settings\": {\n        \"title\":key+ ' temperature',\n        \"value\":\"wink.indicator.value(datasources[\\\"Node-Red\\\"] && datasources[\\\"Node-Red\\\"][\\\"WinkData\\\"][\\\"air_conditioners\\\"][\\\"\" + key + \"\\\"],\\\"temperature\\\")\",\n        \"on_text\":\"wink.indicator.on_text(datasources[\\\"Node-Red\\\"] && datasources[\\\"Node-Red\\\"][\\\"WinkData\\\"][\\\"air_conditioners\\\"][\\\"\" + key + \"\\\"],\\\"temperature\\\")\",\n        \"off_text\":\"wink.indicator.off_text(datasources[\\\"Node-Red\\\"] && datasources[\\\"Node-Red\\\"][\\\"WinkData\\\"][\\\"air_conditioners\\\"][\\\"\" + key + \"\\\"],\\\"temperature\\\")\",\n        \"style_element\":\"wink.indicator.style_element(datasources[\\\"Node-Red\\\"] && datasources[\\\"Node-Red\\\"][\\\"WinkData\\\"][\\\"air_conditioners\\\"][\\\"\" + key + \"\\\"],\\\"temperature\\\")\"\n    }\n\n})\n\n}\n\nfor (var key in context.global.winkState.propane_tanks)\n{\n    if( typeof pane_idx.prop_tnk !=='undefined') \n    {\n        pane_id=pane_idx.prop_tnk; //motion\n    } else\n    {\n        freeboard.panes.push(  {\n            \"title\":\"Propane Tanks\",\n            \"width\": 1,\n            \"row\": {\n                \"3\": 1\n            },\n            \"col\": {\n                \"3\": 1\n            },\n            \"col_width\": 1,\n            widgets:[]\n        });\n        pane_idx.prop_tnk=i;\n        pane_id=i;\n        i++;\n    }\n    freeboard.panes[pane_id].widgets.push(\n{\n    \"type\": \"indicator\",\n    \"settings\": {\n        \"title\":key,\n        \"value\":\"wink.indicator.value(datasources[\\\"Node-Red\\\"] && datasources[\\\"Node-Red\\\"][\\\"WinkData\\\"][\\\"propane_tanks\\\"][\\\"\" + key + \"\\\"])\",\n        \"on_text\":\"wink.indicator.on_text(datasources[\\\"Node-Red\\\"] && datasources[\\\"Node-Red\\\"][\\\"WinkData\\\"][\\\"propane_tanks\\\"][\\\"\" + key + \"\\\"],\\\"remaining\\\")\",\n        \"off_text\":\"wink.indicator.off_text(datasources[\\\"Node-Red\\\"] && datasources[\\\"Node-Red\\\"][\\\"WinkData\\\"][\\\"propane_tanks\\\"][\\\"\" + key + \"\\\"],\\\"remaining\\\")\",\n        \"style_element\":\"wink.indicator.style_element(datasources[\\\"Node-Red\\\"] && datasources[\\\"Node-Red\\\"][\\\"WinkData\\\"][\\\"propane_tanks\\\"][\\\"\" + key + \"\\\"])\"\n    }\n})\nfreeboard.panes[pane_id].widgets.push(\n{\n        \"type\": \"indicator\",\n         \"settings\": {\n        \"title\":key + ' Battery',\n        \"value\":\"wink.indicator.value(datasources[\\\"Node-Red\\\"] && datasources[\\\"Node-Red\\\"][\\\"WinkData\\\"][\\\"propane_tanks\\\"][\\\"\" + key + \"\\\"],\\\"battery\\\")\",\n        \"on_text\":\"wink.indicator.on_text(datasources[\\\"Node-Red\\\"] && datasources[\\\"Node-Red\\\"][\\\"WinkData\\\"][\\\"propane_tanks\\\"][\\\"\" + key + \"\\\"],\\\"battery\\\")\",\n        \"off_text\":\"wink.indicator.off_text(datasources[\\\"Node-Red\\\"] && datasources[\\\"Node-Red\\\"][\\\"WinkData\\\"][\\\"propane_tanks\\\"][\\\"\" + key + \"\\\"],\\\"battery\\\")\",\n        \"style_element\":\"wink.indicator.style_element(datasources[\\\"Node-Red\\\"] && datasources[\\\"Node-Red\\\"][\\\"WinkData\\\"][\\\"propane_tanks\\\"][\\\"\" + key + \"\\\"],\\\"battery\\\")\"\n         }\n})\n\n}\n\nfor (var key in context.global.winkState.garage_doors)\n{\n    if( typeof pane_idx.garage !=='undefined') \n    {\n        pane_id=pane_idx.garage; //motion\n    } else\n    {\n        freeboard.panes.push(  {\n            \"title\":\"Garage doors\",\n            \"width\": 1,\n            \"row\": {\n                \"3\": 1\n            },\n            \"col\": {\n                \"3\": 1\n            },\n            \"col_width\": 1,\n            widgets:[]\n        });\n        pane_idx.garage=i;\n        pane_id=i;\n        i++;\n    }\n    freeboard.panes[pane_id].widgets.push(\n{\n    \"type\": \"indicator\",\n    \"settings\": {\n        \"title\":key + (context.global.winkState.garage_doors[key].connection ? \" - Online\" : \" - Off\"),\n        \"value\":\"wink.indicator.value(datasources[\\\"Node-Red\\\"] && datasources[\\\"Node-Red\\\"][\\\"WinkData\\\"][\\\"garage_doors\\\"][\\\"\" + key + \"\\\"])\",\n        \"on_text\":\"wink.indicator.on_text(datasources[\\\"Node-Red\\\"] && datasources[\\\"Node-Red\\\"][\\\"WinkData\\\"][\\\"garage_doors\\\"][\\\"\" + key + \"\\\"])\",\n        \"off_text\":\"wink.indicator.off_text(datasources[\\\"Node-Red\\\"] && datasources[\\\"Node-Red\\\"][\\\"WinkData\\\"][\\\"garage_doors\\\"][\\\"\" + key + \"\\\"])\",\n        \"style_element\":\"wink.indicator.style_element(datasources[\\\"Node-Red\\\"] && datasources[\\\"Node-Red\\\"][\\\"WinkData\\\"][\\\"garage_doors\\\"][\\\"\" + key + \"\\\"])\"\n    }\n})\n    \n}\n\nfor (var key in context.global.winkState.piggy_banks)\n{\n    if( typeof pane_idx.porky !=='undefined') \n    {\n        pane_id=pane_idx.porky; //porky banko\n    } else\n    {\n        freeboard.panes.push(  {\n            \"title\":\"Piggy Banks\",\n            \"width\": 1,\n            \"row\": {\n                \"3\": 1\n            },\n            \"col\": {\n                \"3\": 1\n            },\n            \"col_width\": 1,\n            widgets:[]\n        });\n        pane_idx.porky=i;\n        pane_id=i;\n        i++;\n    }\n    freeboard.panes[pane_id].widgets.push(\n{\n    \"type\": \"indicator\",\n    \"settings\": {\n        \"title\":key,\n        \"value\":\"wink.indicator.value(datasources[\\\"Node-Red\\\"] && datasources[\\\"Node-Red\\\"][\\\"WinkData\\\"][\\\"piggy_banks\\\"][\\\"\" + key + \"\\\"])\",\n        \"on_text\":\"wink.indicator.on_text(datasources[\\\"Node-Red\\\"] && datasources[\\\"Node-Red\\\"][\\\"WinkData\\\"][\\\"piggy_banks\\\"][\\\"\" + key + \"\\\"])\",\n        \"off_text\":\"wink.indicator.off_text(datasources[\\\"Node-Red\\\"] && datasources[\\\"Node-Red\\\"][\\\"WinkData\\\"][\\\"piggy_banks\\\"][\\\"\" + key + \"\\\"])\",\n        \"style_element\":\"wink.indicator.style_element(datasources[\\\"Node-Red\\\"] && datasources[\\\"Node-Red\\\"][\\\"WinkData\\\"][\\\"piggy_banks\\\"][\\\"\" + key + \"\\\"])\"\n    }\n})\n    \n}\n\n\n\nfor (var key in context.global.winkState.hubs)\n{\n    if( typeof pane_idx.hubs !=='undefined') \n    {\n        pane_id=pane_idx.hubs; //motion\n    } else\n    {\n        freeboard.panes.push(  {\n            \"title\":\"Hubs\",\n            \"width\": 1,\n            \"row\": {\n                \"3\": 1\n            },\n            \"col\": {\n                \"3\": 1\n            },\n            \"col_width\": 1,\n            widgets:[]\n        });\n        pane_idx.hubs=i;\n        pane_id=i;\n        i++;\n    }\n    freeboard.panes[pane_id].widgets.push(\n{\n    \"type\": \"indicator\",\n    \"settings\": {\n        \"title\":key,\n        \"value\":\"wink.indicator.value(datasources[\\\"Node-Red\\\"] && datasources[\\\"Node-Red\\\"][\\\"WinkData\\\"][\\\"hubs\\\"][\\\"\" + key + \"\\\"])\",\n        \"on_text\":\"wink.indicator.on_text(datasources[\\\"Node-Red\\\"] && datasources[\\\"Node-Red\\\"][\\\"WinkData\\\"][\\\"hubs\\\"][\\\"\" + key + \"\\\"])\",\n        \"off_text\":\"wink.indicator.off_text(datasources[\\\"Node-Red\\\"] && datasources[\\\"Node-Red\\\"][\\\"WinkData\\\"][\\\"hubs\\\"][\\\"\" + key + \"\\\"])\",\n        \"style_element\":\"wink.indicator.style_element(datasources[\\\"Node-Red\\\"] && datasources[\\\"Node-Red\\\"][\\\"WinkData\\\"][\\\"hubs\\\"][\\\"\" + key + \"\\\"])\"\n    }\n}\n)\n\nif (context.global.winkState.hubs[key].firmware_version !== null)\n    {\nfreeboard.panes[pane_id].widgets.push(\n{\n    \"type\": \"text_widget\",\n    \"settings\": {\n        \"title\":\"Current firmware\",\n        \"value\":\"datasources[\\\"Node-Red\\\"][\\\"WinkData\\\"][\\\"hubs\\\"][\\\"\" + key + \"\\\"][\\\"firmware_version\\\"]\",\n        \"size\":\"regular\",\n        \"animate\":\"true\"\n    }\n})\n}\n}\n\nfor (var key in context.global.Presence){\n    if( typeof pane_idx.presence !=='undefined') \n        {\n            pane_id=pane_idx.presence; //motion\n        } else\n        {\n            freeboard.panes.push(  {\n                \"title\":\"Presence\",\n                \"width\": 1,\n                \"row\": {\n                    \"3\": 1\n                },\n                \"col\": {\n                    \"3\": 1\n                },\n                \"col_width\": 1,\n                widgets:[]\n            });\n            pane_idx.presence=i;\n            pane_id=i;\n            i++;\n        }\n//}\nif( typeof pane_idx.presence !=='undefined'){\n                    freeboard.panes[pane_idx.presence].widgets.push(\n                 {\n                     \"type\": \"indicator\",\n                     \"settings\": \n                      {\n                          \"title\":\"\" ,\n                          \"value\":\"(datasources[\\\"Node-Red\\\"][\\\"PresenceDetail\\\"][\\\"\" + key + \"\\\"][\\\"home\\\"]==\\\"yes\\\" ? true : false)\",\n                          \"on_text\":key+\" Home\",\n                          \"off_text\":key+\" Out\"\n                      }\n                 })\n} \n}\n/*\nvar k=0;\nvar b=0;\nfor (var key in context.global.winkState.robots){\n    if (k>9){\n        b++; \n        k=0;\n        \n    }\n    if( typeof pane_idx['robots'+b] !=='undefined') \n        {\n            pane_id=pane_idx['robots'+b]; //motion\n        } else\n        {\n            freeboard.panes.push(  {\n                \"title\":\"Robots\",\n                \"width\": 1,\n                \"row\": {\n                    \"3\": 1\n                },\n                \"col\": {\n                    \"3\": 1\n                },\n                \"col_width\": 1,\n                widgets:[]\n            });\n            pane_idx['robots'+b]=i;\n            pane_id=i;\n            i++;\n        }\n        if( typeof pane_idx['robots'+b] !=='undefined'){\n                            freeboard.panes[pane_idx['robots'+b]].widgets.push(\n                         {\n                             \"type\": \"indicator\",\n                             \"settings\": \n                              {\n//                                  \"title\":key,\n                                  \"value\":\"datasources[\\\"Node-Red\\\"][\\\"WinkData\\\"][\\\"robots\\\"][\\\"\" + key + \"\\\"][\\\"enabled\\\"]\",\n                                  \"on_text\":key,\n                                  \"off_text\":key\n                              }\n                         })\n        k++;\n        } \n}\n*/\n\n\n\nfreeboard.datasources =\n [\n    {\n        \"name\": \"Node-Red\",\n        \"type\": \"JSON\",\n        \"settings\": {\n            \"url\": context.global.BlueMixUrlBase+\"/red/getGlobalDataJson\",\n            \"use_thingproxy\": true,\n            \"refresh\": 2,\n            \"method\": \"GET\",\n            \"headers\": [\n              {\n                  \"name\": \"Authorization\",\n                  \"value\": \"Bearer \"+context.global.FREEBOARD_TOKEN\n              }\n            ],\n            \"name\":\"Node-Red\"\n        }\n    }   \n ]\nfreeboard.columns=i;\nmsg.payload=freeboard;\n}\nelse\n{\n    msg.payload=\"Bad request darling\"\n}\nreturn msg;",
     "outputs": 1,
@@ -991,14 +1088,14 @@
     "y": 355,
     "wires": [
       [
-        "9e9cc68a.f1f518"
+        "379410e1.9d6e6"
       ]
     ]
   },
   {
-    "id": "1000bc08.325674",
+    "id": "c34c3f74.fadab",
     "type": "debug",
-    "z": "763654c7.cdd86c",
+    "z": "811c60ec.7ee3a",
     "name": "",
     "active": false,
     "console": "false",
@@ -1008,9 +1105,9 @@
     "wires": []
   },
   {
-    "id": "aabdd371.a223b",
+    "id": "e23f7d5e.552bf",
     "type": "http in",
-    "z": "763654c7.cdd86c",
+    "z": "811c60ec.7ee3a",
     "name": "",
     "url": "/freeboard/RobotControls",
     "method": "get",
@@ -1019,14 +1116,14 @@
     "y": 705,
     "wires": [
       [
-        "b3d6b5b9.4b1028"
+        "4b9f5841.eddf08"
       ]
     ]
   },
   {
-    "id": "4001ee6d.4f8ee",
+    "id": "d7830d42.b7a6d",
     "type": "function",
-    "z": "763654c7.cdd86c",
+    "z": "811c60ec.7ee3a",
     "name": "GenRobots",
     "func": "//if(msg.req.headers.authorization && msg.req.headers.authorization==\"Bearer \"+context.global.FREEBOARD_TOKEN){\nif ((msg.req.body.uid==context.global.WinkUser.uid && msg.req.body.pwd==context.global.WinkUser.pwd)||context.global.getCookie('exchange_token',msg.req.headers.cookie)==context.global.FREEBOARD_TOKEN || msg.payload.token==context.global.FREEBOARD_TOKEN){\n//if (true){\nmsg.statusCode=\"200\";\nmsg.headers={'Cache-Control':\"max-age=0,no-cache,no-store,post-check=0,pre-check=0\"};\nmsg.payload.pwd_str=context.global.FREEBOARD_TOKEN;\nmsg.payload.ifttt_token=context.global.FREEBOARD_TOKEN;\nmsg.payload.haveRobots=false\nvar robots=[]\nif ('robots' in context.global.winkState){\n        for (var l_robot in context.global.winkState.robots){\n            var robot=context.global.winkState.robots[l_robot];\n            robots.push({\n            name:robot.name,\n            //class_name:'dial '+bulb.object_id,\n            object_id:robot.object_id,\n            enabled:robot.enabled,\n            not_enabled:!robot.enabled\n        });\n    }\n    msg.payload.haveRobots=true\n}\nmsg.payload.robots=robots;\nif (msg.topic=='json'){\n    var Etag=\"\";\n    if ('CRYPTO' in context.global) Etag=context.global.CRYPTO.createHash(\"md5\").update(JSON.stringify(msg.payload),\"utf8\").digest(\"hex\");\n    msg.headers={\n      'Content-Type': 'application/json',\n      'ETag': Etag\n    };\n}\n} else {\nmsg.statusCode=\"403\";\n}\nreturn msg;",
     "outputs": 1,
@@ -1035,14 +1132,14 @@
     "y": 726,
     "wires": [
       [
-        "8baa45fc.207ee8"
+        "a1286adb.30b7d8"
       ]
     ]
   },
   {
-    "id": "51ad197e.12cf38",
+    "id": "c46f8298.cfde3",
     "type": "template",
-    "z": "763654c7.cdd86c",
+    "z": "811c60ec.7ee3a",
     "name": "",
     "field": "",
     "fieldType": "msg",
@@ -1053,14 +1150,14 @@
     "y": 715,
     "wires": [
       [
-        "72267793.6d69b8"
+        "fb44836c.c01a1"
       ]
     ]
   },
   {
-    "id": "2fb7fd03.70fcb2",
+    "id": "c69d552a.ff9238",
     "type": "http in",
-    "z": "763654c7.cdd86c",
+    "z": "811c60ec.7ee3a",
     "name": "",
     "url": "/freeboard/RobotsData",
     "method": "get",
@@ -1069,36 +1166,36 @@
     "y": 758,
     "wires": [
       [
-        "5ac3c61e.ded628"
+        "60ada00.f26d46"
       ]
     ]
   },
   {
-    "id": "9aa3640f.663cf8",
+    "id": "2d8d5d0c.be5812",
     "type": "json",
-    "z": "763654c7.cdd86c",
+    "z": "811c60ec.7ee3a",
     "name": "",
     "x": 818,
     "y": 754,
     "wires": [
       [
-        "72267793.6d69b8"
+        "fb44836c.c01a1"
       ]
     ]
   },
   {
-    "id": "72267793.6d69b8",
+    "id": "fb44836c.c01a1",
     "type": "http response",
-    "z": "763654c7.cdd86c",
+    "z": "811c60ec.7ee3a",
     "name": "",
     "x": 967,
     "y": 727,
     "wires": []
   },
   {
-    "id": "b3d6b5b9.4b1028",
+    "id": "4b9f5841.eddf08",
     "type": "function",
-    "z": "763654c7.cdd86c",
+    "z": "811c60ec.7ee3a",
     "name": "",
     "func": "msg.topic='page';\nreturn msg;",
     "outputs": 1,
@@ -1107,14 +1204,14 @@
     "y": 704,
     "wires": [
       [
-        "4001ee6d.4f8ee"
+        "d7830d42.b7a6d"
       ]
     ]
   },
   {
-    "id": "5ac3c61e.ded628",
+    "id": "60ada00.f26d46",
     "type": "function",
-    "z": "763654c7.cdd86c",
+    "z": "811c60ec.7ee3a",
     "name": "",
     "func": "msg.topic='json';\nreturn msg;",
     "outputs": 1,
@@ -1123,14 +1220,14 @@
     "y": 759,
     "wires": [
       [
-        "4001ee6d.4f8ee"
+        "d7830d42.b7a6d"
       ]
     ]
   },
   {
-    "id": "8baa45fc.207ee8",
+    "id": "a1286adb.30b7d8",
     "type": "switch",
-    "z": "763654c7.cdd86c",
+    "z": "811c60ec.7ee3a",
     "name": "",
     "property": "topic",
     "propertyType": "msg",
@@ -1150,17 +1247,17 @@
     "y": 731,
     "wires": [
       [
-        "51ad197e.12cf38"
+        "c46f8298.cfde3"
       ],
       [
-        "9aa3640f.663cf8"
+        "2d8d5d0c.be5812"
       ]
     ]
   },
   {
-    "id": "2581ad74.4a0aa2",
+    "id": "9ad1ee43.d9b7e",
     "type": "function",
-    "z": "763654c7.cdd86c",
+    "z": "811c60ec.7ee3a",
     "name": "",
     "func": "msg.topic='page';\nreturn msg;",
     "outputs": 1,
@@ -1169,14 +1266,14 @@
     "y": 615,
     "wires": [
       [
-        "fa4bf56.a863808"
+        "ed6ac571.91faf8"
       ]
     ]
   },
   {
-    "id": "9d16b132.f146a",
+    "id": "cd670f1e.5f2",
     "type": "function",
-    "z": "763654c7.cdd86c",
+    "z": "811c60ec.7ee3a",
     "name": "",
     "func": "msg.topic='json';\nreturn msg;",
     "outputs": 1,
@@ -1185,14 +1282,14 @@
     "y": 664,
     "wires": [
       [
-        "fa4bf56.a863808"
+        "ed6ac571.91faf8"
       ]
     ]
   },
   {
-    "id": "37e8c4b7.f39fbc",
+    "id": "50edf171.82862",
     "type": "switch",
-    "z": "763654c7.cdd86c",
+    "z": "811c60ec.7ee3a",
     "name": "",
     "property": "topic",
     "propertyType": "msg",
@@ -1212,17 +1309,17 @@
     "y": 642,
     "wires": [
       [
-        "a5197a01.cfe428"
+        "3c35dbdb.f1b924"
       ],
       [
-        "185acdb4.551362"
+        "bf69ad0f.ec4ec"
       ]
     ]
   },
   {
-    "id": "fbddffb3.2a55e",
+    "id": "f5f1c3f.459cb4",
     "type": "function",
-    "z": "763654c7.cdd86c",
+    "z": "811c60ec.7ee3a",
     "name": "",
     "func": "msg.topic='page';\nreturn msg;",
     "outputs": 1,
@@ -1231,14 +1328,14 @@
     "y": 528,
     "wires": [
       [
-        "e04f2fcf.923c2"
+        "d4c43570.b1c278"
       ]
     ]
   },
   {
-    "id": "64d9a6c3.c9d018",
+    "id": "e6c6d387.4c4e4",
     "type": "function",
-    "z": "763654c7.cdd86c",
+    "z": "811c60ec.7ee3a",
     "name": "",
     "func": "msg.topic='json';\nreturn msg;",
     "outputs": 1,
@@ -1247,14 +1344,14 @@
     "y": 566,
     "wires": [
       [
-        "e04f2fcf.923c2"
+        "d4c43570.b1c278"
       ]
     ]
   },
   {
-    "id": "c2f8d210.9c407",
+    "id": "b95592d0.b3e6f",
     "type": "switch",
-    "z": "763654c7.cdd86c",
+    "z": "811c60ec.7ee3a",
     "name": "",
     "property": "topic",
     "propertyType": "msg",
@@ -1274,17 +1371,17 @@
     "y": 548,
     "wires": [
       [
-        "c4714b37.1676f8"
+        "9f1f047f.3b6eb8"
       ],
       [
-        "cf58bcea.e8445"
+        "7cacf071.a39bf"
       ]
     ]
   },
   {
-    "id": "7a6fd48d.6e19ac",
+    "id": "7b232413.2793ec",
     "type": "comment",
-    "z": "763654c7.cdd86c",
+    "z": "811c60ec.7ee3a",
     "name": "Config page---------------------------------------",
     "info": "",
     "x": 175,
@@ -1292,9 +1389,9 @@
     "wires": []
   },
   {
-    "id": "be0cb5f9.148858",
+    "id": "4950f12e.1b2e3",
     "type": "debug",
-    "z": "763654c7.cdd86c",
+    "z": "811c60ec.7ee3a",
     "name": "",
     "active": false,
     "console": "false",
@@ -1304,9 +1401,9 @@
     "wires": []
   },
   {
-    "id": "80d3bfac.bbdf8",
+    "id": "d31c9146.7b188",
     "type": "template",
-    "z": "763654c7.cdd86c",
+    "z": "811c60ec.7ee3a",
     "name": "",
     "field": "payload",
     "fieldType": "msg",
@@ -1320,9 +1417,9 @@
     ]
   },
   {
-    "id": "c4ce34a5.b029b8",
+    "id": "a7639d20.a84bd",
     "type": "template",
-    "z": "763654c7.cdd86c",
+    "z": "811c60ec.7ee3a",
     "name": "",
     "field": "payload",
     "fieldType": "msg",
@@ -1333,7 +1430,7 @@
     "y": 972,
     "wires": [
       [
-        "91caf533.61b1d8"
+        "ae203f82.5e8f5"
       ]
     ]
   }
