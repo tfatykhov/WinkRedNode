@@ -1,15 +1,4 @@
 # WinkRedNode
-Updates
-=========================
-Please check [Flows/Bluemix/README.md](Flows/Bluemix/README.md) for latest updates.
-
-This repository explains how to use [Node-RED](http://nodered.org/) and [Freeboard](http://freeboard.io/)
-with the [Wink API](http://docs.wink.apiary.io/) in order to enhance your home automation experience.
-
-This repository is neither officially-endorsed (or supported) by [Wink](http://wink.com/);
-however, Wink publishes an API and there are lots of wonderful open source tools that allow us to build on that API.
-
-
 ## Overview
 
 Node-RED operates around the notion of a "flow".
@@ -65,8 +54,14 @@ All these flows works perfectly locally and in the cloud.Only exception is - loc
 Brian created schedule flow that works with blue mix monitoring - check it here:[Flows/BMeissen Sample Flows](Flows/BMeissen Sample Flows)
 
 
-### Additional Information
+### Donations
+Donations are always welcome. They will help us keep this project up and running and add support to more devices and services!
+you can use PayPal or google wallet. 
 
+* Timur Fatykhov: tfatykhov@gmail.com
+* Brian Meissen: paypal@meissenation.com
+
+### Additional Information
 There are many excellent cloud platforms as a service;
 if you really like another,
 perhaps you contribute a "HOWTO" for installing Node-RED and Freeboard?
