@@ -1,10 +1,23 @@
 # WinkRedNode
-## Overview
+## Node-Red Overview
 
 Node-RED operates around the notion of a "flow".
 This repository contains examples of many flows that "know" about the Wink API.
 Once you have one or more flows deployed in your Node-RED process,
 you can make use of that data.
+
+## About
+This application is Node-Red based app which helps joining together various systesms for better home automation experience:
+
+* Wink http://winkapp.com
+* Lifx http://lifx.com
+* IFTTT http://ifttt.com
+* Forecast.io http://forecast.io
+* Blue Iris http://blueiris.com
+* BloomSky http://bloomsky.com
+* Several ip cameras (Foscam, D-link, Sansung)
+
+written on JavaScript and powered by Node-Red and Node.js it allows to build additional functionality like advanced scheduling very easy. It is also a fun way to learn functional and event based programming and some modern technologies using JavaScript.
 
 
 ### Installation instruction:
