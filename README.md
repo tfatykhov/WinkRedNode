@@ -49,7 +49,7 @@ Please navigate to: [Flows/Bluemix](Flows/Bluemix/). In order for application to
 4. [Flows/Bluemix/tabletUI.json](Flows/Bluemix/tabletUI.json) - set of flows to generate application User interface
 
 
-All these flows works perfectly locally and in the cloud.Only exception for noa is that local version will not be able to use IBM Cloudant DB as percistence layer. You will have to put all global variables in FunctionGlobalContext section of settings.js in /home/pi/.node-red. This will be addressed in the future but for now we are concentrated on cloud based version.
+All these flows works perfectly locally and in the cloud.Only exception for now is that local version will not be able to use IBM Cloudant DB as percistence layer. You will have to put all global variables in FunctionGlobalContext section of settings.js in /home/pi/.node-red. This will be addressed in the future but currently we  are concentrated on cloud based version.
 Also you  will need to setup port forwarding so your instance can be accessed from outside. 
 
 Brian created schedule flow that works with blue mix monitoring - check it here:[Flows/BMeissen Sample Flows](Flows/BMeissen Sample Flows)
