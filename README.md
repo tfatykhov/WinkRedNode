@@ -17,7 +17,7 @@ This application is Node-Red based app which helps joining together various syst
 * BloomSky http://bloomsky.com (community based weather station and sky camera)
 * Several ip cameras (Foscam, D-link, Sansung)
 
-written on JavaScript and powered by Node-Red and Node.js it allows to build additional functionality like advanced scheduling very easy. It is also a fun way to learn functional and event based programming and some modern technologies using JavaScript.
+written in JavaScript and powered by Node-Red and Node.js it allows to build additional functionality like advanced scheduling very easy. It is also a fun way to learn functional and event based programming and some modern technologies at the same time enchancing your home automation experience.
 
 
 ### Installation instruction:
