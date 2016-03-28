@@ -15,3 +15,7 @@ build/
 node_modules/
 npm-debug.log
 .DS_Store
+Flows/Bluemix/images/CameraPage1.png
+Flows/Bluemix/images/config_ui.png
+Flows/Bluemix/images/freeboard.png
+Flows/Bluemix/images/ui.png
