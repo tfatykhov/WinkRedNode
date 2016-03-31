@@ -11,7 +11,16 @@ https://(your_app_name).mybluemix.net/freeboard/winkboardautogroup - sample free
 Color change for supportted bulbs in ui
 
 <img src="images/color_bulbs.png"><br><br>
+* usage in scripts:<br>
+var color=context.global.tinycolor("red");<br>
+executeWinkCMD("light name","light","color",color.toHex());<br>
 
+List of color names - <br>
+https://www.w3.org/TR/css3-color/#svg-color<br>
+
+you can use hex value without leading # directly:<br>
+executeWinkCMD("light name","light","color","FF0000"); <br>
+<br>
 Bluemix git console:<br>
 *  copy contents of [package.json](package.json) and update same file in your configuration with it contents.
 *  add following line to the bluemix-settings.js inside functionGlobalContext section<br>
