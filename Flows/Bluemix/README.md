@@ -6,6 +6,26 @@ https://(your_app_name).mybluemix.net/freeboard/winkboardautogroup - sample free
 
 == UPDATE ==
 -
+03/30/2016
+------------
+Color change for supportted bulbs in ui
+
+<img src="images/color_bulbs.png"><br><br>
+
+Bluemix git console:<br>
+*  copy contents of [package.json](package.json) and update same file in your configuration with it contents.
+*  add following line to the bluemix-settings.js inside functionGlobalContext section<br>
+	*       ,tinycolor : require("tinycolor2").  refer to [sample bluemix-settings.js](bluemix-settings.js)
+*  re-deploy application in git<br>
+<img src="images/deploy.png">
+
+Flow Editor:<br>
+*  Import updated [winkCore.json](winkCore.json)
+*  Import updated [winkIntegration.json](winkIntegration.json)
+*  Import updated [tabletUI.json](tabletUI.json)
+*  do not forget to check [duplicate websockets](../../README-WebsocketFix.md)
+*  perform "FULL" deployment<br>
+
 03/20/2016
 ------------
 * small bug fixes
