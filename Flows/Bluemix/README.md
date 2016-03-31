@@ -20,6 +20,7 @@ https://www.w3.org/TR/css3-color/#svg-color<br>
 
 you can use hex value without leading # directly:<br>
 executeWinkCMD("light name","light","color","FF0000"); <br>
+<b>This command will only changes bulb color. You need to execute "power on" command first</b><br>
 <br>
 Bluemix git console:<br>
 *  copy contents of [package.json](package.json) and update same file in your configuration with it contents.
