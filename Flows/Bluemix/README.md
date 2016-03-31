@@ -6,6 +6,23 @@ https://(your_app_name).mybluemix.net/freeboard/winkboardautogroup - sample free
 
 == UPDATE ==
 -
+03/31/2016
+------------
+Color change for supportted bulbs in ui including apple support :)
+<img src="images/color_bulbs_ipad.png"><br><br>
+
+<b>You still need to perform git console steps from previous update (03/30/2016) unless you aready done this.</b>
+
+Bluemix git console:<br>
+*  re-deploy application in git<br>
+<img src="images/deploy.png">
+
+Flow Editor:<br>
+*  Import updated [tabletUI.json](tabletUI.json)
+*  do not forget to check [duplicate websockets](../../README-WebsocketFix.md)
+*  perform "FULL" deployment<br>
+
+
 03/30/2016
 ------------
 Color change for supportted bulbs in ui
