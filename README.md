@@ -42,6 +42,7 @@ on your raspbery pi session execute following prior to start using node-red: (as
 * npm install winknodered@"git://github.com/tfatykhov/WinkRedNode.git#master"
 * npm install node-red-contrib-freeboard@"git://github.com/tfatykhov/node-red-contrib-freeboard.git"
 * npm install "suncalc"@"git://github.com/mourner/suncalc.git"
+* npm install tinycolor2
 
 
 Once you have Node-RED running, you can deploy your flows described below
