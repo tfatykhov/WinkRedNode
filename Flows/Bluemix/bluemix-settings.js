@@ -55,7 +55,8 @@ var settings = module.exports = {
     ,VCAP_SERVICES: JSON.parse(process.env.VCAP_SERVICES)
     ,CRYPTO: require("crypto")
     ,SunCalc : require("suncalc")
-    ,wnr : require("winknodered")    
+    ,wnr : require("winknodered") 
+    ,tinycolor : require("tinycolor2")   
  },    
 // !!!!DO NOT CHANHGE ANYTHING BELOW THIS LINE!!!
     storageModule: require("./couchstorage")
