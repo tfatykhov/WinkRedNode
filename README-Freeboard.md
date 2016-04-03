@@ -24,10 +24,9 @@ as the "URL":
 
 <img src='images/Freeboard/SampleFreeboard1.png'/>
 
-Under "Headers", click on "Add and define one header with a "Name" of "Authorization" and a value corresponding to the
-`FREEBOARD-TOKEN` you defined when creating the MyWinkNodeRed application, e.g.,
+Under "Headers", click on "Add and define one header with a "Name" of "Authorization" and application access token.You will find it on config tab of application ui (Https://yourappname.mybluemix.net/freeboard/ui) in config tab/application settings
 
-    Name=Authorization    Value=Bearer pseudo-random-string
+    Name=Authorization    Value=Bearer 
 
 Click "Save":
 
