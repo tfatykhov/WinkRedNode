@@ -24,7 +24,7 @@ as the "URL":
 
 <img src='images/Freeboard/SampleFreeboard1.png'/>
 
-Under "Headers", click on "Add and define one header with a "Name" of "Authorization" and application access token.You will find it on config tab of application ui (Https://yourappname.mybluemix.net/freeboard/ui) in config tab/application settings
+Under "Headers", click on "Add and define one header with a "Name" of "Authorization" and application access token.You will find it on config tab of application ui (Https://yourappname.mybluemix.net/freeboard/ui) in config tab/Integration settings
 
     Name=Authorization    Value=Bearer application access token
 
