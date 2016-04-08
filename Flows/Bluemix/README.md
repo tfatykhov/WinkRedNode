@@ -6,7 +6,7 @@ https://(your_app_name).mybluemix.net/freeboard/winkboardautogroup - sample free
 
 == UPDATE ==
 -
-03/31/2016
+04/08/2016
 ------------
 Small updates:
 * fixed https://github.com/tfatykhov/WinkRedNode/issues/45 raised issue with camera image cropping.
