@@ -8,6 +8,21 @@ https://(your_app_name).mybluemix.net/freeboard/winkboardautogroup - sample free
 -
 03/31/2016
 ------------
+Small updates:
+* fixed https://github.com/tfatykhov/WinkRedNode/issues/45 raised issue with camera image cropping.
+* added function to save camera snapshots in robotos/schedules:<br>
+		usage: node.send(context.global.saveCameraSnapshot(camera_name,event_name);<br>
+			camera_name can be a single camera, example 'BasementCam' or list of cameras separated by comma - 		'BasementCam,DeckCam'<br>
+
+Flow Editor:<br>
+*  Import updated [winkCore.json](winkCore.json)
+*  Import updated [tabletUI.json](tabletUI.json)
+*  do not forget to check [duplicate websockets](../../README-WebsocketFix.md)
+*  perform "FULL" deployment<br>
+
+
+03/31/2016
+------------
 Color change for supportted bulbs in ui including apple support :)
 <img src="images/color_bulbs_ipad.png"><br><br>
 
