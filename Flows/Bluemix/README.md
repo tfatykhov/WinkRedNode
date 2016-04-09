@@ -6,6 +6,16 @@ https://(your_app_name).mybluemix.net/freeboard/winkboardautogroup - sample free
 
 == UPDATE ==
 -
+04/09/2016
+------------
+Old or "deleted" wink devices are not shown anymore.
+Flow Editor:<br>
+*  Import updated [winkCore.json](winkCore.json)
+*  do not forget to check [duplicate websockets](../../README-WebsocketFix.md)
+*  perform "FULL" deployment<br>
+
+
+Small updates:
 04/08/2016
 ------------
 Small updates:
