@@ -1,6 +1,6 @@
 [
   {
-    "id": "aca04015.9daf",
+    "id": "9a038391.7e7b9",
     "type": "inject",
     "z": "7c147959.8f4298",
     "name": "",
@@ -14,13 +14,13 @@
     "y": 55,
     "wires": [
       [
-        "664d24a8.6f23ac",
-        "ac5bba20.eedeb8"
+        "555a815f.43bac",
+        "e6a4cec7.0b3d8"
       ]
     ]
   },
   {
-    "id": "5e664618.df5dc8",
+    "id": "a65f567a.577008",
     "type": "function",
     "z": "7c147959.8f4298",
     "name": "Prepare OAuth Request",
@@ -31,12 +31,12 @@
     "y": 55,
     "wires": [
       [
-        "24282ee8.98f402"
+        "ed551676.5034e8"
       ]
     ]
   },
   {
-    "id": "664d24a8.6f23ac",
+    "id": "555a815f.43bac",
     "type": "function",
     "z": "7c147959.8f4298",
     "name": "Define email and password",
@@ -47,12 +47,12 @@
     "y": 55,
     "wires": [
       [
-        "5e664618.df5dc8"
+        "a65f567a.577008"
       ]
     ]
   },
   {
-    "id": "24282ee8.98f402",
+    "id": "ed551676.5034e8",
     "type": "http request",
     "z": "7c147959.8f4298",
     "name": "",
@@ -63,12 +63,12 @@
     "y": 55,
     "wires": [
       [
-        "32d3667a.f1b52a"
+        "eb6ad93f.d72738"
       ]
     ]
   },
   {
-    "id": "32d3667a.f1b52a",
+    "id": "eb6ad93f.d72738",
     "type": "function",
     "z": "7c147959.8f4298",
     "name": "Define Token",
@@ -79,12 +79,12 @@
     "y": 55,
     "wires": [
       [
-        "13896d63.6debe3"
+        "f26f47ab.82ef78"
       ]
     ]
   },
   {
-    "id": "8d85003f.8fd1e",
+    "id": "dc799a99.67a3e8",
     "type": "function",
     "z": "7c147959.8f4298",
     "name": "Prepare Queries",
@@ -95,18 +95,18 @@
     "y": 195,
     "wires": [
       [
-        "ac458eaa.36f1c"
+        "968328ea.457068"
       ],
       [
-        "24fbdcd8.dd0364"
+        "fe6641a1.88f65"
       ],
       [
-        "7982d4f3.b1a57c"
+        "ca19d278.adfcc"
       ]
     ]
   },
   {
-    "id": "a6c061a0.8c228",
+    "id": "545531ea.d2b9c",
     "type": "http request",
     "z": "7c147959.8f4298",
     "name": "Get Networks",
@@ -117,12 +117,12 @@
     "y": 125,
     "wires": [
       [
-        "d242ea41.1d9178"
+        "cd104264.24a06"
       ]
     ]
   },
   {
-    "id": "d242ea41.1d9178",
+    "id": "cd104264.24a06",
     "type": "function",
     "z": "7c147959.8f4298",
     "name": "",
@@ -133,12 +133,12 @@
     "y": 125,
     "wires": [
       [
-        "8d85003f.8fd1e"
+        "dc799a99.67a3e8"
       ]
     ]
   },
   {
-    "id": "c45e36e1.a3e298",
+    "id": "b1ee1905.e91c98",
     "type": "inject",
     "z": "7c147959.8f4298",
     "name": "",
@@ -152,12 +152,12 @@
     "y": 195,
     "wires": [
       [
-        "8d85003f.8fd1e"
+        "dc799a99.67a3e8"
       ]
     ]
   },
   {
-    "id": "ac458eaa.36f1c",
+    "id": "968328ea.457068",
     "type": "http request",
     "z": "7c147959.8f4298",
     "name": "Get Sync Module Info",
@@ -168,12 +168,12 @@
     "y": 160,
     "wires": [
       [
-        "be152a70.2f4698"
+        "646343aa.b47ecc"
       ]
     ]
   },
   {
-    "id": "be152a70.2f4698",
+    "id": "646343aa.b47ecc",
     "type": "function",
     "z": "7c147959.8f4298",
     "name": "",
@@ -187,7 +187,7 @@
     ]
   },
   {
-    "id": "e7d52505.a55f48",
+    "id": "5b46a049.338f4",
     "type": "inject",
     "z": "7c147959.8f4298",
     "name": "",
@@ -201,12 +201,12 @@
     "y": 90,
     "wires": [
       [
-        "ac5bba20.eedeb8"
+        "e6a4cec7.0b3d8"
       ]
     ]
   },
   {
-    "id": "ac5bba20.eedeb8",
+    "id": "e6a4cec7.0b3d8",
     "type": "function",
     "z": "7c147959.8f4298",
     "name": "Blink Global Functions",
@@ -217,12 +217,12 @@
     "y": 90,
     "wires": [
       [
-        "84629106.cdbb4"
+        "1351af3a.5431b1"
       ]
     ]
   },
   {
-    "id": "414767aa.718db8",
+    "id": "2b774f42.36bbf",
     "type": "inject",
     "z": "7c147959.8f4298",
     "name": "Arm",
@@ -236,12 +236,12 @@
     "y": 428,
     "wires": [
       [
-        "c70c6828.5cccf8"
+        "b0292979.4f7118"
       ]
     ]
   },
   {
-    "id": "86e0cdd6.ec3bc",
+    "id": "a0d7ea76.a65ba8",
     "type": "inject",
     "z": "7c147959.8f4298",
     "name": "Disarm",
@@ -255,12 +255,12 @@
     "y": 472,
     "wires": [
       [
-        "c70c6828.5cccf8"
+        "b0292979.4f7118"
       ]
     ]
   },
   {
-    "id": "84629106.cdbb4",
+    "id": "1351af3a.5431b1",
     "type": "http request",
     "z": "7c147959.8f4298",
     "name": "",
@@ -274,7 +274,7 @@
     ]
   },
   {
-    "id": "c70c6828.5cccf8",
+    "id": "b0292979.4f7118",
     "type": "function",
     "z": "7c147959.8f4298",
     "name": "",
@@ -285,12 +285,12 @@
     "y": 448,
     "wires": [
       [
-        "c94c58f1.502418"
+        "fa64ba91.a57028"
       ]
     ]
   },
   {
-    "id": "24fbdcd8.dd0364",
+    "id": "fe6641a1.88f65",
     "type": "http request",
     "z": "7c147959.8f4298",
     "name": "Get Homescreen Data",
@@ -301,12 +301,12 @@
     "y": 195,
     "wires": [
       [
-        "3419efe5.707ff"
+        "91d1093d.231c18"
       ]
     ]
   },
   {
-    "id": "3419efe5.707ff",
+    "id": "91d1093d.231c18",
     "type": "function",
     "z": "7c147959.8f4298",
     "name": "",
@@ -317,12 +317,12 @@
     "y": 195,
     "wires": [
       [
-        "6e6caa9c.d16fa4"
+        "cfd589ee.ef4d28"
       ]
     ]
   },
   {
-    "id": "42f23530.ca379c",
+    "id": "a385c859.0e54b8",
     "type": "inject",
     "z": "7c147959.8f4298",
     "name": "",
@@ -336,12 +336,12 @@
     "y": 513,
     "wires": [
       [
-        "a36e3497.dfaeb8"
+        "31b049cc.ecf966"
       ]
     ]
   },
   {
-    "id": "a36e3497.dfaeb8",
+    "id": "31b049cc.ecf966",
     "type": "function",
     "z": "7c147959.8f4298",
     "name": "Clear Blink Data",
@@ -355,7 +355,7 @@
     ]
   },
   {
-    "id": "c94c58f1.502418",
+    "id": "fa64ba91.a57028",
     "type": "http request",
     "z": "7c147959.8f4298",
     "name": "",
@@ -369,7 +369,7 @@
     ]
   },
   {
-    "id": "13896d63.6debe3",
+    "id": "f26f47ab.82ef78",
     "type": "function",
     "z": "7c147959.8f4298",
     "name": "Prepare Network Query",
@@ -380,12 +380,12 @@
     "y": 125,
     "wires": [
       [
-        "a6c061a0.8c228"
+        "545531ea.d2b9c"
       ]
     ]
   },
   {
-    "id": "27765b3a.8fe134",
+    "id": "300bce28.182c62",
     "type": "http request",
     "z": "7c147959.8f4298",
     "name": "Get Events Data",
@@ -396,12 +396,12 @@
     "y": 250,
     "wires": [
       [
-        "cdb72838.e79f48"
+        "859415ad.1ca0b8"
       ]
     ]
   },
   {
-    "id": "cdb72838.e79f48",
+    "id": "859415ad.1ca0b8",
     "type": "function",
     "z": "7c147959.8f4298",
     "name": "",
@@ -412,13 +412,13 @@
     "y": 230,
     "wires": [
       [
-        "4dc6a74c.7fe0d8",
-        "5c1d5ef7.f1ec3"
+        "fbdf44d3.692fd8",
+        "cebbe019.feda6"
       ]
     ]
   },
   {
-    "id": "60d59a83.08e724",
+    "id": "6f26d290.80c99c",
     "type": "http in",
     "z": "7c147959.8f4298",
     "name": "",
@@ -429,12 +429,12 @@
     "y": 590,
     "wires": [
       [
-        "3b9baafe.d786a6"
+        "31a9275c.9fee78"
       ]
     ]
   },
   {
-    "id": "3b9baafe.d786a6",
+    "id": "31a9275c.9fee78",
     "type": "function",
     "z": "7c147959.8f4298",
     "name": "Command msg",
@@ -445,12 +445,12 @@
     "y": 590,
     "wires": [
       [
-        "24c0242a.51ba5c"
+        "f7dfac17.f567c"
       ]
     ]
   },
   {
-    "id": "24c0242a.51ba5c",
+    "id": "f7dfac17.f567c",
     "type": "http response",
     "z": "7c147959.8f4298",
     "name": "",
@@ -459,7 +459,7 @@
     "wires": []
   },
   {
-    "id": "fde3db53.6400f8",
+    "id": "14230aa2.19e045",
     "type": "inject",
     "z": "7c147959.8f4298",
     "name": "",
@@ -473,12 +473,12 @@
     "y": 330,
     "wires": [
       [
-        "6e6caa9c.d16fa4"
+        "cfd589ee.ef4d28"
       ]
     ]
   },
   {
-    "id": "6e6caa9c.d16fa4",
+    "id": "cfd589ee.ef4d28",
     "type": "function",
     "z": "7c147959.8f4298",
     "name": "Blink Cameras into winkState",
@@ -489,12 +489,12 @@
     "y": 336,
     "wires": [
       [
-        "7233cf0b.45d"
+        "b26cbe0f.6291e"
       ]
     ]
   },
   {
-    "id": "e50a1f59.499d9",
+    "id": "435e4717.dada58",
     "type": "http in",
     "z": "7c147959.8f4298",
     "name": "",
@@ -505,12 +505,12 @@
     "y": 625,
     "wires": [
       [
-        "352b958f.a4cf7a"
+        "7ea397b9.8654f8"
       ]
     ]
   },
   {
-    "id": "352b958f.a4cf7a",
+    "id": "7ea397b9.8654f8",
     "type": "function",
     "z": "7c147959.8f4298",
     "name": "Get thumb jpg",
@@ -521,15 +521,15 @@
     "y": 625,
     "wires": [
       [
-        "c0717524.d126e8"
+        "6646163f.dad238"
       ],
       [
-        "453c408e.8bd52"
+        "a897ed1b.253a"
       ]
     ]
   },
   {
-    "id": "3e136420.1e56dc",
+    "id": "c0ecedc9.0ef9c",
     "type": "http response",
     "z": "7c147959.8f4298",
     "name": "",
@@ -538,7 +538,7 @@
     "wires": []
   },
   {
-    "id": "c0717524.d126e8",
+    "id": "6646163f.dad238",
     "type": "http request",
     "z": "7c147959.8f4298",
     "name": "",
@@ -549,12 +549,12 @@
     "y": 625,
     "wires": [
       [
-        "3e136420.1e56dc"
+        "c0ecedc9.0ef9c"
       ]
     ]
   },
   {
-    "id": "7233cf0b.45d",
+    "id": "b26cbe0f.6291e",
     "type": "http request",
     "z": "7c147959.8f4298",
     "name": "",
@@ -568,7 +568,7 @@
     ]
   },
   {
-    "id": "e3d83ea2.aa6a1",
+    "id": "6b791978.8852b8",
     "type": "http in",
     "z": "7c147959.8f4298",
     "name": "",
@@ -579,13 +579,13 @@
     "y": 715,
     "wires": [
       [
-        "25ee2761.58db28",
-        "3aaef6cb.b6faca"
+        "c33d6c67.580a3",
+        "6d224586.ae18fc"
       ]
     ]
   },
   {
-    "id": "25ee2761.58db28",
+    "id": "c33d6c67.580a3",
     "type": "function",
     "z": "7c147959.8f4298",
     "name": "Validate Web Req",
@@ -596,15 +596,15 @@
     "y": 715,
     "wires": [
       [
-        "bdcc2596.77d898"
+        "688b3b45.8d2c64"
       ],
       [
-        "2b14fc4.93c4804"
+        "54e10a97.d390f4"
       ]
     ]
   },
   {
-    "id": "f360c237.ce953",
+    "id": "1e197bb8.9a7a74",
     "type": "http response",
     "z": "7c147959.8f4298",
     "name": "",
@@ -613,7 +613,7 @@
     "wires": []
   },
   {
-    "id": "4077349a.8bac9c",
+    "id": "a8b2de1e.e3647",
     "type": "http request",
     "z": "7c147959.8f4298",
     "name": "",
@@ -624,12 +624,12 @@
     "y": 715,
     "wires": [
       [
-        "f360c237.ce953"
+        "1e197bb8.9a7a74"
       ]
     ]
   },
   {
-    "id": "bdcc2596.77d898",
+    "id": "688b3b45.8d2c64",
     "type": "function",
     "z": "7c147959.8f4298",
     "name": "",
@@ -640,14 +640,14 @@
     "y": 715,
     "wires": [
       [
-        "4077349a.8bac9c",
-        "6217f7e9.0355f8",
-        "ade5c255.76313"
+        "a8b2de1e.e3647",
+        "a5fbf113.0d0d",
+        "bc82801e.bac77"
       ]
     ]
   },
   {
-    "id": "d5a3516a.903eb",
+    "id": "ca4200be.a2b7a",
     "type": "comment",
     "z": "7c147959.8f4298",
     "name": "Web Services",
@@ -657,7 +657,7 @@
     "wires": []
   },
   {
-    "id": "d29a7e77.a1774",
+    "id": "c0107098.74fd9",
     "type": "comment",
     "z": "7c147959.8f4298",
     "name": "Import from Blink API into context.global.Blink",
@@ -667,7 +667,7 @@
     "wires": []
   },
   {
-    "id": "c4329fc1.71e19",
+    "id": "f31bb45.f7af548",
     "type": "comment",
     "z": "7c147959.8f4298",
     "name": "Import from context.global.Blink into winkState",
@@ -677,7 +677,7 @@
     "wires": []
   },
   {
-    "id": "34318529.c5ce1a",
+    "id": "9e461463.2acf48",
     "type": "comment",
     "z": "7c147959.8f4298",
     "name": "v---- Update \"Define username and password\" node to your Blink account e-mail and password",
@@ -687,7 +687,7 @@
     "wires": []
   },
   {
-    "id": "50379ae1.cbc374",
+    "id": "2a815d85.e3ba62",
     "type": "comment",
     "z": "7c147959.8f4298",
     "name": "Arm / Disarm Blink manually through using the Inject button",
@@ -697,7 +697,7 @@
     "wires": []
   },
   {
-    "id": "ade5c255.76313",
+    "id": "bc82801e.bac77",
     "type": "debug",
     "z": "7c147959.8f4298",
     "name": "",
@@ -709,7 +709,7 @@
     "wires": []
   },
   {
-    "id": "2b14fc4.93c4804",
+    "id": "54e10a97.d390f4",
     "type": "http response",
     "z": "7c147959.8f4298",
     "name": "",
@@ -718,7 +718,7 @@
     "wires": []
   },
   {
-    "id": "453c408e.8bd52",
+    "id": "a897ed1b.253a",
     "type": "http response",
     "z": "7c147959.8f4298",
     "name": "",
@@ -727,7 +727,7 @@
     "wires": []
   },
   {
-    "id": "4dc6a74c.7fe0d8",
+    "id": "fbdf44d3.692fd8",
     "type": "http request",
     "z": "7c147959.8f4298",
     "name": "",
@@ -741,7 +741,7 @@
     ]
   },
   {
-    "id": "5c1d5ef7.f1ec3",
+    "id": "cebbe019.feda6",
     "type": "debug",
     "z": "7c147959.8f4298",
     "name": "",
@@ -753,7 +753,7 @@
     "wires": []
   },
   {
-    "id": "7982d4f3.b1a57c",
+    "id": "ca19d278.adfcc",
     "type": "delay",
     "z": "7c147959.8f4298",
     "name": "",
@@ -770,12 +770,12 @@
     "y": 250,
     "wires": [
       [
-        "27765b3a.8fe134"
+        "300bce28.182c62"
       ]
     ]
   },
   {
-    "id": "e060ede.aae611",
+    "id": "e4cbae1a.d0a3e",
     "type": "inject",
     "z": "7c147959.8f4298",
     "name": "",
@@ -789,12 +789,12 @@
     "y": 414,
     "wires": [
       [
-        "46b56c89.7476e4"
+        "5a916853.fd1298"
       ]
     ]
   },
   {
-    "id": "46b56c89.7476e4",
+    "id": "5a916853.fd1298",
     "type": "function",
     "z": "7c147959.8f4298",
     "name": "",
@@ -808,7 +808,7 @@
     ]
   },
   {
-    "id": "6217f7e9.0355f8",
+    "id": "a5fbf113.0d0d",
     "type": "function",
     "z": "7c147959.8f4298",
     "name": "",
@@ -819,16 +819,16 @@
     "y": 497,
     "wires": [
       [
-        "27765b3a.8fe134"
+        "300bce28.182c62"
       ]
     ]
   },
   {
-    "id": "3aaef6cb.b6faca",
+    "id": "6d224586.ae18fc",
     "type": "debug",
     "z": "7c147959.8f4298",
     "name": "",
-    "active": true,
+    "active": false,
     "console": "false",
     "complete": "true",
     "x": 287,
