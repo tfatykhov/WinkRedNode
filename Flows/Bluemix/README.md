@@ -8,13 +8,16 @@ https://(your_app_name).mybluemix.net/freeboard/winkboardautogroup - sample free
 -
 04/14/2016
 ------------
+###Bloomsky:
+
 Updated Bloomsky integration such that the UI will show the latest image from Bloomsky, without needing to refresh the browser.
 Flow Editor:<br>
 *  Import updated [winkIntegration.json](winkIntegration.json)
 *  perform "Modified Nodes" deployment<br>
-<br><br>
-Integration with Blink Home Cameras now live! If you have Blink cameras, your cameras can now show up in the Camera tab of the UI and the temperature data shows up in the sensors.<br>
-Flow Editor:<br>
+<br>
+###Blink Cameras:
+
+Integration with Blink Home Cameras now live! If you have Blink cameras, your cameras can now show up in the Camera tab of the UI and the temperature data shows up in the sensors. Flow Editor:<br>
 *  Import [Blink.json](Blink.json)
 *  Update "Define e-mail and password" node with your Blink username and password.
 *  Perform "Modified Nodes" deployment<br>
