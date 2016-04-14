@@ -6,6 +6,13 @@ https://(your_app_name).mybluemix.net/freeboard/winkboardautogroup - sample free
 
 == UPDATE ==
 -
+04/14/2016
+------------
+Updated Bloomsky integration such that the UI will show the latest image from Bloomsky, without needing to refresh the browser.
+Flow Editor:<br>
+*  Import updated [winkIntegration.json](winkIntegration.json)
+*  perform "Modified Nodes" deployment<br>
+
 04/09/2016
 ------------
 Old or "deleted" wink devices are not shown anymore.
