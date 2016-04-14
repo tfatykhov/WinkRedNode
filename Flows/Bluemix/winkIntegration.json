@@ -1,6 +1,6 @@
 [
   {
-    "id": "ae63c5c2.7da4c8",
+    "id": "e7b94b91.ba89c8",
     "type": "function",
     "z": "95f60c40.6a09f",
     "name": "",
@@ -11,12 +11,12 @@
     "y": 868.5,
     "wires": [
       [
-        "9863023e.3a8c7"
+        "74e1435e.1d454c"
       ]
     ]
   },
   {
-    "id": "b6a74d6c.ea002",
+    "id": "e5f9d285.bd081",
     "type": "function",
     "z": "95f60c40.6a09f",
     "name": "",
@@ -27,15 +27,15 @@
     "y": 245.49993896484375,
     "wires": [
       [
-        "2cfcfde5.d19d62"
+        "22fbd9b2.acb316"
       ],
       [
-        "d8d831f1.91534"
+        "78763c42.4b0084"
       ]
     ]
   },
   {
-    "id": "27f01286.02af3e",
+    "id": "cb232b16.459af8",
     "type": "http in",
     "z": "95f60c40.6a09f",
     "name": "",
@@ -46,13 +46,13 @@
     "y": 238.5,
     "wires": [
       [
-        "e47ad5f8.d7dc78",
-        "9a57b455.8cc608"
+        "2bb4f9aa.29ac86",
+        "20b73811.f855c8"
       ]
     ]
   },
   {
-    "id": "2cfcfde5.d19d62",
+    "id": "22fbd9b2.acb316",
     "type": "http response",
     "z": "95f60c40.6a09f",
     "name": "",
@@ -61,7 +61,7 @@
     "wires": []
   },
   {
-    "id": "ee9ff44.148c608",
+    "id": "cbed63f0.6e2a",
     "type": "comment",
     "z": "95f60c40.6a09f",
     "name": "IFTTT Integration-------------------------------------------------------------------------------------------------------------------------------",
@@ -71,7 +71,7 @@
     "wires": []
   },
   {
-    "id": "da1a4481.323068",
+    "id": "f211443d.9a1928",
     "type": "http request",
     "z": "95f60c40.6a09f",
     "name": "",
@@ -82,13 +82,13 @@
     "y": 245.49993896484375,
     "wires": [
       [
-        "388bccee.fb57c4",
-        "711931b2.b2905"
+        "aaac9a5b.fccbc8",
+        "6257cd90.d6c964"
       ]
     ]
   },
   {
-    "id": "d5f44b5f.1e4ce8",
+    "id": "3f75cd82.605422",
     "type": "comment",
     "z": "95f60c40.6a09f",
     "name": "Wink API Apdex-------------------------------------------------------------------------------------------------------------------------------",
@@ -98,7 +98,7 @@
     "wires": []
   },
   {
-    "id": "a42a4774.6f4358",
+    "id": "2e7ce439.5e527c",
     "type": "inject",
     "z": "95f60c40.6a09f",
     "name": "",
@@ -112,12 +112,12 @@
     "y": 466.4998779296875,
     "wires": [
       [
-        "3acb88b4.0fcbb8"
+        "af7c0532.5780e8"
       ]
     ]
   },
   {
-    "id": "3acb88b4.0fcbb8",
+    "id": "af7c0532.5780e8",
     "type": "function",
     "z": "95f60c40.6a09f",
     "name": "",
@@ -128,12 +128,12 @@
     "y": 467.49993896484375,
     "wires": [
       [
-        "dcd49ad7.a54258"
+        "61cbd8a4.396268"
       ]
     ]
   },
   {
-    "id": "dcd49ad7.a54258",
+    "id": "61cbd8a4.396268",
     "type": "http request",
     "z": "95f60c40.6a09f",
     "name": "",
@@ -144,12 +144,12 @@
     "y": 479.49993896484375,
     "wires": [
       [
-        "45c9a5b2.d018ec"
+        "129d5aee.3b57c5"
       ]
     ]
   },
   {
-    "id": "45c9a5b2.d018ec",
+    "id": "129d5aee.3b57c5",
     "type": "function",
     "z": "95f60c40.6a09f",
     "name": "",
@@ -163,7 +163,7 @@
     ]
   },
   {
-    "id": "d2711754.e3d888",
+    "id": "e59389f3.9cba88",
     "type": "comment",
     "z": "95f60c40.6a09f",
     "name": "DromCam/NestCam Integration-------------------------------------------------------------------------------------------------------------------------------",
@@ -173,7 +173,7 @@
     "wires": []
   },
   {
-    "id": "52944684.cfa708",
+    "id": "4b190c69.360da4",
     "type": "comment",
     "z": "95f60c40.6a09f",
     "name": "Presence  via IFTTT/Tasker/etc. -------------------------------------------------------------------------------------------------------------------------------",
@@ -183,7 +183,7 @@
     "wires": []
   },
   {
-    "id": "9a9475a6.4df118",
+    "id": "5710e71f.087a08",
     "type": "http in",
     "z": "95f60c40.6a09f",
     "name": "",
@@ -194,14 +194,14 @@
     "y": 674.9998779296875,
     "wires": [
       [
-        "8e457dd7.df289",
-        "b7c187ad.0630c8",
-        "510780d0.0c0ce"
+        "1c70f525.bc5f4b",
+        "5f4c6253.8dc3fc",
+        "96bee4e0.328b68"
       ]
     ]
   },
   {
-    "id": "8e457dd7.df289",
+    "id": "1c70f525.bc5f4b",
     "type": "function",
     "z": "95f60c40.6a09f",
     "name": "Update Presence entry",
@@ -212,17 +212,17 @@
     "y": 675.9998779296875,
     "wires": [
       [
-        "b298e9.6ce09718",
-        "a93e0507.116248",
-        "199aa01e.2932c"
+        "36e700fd.6850b",
+        "1a3b5256.c8426e",
+        "eb67c3ee.13ace"
       ],
       [
-        "8ad696b9.80dc38"
+        "f2212ecd.ef457"
       ]
     ]
   },
   {
-    "id": "b298e9.6ce09718",
+    "id": "36e700fd.6850b",
     "type": "http response",
     "z": "95f60c40.6a09f",
     "name": "",
@@ -231,7 +231,7 @@
     "wires": []
   },
   {
-    "id": "8ad696b9.80dc38",
+    "id": "f2212ecd.ef457",
     "type": "function",
     "z": "95f60c40.6a09f",
     "name": "",
@@ -242,12 +242,12 @@
     "y": 743.22216796875,
     "wires": [
       [
-        "fa847fc4.7b2d5"
+        "3dad889a.1e2548"
       ]
     ]
   },
   {
-    "id": "fa847fc4.7b2d5",
+    "id": "3dad889a.1e2548",
     "type": "http request",
     "z": "95f60c40.6a09f",
     "name": "",
@@ -261,7 +261,7 @@
     ]
   },
   {
-    "id": "12765d15.ffc763",
+    "id": "761a84a1.9c2c8c",
     "type": "comment",
     "z": "95f60c40.6a09f",
     "name": "Integration with Ecobee Node Red ----------------------------------------------------------------------------------------------",
@@ -271,7 +271,7 @@
     "wires": []
   },
   {
-    "id": "33db2fd3.2234c",
+    "id": "887bf05.946621",
     "type": "http in",
     "z": "95f60c40.6a09f",
     "name": "",
@@ -282,12 +282,12 @@
     "y": 572.4999694824219,
     "wires": [
       [
-        "a4cd93ad.85202"
+        "459fc276.93d01c"
       ]
     ]
   },
   {
-    "id": "a4cd93ad.85202",
+    "id": "459fc276.93d01c",
     "type": "function",
     "z": "95f60c40.6a09f",
     "name": "",
@@ -298,12 +298,12 @@
     "y": 571.4999694824219,
     "wires": [
       [
-        "52309873.aa3518"
+        "be5e3789.41aa78"
       ]
     ]
   },
   {
-    "id": "52309873.aa3518",
+    "id": "be5e3789.41aa78",
     "type": "http request",
     "z": "95f60c40.6a09f",
     "name": "",
@@ -314,12 +314,12 @@
     "y": 573.4999694824219,
     "wires": [
       [
-        "97c7d3.f7e0583"
+        "bbca89ce.dff118"
       ]
     ]
   },
   {
-    "id": "97c7d3.f7e0583",
+    "id": "bbca89ce.dff118",
     "type": "http response",
     "z": "95f60c40.6a09f",
     "name": "",
@@ -328,7 +328,7 @@
     "wires": []
   },
   {
-    "id": "81ed804f.8a8fe",
+    "id": "be3b1b63.e864a8",
     "type": "function",
     "z": "95f60c40.6a09f",
     "name": "",
@@ -339,12 +339,12 @@
     "y": 705.611083984375,
     "wires": [
       [
-        "1bfaa222.5abade"
+        "45e477bb.eb3b18"
       ]
     ]
   },
   {
-    "id": "a93e0507.116248",
+    "id": "1a3b5256.c8426e",
     "type": "function",
     "z": "95f60c40.6a09f",
     "name": "",
@@ -355,12 +355,12 @@
     "y": 704.611083984375,
     "wires": [
       [
-        "4aef501b.d3f7a"
+        "ae1567a6.df3e08"
       ]
     ]
   },
   {
-    "id": "4aef501b.d3f7a",
+    "id": "ae1567a6.df3e08",
     "type": "http request",
     "z": "95f60c40.6a09f",
     "name": "",
@@ -371,12 +371,12 @@
     "y": 704.611083984375,
     "wires": [
       [
-        "81ed804f.8a8fe"
+        "be3b1b63.e864a8"
       ]
     ]
   },
   {
-    "id": "1bfaa222.5abade",
+    "id": "45e477bb.eb3b18",
     "type": "http request",
     "z": "95f60c40.6a09f",
     "name": "",
@@ -390,7 +390,7 @@
     ]
   },
   {
-    "id": "8e414f70.79e0f",
+    "id": "b1fbce67.0576e",
     "type": "inject",
     "z": "95f60c40.6a09f",
     "name": "",
@@ -404,12 +404,12 @@
     "y": 1113.8333129882812,
     "wires": [
       [
-        "410d813d.87e37"
+        "8b71cc5b.7014a"
       ]
     ]
   },
   {
-    "id": "410d813d.87e37",
+    "id": "8b71cc5b.7014a",
     "type": "function",
     "z": "95f60c40.6a09f",
     "name": "Try to create DB",
@@ -420,12 +420,12 @@
     "y": 1114.8332824707031,
     "wires": [
       [
-        "7489ef1b.f1675"
+        "8d0693cd.168fc"
       ]
     ]
   },
   {
-    "id": "7489ef1b.f1675",
+    "id": "8d0693cd.168fc",
     "type": "http request",
     "z": "95f60c40.6a09f",
     "name": "db req",
@@ -436,12 +436,12 @@
     "y": 1114.8332824707031,
     "wires": [
       [
-        "ab487ee1.591f3"
+        "ade24723.e90878"
       ]
     ]
   },
   {
-    "id": "ab487ee1.591f3",
+    "id": "ade24723.e90878",
     "type": "function",
     "z": "95f60c40.6a09f",
     "name": "Check response",
@@ -452,12 +452,12 @@
     "y": 1114.8332824707031,
     "wires": [
       [
-        "ac3efdd4.b38c9"
+        "7e38392.93306c8"
       ]
     ]
   },
   {
-    "id": "ac3efdd4.b38c9",
+    "id": "7e38392.93306c8",
     "type": "http request",
     "z": "95f60c40.6a09f",
     "name": "",
@@ -468,12 +468,12 @@
     "y": 1115.72216796875,
     "wires": [
       [
-        "6ab920ba.dd091"
+        "f48854d6.387898"
       ]
     ]
   },
   {
-    "id": "6ab920ba.dd091",
+    "id": "f48854d6.387898",
     "type": "function",
     "z": "95f60c40.6a09f",
     "name": "restore from db",
@@ -484,12 +484,12 @@
     "y": 1115.72216796875,
     "wires": [
       [
-        "c0163108.c59bb"
+        "2ae6784.e422388"
       ]
     ]
   },
   {
-    "id": "b4ad88f2.94b738",
+    "id": "1a7c1377.c6592d",
     "type": "comment",
     "z": "95f60c40.6a09f",
     "name": "Cloundant DB -------------------------------------------------------------------------------------------------------------------------------",
@@ -499,26 +499,26 @@
     "wires": []
   },
   {
-    "id": "9c7696b1.2e5a38",
+    "id": "669c3a0a.933594",
     "type": "function",
     "z": "95f60c40.6a09f",
     "name": "Save Snapshots to db",
-    "func": "if ((msg.req.body.uid==context.global.WinkUser.uid && msg.req.body.pwd==context.global.WinkUser.pwd)||context.global.getCookie('exchange_token',msg.req.headers.cookie)==context.global.FREEBOARD_TOKEN || msg.payload.token==context.global.FREEBOARD_TOKEN || (msg.req.headers.authorization && msg.req.headers.authorization==\"Bearer \"+context.global.FREEBOARD_TOKEN)){\nvar msg1=msg;\nvar trigger=msg.payload.object_name;\nvar cam_list=msg.payload.cam_list.split(',');\nmsg1.res.statusCode=\"200\";\nnode.send([msg1,null]);\nvar date=new Date();\nvar delay=0;\nfor (var i=0;i<cam_list.length;i++){\n//for (var cam in context.global.winkState.cameras){\n var camera=context.global.winkState.cameras[cam_list[i]];\n var cam=cam_list[i];\nif ('snap_url' in camera && camera.snap_url!=='undefined' && camera.eco_system!==\"Blink\"){\n    //var msg={}\n    msg.url=camera.snap_url;\n    msg.method=\"GET\";\n    msg.date=date;\n    msg.topic=cam;\n    msg.trigger=trigger;\n    context.global.sendWithTimeout(node,[null,msg],delay);\n    delay+=500;\n}\nif (camera.eco_system==\"Blink\")\n{\n    date = new Date(context.global.Blink.events[msg.payload.blinkevent].updated_at);\n    msg.url=camera.snap_url+\"&blinkevent=\"+msg.payload.blinkevent+\"&iftttkey=\"+context.global.FREEBOARD_TOKEN;\n    msg.method=\"GET\";\n    msg.date=date;\n    msg.topic=cam;\n    msg.trigger=trigger;\n    context.global.sendWithTimeout(node,[null,msg],delay);\n    delay+=500;\n}\n}\n\n} else {\n    msg.statusCode=\"401\";\n    node.send(msg);\n//    msg.res.send(401,\"Bad request\");\n}\nreturn;",
+    "func": "if ((msg.req.body.uid==context.global.WinkUser.uid && msg.req.body.pwd==context.global.WinkUser.pwd)||context.global.getCookie('exchange_token',msg.req.headers.cookie)==context.global.FREEBOARD_TOKEN || msg.payload.token==context.global.FREEBOARD_TOKEN || (msg.req.headers.authorization && msg.req.headers.authorization==\"Bearer \"+context.global.FREEBOARD_TOKEN)){\nvar msg1=msg;\nvar trigger=msg.payload.object_name;\nvar cam_list=msg.payload.cam_list.split(',');\nmsg1.res.statusCode=\"200\";\nnode.send([msg1,null]);\nvar date=new Date();\nvar delay=0;\nfor (var i=0;i<cam_list.length;i++){\n//for (var cam in context.global.winkState.cameras){\n var camera=context.global.winkState.cameras[cam_list[i]];\n var cam=cam_list[i];\nif ('snap_url' in camera && camera.snap_url!=='undefined'){\n    //var msg={}\n    msg.url=camera.snap_url;\n    msg.method=\"GET\";\n    msg.date=date;\n    msg.topic=cam;\n    msg.trigger=trigger;\n    context.global.sendWithTimeout(node,[null,msg],delay);\n    delay+=500;\n}\n\n}\n\n} else {\n    msg.statusCode=\"401\";\n    node.send(msg);\n//    msg.res.send(401,\"Bad request\");\n}\nreturn;",
     "outputs": "2",
     "noerr": 0,
     "x": 404.10418701171875,
     "y": 1214.833251953125,
     "wires": [
       [
-        "f981f481.1e0c28"
+        "3c2e2e61.a1d882"
       ],
       [
-        "6e044840.147f58"
+        "838377d0.007f88"
       ]
     ]
   },
   {
-    "id": "6e044840.147f58",
+    "id": "838377d0.007f88",
     "type": "http request",
     "z": "95f60c40.6a09f",
     "name": "getPic",
@@ -529,12 +529,12 @@
     "y": 1220.8332824707031,
     "wires": [
       [
-        "7c6e3ad7.c16544"
+        "2017c66c.19807a"
       ]
     ]
   },
   {
-    "id": "7c6e3ad7.c16544",
+    "id": "2017c66c.19807a",
     "type": "function",
     "z": "95f60c40.6a09f",
     "name": "save picture",
@@ -545,12 +545,12 @@
     "y": 1220.8332824707031,
     "wires": [
       [
-        "eb74b1c1.3965e"
+        "720178a3.014f98"
       ]
     ]
   },
   {
-    "id": "eb74b1c1.3965e",
+    "id": "720178a3.014f98",
     "type": "http request",
     "z": "95f60c40.6a09f",
     "name": "",
@@ -561,12 +561,12 @@
     "y": 1221.72216796875,
     "wires": [
       [
-        "8603b18f.e9a63"
+        "28f85c72.a12c94"
       ]
     ]
   },
   {
-    "id": "4028b09a.397d3",
+    "id": "fafb4e0d.c5601",
     "type": "http in",
     "z": "95f60c40.6a09f",
     "name": "",
@@ -577,12 +577,12 @@
     "y": 1214.72216796875,
     "wires": [
       [
-        "9c7696b1.2e5a38"
+        "669c3a0a.933594"
       ]
     ]
   },
   {
-    "id": "f981f481.1e0c28",
+    "id": "3c2e2e61.a1d882",
     "type": "http response",
     "z": "95f60c40.6a09f",
     "name": "",
@@ -591,7 +591,7 @@
     "wires": []
   },
   {
-    "id": "8603b18f.e9a63",
+    "id": "28f85c72.a12c94",
     "type": "function",
     "z": "95f60c40.6a09f",
     "name": "cache results",
@@ -602,12 +602,12 @@
     "y": 1217.72216796875,
     "wires": [
       [
-        "49eadbbd.e6e684"
+        "1c31e52c.5b588b"
       ]
     ]
   },
   {
-    "id": "49eadbbd.e6e684",
+    "id": "1c31e52c.5b588b",
     "type": "http request",
     "z": "95f60c40.6a09f",
     "name": "",
@@ -618,12 +618,12 @@
     "y": 1101.72216796875,
     "wires": [
       [
-        "711d8169.8df27"
+        "3a3d4e51.e1c762"
       ]
     ]
   },
   {
-    "id": "711d8169.8df27",
+    "id": "3a3d4e51.e1c762",
     "type": "function",
     "z": "95f60c40.6a09f",
     "name": "delete old pics",
@@ -637,7 +637,7 @@
     ]
   },
   {
-    "id": "872ece76.ef70f",
+    "id": "86903b87.97afd8",
     "type": "http in",
     "z": "95f60c40.6a09f",
     "name": "",
@@ -648,12 +648,12 @@
     "y": 1272.72216796875,
     "wires": [
       [
-        "8b60f5e5.33bd78"
+        "35290a14.f908a6"
       ]
     ]
   },
   {
-    "id": "8b60f5e5.33bd78",
+    "id": "35290a14.f908a6",
     "type": "function",
     "z": "95f60c40.6a09f",
     "name": "gen CLD url",
@@ -664,12 +664,12 @@
     "y": 1272.72216796875,
     "wires": [
       [
-        "c65a8295.29125"
+        "6a4e9a48.40abe4"
       ]
     ]
   },
   {
-    "id": "c65a8295.29125",
+    "id": "6a4e9a48.40abe4",
     "type": "http request",
     "z": "95f60c40.6a09f",
     "name": "",
@@ -680,12 +680,12 @@
     "y": 1274.72216796875,
     "wires": [
       [
-        "2d6111e9.f3a7ae"
+        "de9db906.23cb58"
       ]
     ]
   },
   {
-    "id": "2d6111e9.f3a7ae",
+    "id": "de9db906.23cb58",
     "type": "http response",
     "z": "95f60c40.6a09f",
     "name": "",
@@ -694,7 +694,7 @@
     "wires": []
   },
   {
-    "id": "b9a07c50.11a23",
+    "id": "50839df7.d62364",
     "type": "http in",
     "z": "95f60c40.6a09f",
     "name": "",
@@ -705,12 +705,12 @@
     "y": 1365.72216796875,
     "wires": [
       [
-        "a4e0897b.9cf4c8"
+        "cbd8d6c2.3010b8"
       ]
     ]
   },
   {
-    "id": "a4e0897b.9cf4c8",
+    "id": "cbd8d6c2.3010b8",
     "type": "function",
     "z": "95f60c40.6a09f",
     "name": "get activities from db",
@@ -721,15 +721,15 @@
     "y": 1365.72216796875,
     "wires": [
       [
-        "c6483ccf.3a945"
+        "e000dc76.0478e"
       ],
       [
-        "831ef63e.683848"
+        "77ea55f5.1005fc"
       ]
     ]
   },
   {
-    "id": "831ef63e.683848",
+    "id": "77ea55f5.1005fc",
     "type": "http request",
     "z": "95f60c40.6a09f",
     "name": "",
@@ -740,12 +740,12 @@
     "y": 1398.72216796875,
     "wires": [
       [
-        "24b855cb.651f4a"
+        "5053ac3e.be0594"
       ]
     ]
   },
   {
-    "id": "24b855cb.651f4a",
+    "id": "5053ac3e.be0594",
     "type": "function",
     "z": "95f60c40.6a09f",
     "name": "cache cam history",
@@ -759,7 +759,7 @@
     ]
   },
   {
-    "id": "c6483ccf.3a945",
+    "id": "e000dc76.0478e",
     "type": "http response",
     "z": "95f60c40.6a09f",
     "name": "",
@@ -768,7 +768,7 @@
     "wires": []
   },
   {
-    "id": "4580015a.e44f3",
+    "id": "ad9f0c8e.2ef15",
     "type": "inject",
     "z": "95f60c40.6a09f",
     "name": "",
@@ -782,12 +782,12 @@
     "y": 867.7499389648438,
     "wires": [
       [
-        "ae63c5c2.7da4c8"
+        "e7b94b91.ba89c8"
       ]
     ]
   },
   {
-    "id": "9863023e.3a8c7",
+    "id": "74e1435e.1d454c",
     "type": "debug",
     "z": "95f60c40.6a09f",
     "name": "",
@@ -799,7 +799,7 @@
     "wires": []
   },
   {
-    "id": "7311428.4e0c0bc",
+    "id": "8745f8d9.819e78",
     "type": "comment",
     "z": "95f60c40.6a09f",
     "name": "Integration with LIFX Bulbs ---------------------------------------------------------------------------------------",
@@ -809,7 +809,7 @@
     "wires": []
   },
   {
-    "id": "51d3edc4.4d75a4",
+    "id": "b8e14237.f129a",
     "type": "function",
     "z": "95f60c40.6a09f",
     "name": "Throw Config Data",
@@ -820,12 +820,12 @@
     "y": 62.5,
     "wires": [
       [
-        "343c0b4d.cb9284"
+        "33397a32.65a0b6"
       ]
     ]
   },
   {
-    "id": "343c0b4d.cb9284",
+    "id": "33397a32.65a0b6",
     "type": "http response",
     "z": "95f60c40.6a09f",
     "name": "",
@@ -834,7 +834,7 @@
     "wires": []
   },
   {
-    "id": "df2f4208.4565a",
+    "id": "54b24bf7.2a16f4",
     "type": "comment",
     "z": "95f60c40.6a09f",
     "name": "Section for web services---------------------------------------------------------------------------------------------------------------------------------",
@@ -844,7 +844,7 @@
     "wires": []
   },
   {
-    "id": "11411743.9d4519",
+    "id": "363963a0.1dc13c",
     "type": "http in",
     "z": "95f60c40.6a09f",
     "name": "",
@@ -855,12 +855,12 @@
     "y": 112.5,
     "wires": [
       [
-        "352cef69.42d1c"
+        "e0a35c0e.cb16d"
       ]
     ]
   },
   {
-    "id": "352cef69.42d1c",
+    "id": "e0a35c0e.cb16d",
     "type": "function",
     "z": "95f60c40.6a09f",
     "name": "Throw Cameras Data",
@@ -871,12 +871,12 @@
     "y": 115.5,
     "wires": [
       [
-        "4d35504.869adb"
+        "9d4a7065.4e4ba"
       ]
     ]
   },
   {
-    "id": "4d35504.869adb",
+    "id": "9d4a7065.4e4ba",
     "type": "http response",
     "z": "95f60c40.6a09f",
     "name": "",
@@ -885,7 +885,7 @@
     "wires": []
   },
   {
-    "id": "3dd93b1.e9c4ec4",
+    "id": "87a060ee.0ed06",
     "type": "catch",
     "z": "95f60c40.6a09f",
     "name": "",
@@ -893,12 +893,12 @@
     "y": 2088,
     "wires": [
       [
-        "835a6d10.47625"
+        "b06b8e36.2dace"
       ]
     ]
   },
   {
-    "id": "835a6d10.47625",
+    "id": "b06b8e36.2dace",
     "type": "debug",
     "z": "95f60c40.6a09f",
     "name": "",
@@ -910,7 +910,7 @@
     "wires": []
   },
   {
-    "id": "d8402a27.876d28",
+    "id": "b3ba735d.5b05e",
     "type": "inject",
     "z": "95f60c40.6a09f",
     "name": "",
@@ -924,12 +924,12 @@
     "y": 1552,
     "wires": [
       [
-        "be83d26b.8cb01"
+        "60cf6ddc.1036b4"
       ]
     ]
   },
   {
-    "id": "be83d26b.8cb01",
+    "id": "60cf6ddc.1036b4",
     "type": "function",
     "z": "95f60c40.6a09f",
     "name": "",
@@ -940,12 +940,12 @@
     "y": 1552,
     "wires": [
       [
-        "3dcbe882.2738f8"
+        "35b93e0f.ee4222"
       ]
     ]
   },
   {
-    "id": "3dcbe882.2738f8",
+    "id": "35b93e0f.ee4222",
     "type": "http request",
     "z": "95f60c40.6a09f",
     "name": "",
@@ -956,12 +956,12 @@
     "y": 1551,
     "wires": [
       [
-        "b857b0ab.f43a1"
+        "e61dd3dd.53c9a"
       ]
     ]
   },
   {
-    "id": "b857b0ab.f43a1",
+    "id": "e61dd3dd.53c9a",
     "type": "function",
     "z": "95f60c40.6a09f",
     "name": "",
@@ -972,12 +972,12 @@
     "y": 1553,
     "wires": [
       [
-        "bc3665e6.3c8df8"
+        "b7713a17.800298"
       ]
     ]
   },
   {
-    "id": "bc3665e6.3c8df8",
+    "id": "b7713a17.800298",
     "type": "http request",
     "z": "95f60c40.6a09f",
     "name": "",
@@ -991,7 +991,7 @@
     ]
   },
   {
-    "id": "b7c187ad.0630c8",
+    "id": "5f4c6253.8dc3fc",
     "type": "function",
     "z": "95f60c40.6a09f",
     "name": "",
@@ -1002,12 +1002,12 @@
     "y": 760,
     "wires": [
       [
-        "ec68b1a2.e8782"
+        "a0dec2ce.ef8ee"
       ]
     ]
   },
   {
-    "id": "ec68b1a2.e8782",
+    "id": "a0dec2ce.ef8ee",
     "type": "http request",
     "z": "95f60c40.6a09f",
     "name": "",
@@ -1021,7 +1021,7 @@
     ]
   },
   {
-    "id": "2c2657d6.5c3eb8",
+    "id": "542499bd.82b638",
     "type": "inject",
     "z": "95f60c40.6a09f",
     "name": "",
@@ -1035,12 +1035,12 @@
     "y": 962,
     "wires": [
       [
-        "b05d7237.6a684"
+        "1d39860d.eb4baa"
       ]
     ]
   },
   {
-    "id": "b05d7237.6a684",
+    "id": "1d39860d.eb4baa",
     "type": "delay",
     "z": "95f60c40.6a09f",
     "name": "",
@@ -1057,12 +1057,12 @@
     "y": 963,
     "wires": [
       [
-        "7c8d69bd.b1b468"
+        "ab8609b4.63fb28"
       ]
     ]
   },
   {
-    "id": "7c8d69bd.b1b468",
+    "id": "ab8609b4.63fb28",
     "type": "function",
     "z": "95f60c40.6a09f",
     "name": "try to refresh app_config data",
@@ -1073,12 +1073,12 @@
     "y": 954,
     "wires": [
       [
-        "b8f679f6.9ff928"
+        "75598d77.515874"
       ]
     ]
   },
   {
-    "id": "b8f679f6.9ff928",
+    "id": "75598d77.515874",
     "type": "http request",
     "z": "95f60c40.6a09f",
     "name": "",
@@ -1089,12 +1089,12 @@
     "y": 959,
     "wires": [
       [
-        "53cd770a.326ab8"
+        "efa6f904.7a5028"
       ]
     ]
   },
   {
-    "id": "53cd770a.326ab8",
+    "id": "efa6f904.7a5028",
     "type": "function",
     "z": "95f60c40.6a09f",
     "name": "create or update config ",
@@ -1105,12 +1105,12 @@
     "y": 958,
     "wires": [
       [
-        "9f84a756.dc4d98"
+        "c390c72f.83c138"
       ]
     ]
   },
   {
-    "id": "9f84a756.dc4d98",
+    "id": "c390c72f.83c138",
     "type": "http request",
     "z": "95f60c40.6a09f",
     "name": "",
@@ -1121,12 +1121,12 @@
     "y": 957,
     "wires": [
       [
-        "2fef2922.132a06"
+        "2697d118.1530ee"
       ]
     ]
   },
   {
-    "id": "c88f26d5.783f98",
+    "id": "592c9278.f2eeec",
     "type": "http in",
     "z": "95f60c40.6a09f",
     "name": "",
@@ -1137,12 +1137,12 @@
     "y": 1043,
     "wires": [
       [
-        "f5fa826b.5aa11"
+        "e969c271.9733c"
       ]
     ]
   },
   {
-    "id": "f5fa826b.5aa11",
+    "id": "e969c271.9733c",
     "type": "function",
     "z": "95f60c40.6a09f",
     "name": "",
@@ -1153,15 +1153,15 @@
     "y": 1047,
     "wires": [
       [
-        "7c8d69bd.b1b468"
+        "ab8609b4.63fb28"
       ],
       [
-        "df5fd80f.ed25f8"
+        "4e671410.8ce46c"
       ]
     ]
   },
   {
-    "id": "df5fd80f.ed25f8",
+    "id": "4e671410.8ce46c",
     "type": "http response",
     "z": "95f60c40.6a09f",
     "name": "",
@@ -1170,7 +1170,7 @@
     "wires": []
   },
   {
-    "id": "2fef2922.132a06",
+    "id": "2697d118.1530ee",
     "type": "function",
     "z": "95f60c40.6a09f",
     "name": "",
@@ -1181,12 +1181,12 @@
     "y": 1046,
     "wires": [
       [
-        "38604ebb.3e4a72"
+        "e044e7b4.fb28c8"
       ]
     ]
   },
   {
-    "id": "63db2932.5c6ea8",
+    "id": "dbcccb1d.038f48",
     "type": "json",
     "z": "95f60c40.6a09f",
     "name": "",
@@ -1194,12 +1194,12 @@
     "y": 210,
     "wires": [
       [
-        "b6a74d6c.ea002"
+        "e5f9d285.bd081"
       ]
     ]
   },
   {
-    "id": "e47ad5f8.d7dc78",
+    "id": "2bb4f9aa.29ac86",
     "type": "switch",
     "z": "95f60c40.6a09f",
     "name": "",
@@ -1221,15 +1221,15 @@
     "y": 236,
     "wires": [
       [
-        "63db2932.5c6ea8"
+        "dbcccb1d.038f48"
       ],
       [
-        "b6a74d6c.ea002"
+        "e5f9d285.bd081"
       ]
     ]
   },
   {
-    "id": "38604ebb.3e4a72",
+    "id": "e044e7b4.fb28c8",
     "type": "http request",
     "z": "95f60c40.6a09f",
     "name": "",
@@ -1243,7 +1243,7 @@
     ]
   },
   {
-    "id": "510780d0.0c0ce",
+    "id": "96bee4e0.328b68",
     "type": "function",
     "z": "95f60c40.6a09f",
     "name": "",
@@ -1254,12 +1254,12 @@
     "y": 712,
     "wires": [
       [
-        "b629a9a2.9f6fc8"
+        "188db1bb.34965e"
       ]
     ]
   },
   {
-    "id": "b629a9a2.9f6fc8",
+    "id": "188db1bb.34965e",
     "type": "http request",
     "z": "95f60c40.6a09f",
     "name": "",
@@ -1273,7 +1273,7 @@
     ]
   },
   {
-    "id": "e885202.e8f2ae",
+    "id": "f118a123.9ba5d",
     "type": "http in",
     "z": "95f60c40.6a09f",
     "name": "",
@@ -1284,12 +1284,12 @@
     "y": 63,
     "wires": [
       [
-        "51d3edc4.4d75a4"
+        "b8e14237.f129a"
       ]
     ]
   },
   {
-    "id": "a719f123.c835f",
+    "id": "fa835dfd.8838c",
     "type": "http in",
     "z": "95f60c40.6a09f",
     "name": "",
@@ -1300,12 +1300,12 @@
     "y": 296,
     "wires": [
       [
-        "99a24216.a118b"
+        "3e215f18.b295e"
       ]
     ]
   },
   {
-    "id": "9a53a928.863428",
+    "id": "7b54b77f.da3e38",
     "type": "http response",
     "z": "95f60c40.6a09f",
     "name": "",
@@ -1314,7 +1314,7 @@
     "wires": []
   },
   {
-    "id": "41211bc4.b64b04",
+    "id": "7d42fee1.08cb9",
     "type": "function",
     "z": "95f60c40.6a09f",
     "name": "",
@@ -1325,15 +1325,15 @@
     "y": 310,
     "wires": [
       [
-        "9a53a928.863428"
+        "7b54b77f.da3e38"
       ],
       [
-        "8cda5a69.fb72b8"
+        "19d9e888.c0d6a7"
       ]
     ]
   },
   {
-    "id": "99a24216.a118b",
+    "id": "3e215f18.b295e",
     "type": "switch",
     "z": "95f60c40.6a09f",
     "name": "",
@@ -1355,15 +1355,15 @@
     "y": 302,
     "wires": [
       [
-        "3e6745a6.b3fa1a"
+        "cbcbbde6.1de88"
       ],
       [
-        "41211bc4.b64b04"
+        "7d42fee1.08cb9"
       ]
     ]
   },
   {
-    "id": "3e6745a6.b3fa1a",
+    "id": "cbcbbde6.1de88",
     "type": "json",
     "z": "95f60c40.6a09f",
     "name": "",
@@ -1371,12 +1371,12 @@
     "y": 273,
     "wires": [
       [
-        "41211bc4.b64b04"
+        "7d42fee1.08cb9"
       ]
     ]
   },
   {
-    "id": "8cda5a69.fb72b8",
+    "id": "19d9e888.c0d6a7",
     "type": "switch",
     "z": "95f60c40.6a09f",
     "name": "",
@@ -1405,18 +1405,18 @@
     "y": 334,
     "wires": [
       [
-        "21470c4a.4632d4"
+        "1212f576.e3aa8b"
       ],
       [
-        "9da06321.134de"
+        "3fa1c121.e043ce"
       ],
       [
-        "920cd614.5b6ea8"
+        "ea1a8d77.54443"
       ]
     ]
   },
   {
-    "id": "21470c4a.4632d4",
+    "id": "1212f576.e3aa8b",
     "type": "function",
     "z": "95f60c40.6a09f",
     "name": "fadein",
@@ -1427,12 +1427,12 @@
     "y": 296,
     "wires": [
       [
-        "4fd0ee20.c5328"
+        "9977c4c8.9aed98"
       ]
     ]
   },
   {
-    "id": "9da06321.134de",
+    "id": "3fa1c121.e043ce",
     "type": "function",
     "z": "95f60c40.6a09f",
     "name": "fadeout",
@@ -1443,12 +1443,12 @@
     "y": 336,
     "wires": [
       [
-        "4fd0ee20.c5328"
+        "9977c4c8.9aed98"
       ]
     ]
   },
   {
-    "id": "920cd614.5b6ea8",
+    "id": "ea1a8d77.54443",
     "type": "function",
     "z": "95f60c40.6a09f",
     "name": "pulse",
@@ -1459,12 +1459,12 @@
     "y": 375,
     "wires": [
       [
-        "4fd0ee20.c5328"
+        "9977c4c8.9aed98"
       ]
     ]
   },
   {
-    "id": "a6304eb1.3e048",
+    "id": "19efd44e.91ad1c",
     "type": "http request",
     "z": "95f60c40.6a09f",
     "name": "",
@@ -1475,12 +1475,12 @@
     "y": 329,
     "wires": [
       [
-        "388bccee.fb57c4"
+        "aaac9a5b.fccbc8"
       ]
     ]
   },
   {
-    "id": "199aa01e.2932c",
+    "id": "eb67c3ee.13ace",
     "type": "function",
     "z": "95f60c40.6a09f",
     "name": "",
@@ -1491,12 +1491,12 @@
     "y": 783,
     "wires": [
       [
-        "c8e3fb9b.d30a88"
+        "f76a858c.433158"
       ]
     ]
   },
   {
-    "id": "c8e3fb9b.d30a88",
+    "id": "f76a858c.433158",
     "type": "http request",
     "z": "95f60c40.6a09f",
     "name": "",
@@ -1510,7 +1510,7 @@
     ]
   },
   {
-    "id": "c0163108.c59bb",
+    "id": "2ae6784.e422388",
     "type": "http request",
     "z": "95f60c40.6a09f",
     "name": "",
@@ -1524,7 +1524,7 @@
     ]
   },
   {
-    "id": "a6e15b16.368638",
+    "id": "564c90c1.0a1f3",
     "type": "delay",
     "z": "95f60c40.6a09f",
     "name": "",
@@ -1541,13 +1541,13 @@
     "y": 246,
     "wires": [
       [
-        "da1a4481.323068",
-        "9a57b455.8cc608"
+        "f211443d.9a1928",
+        "20b73811.f855c8"
       ]
     ]
   },
   {
-    "id": "4fd0ee20.c5328",
+    "id": "9977c4c8.9aed98",
     "type": "delay",
     "z": "95f60c40.6a09f",
     "name": "",
@@ -1564,12 +1564,12 @@
     "y": 329,
     "wires": [
       [
-        "a6304eb1.3e048"
+        "19efd44e.91ad1c"
       ]
     ]
   },
   {
-    "id": "388bccee.fb57c4",
+    "id": "aaac9a5b.fccbc8",
     "type": "debug",
     "z": "95f60c40.6a09f",
     "name": "",
@@ -1581,7 +1581,7 @@
     "wires": []
   },
   {
-    "id": "d8d831f1.91534",
+    "id": "78763c42.4b0084",
     "type": "function",
     "z": "95f60c40.6a09f",
     "name": "",
@@ -1592,12 +1592,12 @@
     "y": 248,
     "wires": [
       [
-        "a6e15b16.368638"
+        "564c90c1.0a1f3"
       ]
     ]
   },
   {
-    "id": "1b9ee64a.2efb1a",
+    "id": "8061174a.5ce008",
     "type": "http in",
     "z": "95f60c40.6a09f",
     "name": "activate VacMode",
@@ -1608,13 +1608,13 @@
     "y": 1630,
     "wires": [
       [
-        "440aa2a6.0212fc",
-        "a0b0d421.15c068"
+        "ee1e2afd.9d6d28",
+        "5444de85.9ad69"
       ]
     ]
   },
   {
-    "id": "440aa2a6.0212fc",
+    "id": "ee1e2afd.9d6d28",
     "type": "debug",
     "z": "95f60c40.6a09f",
     "name": "",
@@ -1626,7 +1626,7 @@
     "wires": []
   },
   {
-    "id": "fe581a7e.d35748",
+    "id": "ce55961c.e298a8",
     "type": "http response",
     "z": "95f60c40.6a09f",
     "name": "",
@@ -1635,7 +1635,7 @@
     "wires": []
   },
   {
-    "id": "711931b2.b2905",
+    "id": "6257cd90.d6c964",
     "type": "function",
     "z": "95f60c40.6a09f",
     "name": "",
@@ -1646,12 +1646,12 @@
     "y": 195,
     "wires": [
       [
-        "34d4b858.ee2018"
+        "884abb55.727868"
       ]
     ]
   },
   {
-    "id": "34d4b858.ee2018",
+    "id": "884abb55.727868",
     "type": "http request",
     "z": "95f60c40.6a09f",
     "name": "",
@@ -1665,7 +1665,7 @@
     ]
   },
   {
-    "id": "a0b0d421.15c068",
+    "id": "5444de85.9ad69",
     "type": "function",
     "z": "95f60c40.6a09f",
     "name": "",
@@ -1676,12 +1676,12 @@
     "y": 1661,
     "wires": [
       [
-        "bd77bb5c.7bcbb8"
+        "81f4445b.981198"
       ]
     ]
   },
   {
-    "id": "bd77bb5c.7bcbb8",
+    "id": "81f4445b.981198",
     "type": "switch",
     "z": "95f60c40.6a09f",
     "name": "",
@@ -1708,18 +1708,18 @@
     "y": 1642,
     "wires": [
       [
-        "b758214.5aab0e"
+        "ee5eb000.f35c1"
       ],
       [
-        "b758214.5aab0e"
+        "ee5eb000.f35c1"
       ],
       [
-        "fe581a7e.d35748"
+        "ce55961c.e298a8"
       ]
     ]
   },
   {
-    "id": "b758214.5aab0e",
+    "id": "ee5eb000.f35c1",
     "type": "http request",
     "z": "95f60c40.6a09f",
     "name": "",
@@ -1730,12 +1730,12 @@
     "y": 1615,
     "wires": [
       [
-        "79fcc1a5.d5fdf"
+        "206b5fc4.5fad1"
       ]
     ]
   },
   {
-    "id": "79fcc1a5.d5fdf",
+    "id": "206b5fc4.5fad1",
     "type": "debug",
     "z": "95f60c40.6a09f",
     "name": "",
@@ -1747,7 +1747,7 @@
     "wires": []
   },
   {
-    "id": "604b84c9.c06c7c",
+    "id": "3400d483.d6043c",
     "type": "inject",
     "z": "95f60c40.6a09f",
     "name": "",
@@ -1761,12 +1761,12 @@
     "y": 1724,
     "wires": [
       [
-        "ceffafc4.813ee"
+        "afd40338.8c296"
       ]
     ]
   },
   {
-    "id": "ceffafc4.813ee",
+    "id": "afd40338.8c296",
     "type": "function",
     "z": "95f60c40.6a09f",
     "name": "",
@@ -1777,12 +1777,12 @@
     "y": 1726,
     "wires": [
       [
-        "6fa35b07.709054"
+        "85b596ae.726d18"
       ]
     ]
   },
   {
-    "id": "f7211ffc.2d2c3",
+    "id": "bf41ce93.644a3",
     "type": "inject",
     "z": "95f60c40.6a09f",
     "name": "",
@@ -1796,12 +1796,12 @@
     "y": 366,
     "wires": [
       [
-        "634395c1.70eecc"
+        "7d2eec88.1d0694"
       ]
     ]
   },
   {
-    "id": "634395c1.70eecc",
+    "id": "7d2eec88.1d0694",
     "type": "function",
     "z": "95f60c40.6a09f",
     "name": "",
@@ -1815,7 +1815,7 @@
     ]
   },
   {
-    "id": "6fa35b07.709054",
+    "id": "85b596ae.726d18",
     "type": "delay",
     "z": "95f60c40.6a09f",
     "name": "",
@@ -1832,12 +1832,12 @@
     "y": 1725,
     "wires": [
       [
-        "f3a5b6c6.71da28"
+        "c6508d9e.600c9"
       ]
     ]
   },
   {
-    "id": "f3a5b6c6.71da28",
+    "id": "c6508d9e.600c9",
     "type": "http request",
     "z": "95f60c40.6a09f",
     "name": "",
@@ -1851,7 +1851,7 @@
     ]
   },
   {
-    "id": "1f7cb5c7.1a4fba",
+    "id": "6be4434b.75daac",
     "type": "inject",
     "z": "95f60c40.6a09f",
     "name": "",
@@ -1865,12 +1865,12 @@
     "y": 1875,
     "wires": [
       [
-        "943fbe5e.06adb"
+        "d6308e91.54146"
       ]
     ]
   },
   {
-    "id": "d080d708.609fd8",
+    "id": "fc1bc23a.75bcf",
     "type": "http request",
     "z": "95f60c40.6a09f",
     "name": "",
@@ -1881,13 +1881,13 @@
     "y": 1873,
     "wires": [
       [
-        "b1f79c5c.fe6a6",
-        "7c86913c.7ec13"
+        "298a7cc.4651284",
+        "70184a5a.12bf84"
       ]
     ]
   },
   {
-    "id": "e94c166d.27f0e8",
+    "id": "de7cb36a.cbb39",
     "type": "function",
     "z": "95f60c40.6a09f",
     "name": "",
@@ -1898,12 +1898,12 @@
     "y": 1874,
     "wires": [
       [
-        "d080d708.609fd8"
+        "fc1bc23a.75bcf"
       ]
     ]
   },
   {
-    "id": "b1f79c5c.fe6a6",
+    "id": "298a7cc.4651284",
     "type": "debug",
     "z": "95f60c40.6a09f",
     "name": "",
@@ -1915,24 +1915,24 @@
     "wires": []
   },
   {
-    "id": "7c86913c.7ec13",
+    "id": "70184a5a.12bf84",
     "type": "function",
     "z": "95f60c40.6a09f",
     "name": "",
-    "func": "if (msg.statusCode=='200') {\n    data_set=msg.payload;\n    i=0;\n    data_set.forEach(function(dev){\n       var weatherData=dev.Data;\n       if (context.global.DEBUG){\n           node.warn('device '+ dev.DeviceName);           \n           node.warn('temperature: '+ weatherData.Temperature);\n           node.warn('humidity: '+ weatherData.Humidity);\n           node.warn('night: '+ weatherData.Night);\n           node.warn('rain: '+ weatherData.Rain);\n           node.warn('pressure: '+ weatherData.Pressure);       \n           node.warn('luminance: '+ weatherData.Luminance);   \n           node.warn('uvindex: ' + weatherData.UVIndex);\n           node.warn('ImageURL: ' + weatherData.ImageURL);\n           node.warn('devide id: '+ dev.DeviceID);\n       }\n       if(!('Bloomsky' in context.global.Weather)) context.global.Weather.Bloomsky={};\n       context.global.Weather.Bloomsky.Rain=weatherData.Rain;\n       context.global.Weather.Bloomsky.Night=weatherData.Night;\n       context.global.Weather.Bloomsky.TemperatureC=weatherData.Temperature;\n       context.global.Weather.Bloomsky.TemperatureF=Math.round(weatherData.Temperature*1.8+32);       \n       context.global.Weather.Bloomsky.Luminance=weatherData.Luminance;  \n       context.global.Weather.Bloomsky.Humidity=weatherData.Humidity; \n       context.global.Weather.Bloomsky.Pressure=weatherData.Pressure;\n       context.global.Weather.Bloomsky.UVIndex=weatherData.UVIndex;       \n        var postMsg={\n            url:context.global.BlueMixUrlBase+'/red/wink/subscribtions',\n            method:\"POST\",\n                headers: {\n                \"Content-Type\":\"application/json\"\n            },\n            payload:{\n          capabilities: { fields: [ \n              { field: 'temperature', type: 'float' },\n              { field: 'humidity', type: 'percentage' },\n              { field: 'timeframe', type: 'boolean' },\n              { field: 'rain', type: 'boolean' },\n              { field: 'pressure', type: 'float' },\n              { field: 'luminance', type: 'float' },\n              { field: 'uvindex', type: 'float' }\n              ] },\n          device_manufacturer: 'BloomSky',\n          \"eco_system\" : \"BLOOMSKY\",\n          last_event: \n           { brightness_occurred_at: null,\n             loudness_occurred_at: null,\n             vibration_occurred_at: null },\n          last_reading: \n           { \n                agent_session_id: 'FALSE',\n                connection: true,\n                'temperature': weatherData.Temperature,\n                'humidity': weatherData.Humidity,\n                'timeframe': weatherData.Night,\n                'rain': weatherData.Rain,\n                'pressure': weatherData.Pressure,\n                'luminance': weatherData.Luminance,   \n                'uvindex': weatherData.UVIndex\n           },\n          manufacturer_device_model: 'bloomsky_weather_sensor',\n          model_name: 'Weather Sensor',\n          name:dev.DeviceName,\n          object_id:  dev.DeviceID+'_BloomSky',\n          object_type: 'sensor_pod',\n          radio_type: 'wifi',\n          sensor_pod_id: dev.DeviceID+'_BloomSky',\n          triggers: [],\n          units: {},\n          upc_code: dev.DeviceName+'_weather_sensor',\n          upc_id: 'BloomSky_'+i\n          }\n        };\n    context.global.sendWithTimeout(node,postMsg,i*2000);\n    i++;\n    var proto=context.global.BlueMixUrlBase.split(':')[0]+':';\n        var camMsg={\n            topic:dev.DeviceName,\n            url:context.global.BlueMixUrlBase+'/red/wink/subscribtions',\n            method:\"POST\",\n                headers: {\n                \"Content-Type\":\"application/json\"\n            },\n            payload:{    \n            \"name\": dev.DeviceName,\n            \"object_type\": \"camera\",\n            \"eco_system\" : \"BloomSky\",\n            \"object_id\": dev.DeviceID+'_BloomSky',\n            \"freeboard\": 0,\n            \"manufacturer_device_model\":\"BloomSky camera\",\n            \"connection\": true,\n            \"capturing_audio\": true,\n            \"capturing_video\": true,\n            \"url\":proto+weatherData.ImageURL.split(':')[1],\n            \"snap_url\": proto+weatherData.ImageURL.split(':')[1],\n            \"history_url\":proto+weatherData.ImageURL.split(':')[1],\n            \"refresh_time\":300,\n            \"motion\": \"N/A\",\n            \"activities\":[],\n            last_reading:{\n                \"motion\":false\n            }\n            }\n        }\n        context.global.sendWithTimeout(node,camMsg,i*2000);\n        i++;\n    });\n}",
+    "func": "if (msg.statusCode=='200') {\n    data_set=msg.payload;\n    i=0;\n    data_set.forEach(function(dev){\n       var weatherData=dev.Data;\n       if (context.global.DEBUG){\n           node.warn('device '+ dev.DeviceName);           \n           node.warn('temperature: '+ weatherData.Temperature);\n           node.warn('humidity: '+ weatherData.Humidity);\n           node.warn('night: '+ weatherData.Night);\n           node.warn('rain: '+ weatherData.Rain);\n           node.warn('pressure: '+ weatherData.Pressure);       \n           node.warn('luminance: '+ weatherData.Luminance);   \n           node.warn('uvindex: ' + weatherData.UVIndex);\n           node.warn('ImageURL: ' + weatherData.ImageURL);\n           node.warn('devide id: '+ dev.DeviceID);\n       }\n       if(!('Bloomsky' in context.global.Weather)) context.global.Weather.Bloomsky={};\n       context.global.Weather.Bloomsky.Rain=weatherData.Rain;\n       context.global.Weather.Bloomsky.Night=weatherData.Night;\n       context.global.Weather.Bloomsky.TemperatureC=weatherData.Temperature;\n       context.global.Weather.Bloomsky.TemperatureF=Math.round(weatherData.Temperature*1.8+32);       \n       context.global.Weather.Bloomsky.Luminance=weatherData.Luminance;  \n       context.global.Weather.Bloomsky.Humidity=weatherData.Humidity; \n       context.global.Weather.Bloomsky.Pressure=weatherData.Pressure;\n       context.global.Weather.Bloomsky.UVIndex=weatherData.UVIndex; \n        var postMsg={\n            url:context.global.BlueMixUrlBase+'/red/wink/subscribtions',\n            method:\"POST\",\n                headers: {\n                \"Content-Type\":\"application/json\"\n            },\n            payload:{\n          capabilities: { fields: [ \n              { field: 'temperature', type: 'float' },\n              { field: 'humidity', type: 'percentage' },\n              { field: 'timeframe', type: 'boolean' },\n              { field: 'rain', type: 'boolean' },\n              { field: 'pressure', type: 'float' },\n              { field: 'luminance', type: 'float' },\n              { field: 'uvindex', type: 'float' }\n              ] },\n          device_manufacturer: 'BloomSky',\n          \"eco_system\" : \"BLOOMSKY\",\n          last_event: \n           { brightness_occurred_at: null,\n             loudness_occurred_at: null,\n             vibration_occurred_at: null },\n          last_reading: \n           { \n                agent_session_id: 'FALSE',\n                connection: true,\n                'temperature': weatherData.Temperature,\n                'humidity': weatherData.Humidity,\n                'timeframe': weatherData.Night,\n                'rain': weatherData.Rain,\n                'pressure': weatherData.Pressure,\n                'luminance': weatherData.Luminance,   \n                'uvindex': weatherData.UVIndex\n           },\n          manufacturer_device_model: 'bloomsky_weather_sensor',\n          model_name: 'Weather Sensor',\n          name:dev.DeviceName,\n          object_id:  dev.DeviceID+'_BloomSky',\n          object_type: 'sensor_pod',\n          radio_type: 'wifi',\n          sensor_pod_id: dev.DeviceID+'_BloomSky',\n          triggers: [],\n          units: {},\n          upc_code: dev.DeviceName+'_weather_sensor',\n          upc_id: 'BloomSky_'+i\n          }\n        };\n    context.global.sendWithTimeout(node,postMsg,i*2000);\n    i++;\n    var proto=context.global.BlueMixUrlBase.split(':')[0]+':';\n        var camMsg={\n            topic:dev.DeviceName,\n            url:context.global.BlueMixUrlBase+'/red/wink/subscribtions',\n            method:\"POST\",\n                headers: {\n                \"Content-Type\":\"application/json\"\n            },\n            payload:{    \n            \"name\": dev.DeviceName,\n            \"object_type\": \"camera\",\n            \"eco_system\" : \"BloomSky\",\n            \"object_id\": dev.DeviceID+'_BloomSky',\n            \"freeboard\": 0,\n            \"manufacturer_device_model\":\"BloomSky camera\",\n            \"connection\": true,\n            \"capturing_audio\": true,\n            \"capturing_video\": true,\n            \"url\":context.global.BlueMixUrlBase+'/red/bloomsky',\n            \"snap_url\": context.global.BlueMixUrlBase+'/red/bloomsky',\n            \"history_url\":context.global.BlueMixUrlBase+'/red/bloomsky',\n            \"refresh_time\":300,\n            \"motion\": \"N/A\",\n            \"activities\":[],\n            last_reading:{\n                \"motion\":false\n            }\n            }\n        };\n        context.global.sendWithTimeout(node,camMsg,i*2000);\n        i++;\n    });\n}\nnode.warn(context.global.Weather.Bloomsky.URL);",
     "outputs": 1,
     "noerr": 0,
     "x": 708,
     "y": 1925,
     "wires": [
       [
-        "9696dd1f.fe446",
-        "6772ee72.58851"
+        "453e5735.0dfe38",
+        "aa170f7a.2f326"
       ]
     ]
   },
   {
-    "id": "9696dd1f.fe446",
+    "id": "453e5735.0dfe38",
     "type": "http request",
     "z": "95f60c40.6a09f",
     "name": "",
@@ -1943,12 +1943,12 @@
     "y": 1920,
     "wires": [
       [
-        "e4e37a76.4a4398"
+        "d2488e4.64ae87"
       ]
     ]
   },
   {
-    "id": "b8ab9d24.ea8ef",
+    "id": "46d1184d.291b98",
     "type": "comment",
     "z": "95f60c40.6a09f",
     "name": "Integration with BloomSky ---------------------------------------------------------------------------------------",
@@ -1958,7 +1958,7 @@
     "wires": []
   },
   {
-    "id": "943fbe5e.06adb",
+    "id": "d6308e91.54146",
     "type": "delay",
     "z": "95f60c40.6a09f",
     "name": "",
@@ -1975,12 +1975,12 @@
     "y": 1874,
     "wires": [
       [
-        "e94c166d.27f0e8"
+        "de7cb36a.cbb39"
       ]
     ]
   },
   {
-    "id": "6772ee72.58851",
+    "id": "aa170f7a.2f326",
     "type": "debug",
     "z": "95f60c40.6a09f",
     "name": "",
@@ -1992,7 +1992,7 @@
     "wires": []
   },
   {
-    "id": "e4e37a76.4a4398",
+    "id": "d2488e4.64ae87",
     "type": "function",
     "z": "95f60c40.6a09f",
     "name": "",
@@ -2006,7 +2006,7 @@
     ]
   },
   {
-    "id": "9a57b455.8cc608",
+    "id": "20b73811.f855c8",
     "type": "debug",
     "z": "95f60c40.6a09f",
     "name": "",
@@ -2015,6 +2015,101 @@
     "complete": "false",
     "x": 1094,
     "y": 159,
+    "wires": []
+  },
+  {
+    "id": "5b286349.54384c",
+    "type": "http request",
+    "z": "95f60c40.6a09f",
+    "name": "",
+    "method": "use",
+    "ret": "bin",
+    "url": "",
+    "x": 437,
+    "y": 1968,
+    "wires": [
+      [
+        "dca7f775.9abf08",
+        "8113702d.3185f"
+      ]
+    ]
+  },
+  {
+    "id": "402b0143.98d9b",
+    "type": "http in",
+    "z": "95f60c40.6a09f",
+    "name": "",
+    "url": "/red/bloomsky",
+    "method": "get",
+    "swaggerDoc": "",
+    "x": 95,
+    "y": 1965,
+    "wires": [
+      [
+        "c04d0c03.28244"
+      ]
+    ]
+  },
+  {
+    "id": "c04d0c03.28244",
+    "type": "function",
+    "z": "95f60c40.6a09f",
+    "name": "",
+    "func": "var web_req=(context.global.getCookie('exchange_token',msg.req.headers.cookie)=='0' ? false:true);\nif (msg.payload.iftttkey==context.global.IFTTT_TOKEN || msg.payload.iftttkey==context.global.FREEBOARD_TOKEN || (msg.req.headers.authorization && msg.req.headers.authorization==\"Bearer \"+context.global.FREEBOARD_TOKEN)) web_req=true;\nif (web_req)\n{\n    msg.statusCode=200;\n    msg.url=context.global.Weather.Bloomsky.URL;\n    msg.method=\"GET\";\n     return [msg,null];\n}\nelse {\n    node.warn(\"ifttt messages bad request\");\n    msg.payload=\"403: Bad request\";\n    msg.statusCode=403;\n    return [null,msg];\n}\nreturn msg;\n",
+    "outputs": "2",
+    "noerr": 0,
+    "x": 280,
+    "y": 1965,
+    "wires": [
+      [
+        "5b286349.54384c",
+        "197199a1.ca6a96"
+      ],
+      [
+        "c4432c5c.6d77c"
+      ]
+    ]
+  },
+  {
+    "id": "197199a1.ca6a96",
+    "type": "debug",
+    "z": "95f60c40.6a09f",
+    "name": "",
+    "active": false,
+    "console": "false",
+    "complete": "true",
+    "x": 412,
+    "y": 1924,
+    "wires": []
+  },
+  {
+    "id": "dca7f775.9abf08",
+    "type": "debug",
+    "z": "95f60c40.6a09f",
+    "name": "",
+    "active": false,
+    "console": "false",
+    "complete": "true",
+    "x": 612,
+    "y": 2028,
+    "wires": []
+  },
+  {
+    "id": "8113702d.3185f",
+    "type": "http response",
+    "z": "95f60c40.6a09f",
+    "name": "",
+    "x": 586,
+    "y": 1954,
+    "wires": []
+  },
+  {
+    "id": "c4432c5c.6d77c",
+    "type": "http response",
+    "z": "95f60c40.6a09f",
+    "name": "",
+    "x": 417,
+    "y": 2003,
     "wires": []
   }
 ]
