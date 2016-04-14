@@ -12,6 +12,13 @@ Updated Bloomsky integration such that the UI will show the latest image from Bl
 Flow Editor:<br>
 *  Import updated [winkIntegration.json](winkIntegration.json)
 *  perform "Modified Nodes" deployment<br>
+<br><br>
+Integration with Blink Home Cameras now live! If you have Blink cameras, your cameras can now show up in the Camera tab of the UI and the temperature data shows up in the sensors.<br>
+Flow Editor:<br>
+*  Import [Blink.json](Blink.json)
+*  Update "Define e-mail and password" node with your Blink username and password.
+*  Perform "Modified Nodes" deployment<br>
+
 
 04/09/2016
 ------------
