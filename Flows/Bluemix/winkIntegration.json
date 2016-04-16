@@ -1,8 +1,26 @@
 [
   {
-    "id": "e7b94b91.ba89c8",
+    "id": "e49c8ede.cd963",
     "type": "function",
-    "z": "95f60c40.6a09f",
+    "z": "17b3daf5.e84c25",
+    "name": "",
+    "func": "var web_req=(context.global.getCookie('exchange_token',msg.req.headers.cookie)=='0' ? false:true);\nif (msg.payload.token==context.global.FREEBOARD_TOKEN || (msg.req.headers.authorization && msg.req.headers.authorization==\"Bearer \"+context.global.FREEBOARD_TOKEN)) web_req=true;\nif (web_req)\n{\n    msg.statusCode=200;\n    msg.url=context.global.Weather.Bloomsky.URL;\n    msg.method=\"GET\";\n    return [msg,null];\n\n    \n}\nelse {\n    node.warn(\"ifttt messages bad request\");\n    msg.payload=\"403: Bad request\";\n    msg.statusCode=403;\n    return [null,msg];\n}\nreturn msg;",
+    "outputs": "2",
+    "noerr": 0,
+    "x": 280,
+    "y": 1965,
+    "wires": [
+      [
+        "4d17cbde.8d81c4",
+        "6cfbe7c4.480b88"
+      ],
+      []
+    ]
+  },
+  {
+    "id": "6fcc4b13.f6eea4",
+    "type": "function",
+    "z": "17b3daf5.e84c25",
     "name": "",
     "func": "var avgtemp=0;\nvar avghumidity=0;\nvar numthermos=0;\nvar numhumidities=0;\nmsg.payload={\n    \"thermostats\":context.global.Ecobee.Thermostats,\n    \"sensor_pods\":context.global.Ecobee.Sensors\n};\nif (typeof context.global.winkState.thermostats=='undefined'){ context.global.winkState.thermostats = new Object(); }\nfor (var name in msg.payload.thermostats)\n{\n//    node.warn(\"Importing: \"+name+\" thermostat\");\n    context.global.winkState.thermostats[name]={\n        \"name\":name,\n        \"object_type\": msg.payload.thermostats[name].object_type,\n        \"object_id\": msg.payload.thermostats[name].object_id,\n        \"freeboard\": 0,\n        \"connection\": msg.payload.thermostats[name].connection,\n        \"min_set_point\": (msg.payload.thermostats[name].min_set_point-32)*(5/9),\n        \"max_set_point\": (msg.payload.thermostats[name].max_set_point-32)*(5/9),\n        \"mode\": msg.payload.thermostats[name].mode,\n        \"temperature\": (msg.payload.thermostats[name].temperature-32)*(5/9),\n        \"humidity\": msg.payload.thermostats[name].humidity,\n        \"users_away\":false\n    };\n    if (msg.payload.thermostats[name].temperature){ avgtemp+=(msg.payload.thermostats[name].temperature-32)*(5/9); numthermos++; }\n    if (msg.payload.thermostats[name].humidity){ avghumidity+=(msg.payload.thermostats[name].humidity); numhumidities++; }\n}\n\navgtemp=avgtemp/numthermos;\navghumidity=avghumidity/numhumidities;\n\nif (typeof context.global.winkState.groups[\".sensors\"].temperature=='undefined'){ context.global.winkState.groups[\".sensors\"].temperature = new Object(); }\nif (typeof context.global.winkState.groups[\".sensors\"].humidity=='undefined'){ context.global.winkState.groups[\".sensors\"].humidity = new Object(); }\ncontext.global.winkState.groups[\".sensors\"].temperature={\n    average:avgtemp\n};\ncontext.global.winkState.groups[\".sensors\"].humidity={\n    average:avghumidity\n};\n\n//node.warn(\"Ecobee Thermostat import finished\");\n\nfor (var name in msg.payload.sensor_pods)\n{\n//    node.warn(\"Importing: \"+name+\" sensor pod\");\n    context.global.winkState.sensor_pods[name]={\n        \"name\":name,\n        \"object_type\":msg.payload.sensor_pods[name].object_type,\n        \"object_id\":msg.payload.sensor_pods[name].object_id,\n        \"freeboard\":0,\n    }\n    if (msg.payload.sensor_pods[name].motion==\"true\"){context.global.winkState.sensor_pods[name].motion=true}\n    else if (msg.payload.sensor_pods[name].motion==\"false\"){context.global.winkState.sensor_pods[name].motion=false}\n    context.global.winkDevCap[name]={\n        \"sensor_types\":[{}]\n    }\n    context.global.winkDevCap[name].sensor_types=[{\n            \"field\":\"motion\",\n            \"type\":\"boolean\"\n        }]\n}\n\n//node.warn(\"Ecobee Remote Sensor import finished\");\nvar newMsg={\n    \"payload\":\"Ecobee Thermostat and Remote Sensor Data imported successfully\"\n};\nreturn newMsg;",
     "outputs": 1,
@@ -11,14 +29,14 @@
     "y": 868.5,
     "wires": [
       [
-        "74e1435e.1d454c"
+        "6bb5c809.5f72f8"
       ]
     ]
   },
   {
-    "id": "e5f9d285.bd081",
+    "id": "a830643a.3af6b8",
     "type": "function",
-    "z": "95f60c40.6a09f",
+    "z": "17b3daf5.e84c25",
     "name": "",
     "func": "if ('wnr' in context.global){\nvar WinkCMDmsg={};\nvar web_req=(context.global.getCookie('exchange_token',msg.req.headers.cookie)=='0' ? false:true);\n\nif (msg.payload.iftttkey==context.global.IFTTT_TOKEN || msg.payload.iftttkey==context.global.FREEBOARD_TOKEN) web_req=true;\nif (web_req)\n{\n    if ('ifttt' in  msg.payload)\n    {\n      context.global.ifttt=(msg.payload.ifttt.toLowerCase()==\"on\" ? true:false)\n      msg.res.StatusCode=200;\n      return [msg];\n    }\n    if ('winkName' in msg.payload)\n    {\n//    node.warn('Name '+msg.payload.winkName)\n    if ('cmd' in msg.payload)\n    {\n        cmd=msg.payload.cmd\n    } else cmd='on' \n    if ('level' in msg.payload)\n    {\n        level=msg.payload.level\n    }  else level= (cmd.toLowerCase() =='on' ? 100 : 0)\n//    node.warn(level)\n    WinkCMDmsg = context.global.executeWinkCMD(msg.payload.winkName,msg.payload.type,msg.payload.cmd,level);\n    msg.statusCode=200;\n//    node.warn('Message '+ JSON.stringify(WinkCMDmsg))\n    }\n    if ('nodeRedVar' in msg.payload) {\n        if ('value' in msg.payload) value=msg.payload.value \n        else value = true;\n    context.global[msg.payload.nodeRedVar]=value;\n    WinkCMDmsg=context.global.send_ui_note('information',30000,'Variable '+msg.payload.nodeRedVar+' set to: '+context.global[msg.payload.nodeRedVar],null);\n    WinkCMDmsg.topic=msg.payload.nodeRedVar;\n    WinkCMDmsg.var_val=value;    \n    }\n}\nelse {\n    node.warn(\"ifttt messages bad request\")\n     msg.statusCode=403;\n     return [msg,null];\n}\nif (WinkCMDmsg!==\"\")\n{\n    return [msg,WinkCMDmsg];\n}\nelse\n{\nreturn [msg,null];\n}\n} else return [msg,null];",
     "outputs": "2",
@@ -27,17 +45,17 @@
     "y": 245.49993896484375,
     "wires": [
       [
-        "22fbd9b2.acb316"
+        "7fad256d.bfd00c"
       ],
       [
-        "78763c42.4b0084"
+        "74e89d40.bb20f4"
       ]
     ]
   },
   {
-    "id": "cb232b16.459af8",
+    "id": "bde27635.0f2fd8",
     "type": "http in",
-    "z": "95f60c40.6a09f",
+    "z": "17b3daf5.e84c25",
     "name": "",
     "url": "/red/ifttt",
     "method": "post",
@@ -46,24 +64,24 @@
     "y": 238.5,
     "wires": [
       [
-        "2bb4f9aa.29ac86",
-        "20b73811.f855c8"
+        "deb24fe3.2d914",
+        "ecb3cff1.6ef94"
       ]
     ]
   },
   {
-    "id": "22fbd9b2.acb316",
+    "id": "7fad256d.bfd00c",
     "type": "http response",
-    "z": "95f60c40.6a09f",
+    "z": "17b3daf5.e84c25",
     "name": "",
     "x": 787.5,
     "y": 208.49993896484375,
     "wires": []
   },
   {
-    "id": "cbed63f0.6e2a",
+    "id": "a5be95c4.9b0b28",
     "type": "comment",
-    "z": "95f60c40.6a09f",
+    "z": "17b3daf5.e84c25",
     "name": "IFTTT Integration-------------------------------------------------------------------------------------------------------------------------------",
     "info": "",
     "x": 441.5,
@@ -71,9 +89,9 @@
     "wires": []
   },
   {
-    "id": "f211443d.9a1928",
+    "id": "5c387068.3131b",
     "type": "http request",
-    "z": "95f60c40.6a09f",
+    "z": "17b3daf5.e84c25",
     "name": "",
     "method": "use",
     "ret": "obj",
@@ -82,15 +100,15 @@
     "y": 245.49993896484375,
     "wires": [
       [
-        "aaac9a5b.fccbc8",
-        "6257cd90.d6c964"
+        "1b785d0f.0db4b3",
+        "67340f05.a811"
       ]
     ]
   },
   {
-    "id": "3f75cd82.605422",
+    "id": "9624116c.c8aac",
     "type": "comment",
-    "z": "95f60c40.6a09f",
+    "z": "17b3daf5.e84c25",
     "name": "Wink API Apdex-------------------------------------------------------------------------------------------------------------------------------",
     "info": "",
     "x": 442.5,
@@ -98,9 +116,9 @@
     "wires": []
   },
   {
-    "id": "2e7ce439.5e527c",
+    "id": "6a234792.94a838",
     "type": "inject",
-    "z": "95f60c40.6a09f",
+    "z": "17b3daf5.e84c25",
     "name": "",
     "topic": "",
     "payload": "",
@@ -112,14 +130,14 @@
     "y": 466.4998779296875,
     "wires": [
       [
-        "af7c0532.5780e8"
+        "6adef8eb.5a1328"
       ]
     ]
   },
   {
-    "id": "af7c0532.5780e8",
+    "id": "6adef8eb.5a1328",
     "type": "function",
-    "z": "95f60c40.6a09f",
+    "z": "17b3daf5.e84c25",
     "name": "",
     "func": "context.global.new_version=\"Y\";\nvar newMsg ={\n    \"url\":\"http://status.winkapp.com/metrics-display/009ykpcmnm25/day.json\",\n    \"method\":\"GET\",\n    headers: {\n        \"Content-Type\":\"application/json\"\n    }\n};\nreturn newMsg;",
     "outputs": 1,
@@ -128,14 +146,14 @@
     "y": 467.49993896484375,
     "wires": [
       [
-        "61cbd8a4.396268"
+        "c602710d.93c7b"
       ]
     ]
   },
   {
-    "id": "61cbd8a4.396268",
+    "id": "c602710d.93c7b",
     "type": "http request",
-    "z": "95f60c40.6a09f",
+    "z": "17b3daf5.e84c25",
     "name": "",
     "method": "use",
     "ret": "obj",
@@ -144,14 +162,14 @@
     "y": 479.49993896484375,
     "wires": [
       [
-        "129d5aee.3b57c5"
+        "ecb61726.e89f18"
       ]
     ]
   },
   {
-    "id": "129d5aee.3b57c5",
+    "id": "ecb61726.e89f18",
     "type": "function",
-    "z": "95f60c40.6a09f",
+    "z": "17b3daf5.e84c25",
     "name": "",
     "func": "if ('metrics' in msg.payload && msg.payload.metrics.length>0){\ncontext.global.winkState.winkAPI = \"\";\nwinkAPI=\"\";\n        for(j = 0; j<msg.payload.metrics[0].data.length; j++)\n        {\n            winkAPI = msg.payload.metrics[0].data[j].value;\n        }\ncontext.global.winkState.winkAPI=winkAPI;\nvar newMsg={\n    payload:\"Wink Apdex is currently: \"+context.global.winkState.winkAPI\n};\nreturn newMsg;\n}\n",
     "outputs": 1,
@@ -163,9 +181,9 @@
     ]
   },
   {
-    "id": "e59389f3.9cba88",
+    "id": "bc3e90aa.8fe48",
     "type": "comment",
-    "z": "95f60c40.6a09f",
+    "z": "17b3daf5.e84c25",
     "name": "DromCam/NestCam Integration-------------------------------------------------------------------------------------------------------------------------------",
     "info": "",
     "x": 492.5,
@@ -173,9 +191,9 @@
     "wires": []
   },
   {
-    "id": "4b190c69.360da4",
+    "id": "34785b37.a13fa4",
     "type": "comment",
-    "z": "95f60c40.6a09f",
+    "z": "17b3daf5.e84c25",
     "name": "Presence  via IFTTT/Tasker/etc. -------------------------------------------------------------------------------------------------------------------------------",
     "info": "",
     "x": 492,
@@ -183,9 +201,9 @@
     "wires": []
   },
   {
-    "id": "5710e71f.087a08",
+    "id": "9239e6a6.550878",
     "type": "http in",
-    "z": "95f60c40.6a09f",
+    "z": "17b3daf5.e84c25",
     "name": "",
     "url": "/red/presence",
     "method": "post",
@@ -194,16 +212,16 @@
     "y": 674.9998779296875,
     "wires": [
       [
-        "1c70f525.bc5f4b",
-        "5f4c6253.8dc3fc",
-        "96bee4e0.328b68"
+        "fb2898e8.4922c8",
+        "bbe21926.db25b8",
+        "47bccbe6.ebe3a4"
       ]
     ]
   },
   {
-    "id": "1c70f525.bc5f4b",
+    "id": "fb2898e8.4922c8",
     "type": "function",
-    "z": "95f60c40.6a09f",
+    "z": "17b3daf5.e84c25",
     "name": "Update Presence entry",
     "func": "pr_msg={};\n//if (typeof context.global.PresenceHistory === 'undefined') context.global.PresenceHistory=[]\npr_msg.payload={old_value:context.global.checkPresence()}\nif (msg.payload.iftttkey==context.global.IFTTT_TOKEN)\n{\n    if (context.global.DEBUG ) node.warn(msg.payload.name+' '+msg.payload.home)\n    if (typeof(context.global.Presence) === 'undefined'){\n    context.global.Presence = {}\n    } else pr_msg.payload.old_presence=context.global.Presence;\n    if (msg.payload.name !=='undefined'){\n        if (!context.global.Presence[msg.payload.name]) context.global.Presence[msg.payload.name]={}\n            context.global.Presence[msg.payload.name].home=msg.payload.home\n        }\n    msg.StatusCode=200;\n    pr_msg.payload.new_value=context.global.checkPresence();\n}\nelse {\n    node.warn(\"presense, bad request\")\n     msg.StatusCode=403;\n     pr_msg.payload.new_value='ERROR';\n}\nreturn [msg,pr_msg];",
     "outputs": "2",
@@ -212,28 +230,28 @@
     "y": 675.9998779296875,
     "wires": [
       [
-        "36e700fd.6850b",
-        "1a3b5256.c8426e",
-        "eb67c3ee.13ace"
+        "1d67a189.19471e",
+        "349742ba.107fbe",
+        "d4c38ab.17a2078"
       ],
       [
-        "f2212ecd.ef457"
+        "6d701ecd.b3b6"
       ]
     ]
   },
   {
-    "id": "36e700fd.6850b",
+    "id": "1d67a189.19471e",
     "type": "http response",
-    "z": "95f60c40.6a09f",
+    "z": "17b3daf5.e84c25",
     "name": "",
     "x": 786,
     "y": 662.9998779296875,
     "wires": []
   },
   {
-    "id": "f2212ecd.ef457",
+    "id": "6d701ecd.b3b6",
     "type": "function",
-    "z": "95f60c40.6a09f",
+    "z": "17b3daf5.e84c25",
     "name": "",
     "func": "var currDate= new Date();\ncurr_presence=context.global.checkPresence()\nif (msg.payload.new_value!=='ERROR' && msg.payload.new_value!==msg.payload.old_value){\n    if('old_presence' in  msg.payload){\n        var HistP={}\n        HistP.timestamp=new Date();\n        HistP.offset=context.global.Weather.Offset\n        HistP.details=msg.payload.old_presence\n//        node.warn(HistP)\n        context.global.PresenceHistory.unshift(HistP)\n    }\n    if (context.global.PresenceHistory.length > 15) context.global.PresenceHistory.pop();\n\n    var currDate= new Date();\n    var currHours=currDate.getHours();\n    var currMins=currDate.getMinutes();\n    currHours=currHours+context.global.Weather.Offset;\n    if ((currHours > context.global.Weather.SunriseHour && currHours < context.global.Weather.SunsetHour) || (currHours==context.global.Weather.SunsetHour && currMins <context.global.Weather.SunsetMin))\n    {\n        var timeFrame=\"DAY\";\n    }\n    else {\n        var timeFrame=\"NIGHT\";\n    }    \n    var scene_name=(msg.payload.new_value ? 'PRESENCE' : 'NO PRESENCE')+(timeFrame=='NIGHT' ? ' '+timeFrame : '');\n    for (var key in context.global.winkState.scenes){\n        if ( context.global.winkState.scenes[key].name.toUpperCase()==scene_name)\n        {\n            var newMsg ={\n            \"url\":\"https://winkapi.quirky.com/scenes/\"+context.global.winkState.scenes[key].object_id+\"/activate\",\n            \"method\": \"POST\",\n            headers: {\n                \"Authorization\":\"Bearer \"+context.global.WinkToken,\n                \"Content-Type\":\"application/json\"\n                }\n            }\n        node.send(newMsg);\n        break;\n        }\n    }\n    if ('VacationMode' in context.global && context.global.VacationMode && msg.payload.new_value){\n            var newMsg1 ={\n                url:context.global.BlueMixUrlBase+'/red/ifttt',\n                \"method\": \"POST\",\n                headers: {\n                    \"Authorization\":\"Bearer \"+context.global.FREEBOARD_TOKEN\n                },\n                payload:{\n                    \"nodeRedVar\":\"VacationMode\",\n                    \"value\":\"off\",\n                    \"iftttkey\":context.global.FREEBOARD_TOKEN\n                    }\n            };\n        node.send(newMsg1)\n    }\n    return;\n}\nreturn;",
     "outputs": 1,
@@ -242,14 +260,14 @@
     "y": 743.22216796875,
     "wires": [
       [
-        "3dad889a.1e2548"
+        "8863b0d8.1b2bd"
       ]
     ]
   },
   {
-    "id": "3dad889a.1e2548",
+    "id": "8863b0d8.1b2bd",
     "type": "http request",
-    "z": "95f60c40.6a09f",
+    "z": "17b3daf5.e84c25",
     "name": "",
     "method": "use",
     "ret": "txt",
@@ -261,9 +279,9 @@
     ]
   },
   {
-    "id": "761a84a1.9c2c8c",
+    "id": "8143ac4e.a9a65",
     "type": "comment",
-    "z": "95f60c40.6a09f",
+    "z": "17b3daf5.e84c25",
     "name": "Integration with Ecobee Node Red ----------------------------------------------------------------------------------------------",
     "info": "",
     "x": 385,
@@ -271,9 +289,9 @@
     "wires": []
   },
   {
-    "id": "887bf05.946621",
+    "id": "8ed996b3.632618",
     "type": "http in",
-    "z": "95f60c40.6a09f",
+    "z": "17b3daf5.e84c25",
     "name": "",
     "url": "/freeboard/camera",
     "method": "get",
@@ -282,14 +300,14 @@
     "y": 572.4999694824219,
     "wires": [
       [
-        "459fc276.93d01c"
+        "e5e4f8f5.bb0c88"
       ]
     ]
   },
   {
-    "id": "459fc276.93d01c",
+    "id": "e5e4f8f5.bb0c88",
     "type": "function",
-    "z": "95f60c40.6a09f",
+    "z": "17b3daf5.e84c25",
     "name": "",
     "func": "if (msg.payload.token==context.global.FREEBOARD_TOKEN)\n{\n   if(msg.payload.model.indexOf(\"dropcam\")!=-1){\n   if (typeof msg.payload.cuepoint ==='undefined'){\n   msg.url=\"https://winkapi.quirky.com/cameras/\"+msg.payload.id+\"/image\"\n   msg.method=\"GET\"\n    msg.headers= {\n        \"Authorization\":\"Bearer \"+context.global.WinkToken,\n        \"User-Agent\":\"Manufacturer/Darwin node/0.10.30 Wink/3.6.0\"\n    }\n} else\n{\n    msg.url=\"https://winkapi.quirky.com/cameras/\"+msg.payload.id+\"/cuepoints/\"+msg.payload.cuepoint+\"/image\"\n   msg.method=\"GET\"\n    msg.headers= {\n        \"Authorization\":\"Bearer \"+context.global.WinkToken,\n        \"User-Agent\":\"Manufacturer/Darwin node/0.10.30 Wink/3.6.0\"\n}\n}\nreturn msg;\n}\n}\nif (typeof msg.payload.model!=='undefined' && msg.payload.model=='foscam'){\nfor (var k in context.global.FosCam){\n    if (context.global.FosCam[k].Parameters.id.value==msg.payload.id){\n     msg.method=\"GET\"\n     msg.url=\"http://\"+context.global.FosCam[k].hostname+\"/videostream.cgi?user=\"+context.global.FosCam[k].uid+\"&pwd=\"+context.global.FosCam[k].pwd\n     node.warn(msg.url);\n    return msg;\n    }\n}\n}\nelse {\n    msg.statusCode=\"403\";\n    node.send(msg);\n//    msg.res.send(400,\"Bad Request darling\");\n}\n",
     "outputs": 1,
@@ -298,14 +316,14 @@
     "y": 571.4999694824219,
     "wires": [
       [
-        "be5e3789.41aa78"
+        "37d52525.888faa"
       ]
     ]
   },
   {
-    "id": "be5e3789.41aa78",
+    "id": "37d52525.888faa",
     "type": "http request",
-    "z": "95f60c40.6a09f",
+    "z": "17b3daf5.e84c25",
     "name": "",
     "method": "use",
     "ret": "bin",
@@ -314,23 +332,23 @@
     "y": 573.4999694824219,
     "wires": [
       [
-        "bbca89ce.dff118"
+        "d3676228.8ee2a"
       ]
     ]
   },
   {
-    "id": "bbca89ce.dff118",
+    "id": "d3676228.8ee2a",
     "type": "http response",
-    "z": "95f60c40.6a09f",
+    "z": "17b3daf5.e84c25",
     "name": "",
     "x": 786.4999847412109,
     "y": 574.4999694824219,
     "wires": []
   },
   {
-    "id": "be3b1b63.e864a8",
+    "id": "2033c088.10ae7",
     "type": "function",
-    "z": "95f60c40.6a09f",
+    "z": "17b3daf5.e84c25",
     "name": "",
     "func": " var PresenceBkup={\n    Presence: context.global.Presence,\n    PresenceDetail: context.global.PresenceDetail,\n    PresenceHistory: context.global.PresenceHistory\n }\n    var DBMsg={\n        url:context.global.VCAP_SERVICES.cloudantNoSQLDB[0].credentials.url+\"/winkapp\",\n        method:\"POST\",\n        headers: \n            {\n                \"Content-Type\":\"application/json\"\n            },\n        payload: {\n            \"_id\":\"winkPresence\",\n            \"item\":\"Presence\",\n            \"Presence\":PresenceBkup\n        }\n    } \n \n \n //if (msg.payload.total_rows > 0  && msg.payload.rows.map(function(e) { return e.id; }).indexOf('winkPresence')!=-1){\n  if ('_rev' in msg.payload){   \n if (context.global.DEBUG) node.warn('record exists... updating');\n DBMsg.method=\"PUT\";\n DBMsg.url=DBMsg.url+\"/winkPresence\"\n DBMsg.payload._rev=msg.payload._rev;\n //msg.payload.rows.map(function(e) {if(e.id==\"winkPresence\") return e.value._rev; })[0];\n }\nreturn DBMsg;",
     "outputs": 1,
@@ -339,14 +357,14 @@
     "y": 705.611083984375,
     "wires": [
       [
-        "45e477bb.eb3b18"
+        "5b1fa9c.d25a758"
       ]
     ]
   },
   {
-    "id": "1a3b5256.c8426e",
+    "id": "349742ba.107fbe",
     "type": "function",
-    "z": "95f60c40.6a09f",
+    "z": "17b3daf5.e84c25",
     "name": "",
     "func": "if (context.global.CloudantBkUP) {\n    var msg={\n        url:context.global.VCAP_SERVICES.cloudantNoSQLDB[0].credentials.url+\"/winkapp/winkPresence\",\n        method:\"GET\"\n    }\n    node.send(msg); \n}\nreturn;",
     "outputs": 1,
@@ -355,14 +373,14 @@
     "y": 704.611083984375,
     "wires": [
       [
-        "ae1567a6.df3e08"
+        "5ce63dfa.cb88b4"
       ]
     ]
   },
   {
-    "id": "ae1567a6.df3e08",
+    "id": "5ce63dfa.cb88b4",
     "type": "http request",
-    "z": "95f60c40.6a09f",
+    "z": "17b3daf5.e84c25",
     "name": "",
     "method": "use",
     "ret": "obj",
@@ -371,14 +389,14 @@
     "y": 704.611083984375,
     "wires": [
       [
-        "be3b1b63.e864a8"
+        "2033c088.10ae7"
       ]
     ]
   },
   {
-    "id": "45e477bb.eb3b18",
+    "id": "5b1fa9c.d25a758",
     "type": "http request",
-    "z": "95f60c40.6a09f",
+    "z": "17b3daf5.e84c25",
     "name": "",
     "method": "use",
     "ret": "obj",
@@ -390,9 +408,9 @@
     ]
   },
   {
-    "id": "b1fbce67.0576e",
+    "id": "a637b06d.7ba71",
     "type": "inject",
-    "z": "95f60c40.6a09f",
+    "z": "17b3daf5.e84c25",
     "name": "",
     "topic": "",
     "payload": "",
@@ -404,14 +422,14 @@
     "y": 1113.8333129882812,
     "wires": [
       [
-        "8b71cc5b.7014a"
+        "a0eb429.48d09c"
       ]
     ]
   },
   {
-    "id": "8b71cc5b.7014a",
+    "id": "a0eb429.48d09c",
     "type": "function",
-    "z": "95f60c40.6a09f",
+    "z": "17b3daf5.e84c25",
     "name": "Try to create DB",
     "func": "if (typeof context.global.VCAP_SERVICES!=='undefined' && 'cloudantNoSQLDB' in context.global.VCAP_SERVICES){\n    var DBmsg={\n        url: context.global.VCAP_SERVICES.cloudantNoSQLDB[0].credentials.url+\"/winkapp\",\n        method:\"PUT\"\n    }\n    node.send(DBmsg);\n} else{\nnode.warn('Cloudant credentials are not present. DB backup will be disabled');\ncontext.global.CloudantBkUP=false;\n}\nreturn;",
     "outputs": 1,
@@ -420,14 +438,14 @@
     "y": 1114.8332824707031,
     "wires": [
       [
-        "8d0693cd.168fc"
+        "2d9690ca.53196"
       ]
     ]
   },
   {
-    "id": "8d0693cd.168fc",
+    "id": "2d9690ca.53196",
     "type": "http request",
-    "z": "95f60c40.6a09f",
+    "z": "17b3daf5.e84c25",
     "name": "db req",
     "method": "use",
     "ret": "obj",
@@ -436,14 +454,14 @@
     "y": 1114.8332824707031,
     "wires": [
       [
-        "ade24723.e90878"
+        "4c13ecd7.2de024"
       ]
     ]
   },
   {
-    "id": "ade24723.e90878",
+    "id": "4c13ecd7.2de024",
     "type": "function",
-    "z": "95f60c40.6a09f",
+    "z": "17b3daf5.e84c25",
     "name": "Check response",
     "func": "if (msg.statusCode=='201' || msg.statusCode=='412')\n{\n    node.warn('Database created or already exists, turning on backup');\n    context.global.CloudantBkUP=true;\n    context.global.CloudantCamera=[];\n    msg.url=context.global.VCAP_SERVICES.cloudantNoSQLDB[0].credentials.url+\"/winkapp/winkPresence\"\n    msg.method=\"GET\"\n    node.send(msg)\n} else {\n    node.warn('issue with cloudant sercvice. backup disabled until next re-try');\n    context.global.CloudantBkUP=false;\n}\nreturn;",
     "outputs": 1,
@@ -452,14 +470,14 @@
     "y": 1114.8332824707031,
     "wires": [
       [
-        "7e38392.93306c8"
+        "a56c26ed.4c48f8"
       ]
     ]
   },
   {
-    "id": "7e38392.93306c8",
+    "id": "a56c26ed.4c48f8",
     "type": "http request",
-    "z": "95f60c40.6a09f",
+    "z": "17b3daf5.e84c25",
     "name": "",
     "method": "use",
     "ret": "obj",
@@ -468,14 +486,14 @@
     "y": 1115.72216796875,
     "wires": [
       [
-        "f48854d6.387898"
+        "eb0885ac.773768"
       ]
     ]
   },
   {
-    "id": "f48854d6.387898",
+    "id": "eb0885ac.773768",
     "type": "function",
-    "z": "95f60c40.6a09f",
+    "z": "17b3daf5.e84c25",
     "name": "restore from db",
     "func": "if (\"Presence\" in msg.payload){\n    node.warn('restoring presence from db backup')\n    context.global.Presence=msg.payload.Presence.Presence\n    context.global.PresenceHistory=msg.payload.Presence.PresenceHistory\n    for(var pr in context.global.Presence){\n        p=context.global.Presence[pr];\n        var PresenceSensorMsg={\n            url:context.global.BlueMixUrlBase+'/red/wink/subscribtions',\n            method:\"POST\",\n                headers: {\n                \"Content-Type\":\"application/json\"\n            },\n            payload:{\n              capabilities: { fields: [ { field: 'presence', type: 'boolean' } ] },\n              device_manufacturer: 'node_red_virtual_sensor',\n              hidden_at: null,\n              last_event: \n               { brightness_occurred_at: null,\n                 loudness_occurred_at: null,\n                 vibration_occurred_at: null },\n              last_reading: \n               { \n                   agent_session_id: 'FALSE',\n                   connection: true,\n                   presence:(p.home=='yes' ? true : false),\n               },\n              manufacturer_device_model: 'foscam_virtual_motion_sensor',\n              model_name: 'Presense Sensor',\n              \"eco_system\" : \"NODERED\",\n              name: pr,\n              object_id: 'Presense_'+pr,\n              object_type: 'sensor_pod',\n              radio_type: 'wifi',\n              sensor_pod_id: 'Presense_'+pr,\n              triggers: [],\n              units: {},\n              upc_code: 'presence_sensor',\n              upc_id: 'Presense_'+pr\n          }\n        }\n    node.send(PresenceSensorMsg);\n    }\n}\nreturn;",
     "outputs": 1,
@@ -484,14 +502,14 @@
     "y": 1115.72216796875,
     "wires": [
       [
-        "2ae6784.e422388"
+        "accec1a7.bd715"
       ]
     ]
   },
   {
-    "id": "1a7c1377.c6592d",
+    "id": "bd1c40e5.7b38e",
     "type": "comment",
-    "z": "95f60c40.6a09f",
+    "z": "17b3daf5.e84c25",
     "name": "Cloundant DB -------------------------------------------------------------------------------------------------------------------------------",
     "info": "modfy bluemix-settings.json and add following line:\n\ncontext.global.InitialStateKey=\"<your initial state api key>\"",
     "x": 404.5,
@@ -499,9 +517,9 @@
     "wires": []
   },
   {
-    "id": "669c3a0a.933594",
+    "id": "fb033215.c7139",
     "type": "function",
-    "z": "95f60c40.6a09f",
+    "z": "17b3daf5.e84c25",
     "name": "Save Snapshots to db",
     "func": "if ((msg.req.body.uid==context.global.WinkUser.uid && msg.req.body.pwd==context.global.WinkUser.pwd)||context.global.getCookie('exchange_token',msg.req.headers.cookie)==context.global.FREEBOARD_TOKEN || msg.payload.token==context.global.FREEBOARD_TOKEN || (msg.req.headers.authorization && msg.req.headers.authorization==\"Bearer \"+context.global.FREEBOARD_TOKEN)){\nvar msg1=msg;\nvar trigger=msg.payload.object_name;\nvar cam_list=msg.payload.cam_list.split(',');\nmsg1.res.statusCode=\"200\";\nnode.send([msg1,null]);\nvar date=new Date();\nvar delay=0;\nfor (var i=0;i<cam_list.length;i++){\n//for (var cam in context.global.winkState.cameras){\n var camera=context.global.winkState.cameras[cam_list[i]];\n var cam=cam_list[i];\nif ('snap_url' in camera && camera.snap_url!=='undefined'){\n    //var msg={}\n    msg.url=camera.snap_url;\n    msg.method=\"GET\";\n    msg.date=date;\n    msg.topic=cam;\n    msg.trigger=trigger;\n    context.global.sendWithTimeout(node,[null,msg],delay);\n    delay+=500;\n}\n\n}\n\n} else {\n    msg.statusCode=\"401\";\n    node.send(msg);\n//    msg.res.send(401,\"Bad request\");\n}\nreturn;",
     "outputs": "2",
@@ -510,17 +528,17 @@
     "y": 1214.833251953125,
     "wires": [
       [
-        "3c2e2e61.a1d882"
+        "622e7eca.c3d7f"
       ],
       [
-        "838377d0.007f88"
+        "c7c0c1c5.ace2a"
       ]
     ]
   },
   {
-    "id": "838377d0.007f88",
+    "id": "c7c0c1c5.ace2a",
     "type": "http request",
-    "z": "95f60c40.6a09f",
+    "z": "17b3daf5.e84c25",
     "name": "getPic",
     "method": "use",
     "ret": "bin",
@@ -529,14 +547,14 @@
     "y": 1220.8332824707031,
     "wires": [
       [
-        "2017c66c.19807a"
+        "9bc7dc88.3481c"
       ]
     ]
   },
   {
-    "id": "2017c66c.19807a",
+    "id": "9bc7dc88.3481c",
     "type": "function",
-    "z": "95f60c40.6a09f",
+    "z": "17b3daf5.e84c25",
     "name": "save picture",
     "func": "//if (typeof (context.global.ImageArchive)=== 'undefined') {\n//    context.global.ImageArchive = {}\n//}\n//     for (var n in context.global.winkState.cameras){\n//        if (!(n in context.global.ImageArchive)) context.global.ImageArchive[n]=[]\n//    }\n\n//node.warn('Saving image from '+msg.topic)\n//node.warn(bitmap);\nvar DBmsg={\n         url:context.global.VCAP_SERVICES.cloudantNoSQLDB[0].credentials.url+\"/winkapp\",\n        topic:msg.trigger,\n        method:\"POST\",\n        headers: \n            {\n                \"Content-Type\":\"application/json\"\n            },\n        payload: {\n            \"_id\":msg.topic+'|'+msg.date.getTime()+'|'+msg.trigger,\n            \"key\":\"Snapshot\",\n            \"cameraName\":msg.topic,\n            \"timestamp\":msg.date.getTime(),\n            \"trigger\":msg.trigger,\n            \"fileName\":\"CameraImage.jpg\",\n           \"_attachments\":\n                {\n                    \"CameraImage.jpg\":\n                    {\n                        \"content_type\":\"image/jpeg\",\n                        \"data\":msg.payload.toString('base64')\n                    }\n                }        \n        } \n}\n\n//context.global.ImageArchive[msg.topic].splice(0,0,camObj);\n//if (context.global.ImageArchive[msg.topic].length>10) context.global.ImageArchive[msg.topic].pop()\nreturn DBmsg;",
     "outputs": "1",
@@ -545,14 +563,14 @@
     "y": 1220.8332824707031,
     "wires": [
       [
-        "720178a3.014f98"
+        "dcdcdd1f.68b0f"
       ]
     ]
   },
   {
-    "id": "720178a3.014f98",
+    "id": "dcdcdd1f.68b0f",
     "type": "http request",
-    "z": "95f60c40.6a09f",
+    "z": "17b3daf5.e84c25",
     "name": "",
     "method": "use",
     "ret": "obj",
@@ -561,14 +579,14 @@
     "y": 1221.72216796875,
     "wires": [
       [
-        "28f85c72.a12c94"
+        "c10efb9b.5fecb8"
       ]
     ]
   },
   {
-    "id": "fafb4e0d.c5601",
+    "id": "acfc8ff9.f002b",
     "type": "http in",
-    "z": "95f60c40.6a09f",
+    "z": "17b3daf5.e84c25",
     "name": "",
     "url": "/red/save_images",
     "method": "get",
@@ -577,23 +595,23 @@
     "y": 1214.72216796875,
     "wires": [
       [
-        "669c3a0a.933594"
+        "fb033215.c7139"
       ]
     ]
   },
   {
-    "id": "3c2e2e61.a1d882",
+    "id": "622e7eca.c3d7f",
     "type": "http response",
-    "z": "95f60c40.6a09f",
+    "z": "17b3daf5.e84c25",
     "name": "",
     "x": 610.9999694824219,
     "y": 1177.72216796875,
     "wires": []
   },
   {
-    "id": "28f85c72.a12c94",
+    "id": "c10efb9b.5fecb8",
     "type": "function",
-    "z": "95f60c40.6a09f",
+    "z": "17b3daf5.e84c25",
     "name": "cache results",
     "func": "if ('ok' in msg.payload && msg.payload.ok){\n    var cameraname=msg.payload.id.split('|')[0];\n    var tstamp=msg.payload.id.split('|')[1];\n    //node.warn('Camera - ' + cameraname)\n    if (typeof(context.global.winkState.cameras[cameraname].activities)==='undefined') context.global.winkState.cameras[cameraname].activities=[]\n    var cam_act={\n        id:msg.payload.rev,\n        cloudant_id:msg.payload.id,\n        category:\"cuepoint\",\n        cuepoint_id:Math.round(tstamp/1000),\n        trigger:msg.topic,\n        snapshot_url:context.global.BlueMixUrlBase+\"/red/camera_history?img_id=\"+msg.payload.id\n    }\n   context.global.winkState.cameras[cameraname].activities.splice(0,0,cam_act);\n   if (context.global.winkState.cameras[cameraname].activities.length>15){\n    for (var i=15; i<context.global.winkState.cameras[cameraname].activities.length;i++){\n    var doc_id=context.global.winkState.cameras[cameraname].activities[i].cloudant_id\n    var rev=context.global.winkState.cameras[cameraname].activities[i].id\n    if(typeof(doc_id)!=='undefined'){\n    var DBmsg={\n         topic:cameraname,\n         position:i,\n         url:context.global.VCAP_SERVICES.cloudantNoSQLDB[0].credentials.url+\"/winkapp/\"+doc_id+\"?rev=\"+rev,\n        method:\"DELETE\"\n    }\n    node.send(DBmsg);\n    }\n   }\n   }\n}\nreturn;",
     "outputs": 1,
@@ -602,14 +620,14 @@
     "y": 1217.72216796875,
     "wires": [
       [
-        "1c31e52c.5b588b"
+        "7f73c2ca.7c820c"
       ]
     ]
   },
   {
-    "id": "1c31e52c.5b588b",
+    "id": "7f73c2ca.7c820c",
     "type": "http request",
-    "z": "95f60c40.6a09f",
+    "z": "17b3daf5.e84c25",
     "name": "",
     "method": "use",
     "ret": "obj",
@@ -618,14 +636,14 @@
     "y": 1101.72216796875,
     "wires": [
       [
-        "3a3d4e51.e1c762"
+        "ea5fb666.468928"
       ]
     ]
   },
   {
-    "id": "3a3d4e51.e1c762",
+    "id": "ea5fb666.468928",
     "type": "function",
-    "z": "95f60c40.6a09f",
+    "z": "17b3daf5.e84c25",
     "name": "delete old pics",
     "func": "if (('ok' in msg.payload && msg.payload.ok) ||('error' in msg.payload && msg.payload.error=='not_found') ){\n    //node.warn('deleting '+msg.topic+' position '+ msg.position)\n    context.global.winkState.cameras[msg.topic].activities.splice(msg.position,1)\n}\nreturn;",
     "outputs": 1,
@@ -637,9 +655,9 @@
     ]
   },
   {
-    "id": "86903b87.97afd8",
+    "id": "1aabe77.e975319",
     "type": "http in",
-    "z": "95f60c40.6a09f",
+    "z": "17b3daf5.e84c25",
     "name": "",
     "url": "/red/camera_history",
     "method": "get",
@@ -648,14 +666,14 @@
     "y": 1272.72216796875,
     "wires": [
       [
-        "35290a14.f908a6"
+        "c2bf4ef9.3ed2a"
       ]
     ]
   },
   {
-    "id": "35290a14.f908a6",
+    "id": "c2bf4ef9.3ed2a",
     "type": "function",
-    "z": "95f60c40.6a09f",
+    "z": "17b3daf5.e84c25",
     "name": "gen CLD url",
     "func": "if ('img_id' in msg.payload){\n    msg.url=context.global.VCAP_SERVICES.cloudantNoSQLDB[0].credentials.url+\"/winkapp/\"+msg.payload.img_id+\"/CameraImage.jpg\"\n    msg.method=\"GET\"\n}\nreturn msg;",
     "outputs": 1,
@@ -664,14 +682,14 @@
     "y": 1272.72216796875,
     "wires": [
       [
-        "6a4e9a48.40abe4"
+        "f9833f1c.f0822"
       ]
     ]
   },
   {
-    "id": "6a4e9a48.40abe4",
+    "id": "f9833f1c.f0822",
     "type": "http request",
-    "z": "95f60c40.6a09f",
+    "z": "17b3daf5.e84c25",
     "name": "",
     "method": "use",
     "ret": "bin",
@@ -680,23 +698,23 @@
     "y": 1274.72216796875,
     "wires": [
       [
-        "de9db906.23cb58"
+        "aa662a9c.e5b6d8"
       ]
     ]
   },
   {
-    "id": "de9db906.23cb58",
+    "id": "aa662a9c.e5b6d8",
     "type": "http response",
-    "z": "95f60c40.6a09f",
+    "z": "17b3daf5.e84c25",
     "name": "",
     "x": 711,
     "y": 1274.72216796875,
     "wires": []
   },
   {
-    "id": "50839df7.d62364",
+    "id": "39aa6250.ecf6be",
     "type": "http in",
-    "z": "95f60c40.6a09f",
+    "z": "17b3daf5.e84c25",
     "name": "",
     "url": "/red/retrieve_activities",
     "method": "get",
@@ -705,14 +723,14 @@
     "y": 1365.72216796875,
     "wires": [
       [
-        "cbd8d6c2.3010b8"
+        "b70b8bfb.21c7e8"
       ]
     ]
   },
   {
-    "id": "cbd8d6c2.3010b8",
+    "id": "b70b8bfb.21c7e8",
     "type": "function",
-    "z": "95f60c40.6a09f",
+    "z": "17b3daf5.e84c25",
     "name": "get activities from db",
     "func": "if(msg.req.headers.authorization && msg.req.headers.authorization==\"Bearer \"+context.global.FREEBOARD_TOKEN){\nvar msg1=msg;\nmsg1.statusCode=\"200\";\nmsg.url=context.global.VCAP_SERVICES.cloudantNoSQLDB[0].credentials.url+\"/winkapp/_all_docs?descending=true\"\nmsg.method=\"GET\"\nmsg.topic=msg.payload.camera_name\nnode.send([msg1,msg])\n} else\n{\n    msg.statusCode=400\n    node.send([msg,null])\n}\nreturn;",
     "outputs": "2",
@@ -721,17 +739,17 @@
     "y": 1365.72216796875,
     "wires": [
       [
-        "e000dc76.0478e"
+        "88781b62.71c438"
       ],
       [
-        "77ea55f5.1005fc"
+        "c532e578.f67868"
       ]
     ]
   },
   {
-    "id": "77ea55f5.1005fc",
+    "id": "c532e578.f67868",
     "type": "http request",
-    "z": "95f60c40.6a09f",
+    "z": "17b3daf5.e84c25",
     "name": "",
     "method": "use",
     "ret": "obj",
@@ -740,14 +758,14 @@
     "y": 1398.72216796875,
     "wires": [
       [
-        "5053ac3e.be0594"
+        "1154258f.9bea4a"
       ]
     ]
   },
   {
-    "id": "5053ac3e.be0594",
+    "id": "1154258f.9bea4a",
     "type": "function",
-    "z": "95f60c40.6a09f",
+    "z": "17b3daf5.e84c25",
     "name": "cache cam history",
     "func": "if('total_rows' in msg.payload && msg.payload.total_rows>0){\n var db_rows=msg.payload.rows;\n context.global.winkState.cameras[msg.topic].activities=[]\n //db_rows.foreach(function(row){\n for(var i=0;i<db_rows.length;i++){\n     var row=db_rows[i];\n     if(row.id.indexOf(msg.topic)!=-1){\n      var tstamp=row.id.split('|')[1]\n      var cam_act={\n        id:row.value.rev,\n        cloudant_id:row.id,\n        category:\"cuepoint\",\n        cuepoint_id:Math.round(tstamp/1000),\n        trigger:row.id.split('|')[2],\n        snapshot_url:context.global.BlueMixUrlBase+\"/red/camera_history?img_id=\"+row.id\n      } \n      context.global.winkState.cameras[msg.topic].activities.push(cam_act)         \n     }\n }\n}\nreturn msg;",
     "outputs": 1,
@@ -759,18 +777,18 @@
     ]
   },
   {
-    "id": "e000dc76.0478e",
+    "id": "88781b62.71c438",
     "type": "http response",
-    "z": "95f60c40.6a09f",
+    "z": "17b3daf5.e84c25",
     "name": "",
     "x": 621.9999694824219,
     "y": 1350.72216796875,
     "wires": []
   },
   {
-    "id": "ad9f0c8e.2ef15",
+    "id": "a1adf53d.131008",
     "type": "inject",
-    "z": "95f60c40.6a09f",
+    "z": "17b3daf5.e84c25",
     "name": "",
     "topic": "",
     "payload": "",
@@ -782,14 +800,14 @@
     "y": 867.7499389648438,
     "wires": [
       [
-        "e7b94b91.ba89c8"
+        "6fcc4b13.f6eea4"
       ]
     ]
   },
   {
-    "id": "74e1435e.1d454c",
+    "id": "6bb5c809.5f72f8",
     "type": "debug",
-    "z": "95f60c40.6a09f",
+    "z": "17b3daf5.e84c25",
     "name": "",
     "active": false,
     "console": "false",
@@ -799,9 +817,9 @@
     "wires": []
   },
   {
-    "id": "8745f8d9.819e78",
+    "id": "6827fcba.55b5c4",
     "type": "comment",
-    "z": "95f60c40.6a09f",
+    "z": "17b3daf5.e84c25",
     "name": "Integration with LIFX Bulbs ---------------------------------------------------------------------------------------",
     "info": "",
     "x": 361,
@@ -809,9 +827,9 @@
     "wires": []
   },
   {
-    "id": "b8e14237.f129a",
+    "id": "fed0869d.53f2b8",
     "type": "function",
-    "z": "95f60c40.6a09f",
+    "z": "17b3daf5.e84c25",
     "name": "Throw Config Data",
     "func": "if(msg.req.headers.authorization && msg.req.headers.authorization==\"Bearer \"+context.global.FREEBOARD_TOKEN){\n// text fields array\n/*\ntxt_fields=[]\ntxt_fields.push({forecastIoApiKey : context.global.forecastIoApiKey || \"\" });\ntxt_fields.push({FREEBOARD_TOKEN : context.global.FREEBOARD_TOKEN || \"\" });\ntxt_fields.push({IFTTT_TOKEN : context.global.IFTTT_TOKEN || \"\" });\ntxt_fields.push({LIFX_TOKEN : context.global.LIFX_TOKEN || \"\" });\ntxt_fields.push({motionAdjustTstat : context.global.motionAdjustTstat || false });\ntxt_fields.push({InitialStateKey : context.global.InitialStateKey ||\"\"});\nmsg.payload.txt_fields=txt_fields;\ntxt_area_fields=[]\n\ntxt_area_fields.push({FosCam : JSON.stringify(context.global.foscam || \"\")});\ntxt_area_fields.push({SamsungCam : JSON.stringify(context.global.SamsungCam || \"\")});\ntxt_area_fields.push({DlinkCam : JSON.stringify(context.global.DlinkCam || \"\")});\ntxt_area_fields.push({camera_motion : JSON.stringify(context.global.camera_motion || \"\")});\ntxt_area_fields.push({tab_ui_shortcuts : JSON.stringify(context.global.tab_ui_shortcuts || \"\")});\nmsg.payload.txt_area_fields=txt_area_fields\n*/\nmsg.payload=context.global\nmsg.statusCode=\"200\";\nreturn msg;\n}\nelse\n{\n    //msg.payload=\"Not Authorized\";\n   msg.statusCode=\"403\";\n   return msg;\n//   msg.res.send(\"403\",\"Forbidden\");\n//  return;\n}\n",
     "outputs": 1,
@@ -820,23 +838,23 @@
     "y": 62.5,
     "wires": [
       [
-        "33397a32.65a0b6"
+        "40810221.73d1ac"
       ]
     ]
   },
   {
-    "id": "33397a32.65a0b6",
+    "id": "40810221.73d1ac",
     "type": "http response",
-    "z": "95f60c40.6a09f",
+    "z": "17b3daf5.e84c25",
     "name": "",
     "x": 631.5,
     "y": 63.5,
     "wires": []
   },
   {
-    "id": "54b24bf7.2a16f4",
+    "id": "ee7756d6.d87c68",
     "type": "comment",
-    "z": "95f60c40.6a09f",
+    "z": "17b3daf5.e84c25",
     "name": "Section for web services---------------------------------------------------------------------------------------------------------------------------------",
     "info": "",
     "x": 467,
@@ -844,9 +862,9 @@
     "wires": []
   },
   {
-    "id": "363963a0.1dc13c",
+    "id": "c2b4cdcd.6e06a",
     "type": "http in",
-    "z": "95f60c40.6a09f",
+    "z": "17b3daf5.e84c25",
     "name": "",
     "url": "/red/getCameras",
     "method": "get",
@@ -855,14 +873,14 @@
     "y": 112.5,
     "wires": [
       [
-        "e0a35c0e.cb16d"
+        "68d9b755.9c5aa8"
       ]
     ]
   },
   {
-    "id": "e0a35c0e.cb16d",
+    "id": "68d9b755.9c5aa8",
     "type": "function",
-    "z": "95f60c40.6a09f",
+    "z": "17b3daf5.e84c25",
     "name": "Throw Cameras Data",
     "func": "if(msg.req.headers.authorization && msg.req.headers.authorization==\"Bearer \"+context.global.FREEBOARD_TOKEN){\n// text fields array\ncameras=[]\nfor (var cam in context.global.winkState.cameras){\n    var camera=context.global.winkState.cameras[cam];\n    cameras.push({\n        name:camera.name,\n        id:camera.object_id,\n        connection:camera.connection,\n        url:camera.snap_url\n    });\n}\nmsg.payload.cameras=cameras;\nmsg.statusCode=\"200\";\nreturn msg;\n}\nelse\n{\n    //msg.payload=\"Not Authorized\";\n    msg.statusCode=\"403\";\n    return msg;\n//   msg.res.send(\"403\",\"Forbidden\");\n//  return;\n}\n",
     "outputs": 1,
@@ -871,36 +889,36 @@
     "y": 115.5,
     "wires": [
       [
-        "9d4a7065.4e4ba"
+        "c9a17e43.d89fc"
       ]
     ]
   },
   {
-    "id": "9d4a7065.4e4ba",
+    "id": "c9a17e43.d89fc",
     "type": "http response",
-    "z": "95f60c40.6a09f",
+    "z": "17b3daf5.e84c25",
     "name": "",
     "x": 632.5,
     "y": 116.5,
     "wires": []
   },
   {
-    "id": "87a060ee.0ed06",
+    "id": "1207aa26.ca1bb6",
     "type": "catch",
-    "z": "95f60c40.6a09f",
+    "z": "17b3daf5.e84c25",
     "name": "",
     "x": 128.5,
     "y": 2088,
     "wires": [
       [
-        "b06b8e36.2dace"
+        "ed505f7c.1e238"
       ]
     ]
   },
   {
-    "id": "b06b8e36.2dace",
+    "id": "ed505f7c.1e238",
     "type": "debug",
-    "z": "95f60c40.6a09f",
+    "z": "17b3daf5.e84c25",
     "name": "",
     "active": true,
     "console": "false",
@@ -910,9 +928,9 @@
     "wires": []
   },
   {
-    "id": "b3ba735d.5b05e",
+    "id": "c0e69cde.3b827",
     "type": "inject",
-    "z": "95f60c40.6a09f",
+    "z": "17b3daf5.e84c25",
     "name": "",
     "topic": "",
     "payload": "",
@@ -924,14 +942,14 @@
     "y": 1552,
     "wires": [
       [
-        "60cf6ddc.1036b4"
+        "92e5c52f.d11b38"
       ]
     ]
   },
   {
-    "id": "60cf6ddc.1036b4",
+    "id": "92e5c52f.d11b38",
     "type": "function",
-    "z": "95f60c40.6a09f",
+    "z": "17b3daf5.e84c25",
     "name": "",
     "func": "if ('LIFX_TOKEN' in context.global && context.global.LIFX_TOKEN !== 'undefined'){\nvar newMsg1 ={\n    \"url\":\"https://api.lifx.com/v1/lights/all\",\n    \"method\": \"GET\",\n    headers: {\n        \"Authorization\":\"Bearer \"+context.global.LIFX_TOKEN\n    }\n}\nnode.send(newMsg1);\n}\nreturn;",
     "outputs": 1,
@@ -940,14 +958,14 @@
     "y": 1552,
     "wires": [
       [
-        "35b93e0f.ee4222"
+        "413a74a2.89046c"
       ]
     ]
   },
   {
-    "id": "35b93e0f.ee4222",
+    "id": "413a74a2.89046c",
     "type": "http request",
-    "z": "95f60c40.6a09f",
+    "z": "17b3daf5.e84c25",
     "name": "",
     "method": "use",
     "ret": "txt",
@@ -956,14 +974,14 @@
     "y": 1551,
     "wires": [
       [
-        "f655762d.ec1098"
+        "d896fc61.7dfec"
       ]
     ]
   },
   {
-    "id": "e61dd3dd.53c9a",
+    "id": "98e50652.baa948",
     "type": "function",
-    "z": "95f60c40.6a09f",
+    "z": "17b3daf5.e84c25",
     "name": "",
     "func": "var lifxLights=msg.payload;\nvar useLiveUpd=('CRYPTO' in context.global ? true:false);\nvar CurreTag=\"\";\nvar eTag;\nif (Object.prototype.toString.call(lifxLights)==='[object Array]'){\n    lifxLights.forEach(function (bulb) {\n      //  node.warn(bulb.label)\n     //if (!(' winkState' in context.global)) context.global.winkState={}\n//     if (!('light_bulbs' in context.global.winkState)) context.global.winkState.light_bulbs={}\n     if (bulb.label in context.global.winkState.light_bulbs && useLiveUpd) {\n          var WinkBulb={\n            \"connection\": context.global.winkState.light_bulbs[bulb.label].connection,\n            \"powered\": context.global.winkState.light_bulbs[bulb.label].powered,\n            \"brightness\": context.global.winkState.light_bulbs[bulb.label].brightness,\n            \"hue\" : context.global.winkState.light_bulbs[bulb.label].hue,\n            \"saturation\":context.global.winkState.light_bulbs[bulb.label].saturation,\n            \"temperature\":context.global.winkState.light_bulbs[bulb.label].temperature\n          }\n          CurreTag=context.global.CRYPTO.createHash(\"md5\").update(JSON.stringify(WinkBulb),\"utf8\").digest(\"hex\");\n     }\n     \n     var OrigObject={\n        \"connection\": bulb.connected,\n        \"powered\": (bulb.connected && bulb.power==\"on\" ? true : false),\n        \"brightness\": bulb.brightness,\n        \"hue\" : bulb.color.hue,\n        \"saturation\":bulb.color.saturation,\n        \"temperature\":bulb.color.kelvin\n     };\n     if (useLiveUpd){\n     var LifBulb={\n        \"name\": bulb.label,\n        \"eco_system\": \"LIFX\",\n        \"manufacturer_id\": \"lifx\",\n        \"device_manufacturer\":\"lifx\",\n        \"object_type\": \"light_bulb\",\n        \"object_id\": bulb.id,\n        \"freeboard\": 0,\n        desired_state:{},\n        last_reading:{\n        \"connection\": bulb.connected,\n        \"powered\": (bulb.connected && bulb.power==\"on\" ? true : false),\n        \"brightness\": bulb.brightness,\n        \"hue\" : bulb.color.hue,\n        \"saturation\":bulb.color.saturation,\n        \"temperature\":bulb.color.kelvin\n        }\n     };\n      eTag=context.global.CRYPTO.createHash(\"md5\").update(JSON.stringify(OrigObject),\"utf8\").digest(\"hex\");\n     } else {\n    \n      context.global.winkState.light_bulbs[bulb.label]=OrigObject;\n     }\n     //LifBulb\n     \n     context.global.winkDevCap[bulb.label]=bulb.capabilities\n     //node.warn(bulb.label)\n      if (!('groups' in context.global.winkState)) context.global.winkState.groups={}\n     if (!(bulb.group.name in context.global.winkState.groups)){\n     context.global.winkState.groups[bulb.group.name]={\n         \"name\":bulb.group.name,\n         \"obejct_type\":\"groups\",\n         \"object_id\":bulb.group.id,\n          \"freeboard\": 0,\n          members:{}\n        }\n    }\n      context.global.winkState.groups[bulb.group.name].members[bulb.label]={\n        \"name\": bulb.label,\n        \"object_id\": bulb.id,\n        \"object_type\": \"light_bulbs\"\n      }\n     if (useLiveUpd && CurreTag!==eTag){\n        var postMsg={\n            url:context.global.BlueMixUrlBase+'/red/wink/subscribtions',\n            method:\"POST\",\n                headers: {\n                \"Content-Type\":\"application/json\"\n            },\n            payload:LifBulb \n        }\n     node.send(postMsg);\n     }\n    });\n}\nreturn;",
     "outputs": 1,
@@ -972,14 +990,14 @@
     "y": 1550.1428833007812,
     "wires": [
       [
-        "b7713a17.800298"
+        "2c53f974.6a2766"
       ]
     ]
   },
   {
-    "id": "b7713a17.800298",
+    "id": "2c53f974.6a2766",
     "type": "http request",
-    "z": "95f60c40.6a09f",
+    "z": "17b3daf5.e84c25",
     "name": "",
     "method": "use",
     "ret": "txt",
@@ -991,9 +1009,9 @@
     ]
   },
   {
-    "id": "5f4c6253.8dc3fc",
+    "id": "bbe21926.db25b8",
     "type": "function",
-    "z": "95f60c40.6a09f",
+    "z": "17b3daf5.e84c25",
     "name": "",
     "func": "function send_ui_note(n_type,n_timeout,n_message){\n    var newMsg={\n        url:context.global.BlueMixUrlBase+'/red/notifications',\n        \"method\": \"POST\",\n        headers: {\n            \"Authorization\":\"Bearer \"+context.global.FREEBOARD_TOKEN\n        },\n        payload:{\n            \"type\":n_type,\n            \"message\":n_message,\n            \"timeout\":n_timeout\n            }\n        };\n        node.send(newMsg);\n}\nvar note_msg=msg.payload.name+(msg.payload.home=='yes' ? ' is home' : ' has left');\nsend_ui_note('information',30000,note_msg)\nreturn;",
     "outputs": 1,
@@ -1002,14 +1020,14 @@
     "y": 760,
     "wires": [
       [
-        "a0dec2ce.ef8ee"
+        "caa66854.750078"
       ]
     ]
   },
   {
-    "id": "a0dec2ce.ef8ee",
+    "id": "caa66854.750078",
     "type": "http request",
-    "z": "95f60c40.6a09f",
+    "z": "17b3daf5.e84c25",
     "name": "",
     "method": "use",
     "ret": "txt",
@@ -1021,9 +1039,9 @@
     ]
   },
   {
-    "id": "542499bd.82b638",
+    "id": "fe8fd050.630c",
     "type": "inject",
-    "z": "95f60c40.6a09f",
+    "z": "17b3daf5.e84c25",
     "name": "",
     "topic": "",
     "payload": "",
@@ -1035,14 +1053,14 @@
     "y": 962,
     "wires": [
       [
-        "1d39860d.eb4baa"
+        "10ee56d1.137699"
       ]
     ]
   },
   {
-    "id": "1d39860d.eb4baa",
+    "id": "10ee56d1.137699",
     "type": "delay",
-    "z": "95f60c40.6a09f",
+    "z": "17b3daf5.e84c25",
     "name": "",
     "pauseType": "delay",
     "timeout": "1",
@@ -1057,14 +1075,14 @@
     "y": 963,
     "wires": [
       [
-        "ab8609b4.63fb28"
+        "cec1220b.ba4f7"
       ]
     ]
   },
   {
-    "id": "ab8609b4.63fb28",
+    "id": "cec1220b.ba4f7",
     "type": "function",
-    "z": "95f60c40.6a09f",
+    "z": "17b3daf5.e84c25",
     "name": "try to refresh app_config data",
     "func": "if (context.global.CloudantBkUP) {\n    msg.url=context.global.VCAP_SERVICES.cloudantNoSQLDB[0].credentials.url+\"/winkapp/app_data\";\n    msg.method=\"GET\";\n    node.send(msg); \n}\nreturn;",
     "outputs": 1,
@@ -1073,14 +1091,14 @@
     "y": 954,
     "wires": [
       [
-        "75598d77.515874"
+        "441073f3.3c9dcc"
       ]
     ]
   },
   {
-    "id": "75598d77.515874",
+    "id": "441073f3.3c9dcc",
     "type": "http request",
-    "z": "95f60c40.6a09f",
+    "z": "17b3daf5.e84c25",
     "name": "",
     "method": "use",
     "ret": "obj",
@@ -1089,14 +1107,14 @@
     "y": 959,
     "wires": [
       [
-        "efa6f904.7a5028"
+        "73acee37.55415"
       ]
     ]
   },
   {
-    "id": "efa6f904.7a5028",
+    "id": "73acee37.55415",
     "type": "function",
-    "z": "95f60c40.6a09f",
+    "z": "17b3daf5.e84c25",
     "name": "create or update config ",
     "func": "if ((\"error\" in msg.payload && msg.payload.error=='not_found') || msg.db_mode=='update'){\n    if (context.global.DEBUG ) node.warn((\"error\" in msg.payload && msg.payload.error=='not_found' ? 'Save Data: no app_data exists in cloudant DB creating and saving globals to database' : ' Save Data: updating globals in database'))\n    var DBMsg={\n        url:context.global.VCAP_SERVICES.cloudantNoSQLDB[0].credentials.url+\"/winkapp\",\n        method:(msg.db_mode=='update' ? \"PUT\":\"POST\"),\n        headers: \n            {\n                \"Content-Type\":\"application/json\"\n            },\n        payload: {\n            \"_id\":\"app_data\",\n            \"item\":\"app_data\",\n            \"app_cfg\":{\n            FREEBOARD_TOKEN:context.global.FREEBOARD_TOKEN || context.global.generate_token('FREEBOARD_TOKEN'),\n            vaca_delay:context.global.vaca_delay || 15, \n            ifttt:context.global.ifttt || false,\n            useRobots:context.global.useRobots || false,\n            vaca_wnr_schedules_off: context.global.vaca_wnr_schedules_off|| false,\n            vaca_usePresence: context.global.vaca_usePresence || false,\n            vaca_light_bulbs : context.global.vaca_light_bulbs || [],\n            vaca_binary_switches : context.global.vaca_binary_switches || [],\n            vaca_locks_vac:context.global.vaca_locks_vac || false,\n            motionAdjustTstat: context.global.motionAdjustTstat||false,\n            BlueMixUrlBase:context.global.BlueMixUrlBase,\n            HomeLocation:context.global.HomeLocation,\n            HoursFormat24:context.global.HoursFormat24 || false,\n            LightsNotification:context.global.LightsNotification || false,\n            LightsNotificationM:context.global.LightsNotificationM || false,\n            SensorsNotificationM:context.global.SensorsNotificationM || false,    \n            Schedules:context.global.Schedules || false,\n            VacationMode:context.global.VacationMode || false,            \n            CustomTabUrl:context.global.CustomTabUrl || '',\n            CustomTabName:context.global.CustomTabName|| '',\n            BlueIrisHost:context.global.BlueIrisHost,\n            BlueIrisUid:context.global.BlueIrisUid,\n            BlueIrisPwd:context.global.BlueIrisPwd,\n            wink_id:context.global.wink_id,\n            wink_secret:context.global.wink_secret,\n            BloomskyKey:context.global.BloomskyKey || ''\n            }\n        }\n    }\n    if(msg.db_mode=='update' && !(\"error\" in msg.payload && msg.payload.error=='not_found')){\n    DBMsg.url=DBMsg.url+\"/app_data\"    \n    DBMsg.payload._rev=msg.payload._rev;\n    }\n    \n    if ('HomeLocation' in context.global) DBMsg.payload.app_cfg.HomeLocation=context.global.HomeLocation;\n//\tif ('FosCam' in context.global) DBMsg.payload.app_cfg.FosCam=context.global.FosCam;\n//\tif ('SamsungCam' in context.global) DBMsg.payload.app_cfg.SamsungCam=context.global.SamsungCam;\n//\tif ('DlinkCam' in context.global) DBMsg.payload.app_cfg.DlinkCam=context.global.DlinkCam;\n    if ('camera_motion' in context.global) DBMsg.payload.app_cfg.camera_motion=context.global.camera_motion;\n    if ('tab_ui_shortcuts' in context.global) DBMsg.payload.app_cfg.tab_ui_shortcuts=context.global.tab_ui_shortcuts;\n//    if ('netatmo' in context.global) DBMsg.payload.app_cfg.netatmo=context.global.netatmo;\n    if ('winkState' in context.global) DBMsg.payload.app_cfg.winkState=context.global.winkState;\n    if ('LIFX_TOKEN' in context.global) DBMsg.payload.app_cfg.LIFX_TOKEN=context.global.LIFX_TOKEN;\n    if ('IFTTT_TOKEN' in context.global)DBMsg.payload.app_cfg.IFTTT_TOKEN=context.global.IFTTT_TOKEN;\n    if ('forecastIoApiKey' in context.global)DBMsg.payload.app_cfg.forecastIoApiKey=context.global.forecastIoApiKey;\n    if ('InitialStateKey' in context.global)DBMsg.payload.app_cfg.InitialStateKey=context.global.InitialStateKey;\n    if ('PushBulletKey' in context.global)DBMsg.payload.app_cfg.PushBulletKey=context.global.PushBulletKey;    \nnode.send(DBMsg);    \n}\nelse {\n        if (context.global.DEBUG ) node.warn('config data exists, restoring');\n    for (var key in msg.payload.app_cfg){\n            if (context.global.DEBUG ) node.warn('Restoring '+key+' settings')\n        if (key!=='winkState' && key!=='DlinkCam' && key!=='FosCam' && key!=='SamsungCam'){\n            context.global[key]=msg.payload.app_cfg[key];\n        } else if(msg.restore_wink||0===1) {\n            context.global[key]=msg.payload.app_cfg[key];\n        }\n    }\n}    \nreturn;",
     "outputs": 1,
@@ -1105,14 +1123,14 @@
     "y": 958,
     "wires": [
       [
-        "c390c72f.83c138"
+        "3c4c4c02.e33c24"
       ]
     ]
   },
   {
-    "id": "c390c72f.83c138",
+    "id": "3c4c4c02.e33c24",
     "type": "http request",
-    "z": "95f60c40.6a09f",
+    "z": "17b3daf5.e84c25",
     "name": "",
     "method": "use",
     "ret": "obj",
@@ -1121,14 +1139,14 @@
     "y": 957,
     "wires": [
       [
-        "2697d118.1530ee"
+        "2c968b99.4d2c64"
       ]
     ]
   },
   {
-    "id": "592c9278.f2eeec",
+    "id": "e1844dbe.96aca",
     "type": "http in",
-    "z": "95f60c40.6a09f",
+    "z": "17b3daf5.e84c25",
     "name": "",
     "url": "/red/update_app_cfg",
     "method": "post",
@@ -1137,14 +1155,14 @@
     "y": 1043,
     "wires": [
       [
-        "e969c271.9733c"
+        "aa194ed6.9b85f"
       ]
     ]
   },
   {
-    "id": "e969c271.9733c",
+    "id": "aa194ed6.9b85f",
     "type": "function",
-    "z": "95f60c40.6a09f",
+    "z": "17b3daf5.e84c25",
     "name": "",
     "func": "if(msg.req.headers.authorization && msg.req.headers.authorization==\"Bearer \"+context.global.FREEBOARD_TOKEN){\nmsg.statusCode=\"200\";\nvar msg1={}\nmsg1.db_mode=msg.payload.db_mode||\"read\";\nnode.send([msg1,msg])\n} else\n{\n    msg.statusCode=\"400\";\n    node.send([null,msg])\n}\nreturn;",
     "outputs": "2",
@@ -1153,26 +1171,26 @@
     "y": 1047,
     "wires": [
       [
-        "ab8609b4.63fb28"
+        "cec1220b.ba4f7"
       ],
       [
-        "4e671410.8ce46c"
+        "66617eba.1ebf5"
       ]
     ]
   },
   {
-    "id": "4e671410.8ce46c",
+    "id": "66617eba.1ebf5",
     "type": "http response",
-    "z": "95f60c40.6a09f",
+    "z": "17b3daf5.e84c25",
     "name": "",
     "x": 460.5,
     "y": 1054,
     "wires": []
   },
   {
-    "id": "2697d118.1530ee",
+    "id": "2c968b99.4d2c64",
     "type": "function",
-    "z": "95f60c40.6a09f",
+    "z": "17b3daf5.e84c25",
     "name": "",
     "func": "var msg1={\n    payload:{\n        config:{\n        HoursFormat24:context.global.HoursFormat24\n        }\n    }\n}\nmsg1.method=\"POST\";\nmsg1.url=context.global.BlueMixUrlBase+'/red/wscomms';\nmsg1.headers= {\n    \"Authorization\":\"Bearer \"+context.global.FREEBOARD_TOKEN\n};\n\nreturn msg1;",
     "outputs": 1,
@@ -1181,27 +1199,27 @@
     "y": 1046,
     "wires": [
       [
-        "e044e7b4.fb28c8"
+        "1858d39d.603e1c"
       ]
     ]
   },
   {
-    "id": "dbcccb1d.038f48",
+    "id": "66b6bb4f.c89db4",
     "type": "json",
-    "z": "95f60c40.6a09f",
+    "z": "17b3daf5.e84c25",
     "name": "",
     "x": 430,
     "y": 210,
     "wires": [
       [
-        "e5f9d285.bd081"
+        "a830643a.3af6b8"
       ]
     ]
   },
   {
-    "id": "2bb4f9aa.29ac86",
+    "id": "deb24fe3.2d914",
     "type": "switch",
-    "z": "95f60c40.6a09f",
+    "z": "17b3daf5.e84c25",
     "name": "",
     "property": "req.headers.content-type",
     "propertyType": "msg",
@@ -1221,17 +1239,17 @@
     "y": 236,
     "wires": [
       [
-        "dbcccb1d.038f48"
+        "66b6bb4f.c89db4"
       ],
       [
-        "e5f9d285.bd081"
+        "a830643a.3af6b8"
       ]
     ]
   },
   {
-    "id": "e044e7b4.fb28c8",
+    "id": "1858d39d.603e1c",
     "type": "http request",
-    "z": "95f60c40.6a09f",
+    "z": "17b3daf5.e84c25",
     "name": "",
     "method": "use",
     "ret": "txt",
@@ -1243,9 +1261,9 @@
     ]
   },
   {
-    "id": "96bee4e0.328b68",
+    "id": "47bccbe6.ebe3a4",
     "type": "function",
-    "z": "95f60c40.6a09f",
+    "z": "17b3daf5.e84c25",
     "name": "",
     "func": "var msg1=context.global.render_home_components('Presence');\nmsg1.method=\"POST\";\nmsg1.url=context.global.BlueMixUrlBase+'/red/wscomms';\nmsg1.headers= {\n    \"Authorization\":\"Bearer \"+context.global.FREEBOARD_TOKEN\n};\nreturn msg1;",
     "outputs": 1,
@@ -1254,14 +1272,14 @@
     "y": 712,
     "wires": [
       [
-        "188db1bb.34965e"
+        "3e7bb9bb.5d2ba6"
       ]
     ]
   },
   {
-    "id": "188db1bb.34965e",
+    "id": "3e7bb9bb.5d2ba6",
     "type": "http request",
-    "z": "95f60c40.6a09f",
+    "z": "17b3daf5.e84c25",
     "name": "",
     "method": "use",
     "ret": "txt",
@@ -1273,9 +1291,9 @@
     ]
   },
   {
-    "id": "f118a123.9ba5d",
+    "id": "51841e7.7e077e",
     "type": "http in",
-    "z": "95f60c40.6a09f",
+    "z": "17b3daf5.e84c25",
     "name": "",
     "url": "/red/global_context",
     "method": "get",
@@ -1284,14 +1302,14 @@
     "y": 63,
     "wires": [
       [
-        "b8e14237.f129a"
+        "fed0869d.53f2b8"
       ]
     ]
   },
   {
-    "id": "fa835dfd.8838c",
+    "id": "de1e1166.b2693",
     "type": "http in",
-    "z": "95f60c40.6a09f",
+    "z": "17b3daf5.e84c25",
     "name": "",
     "url": "/red/ifttt/effects/*",
     "method": "post",
@@ -1300,23 +1318,23 @@
     "y": 296,
     "wires": [
       [
-        "3e215f18.b295e"
+        "cba10ebf.93dbc"
       ]
     ]
   },
   {
-    "id": "7b54b77f.da3e38",
+    "id": "27f96284.d3d82e",
     "type": "http response",
-    "z": "95f60c40.6a09f",
+    "z": "17b3daf5.e84c25",
     "name": "",
     "x": 751,
     "y": 283,
     "wires": []
   },
   {
-    "id": "7d42fee1.08cb9",
+    "id": "b6a2cfaa.e7d18",
     "type": "function",
-    "z": "95f60c40.6a09f",
+    "z": "17b3daf5.e84c25",
     "name": "",
     "func": "var effectMsg={};\nvar web_req=(context.global.getCookie('exchange_token',msg.req.headers.cookie)=='0' ? false:true);\nif (msg.payload.iftttkey==context.global.IFTTT_TOKEN || msg.payload.iftttkey==context.global.FREEBOARD_TOKEN || (msg.req.headers.authorization && msg.req.headers.authorization==\"Bearer \"+context.global.FREEBOARD_TOKEN)) web_req=true;\nif (web_req)\n{\nvar effect=msg.req.originalUrl.split('/').pop();\nnode.warn(effect);\nmsg.statusCode=200;\neffectMsg.payload=msg.payload;\neffectMsg.topic=effect;\nreturn [msg,effectMsg];\n}\nelse {\n    node.warn(\"ifttt messages bad request\")\n     msg.statusCode=403;\n     return [msg,null];\n}\n",
     "outputs": "2",
@@ -1325,17 +1343,17 @@
     "y": 310,
     "wires": [
       [
-        "7b54b77f.da3e38"
+        "27f96284.d3d82e"
       ],
       [
-        "19d9e888.c0d6a7"
+        "b109258d.d164a8"
       ]
     ]
   },
   {
-    "id": "3e215f18.b295e",
+    "id": "cba10ebf.93dbc",
     "type": "switch",
-    "z": "95f60c40.6a09f",
+    "z": "17b3daf5.e84c25",
     "name": "",
     "property": "req.headers.content-type",
     "propertyType": "msg",
@@ -1355,30 +1373,30 @@
     "y": 302,
     "wires": [
       [
-        "cbcbbde6.1de88"
+        "1b876037.42322"
       ],
       [
-        "7d42fee1.08cb9"
+        "b6a2cfaa.e7d18"
       ]
     ]
   },
   {
-    "id": "cbcbbde6.1de88",
+    "id": "1b876037.42322",
     "type": "json",
-    "z": "95f60c40.6a09f",
+    "z": "17b3daf5.e84c25",
     "name": "",
     "x": 442,
     "y": 273,
     "wires": [
       [
-        "7d42fee1.08cb9"
+        "b6a2cfaa.e7d18"
       ]
     ]
   },
   {
-    "id": "19d9e888.c0d6a7",
+    "id": "b109258d.d164a8",
     "type": "switch",
-    "z": "95f60c40.6a09f",
+    "z": "17b3daf5.e84c25",
     "name": "",
     "property": "topic",
     "propertyType": "msg",
@@ -1405,20 +1423,20 @@
     "y": 334,
     "wires": [
       [
-        "1212f576.e3aa8b"
+        "fa15a046.3fc75"
       ],
       [
-        "3fa1c121.e043ce"
+        "4fa0ab66.1b7694"
       ],
       [
-        "ea1a8d77.54443"
+        "9331d3d8.9ed06"
       ]
     ]
   },
   {
-    "id": "1212f576.e3aa8b",
+    "id": "fa15a046.3fc75",
     "type": "function",
-    "z": "95f60c40.6a09f",
+    "z": "17b3daf5.e84c25",
     "name": "fadein",
     "func": "var max=parseInt(msg.payload.max) || 0; //0-100\nvar min=parseInt(msg.payload.min) || 0;  //0-100\nvar period=parseInt(msg.payload.period) ||0; //in secondsdd\nvar delay=parseInt(msg.payload.step_time) || (period >120 ? 20:10); //in seconds\nvar timeout_adjust=0;\ngen_msg=function(winkName,type,level,tstmp){\n    var WinkCMDmsg = context.global.executeWinkCMD(winkName,type,(level > 0 ? 'on' : 'off'),level);\n    node.send(WinkCMDmsg);\n    delete context.global.timedOutCmd[tstmp];\n};\nfunction doWithTimeout(i,delay){\n    var ind=Date.now();\n    if (!('timedOutCmd' in context.global)) context.global.timedOutCmd={};\n    var timeoutId=setTimeout(function(){gen_msg(msg.payload.winkName,msg.payload.type,i,ind);},delay);\n    if (context.global.DEBUG) node.warn(timeoutId);\n    context.global.timedOutCmd[ind]={\n        \"object\":msg.payload.winkName,\n        \"type\":msg.payload.type,\n        \"timeOutId\":timeoutId\n    };\n}\nif (max>min && ((msg.payload.type=='light' && msg.payload.winkName in context.global.winkState.light_bulbs) || msg.payload.type=='group')){\n    var step=Math.round((max-min)/period*delay)-1;\n    if (step<1) step=1;\n    var i=1;\n    var curr_br=min;\n    var effect_delay=Math.round(period/((max-min)/step)*1000);\n    if (context.global.DEBUG) node.warn('step:'+step+' effect_delay:'+effect_delay);\n    if (curr_br>0)  doWithTimeout(curr_br,0);\n    do {\n    \ttimeout_adjust++;\n    \tcurr_br=min+i;\n        doWithTimeout(curr_br,timeout_adjust*effect_delay);\n        i+=step;\n    } while(min+i<max);\n    timeout_adjust++;\n    if (curr_br<max) doWithTimeout(max,timeout_adjust*effect_delay);\n}\nreturn;",
     "outputs": 1,
@@ -1427,14 +1445,14 @@
     "y": 296,
     "wires": [
       [
-        "9977c4c8.9aed98"
+        "6bd16695.bcc708"
       ]
     ]
   },
   {
-    "id": "3fa1c121.e043ce",
+    "id": "4fa0ab66.1b7694",
     "type": "function",
-    "z": "95f60c40.6a09f",
+    "z": "17b3daf5.e84c25",
     "name": "fadeout",
     "func": "var max=parseInt(msg.payload.max) || 0 //0-100\nvar min=parseInt(msg.payload.min) || 0  //0-100\nvar period=parseInt(msg.payload.period) ||0 //in secondsdd\nvar delay=parseInt(msg.payload.step_time) || (period >120 ? 20:10); //in seconds\nvar timeout_adjust=0;\nnode.warn(msg.payload);\ngen_msg=function(winkName,type,level,tstmp){\n    var WinkCMDmsg = context.global.executeWinkCMD(winkName,type,(level > 0 ? 'on' : 'off'),level);\n    node.send(WinkCMDmsg);\n    delete context.global.timedOutCmd[tstmp];\n};\nfunction doWithTimeout(i,delay){\n    var ind=Date.now();\n    if (!('timedOutCmd' in context.global)) context.global.timedOutCmd={};\n    var timeoutId=setTimeout(function(){gen_msg(msg.payload.winkName,msg.payload.type,i,ind);},delay);\n    if (context.global.DEBUG) node.warn(timeoutId);\n    context.global.timedOutCmd[ind]={\n        \"object\":msg.payload.winkName,\n        \"type\":msg.payload.type,\n        \"timeOutId\":timeoutId\n    };\n}\nif (max>min && ((msg.payload.type=='light' && msg.payload.winkName in context.global.winkState.light_bulbs) || msg.payload.type=='group')){\n    var step=Math.round((max-min)/period*delay)-1;\n    if (step<1) step=1;\n    var i=0;\n    var curr_br=max;\n    var effect_delay=Math.round(period/((max-min)/step)*1000);\n    if (context.global.DEBUG) node.warn('step:'+step+' effect_delay:'+effect_delay);\n    if (curr_br>0)  doWithTimeout(curr_br,0);    \n    do {\n    \ttimeout_adjust++;\n    \tcurr_br=max-i;\n        doWithTimeout(curr_br,timeout_adjust*effect_delay);\n        i+=step;\n    } while(max-i>=min);\n    timeout_adjust++;\n    if (curr_br>min) doWithTimeout(min,timeout_adjust*effect_delay);\n}\nreturn;\n",
     "outputs": 1,
@@ -1443,14 +1461,14 @@
     "y": 336,
     "wires": [
       [
-        "9977c4c8.9aed98"
+        "6bd16695.bcc708"
       ]
     ]
   },
   {
-    "id": "ea1a8d77.54443",
+    "id": "9331d3d8.9ed06",
     "type": "function",
-    "z": "95f60c40.6a09f",
+    "z": "17b3daf5.e84c25",
     "name": "pulse",
     "func": "var max=parseInt(msg.payload.max) || 0 //0-100\nvar min=parseInt(msg.payload.min) || 0  //0-100\nvar repeat=parseInt(msg.payload.repeat) ||0 //in secondsdd\nvar delay=parseInt(msg.payload.step_time) || 5; //in seconds\nvar timeout_adjust=0;\nif (context.global.DEBUG) node.warn(msg.payload);\ngen_msg=function(winkName,type,level,tstmp){\n    var WinkCMDmsg = context.global.executeWinkCMD(winkName,type,(level > 0 ? 'on' : 'off'),level);\n    node.send(WinkCMDmsg);\n    delete context.global.timedOutCmd[tstmp];\n};\nfunction doWithTimeout(i,delay){\n    var ind=Date.now();\n    if (!('timedOutCmd' in context.global)) context.global.timedOutCmd={};\n    var timeoutId=setTimeout(function(){gen_msg(msg.payload.winkName,msg.payload.type,i,ind);},delay);\n    if (context.global.DEBUG) node.warn(timeoutId);\n    context.global.timedOutCmd[ind]={\n        \"object\":msg.payload.winkName,\n        \"type\":msg.payload.type,\n        \"timeOutId\":timeoutId\n    };\n        node.warn(context.global.timedOutCmd);\n}\nif (msg.payload.winkName in context.global.winkState.binary_switches){\n    min=0;\n    max=100;\n}\n    var i=0;\n    var curr_br;\n    do {\n    \ttimeout_adjust++;\n    \tcurr_br=min;\n        doWithTimeout(curr_br,timeout_adjust*delay*1000);\n        timeout_adjust++;\n    \tcurr_br=max;\n        doWithTimeout(curr_br,timeout_adjust*delay*1000);\n        i++;\n    } while(i<repeat);\nreturn;\n",
     "outputs": 1,
@@ -1459,14 +1477,14 @@
     "y": 375,
     "wires": [
       [
-        "9977c4c8.9aed98"
+        "6bd16695.bcc708"
       ]
     ]
   },
   {
-    "id": "19efd44e.91ad1c",
+    "id": "8df17c6f.d09ed",
     "type": "http request",
-    "z": "95f60c40.6a09f",
+    "z": "17b3daf5.e84c25",
     "name": "",
     "method": "use",
     "ret": "obj",
@@ -1475,14 +1493,14 @@
     "y": 329,
     "wires": [
       [
-        "aaac9a5b.fccbc8"
+        "1b785d0f.0db4b3"
       ]
     ]
   },
   {
-    "id": "eb67c3ee.13ace",
+    "id": "d4c38ab.17a2078",
     "type": "function",
-    "z": "95f60c40.6a09f",
+    "z": "17b3daf5.e84c25",
     "name": "",
     "func": "PresenceSensorMsg={\n    url:context.global.BlueMixUrlBase+'/red/wink/subscribtions',\n    method:\"POST\",\n        headers: {\n        \"Content-Type\":\"application/json\"\n    },\n    payload:{\n      capabilities: { fields: [ { field: 'presence', type: 'boolean' } ] },\n      device_manufacturer: 'node_red_virtual_sensor',\n      hidden_at: null,\n      last_event: \n       { brightness_occurred_at: null,\n         loudness_occurred_at: null,\n         vibration_occurred_at: null },\n      last_reading: \n       { \n           agent_session_id: 'FALSE',\n           connection: true,\n           presence:(msg.payload.home=='yes' ? true : false),\n       },\n      manufacturer_device_model: 'node_red_presence_sensor',\n      model_name: 'Presense Sensor',\n      \"eco_system\" : \"NODERED\",\n      name: msg.payload.name,\n      object_id: 'Presense_'+msg.payload.name,\n      object_type: 'sensor_pod',\n      radio_type: 'wifi',\n      sensor_pod_id: 'Presense_'+msg.payload.name,\n      triggers: [],\n      units: {},\n      upc_code: 'presence_sensor',\n      upc_id: 'Presense_'+msg.payload.name\n  }\n}\n\nreturn PresenceSensorMsg;",
     "outputs": 1,
@@ -1491,14 +1509,14 @@
     "y": 783,
     "wires": [
       [
-        "f76a858c.433158"
+        "5d26ffb5.3c5b8"
       ]
     ]
   },
   {
-    "id": "f76a858c.433158",
+    "id": "5d26ffb5.3c5b8",
     "type": "http request",
-    "z": "95f60c40.6a09f",
+    "z": "17b3daf5.e84c25",
     "name": "",
     "method": "use",
     "ret": "txt",
@@ -1510,9 +1528,9 @@
     ]
   },
   {
-    "id": "2ae6784.e422388",
+    "id": "accec1a7.bd715",
     "type": "http request",
-    "z": "95f60c40.6a09f",
+    "z": "17b3daf5.e84c25",
     "name": "",
     "method": "use",
     "ret": "txt",
@@ -1524,9 +1542,9 @@
     ]
   },
   {
-    "id": "564c90c1.0a1f3",
+    "id": "adff6c8d.35872",
     "type": "delay",
-    "z": "95f60c40.6a09f",
+    "z": "17b3daf5.e84c25",
     "name": "",
     "pauseType": "rate",
     "timeout": "5",
@@ -1541,15 +1559,15 @@
     "y": 246,
     "wires": [
       [
-        "f211443d.9a1928",
-        "20b73811.f855c8"
+        "5c387068.3131b",
+        "ecb3cff1.6ef94"
       ]
     ]
   },
   {
-    "id": "9977c4c8.9aed98",
+    "id": "6bd16695.bcc708",
     "type": "delay",
-    "z": "95f60c40.6a09f",
+    "z": "17b3daf5.e84c25",
     "name": "",
     "pauseType": "rate",
     "timeout": "5",
@@ -1564,14 +1582,14 @@
     "y": 329,
     "wires": [
       [
-        "19efd44e.91ad1c"
+        "8df17c6f.d09ed"
       ]
     ]
   },
   {
-    "id": "aaac9a5b.fccbc8",
+    "id": "1b785d0f.0db4b3",
     "type": "debug",
-    "z": "95f60c40.6a09f",
+    "z": "17b3daf5.e84c25",
     "name": "",
     "active": false,
     "console": "false",
@@ -1581,9 +1599,9 @@
     "wires": []
   },
   {
-    "id": "78763c42.4b0084",
+    "id": "74e89d40.bb20f4",
     "type": "function",
-    "z": "95f60c40.6a09f",
+    "z": "17b3daf5.e84c25",
     "name": "",
     "func": "var t=msg.topic;\nnode.send(msg);\nif ('topic' in msg){\n    var wsMsg={};\n    wsMsg.payload={\n        varName:t,\n        varVal:context.global[t]\n    }\n    wsMsg.method=\"POST\";\n    wsMsg.url=context.global.BlueMixUrlBase+'/red/wscomms';\n    wsMsg.headers= {\n        \"Authorization\":\"Bearer \"+context.global.FREEBOARD_TOKEN\n    };    \n    node.send(wsMsg);\n    \n    if (t=='VacationMode' && context.global.VacationMode=='on'){\n        var Msg1={}\n        Msg1.method=\"POST\";\n        Msg1.url=context.global.BlueMixUrlBase+'/red/vacation_init';\n        Msg1.headers= {\n            \"Authorization\":\"Bearer \"+context.global.FREEBOARD_TOKEN\n        };\n        context.global.sendWithTimeout(node,Msg1,4000);\n    }\n    if (t=='VacationMode' && context.global.VacationMode=='off') context.global.clearAllIntervals();\n\n} \nreturn;",
     "outputs": 1,
@@ -1592,14 +1610,14 @@
     "y": 248,
     "wires": [
       [
-        "564c90c1.0a1f3"
+        "adff6c8d.35872"
       ]
     ]
   },
   {
-    "id": "8061174a.5ce008",
+    "id": "ed26a4eb.fc3d38",
     "type": "http in",
-    "z": "95f60c40.6a09f",
+    "z": "17b3daf5.e84c25",
     "name": "activate VacMode",
     "url": "/red/vacation_init",
     "method": "post",
@@ -1608,15 +1626,15 @@
     "y": 1630,
     "wires": [
       [
-        "ee1e2afd.9d6d28",
-        "5444de85.9ad69"
+        "9e3cc979.118f78",
+        "b1593de8.ad366"
       ]
     ]
   },
   {
-    "id": "ee1e2afd.9d6d28",
+    "id": "9e3cc979.118f78",
     "type": "debug",
-    "z": "95f60c40.6a09f",
+    "z": "17b3daf5.e84c25",
     "name": "",
     "active": false,
     "console": "false",
@@ -1626,18 +1644,18 @@
     "wires": []
   },
   {
-    "id": "ce55961c.e298a8",
+    "id": "453e5b2a.9774f4",
     "type": "http response",
-    "z": "95f60c40.6a09f",
+    "z": "17b3daf5.e84c25",
     "name": "",
     "x": 644,
     "y": 1656,
     "wires": []
   },
   {
-    "id": "6257cd90.d6c964",
+    "id": "67340f05.a811",
     "type": "function",
-    "z": "95f60c40.6a09f",
+    "z": "17b3daf5.e84c25",
     "name": "",
     "func": "if ('topic' in msg){\nvar msg1={}\nmsg1.url=context.global.BlueMixUrlBase+'/red/update_app_cfg';\nmsg1.method=\"POST\";\nmsg1.headers= {\n    \"Authorization\":\"Bearer \"+context.global.FREEBOARD_TOKEN\n};\nmsg1.payload={\n   db_mode:\"update\"\n}\nreturn msg1;\n}",
     "outputs": 1,
@@ -1646,14 +1664,14 @@
     "y": 195,
     "wires": [
       [
-        "884abb55.727868"
+        "941d83e5.b18eb"
       ]
     ]
   },
   {
-    "id": "884abb55.727868",
+    "id": "941d83e5.b18eb",
     "type": "http request",
-    "z": "95f60c40.6a09f",
+    "z": "17b3daf5.e84c25",
     "name": "",
     "method": "use",
     "ret": "obj",
@@ -1665,9 +1683,9 @@
     ]
   },
   {
-    "id": "5444de85.9ad69",
+    "id": "b1593de8.ad366",
     "type": "function",
-    "z": "95f60c40.6a09f",
+    "z": "17b3daf5.e84c25",
     "name": "",
     "func": "checkDevCap=function(dev_fields,cap){\n    var result=false\n    dev_fields.forEach(function(dev_field){\n     if(dev_field.field==cap){\n        result=true;\n     }\n    });\n    return result;\n};\n\n\nsetLockMode=function(lock,mode){\nif (lock in context.global.winkState.locks && checkDevCap(context.global.winkDevCap[lock].fields , mode))\n{\n   WinkCMDmsg ={\n    \"url\":\"https://winkapi.quirky.com/locks/\"+context.global.winkState.locks[lock].object_id,\n    \"method\": \"PUT\",\n    headers: {\n        \"Authorization\":\"Bearer \"+context.global.WinkToken,\n        \"Content-Type\":\"application/json\"\n    },\n    payload: {\n        \"desired_state\": {\n            \"locked\": true\n        }\n    }\n};\nWinkCMDmsg.payload.desired_state[mode]=true;\nif (checkDevCap(context.global.winkDevCap[lock].fields , 'alarm_mode')) {\n    WinkCMDmsg.payload.desired_state.alarm_mode='tamper';\n}\nif (checkDevCap(context.global.winkDevCap[lock].fields , 'alarm_enabled')) {\n    WinkCMDmsg.payload.desired_state.alarm_enabled=true;\n}\nreturn WinkCMDmsg;\n} else return false;    \n}\n\nif(msg.req.headers.authorization && msg.req.headers.authorization==\"Bearer \"+context.global.FREEBOARD_TOKEN){\nmsg.statusCode=\"200\";\nnode.send(msg);\nsetTimeout(function(){\n    if('vaca_locks_vac' in context.global && context.global.vaca_locks_vac){\n        var i=0;\n        for (var lock in context.global.winkState.locks){\n            LMsg=setLockMode(lock,'vacation_mode_enabled');\n            if (LMsg) {\n                if (conext.global.DEBUG) node.warn(LMsg);\n                context.global.sendWithTimeout(node,LMsg,i);\n                i+=1000;\n            }\n        }\n    }\n},(context.global.vaca_delay || 15)*60*1000);\n\n}",
     "outputs": 1,
@@ -1676,14 +1694,14 @@
     "y": 1661,
     "wires": [
       [
-        "81f4445b.981198"
+        "57e2725.9cd588c"
       ]
     ]
   },
   {
-    "id": "81f4445b.981198",
+    "id": "57e2725.9cd588c",
     "type": "switch",
-    "z": "95f60c40.6a09f",
+    "z": "17b3daf5.e84c25",
     "name": "",
     "property": "method",
     "propertyType": "msg",
@@ -1708,20 +1726,20 @@
     "y": 1642,
     "wires": [
       [
-        "ee5eb000.f35c1"
+        "44d4afe9.5c06e"
       ],
       [
-        "ee5eb000.f35c1"
+        "44d4afe9.5c06e"
       ],
       [
-        "ce55961c.e298a8"
+        "453e5b2a.9774f4"
       ]
     ]
   },
   {
-    "id": "ee5eb000.f35c1",
+    "id": "44d4afe9.5c06e",
     "type": "http request",
-    "z": "95f60c40.6a09f",
+    "z": "17b3daf5.e84c25",
     "name": "",
     "method": "use",
     "ret": "txt",
@@ -1730,14 +1748,14 @@
     "y": 1615,
     "wires": [
       [
-        "206b5fc4.5fad1"
+        "51c750f7.2d90e"
       ]
     ]
   },
   {
-    "id": "206b5fc4.5fad1",
+    "id": "51c750f7.2d90e",
     "type": "debug",
-    "z": "95f60c40.6a09f",
+    "z": "17b3daf5.e84c25",
     "name": "",
     "active": false,
     "console": "false",
@@ -1747,9 +1765,9 @@
     "wires": []
   },
   {
-    "id": "3400d483.d6043c",
+    "id": "f8c27ca5.cebb7",
     "type": "inject",
-    "z": "95f60c40.6a09f",
+    "z": "17b3daf5.e84c25",
     "name": "",
     "topic": "",
     "payload": "",
@@ -1761,14 +1779,14 @@
     "y": 1724,
     "wires": [
       [
-        "afd40338.8c296"
+        "1f1337ae.aae9e8"
       ]
     ]
   },
   {
-    "id": "afd40338.8c296",
+    "id": "1f1337ae.aae9e8",
     "type": "function",
-    "z": "95f60c40.6a09f",
+    "z": "17b3daf5.e84c25",
     "name": "",
     "func": "if (context.global.VacationMode=='on'){\n    var currDate= new Date();\n    var currHours=currDate.getHours();\n    var currMins=currDate.getMinutes();\n    currHours=currHours+context.global.Weather.Offset;\n    if (currHours<0) currHours=24+currHours;\n    if ('vaca_light_bulbs' in context.global && (currHours >= context.global.Weather.SunsetHour || currHours<1)) {\n        context.global.vaca_light_bulbs.forEach(function(b){\n        var r,effect,min,max;\n        r=context.global.getRandomNumber(0,2);\n        effect=(r===0 ?'on' : r===1 ? 'off' : 'dim');\n        min=context.global.getRandomNumber(5,20);\n        max=context.global.getRandomNumber(50,100);\n        if (context.global.DEBUG) node.warn('bulb '+ b+' effect '+ effect + ' min ' + min + ' max '+ max);\n        var WinkCMDmsg = context.global.executeWinkCMD(b,'light',(effect=='off' ? 'off' : 'on'),(effect=='dim' ? min : max));\n        node.send(WinkCMDmsg);        \n        });\n    }\n    if ('vaca_light_bulbs' in context.global && currHours==1){\n        context.global.vaca_light_bulbs.forEach(function(b){\n            if(context.global.winkState.light_bulbs[b].powered){\n            var WinkCMDmsg = context.global.executeWinkCMD(b,'light','off',trunc(b.brightness*100));\n            node.send(WinkCMDmsg);\n            }\n        });\n    }\n}\nreturn;",
     "outputs": 1,
@@ -1777,14 +1795,14 @@
     "y": 1726,
     "wires": [
       [
-        "85b596ae.726d18"
+        "558de1c5.ec44b"
       ]
     ]
   },
   {
-    "id": "bf41ce93.644a3",
+    "id": "d7bde082.83c0b",
     "type": "inject",
-    "z": "95f60c40.6a09f",
+    "z": "17b3daf5.e84c25",
     "name": "",
     "topic": "",
     "payload": "",
@@ -1796,14 +1814,14 @@
     "y": 366,
     "wires": [
       [
-        "7d2eec88.1d0694"
+        "74294c69.26e664"
       ]
     ]
   },
   {
-    "id": "7d2eec88.1d0694",
+    "id": "74294c69.26e664",
     "type": "function",
-    "z": "95f60c40.6a09f",
+    "z": "17b3daf5.e84c25",
     "name": "",
     "func": "context.global.clearAllIntervals();\nreturn msg;",
     "outputs": 1,
@@ -1815,9 +1833,9 @@
     ]
   },
   {
-    "id": "85b596ae.726d18",
+    "id": "558de1c5.ec44b",
     "type": "delay",
-    "z": "95f60c40.6a09f",
+    "z": "17b3daf5.e84c25",
     "name": "",
     "pauseType": "rate",
     "timeout": "5",
@@ -1832,14 +1850,14 @@
     "y": 1725,
     "wires": [
       [
-        "c6508d9e.600c9"
+        "8c299cbc.a05a4"
       ]
     ]
   },
   {
-    "id": "c6508d9e.600c9",
+    "id": "8c299cbc.a05a4",
     "type": "http request",
-    "z": "95f60c40.6a09f",
+    "z": "17b3daf5.e84c25",
     "name": "",
     "method": "use",
     "ret": "txt",
@@ -1851,9 +1869,9 @@
     ]
   },
   {
-    "id": "6be4434b.75daac",
+    "id": "1da47763.461dc9",
     "type": "inject",
-    "z": "95f60c40.6a09f",
+    "z": "17b3daf5.e84c25",
     "name": "",
     "topic": "",
     "payload": "",
@@ -1865,14 +1883,14 @@
     "y": 1875,
     "wires": [
       [
-        "de7cb36a.cbb39"
+        "6642abc.0054454"
       ]
     ]
   },
   {
-    "id": "fc1bc23a.75bcf",
+    "id": "ed9e23c8.e0113",
     "type": "http request",
-    "z": "95f60c40.6a09f",
+    "z": "17b3daf5.e84c25",
     "name": "",
     "method": "use",
     "ret": "obj",
@@ -1881,15 +1899,15 @@
     "y": 1873,
     "wires": [
       [
-        "298a7cc.4651284",
-        "70184a5a.12bf84"
+        "31d54696.ebee7a",
+        "50faf2c3.005c8c"
       ]
     ]
   },
   {
-    "id": "de7cb36a.cbb39",
+    "id": "6642abc.0054454",
     "type": "function",
-    "z": "95f60c40.6a09f",
+    "z": "17b3daf5.e84c25",
     "name": "",
     "func": "if ('BloomskyKey' in context.global && context.global.BloomskyKey!=='' ){\nvar msg1={}\nmsg1.url='https://api.bloomsky.com/api/skydata/?unit=intl';\nmsg1.method=\"GET\";\nmsg1.headers= {\n    \"Authorization\":context.global.BloomskyKey\n};\nreturn msg1;\n}",
     "outputs": 1,
@@ -1898,14 +1916,14 @@
     "y": 1874,
     "wires": [
       [
-        "fc1bc23a.75bcf"
+        "ed9e23c8.e0113"
       ]
     ]
   },
   {
-    "id": "298a7cc.4651284",
+    "id": "31d54696.ebee7a",
     "type": "debug",
-    "z": "95f60c40.6a09f",
+    "z": "17b3daf5.e84c25",
     "name": "",
     "active": false,
     "console": "false",
@@ -1915,26 +1933,26 @@
     "wires": []
   },
   {
-    "id": "70184a5a.12bf84",
+    "id": "50faf2c3.005c8c",
     "type": "function",
-    "z": "95f60c40.6a09f",
+    "z": "17b3daf5.e84c25",
     "name": "",
-    "func": "if (msg.statusCode=='200') {\n    data_set=msg.payload;\n    i=0;\n    data_set.forEach(function(dev){\n       var weatherData=dev.Data;\n       if (context.global.DEBUG){\n           node.warn('device '+ dev.DeviceName);           \n           node.warn('temperature: '+ weatherData.Temperature);\n           node.warn('humidity: '+ weatherData.Humidity);\n           node.warn('night: '+ weatherData.Night);\n           node.warn('rain: '+ weatherData.Rain);\n           node.warn('pressure: '+ weatherData.Pressure);       \n           node.warn('luminance: '+ weatherData.Luminance);   \n           node.warn('uvindex: ' + weatherData.UVIndex);\n           node.warn('ImageURL: ' + weatherData.ImageURL);\n           node.warn('devide id: '+ dev.DeviceID);\n           node.warn('url: '+context.global.Weather.Bloomsky.URL);\n       }\n       if(!('Bloomsky' in context.global.Weather)) context.global.Weather.Bloomsky={};\n       context.global.Weather.Bloomsky.Rain=weatherData.Rain;\n       context.global.Weather.Bloomsky.Night=weatherData.Night;\n       context.global.Weather.Bloomsky.TemperatureC=weatherData.Temperature;\n       context.global.Weather.Bloomsky.TemperatureF=Math.round(weatherData.Temperature*1.8+32);       \n       context.global.Weather.Bloomsky.Luminance=weatherData.Luminance;  \n       context.global.Weather.Bloomsky.Humidity=weatherData.Humidity; \n       context.global.Weather.Bloomsky.Pressure=weatherData.Pressure;\n       context.global.Weather.Bloomsky.UVIndex=weatherData.UVIndex; \n        var postMsg={\n            url:context.global.BlueMixUrlBase+'/red/wink/subscribtions',\n            method:\"POST\",\n                headers: {\n                \"Content-Type\":\"application/json\"\n            },\n            payload:{\n          capabilities: { fields: [ \n              { field: 'temperature', type: 'float' },\n              { field: 'humidity', type: 'percentage' },\n              { field: 'timeframe', type: 'boolean' },\n              { field: 'rain', type: 'boolean' },\n              { field: 'pressure', type: 'float' },\n              { field: 'luminance', type: 'float' },\n              { field: 'uvindex', type: 'float' }\n              ] },\n          device_manufacturer: 'BloomSky',\n          \"eco_system\" : \"BLOOMSKY\",\n          last_event: \n           { brightness_occurred_at: null,\n             loudness_occurred_at: null,\n             vibration_occurred_at: null },\n          last_reading: \n           { \n                agent_session_id: 'FALSE',\n                connection: true,\n                'temperature': weatherData.Temperature,\n                'humidity': weatherData.Humidity,\n                'timeframe': weatherData.Night,\n                'rain': weatherData.Rain,\n                'pressure': weatherData.Pressure,\n                'luminance': weatherData.Luminance,   \n                'uvindex': weatherData.UVIndex\n           },\n          manufacturer_device_model: 'bloomsky_weather_sensor',\n          model_name: 'Weather Sensor',\n          name:dev.DeviceName,\n          object_id:  dev.DeviceID+'_BloomSky',\n          object_type: 'sensor_pod',\n          radio_type: 'wifi',\n          sensor_pod_id: dev.DeviceID+'_BloomSky',\n          triggers: [],\n          units: {},\n          upc_code: dev.DeviceName+'_weather_sensor',\n          upc_id: 'BloomSky_'+i\n          }\n        };\n    context.global.sendWithTimeout(node,postMsg,i*2000);\n    i++;\n    var proto=context.global.BlueMixUrlBase.split(':')[0]+':';\n        var camMsg={\n            topic:dev.DeviceName,\n            url:context.global.BlueMixUrlBase+'/red/wink/subscribtions',\n            method:\"POST\",\n                headers: {\n                \"Content-Type\":\"application/json\"\n            },\n            payload:{    \n            \"name\": dev.DeviceName,\n            \"object_type\": \"camera\",\n            \"eco_system\" : \"BloomSky\",\n            \"object_id\": dev.DeviceID+'_BloomSky',\n            \"freeboard\": 0,\n            \"manufacturer_device_model\":\"BloomSky camera\",\n            \"connection\": true,\n            \"capturing_audio\": true,\n            \"capturing_video\": true,\n            \"url\":context.global.BlueMixUrlBase+'/red/bloomsky',\n            \"snap_url\": context.global.BlueMixUrlBase+'/red/bloomsky?token='+context.global.FREEBOARD_TOKEN,\n            \"history_url\":context.global.BlueMixUrlBase+\"/freeboard/cameraSnapshots?token=\"+context.global.FREEBOARD_TOKEN+\"&camera_name=\"+dev.DeviceName,\n            \"refresh_time\":300,\n            \"motion\": \"N/A\",\n            \"activities\":[],\n            last_reading:{\n                \"motion\":false\n            }\n            }\n        };\n        context.global.sendWithTimeout(node,camMsg,i*2000);\n        i++;\n        context.global.Weather.Bloomsky.URL=proto+weatherData.ImageURL.split(':')[1];\n    });\n}",
+    "func": "if (msg.statusCode=='200') {\n    data_set=msg.payload;\n    i=0;\n    data_set.forEach(function(dev){\n       var weatherData=dev.Data;\n       if (context.global.DEBUG){\n           node.warn('device '+ dev.DeviceName);           \n           node.warn('temperature: '+ weatherData.Temperature);\n           node.warn('humidity: '+ weatherData.Humidity);\n           node.warn('night: '+ weatherData.Night);\n           node.warn('rain: '+ weatherData.Rain);\n           node.warn('pressure: '+ weatherData.Pressure);       \n           node.warn('luminance: '+ weatherData.Luminance);   \n           node.warn('uvindex: ' + weatherData.UVIndex);\n           node.warn('ImageURL: ' + weatherData.ImageURL);\n           node.warn('devide id: '+ dev.DeviceID);\n           node.warn('url: '+context.global.Weather.Bloomsky.URL);\n       }\n       if(!('Bloomsky' in context.global.Weather)) context.global.Weather.Bloomsky={};\n       context.global.Weather.Bloomsky.Rain=weatherData.Rain;\n       context.global.Weather.Bloomsky.Night=weatherData.Night;\n       context.global.Weather.Bloomsky.TemperatureC=weatherData.Temperature;\n       context.global.Weather.Bloomsky.TemperatureF=Math.round(weatherData.Temperature*1.8+32);       \n       context.global.Weather.Bloomsky.Luminance=weatherData.Luminance;  \n       context.global.Weather.Bloomsky.Humidity=weatherData.Humidity; \n       context.global.Weather.Bloomsky.Pressure=weatherData.Pressure;\n       context.global.Weather.Bloomsky.UVIndex=weatherData.UVIndex; \n        var postMsg={\n            url:context.global.BlueMixUrlBase+'/red/wink/subscribtions',\n            method:\"POST\",\n                headers: {\n                \"Content-Type\":\"application/json\"\n            },\n            payload:{\n          capabilities: { fields: [ \n              { field: 'temperature', type: 'float' },\n              { field: 'humidity', type: 'percentage' },\n              { field: 'timeframe', type: 'boolean' },\n              { field: 'rain', type: 'boolean' },\n              { field: 'pressure', type: 'float' },\n              { field: 'luminance', type: 'float' },\n              { field: 'uvindex', type: 'float' }\n              ] },\n          device_manufacturer: 'BloomSky',\n          \"eco_system\" : \"BLOOMSKY\",\n          last_event: \n           { brightness_occurred_at: null,\n             loudness_occurred_at: null,\n             vibration_occurred_at: null },\n          last_reading: \n           { \n                agent_session_id: 'FALSE',\n                connection: true,\n                'temperature': weatherData.Temperature,\n                'humidity': weatherData.Humidity,\n                'timeframe': weatherData.Night,\n                'rain': weatherData.Rain,\n                'pressure': weatherData.Pressure,\n                'luminance': weatherData.Luminance,   \n                'uvindex': weatherData.UVIndex\n           },\n          manufacturer_device_model: 'bloomsky_weather_sensor',\n          model_name: 'Weather Sensor',\n          name:dev.DeviceName,\n          object_id:  dev.DeviceID+'_BloomSky',\n          object_type: 'sensor_pod',\n          radio_type: 'wifi',\n          sensor_pod_id: dev.DeviceID+'_BloomSky',\n          triggers: [],\n          units: {},\n          upc_code: dev.DeviceName+'_weather_sensor',\n          upc_id: 'BloomSky_'+i\n          }\n        };\n    context.global.sendWithTimeout(node,postMsg,i*2000);\n    i++;\n    var proto=context.global.BlueMixUrlBase.split(':')[0]+':';\n        var camMsg={\n            topic:dev.DeviceName,\n            url:context.global.BlueMixUrlBase+'/red/wink/subscribtions',\n            method:\"POST\",\n                headers: {\n                \"Content-Type\":\"application/json\"\n            },\n            payload:{    \n            \"name\": dev.DeviceName,\n            \"object_type\": \"camera\",\n            \"eco_system\" : \"BloomSky\",\n            \"object_id\": dev.DeviceID+'_BloomSky',\n            \"freeboard\": 0,\n            \"manufacturer_device_model\":\"BloomSky camera\",\n            \"connection\": true,\n            \"capturing_audio\": true,\n            \"capturing_video\": true,\n            \"url\":context.global.BlueMixUrlBase+'/red/bloomsky',\n            \"snap_url\": context.global.BlueMixUrlBase+'/red/bloomsky', // ?token='+context.global.FREEBOARD_TOKEN,\n            \"history_url\":context.global.BlueMixUrlBase+\"/freeboard/cameraSnapshots?token=\"+context.global.FREEBOARD_TOKEN+\"&camera_name=\"+dev.DeviceName,\n            \"refresh_time\":300,\n            \"motion\": \"N/A\",\n            \"activities\":[],\n            last_reading:{\n                \"motion\":false\n            }\n            }\n        };\n        context.global.sendWithTimeout(node,camMsg,i*2000);\n        i++;\n        context.global.Weather.Bloomsky.URL=proto+weatherData.ImageURL.split(':')[1];\n    });\n}",
     "outputs": 1,
     "noerr": 0,
     "x": 708,
     "y": 1925,
     "wires": [
       [
-        "453e5735.0dfe38",
-        "aa170f7a.2f326"
+        "f8e9b36f.d02b4",
+        "a5d1ff7c.a16ff"
       ]
     ]
   },
   {
-    "id": "453e5735.0dfe38",
+    "id": "f8e9b36f.d02b4",
     "type": "http request",
-    "z": "95f60c40.6a09f",
+    "z": "17b3daf5.e84c25",
     "name": "",
     "method": "use",
     "ret": "obj",
@@ -1943,14 +1961,14 @@
     "y": 1920,
     "wires": [
       [
-        "d2488e4.64ae87"
+        "53981059.e6193"
       ]
     ]
   },
   {
-    "id": "46d1184d.291b98",
+    "id": "458ae02e.eadbc",
     "type": "comment",
-    "z": "95f60c40.6a09f",
+    "z": "17b3daf5.e84c25",
     "name": "Integration with BloomSky ---------------------------------------------------------------------------------------",
     "info": "",
     "x": 335,
@@ -1958,9 +1976,9 @@
     "wires": []
   },
   {
-    "id": "aa170f7a.2f326",
+    "id": "a5d1ff7c.a16ff",
     "type": "debug",
-    "z": "95f60c40.6a09f",
+    "z": "17b3daf5.e84c25",
     "name": "",
     "active": false,
     "console": "false",
@@ -1970,9 +1988,9 @@
     "wires": []
   },
   {
-    "id": "d2488e4.64ae87",
+    "id": "53981059.e6193",
     "type": "function",
-    "z": "95f60c40.6a09f",
+    "z": "17b3daf5.e84c25",
     "name": "",
     "func": "if ('topic' in msg){\n       var newmsg ={\n        \"url\":context.global.BlueMixUrlBase+'/red/retrieve_activities?camera_name='+msg.topic,\n        \"method\": \"GET\",\n        headers: {\n            \"Authorization\":\"Bearer \"+context.global.FREEBOARD_TOKEN\n        }\n    };\n    node.send(newmsg);\n}\nreturn;",
     "outputs": 1,
@@ -1984,9 +2002,9 @@
     ]
   },
   {
-    "id": "20b73811.f855c8",
+    "id": "ecb3cff1.6ef94",
     "type": "debug",
-    "z": "95f60c40.6a09f",
+    "z": "17b3daf5.e84c25",
     "name": "",
     "active": false,
     "console": "false",
@@ -1996,9 +2014,9 @@
     "wires": []
   },
   {
-    "id": "5b286349.54384c",
+    "id": "4d17cbde.8d81c4",
     "type": "http request",
-    "z": "95f60c40.6a09f",
+    "z": "17b3daf5.e84c25",
     "name": "",
     "method": "use",
     "ret": "bin",
@@ -2007,15 +2025,15 @@
     "y": 1968,
     "wires": [
       [
-        "dca7f775.9abf08",
-        "8113702d.3185f"
+        "39307e54.0f45e2",
+        "eb1334ca.9e3f58"
       ]
     ]
   },
   {
-    "id": "402b0143.98d9b",
+    "id": "64645c1e.8d7704",
     "type": "http in",
-    "z": "95f60c40.6a09f",
+    "z": "17b3daf5.e84c25",
     "name": "",
     "url": "/red/bloomsky",
     "method": "get",
@@ -2024,44 +2042,26 @@
     "y": 1965,
     "wires": [
       [
-        "c04d0c03.28244"
+        "e49c8ede.cd963"
       ]
     ]
   },
   {
-    "id": "c04d0c03.28244",
-    "type": "function",
-    "z": "95f60c40.6a09f",
-    "name": "",
-    "func": "//var web_req=(context.global.getCookie('exchange_token',msg.req.headers.cookie)=='0' ? false:true);\n//if (msg.payload.iftttkey==context.global.IFTTT_TOKEN || msg.payload.iftttkey==context.global.FREEBOARD_TOKEN || (msg.req.headers.authorization && msg.req.headers.authorization==\"Bearer \"+context.global.FREEBOARD_TOKEN)) web_req=true;\n//if (web_req)\n//{\n    msg.statusCode=200;\n    msg.url=context.global.Weather.Bloomsky.URL;\n    msg.method=\"GET\";\n    return [msg,null];\n/*\n    \n}\n//else {\n    node.warn(\"ifttt messages bad request\");\n    msg.payload=\"403: Bad request\";\n    msg.statusCode=403;\n    return [null,msg];\n}\nreturn msg;\n\n*/",
-    "outputs": "2",
-    "noerr": 0,
-    "x": 280,
-    "y": 1965,
-    "wires": [
-      [
-        "5b286349.54384c",
-        "197199a1.ca6a96"
-      ],
-      []
-    ]
-  },
-  {
-    "id": "197199a1.ca6a96",
+    "id": "6cfbe7c4.480b88",
     "type": "debug",
-    "z": "95f60c40.6a09f",
+    "z": "17b3daf5.e84c25",
     "name": "",
     "active": false,
     "console": "false",
     "complete": "true",
-    "x": 412,
-    "y": 1924,
+    "x": 437,
+    "y": 1925,
     "wires": []
   },
   {
-    "id": "dca7f775.9abf08",
+    "id": "39307e54.0f45e2",
     "type": "debug",
-    "z": "95f60c40.6a09f",
+    "z": "17b3daf5.e84c25",
     "name": "",
     "active": false,
     "console": "false",
@@ -2071,18 +2071,18 @@
     "wires": []
   },
   {
-    "id": "8113702d.3185f",
+    "id": "eb1334ca.9e3f58",
     "type": "http response",
-    "z": "95f60c40.6a09f",
+    "z": "17b3daf5.e84c25",
     "name": "",
     "x": 586,
     "y": 1954,
     "wires": []
   },
   {
-    "id": "f655762d.ec1098",
+    "id": "d896fc61.7dfec",
     "type": "switch",
-    "z": "95f60c40.6a09f",
+    "z": "17b3daf5.e84c25",
     "name": "",
     "property": "statusCode",
     "propertyType": "msg",
@@ -2104,35 +2104,35 @@
     "y": 1551.4284934997559,
     "wires": [
       [
-        "12d6349e.51b5fb"
+        "a7954abb.c565b8"
       ],
       [
-        "1c48eb75.b01e75"
+        "4bde7ebe.6b718"
       ]
     ]
   },
   {
-    "id": "1c48eb75.b01e75",
+    "id": "4bde7ebe.6b718",
     "type": "json",
-    "z": "95f60c40.6a09f",
+    "z": "17b3daf5.e84c25",
     "name": "",
     "x": 771.4285545349121,
     "y": 1549.9999389648438,
     "wires": [
       [
-        "e61dd3dd.53c9a"
+        "98e50652.baa948"
       ]
     ]
   },
   {
-    "id": "12d6349e.51b5fb",
+    "id": "a7954abb.c565b8",
     "type": "debug",
-    "z": "95f60c40.6a09f",
+    "z": "17b3daf5.e84c25",
     "name": "",
-    "active": true,
+    "active": false,
     "console": "false",
     "complete": "false",
-    "x": 789.9999999999999,
+    "x": 790,
     "y": 1508.5714285714284,
     "wires": []
   }
