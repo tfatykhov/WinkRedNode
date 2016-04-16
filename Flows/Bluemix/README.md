@@ -6,6 +6,19 @@ https://(your_app_name).mybluemix.net/freeboard/winkboardautogroup - sample free
 
 == UPDATE ==
 -
+04/16/2016
+------------
+Clear nonWink devices and Presence entries from cache.
+New settings added to configuration tab/application settings<br>
+<img src="images/clear_cache.png"><br><br>
+Select one relevat to you and click "submit" button. Refresh browser after that.
+
+Flow Editor:<br>
+*  Import updated [winkCore.json](winkCore.json)
+*  Import updated [tabletUI.json](tabletUI.json)
+*  do not forget to check [duplicate websockets](../../README-WebsocketFix.md)
+*  perform "FULL" deployment<br>
+
 04/14/2016
 ------------
 ####Bloomsky:
