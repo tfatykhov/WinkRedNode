@@ -15,7 +15,7 @@ This application is Node-Red based app which helps joining together various syst
 * Forecast.io http://forecast.io (one of the best weather forecast systems)
 * Blue Iris http://blueiris.com (inexpensive solution for vide monitoring)
 * BloomSky http://bloomsky.com (community based weather station and sky camera)
-* Several ip cameras (Foscam, D-link, Sansung)
+* Several ip cameras (Foscam, D-link, Samsung)
 
 written in JavaScript and powered by Node-Red and Node.js it allows to build additional functionality like advanced scheduling very easy. It is also a fun way to learn functional and event based programming and some modern technologies at the same time enchancing your home automation experience.
 
@@ -34,8 +34,8 @@ In order to run Node-RED locally,
 take a look at the [documentation](http://nodered.org/docs/).
 Here is the [QUICKSTART](http://nodered.org/docs/hardware/raspberrypi.html) for running Node-RED on Raspberry Pi.
 You can use configuration settings from [local windows config](README-Local-Windows.md)
-if you do not see package.json in .node-red installation folder 2 things you need to install in order to start using node-red authentication: 
-on your raspbery pi session execute following prior to start using node-red: (assumption is that your user name on rasp pi is 'pi')
+if you do not see package.json in .node-red installation folder. Things you need to install in order to start using node-red authentication: 
+on your raspbery pi session, execute the following prior to logging into the node-red application: (assumption is that your user name on rasp pi is 'pi')
 * cd /home/pi/.node-red
 * npm install when
 * npm install path
