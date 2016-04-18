@@ -1,8 +1,8 @@
 [
   {
-    "id": "d468b6.474fc748",
+    "id": "23747a4.03c4c86",
     "type": "http in",
-    "z": "811c60ec.7ee3a",
+    "z": "4e2b26a1.db8168",
     "name": "",
     "url": "/freeboard/MyFamily",
     "method": "get",
@@ -11,14 +11,14 @@
     "y": 1202,
     "wires": [
       [
-        "f45e08ec.d5e448"
+        "33b1e0b.4fe6a2"
       ]
     ]
   },
   {
-    "id": "9975bd04.57f3c",
+    "id": "db29c83.8825038",
     "type": "function",
-    "z": "811c60ec.7ee3a",
+    "z": "4e2b26a1.db8168",
     "name": "GenLocationMap",
     "func": "//if(msg.req.headers.authorization && msg.req.headers.authorization==\"Bearer \"+context.global.FREEBOARD_TOKEN){\nif ((msg.req.body.uid==context.global.WinkUser.uid && msg.req.body.pwd==context.global.WinkUser.pwd) ||context.global.getCookie('exchange_token',msg.req.headers.cookie)==context.global.FREEBOARD_TOKEN || msg.payload.token==context.global.FREEBOARD_TOKEN){\n//if (true){\nmsg.statusCode=\"200\";\nmsg.payload.pwd_str=context.global.FREEBOARD_TOKEN;\nmsg.payload.ifttt_token=context.global.FREEBOARD_TOKEN;\nmsg.payload.home_location={lat:context.global.HomeLocation.lat,lng:context.global.HomeLocation.lon};\ngeo_locations=[];\nfor (var geo in context.global.winkState.sensor_pods){\n    //node.warn(geo);\n    if(geo.indexOf('Geo')!=-1){\n    var geo_s=context.global.winkState.sensor_pods[geo];        \n    geo_locations.push({\n        name:geo_s.name.split('_')[0],\n        id:geo_s.object_id,\n        lat:geo_s.lat,\n        lng:geo_s.lon\n    });\n   }\n}\nmsg.payload.geo_locations=geo_locations;\nmsg.res.statusCode=\"200\";\nif (msg.topic=='json'){\n    var Etag=\"\";\n    if ('CRYPTO' in context.global) Etag=context.global.CRYPTO.createHash(\"md5\").update(JSON.stringify(msg.payload),\"utf8\").digest(\"hex\");\n    msg.headers={\n      'Content-Type': 'application/json',\n      'ETag': Etag\n    };\n}\n} else {\nmsg.statusCode=\"403\";\n}\nreturn msg;",
     "outputs": 1,
@@ -27,23 +27,23 @@
     "y": 1226,
     "wires": [
       [
-        "2cafd5fb.58d34a"
+        "524322fd.3df84c"
       ]
     ]
   },
   {
-    "id": "e2bfb608.96b748",
+    "id": "d8210846.f92028",
     "type": "http response",
-    "z": "811c60ec.7ee3a",
+    "z": "4e2b26a1.db8168",
     "name": "",
     "x": 989,
     "y": 1222,
     "wires": []
   },
   {
-    "id": "5b209f1c.85a59",
+    "id": "88bd7ddd.563e7",
     "type": "template",
-    "z": "811c60ec.7ee3a",
+    "z": "4e2b26a1.db8168",
     "name": "",
     "field": "",
     "fieldType": "msg",
@@ -54,14 +54,14 @@
     "y": 1192,
     "wires": [
       [
-        "e2bfb608.96b748"
+        "d8210846.f92028"
       ]
     ]
   },
   {
-    "id": "9f854b58.7ee4b8",
+    "id": "91c8e623.17ffc8",
     "type": "http in",
-    "z": "811c60ec.7ee3a",
+    "z": "4e2b26a1.db8168",
     "name": "",
     "url": "/freeboard/MyFamilyjson",
     "method": "get",
@@ -70,14 +70,14 @@
     "y": 1268,
     "wires": [
       [
-        "a80e4b03.177b28"
+        "5e388ea7.1eb65"
       ]
     ]
   },
   {
-    "id": "f45e08ec.d5e448",
+    "id": "33b1e0b.4fe6a2",
     "type": "function",
-    "z": "811c60ec.7ee3a",
+    "z": "4e2b26a1.db8168",
     "name": "",
     "func": "msg.topic='page';\nreturn msg;",
     "outputs": 1,
@@ -86,14 +86,14 @@
     "y": 1203,
     "wires": [
       [
-        "9975bd04.57f3c"
+        "db29c83.8825038"
       ]
     ]
   },
   {
-    "id": "a80e4b03.177b28",
+    "id": "5e388ea7.1eb65",
     "type": "function",
-    "z": "811c60ec.7ee3a",
+    "z": "4e2b26a1.db8168",
     "name": "",
     "func": "msg.topic='json';\nreturn msg;",
     "outputs": 1,
@@ -102,14 +102,14 @@
     "y": 1272,
     "wires": [
       [
-        "9975bd04.57f3c"
+        "db29c83.8825038"
       ]
     ]
   },
   {
-    "id": "2cafd5fb.58d34a",
+    "id": "524322fd.3df84c",
     "type": "switch",
-    "z": "811c60ec.7ee3a",
+    "z": "4e2b26a1.db8168",
     "name": "",
     "property": "topic",
     "propertyType": "msg",
@@ -129,30 +129,30 @@
     "y": 1226,
     "wires": [
       [
-        "5b209f1c.85a59"
+        "88bd7ddd.563e7"
       ],
       [
-        "5964882.d14c878"
+        "27448952.d05546"
       ]
     ]
   },
   {
-    "id": "5964882.d14c878",
+    "id": "27448952.d05546",
     "type": "json",
-    "z": "811c60ec.7ee3a",
+    "z": "4e2b26a1.db8168",
     "name": "",
     "x": 850,
     "y": 1246,
     "wires": [
       [
-        "e2bfb608.96b748"
+        "d8210846.f92028"
       ]
     ]
   },
   {
-    "id": "176304c0.42120b",
+    "id": "45d3a5dd.770adc",
     "type": "function",
-    "z": "811c60ec.7ee3a",
+    "z": "4e2b26a1.db8168",
     "name": "",
     "func": "if ((msg.req.body.uid==context.global.WinkUser.uid && msg.req.body.pwd==context.global.WinkUser.pwd) || msg.payload.token==context.global.FREEBOARD_TOKEN){\nmsg.statusCode=\"200\";\n//msg.res.cookie('exchange_token',context.global.FREEBOARD_TOKEN);\nmsg.headers={\n    \"Set-Cookie\":\"exchange_token=\"+context.global.FREEBOARD_TOKEN+'; Path=/'\n}\n//msg.res.winktoken=context.global.FREEBOARD_TOKEN;\nmsg.payload.pwd_str=context.global.FREEBOARD_TOKEN;\nmsg.payload.ui_shortcuts=[]\nif ('cameras' in context.global.winkState) msg.payload.cameras=true; else msg.payload.cameras=false;\nif ('robots' in context.global.winkState) msg.payload.robots=true; else msg.payload.robots=false;\n   msg.payload.geo=false;\nif ('sensor_pods' in context.global.winkState) {\n    for (var v in context.global.winkState.sensor_pods){\n        if (v.indexOf('Geo') !=-1) { \n            msg.payload.geo=true;\n            break;\n        }\n    }\n}\nif ('CustomTabUrl' in context.global && context.global.CustomTabUrl!=='') {\n    msg.payload.custom_tab=true; \n    msg.payload.CustomTabUrl=context.global.CustomTabUrl;\n    msg.payload.CustomTabName=context.global.CustomTabName || 'My Tab';\n}\n    else msg.payload.custom_tab=false;\n    msg.payload.ui_shortcuts=[];\n    var k=0;\n    if(!Array.isArray(context.global.tab_ui_shortcuts)) { \n        msg.payload.ui_shortcuts[0]={ name:context.global.tab_ui_shortcuts,shortcut:context.global.tab_ui_shortcuts};\n        k=1;\n    }\nfor (var i=k;i<6;i++){\n    msg.payload.ui_shortcuts[i]={}\n    if ('tab_ui_shortcuts' in context.global && Array.isArray(context.global.tab_ui_shortcuts) && context.global.tab_ui_shortcuts[i]){\n        msg.payload.ui_shortcuts[i].name=context.global.tab_ui_shortcuts[i];\n        msg.payload.ui_shortcuts[i].shortuct=context.global.tab_ui_shortcuts[i];\n        } else {\n        msg.payload.ui_shortcuts[i].name='Shortcut '+(i+1);\n        msg.payload.ui_shortcuts[i].shortuct='#';\n        }\n    }\nmsg.payload.ifttt_token=(context.global.IFTTT_TOKEN!=='undefined' ? context.global.IFTTT_TOKEN : context.global.FREEBOARD_TOKEN) ;\n//if ('camera_name' in msg.payload && msg.payload.camera_name!=='undefined') msg.payload.camera_name=msg.req.body.camera_name\n} else {\nmsg.res.statusCode=\"403\";\n}\nreturn msg;",
     "outputs": 1,
@@ -161,14 +161,14 @@
     "y": 66,
     "wires": [
       [
-        "9cb44887.a08d58"
+        "5b334508.d0b64c"
       ]
     ]
   },
   {
-    "id": "a052cb72.7b3668",
+    "id": "40d48501.cb795c",
     "type": "http in",
-    "z": "811c60ec.7ee3a",
+    "z": "4e2b26a1.db8168",
     "name": "",
     "url": "/freeboard/ui",
     "method": "post",
@@ -177,14 +177,14 @@
     "y": 66.99996948242188,
     "wires": [
       [
-        "176304c0.42120b"
+        "45d3a5dd.770adc"
       ]
     ]
   },
   {
-    "id": "6aeda80f.022ee8",
+    "id": "ec00039a.717c3",
     "type": "template",
-    "z": "811c60ec.7ee3a",
+    "z": "4e2b26a1.db8168",
     "name": "",
     "field": "",
     "fieldType": "msg",
@@ -195,23 +195,23 @@
     "y": 59,
     "wires": [
       [
-        "7d983589.d8aacc"
+        "298378ae.14a9b8"
       ]
     ]
   },
   {
-    "id": "7d983589.d8aacc",
+    "id": "298378ae.14a9b8",
     "type": "http response",
-    "z": "811c60ec.7ee3a",
+    "z": "4e2b26a1.db8168",
     "name": "",
     "x": 957,
     "y": 89,
     "wires": []
   },
   {
-    "id": "d69d000.22f69",
+    "id": "6ab278e6.745cf8",
     "type": "template",
-    "z": "811c60ec.7ee3a",
+    "z": "4e2b26a1.db8168",
     "name": "",
     "field": "payload",
     "fieldType": "msg",
@@ -222,23 +222,23 @@
     "y": 122,
     "wires": [
       [
-        "d1adc8a8.cae468"
+        "74bed1e7.d33c6"
       ]
     ]
   },
   {
-    "id": "d1adc8a8.cae468",
+    "id": "74bed1e7.d33c6",
     "type": "http response",
-    "z": "811c60ec.7ee3a",
+    "z": "4e2b26a1.db8168",
     "name": "",
     "x": 487,
     "y": 122,
     "wires": []
   },
   {
-    "id": "c5a5c41f.3c73f8",
+    "id": "bc10a3b8.5de2",
     "type": "http in",
-    "z": "811c60ec.7ee3a",
+    "z": "4e2b26a1.db8168",
     "name": "",
     "url": "/freeboard/UI",
     "method": "get",
@@ -247,14 +247,14 @@
     "y": 119,
     "wires": [
       [
-        "d69d000.22f69"
+        "6ab278e6.745cf8"
       ]
     ]
   },
   {
-    "id": "9cb44887.a08d58",
+    "id": "5b334508.d0b64c",
     "type": "switch",
-    "z": "811c60ec.7ee3a",
+    "z": "4e2b26a1.db8168",
     "name": "",
     "property": "statusCode",
     "rules": [
@@ -273,17 +273,17 @@
     "y": 63,
     "wires": [
       [
-        "9125669e.0bc8a8"
+        "7889ff36.4a80d"
       ],
       [
-        "e89bc7b4.cc75b8"
+        "54f40a78.032cd4"
       ]
     ]
   },
   {
-    "id": "e89bc7b4.cc75b8",
+    "id": "54f40a78.032cd4",
     "type": "template",
-    "z": "811c60ec.7ee3a",
+    "z": "4e2b26a1.db8168",
     "name": "",
     "field": "payload",
     "fieldType": "msg",
@@ -294,14 +294,14 @@
     "y": 112,
     "wires": [
       [
-        "7d983589.d8aacc"
+        "298378ae.14a9b8"
       ]
     ]
   },
   {
-    "id": "9125669e.0bc8a8",
+    "id": "7889ff36.4a80d",
     "type": "function",
-    "z": "811c60ec.7ee3a",
+    "z": "4e2b26a1.db8168",
     "name": "",
     "func": "msg.payload.freeboard_token=context.global.FREEBOARD_TOKEN\nreturn msg;",
     "outputs": 1,
@@ -310,14 +310,14 @@
     "y": 58,
     "wires": [
       [
-        "6aeda80f.022ee8"
+        "ec00039a.717c3"
       ]
     ]
   },
   {
-    "id": "d0f58715.bf4248",
+    "id": "e29c4b10.9c3ca8",
     "type": "http in",
-    "z": "811c60ec.7ee3a",
+    "z": "4e2b26a1.db8168",
     "name": "",
     "url": "/red/getGroupsJson",
     "method": "get",
@@ -326,36 +326,36 @@
     "y": 359.5,
     "wires": [
       [
-        "4ae2cc6a.8f8304"
+        "cfdf9d4.0bc9e6"
       ]
     ]
   },
   {
-    "id": "8f3558ca.50cc98",
+    "id": "15dd72e7.7d295d",
     "type": "http response",
-    "z": "811c60ec.7ee3a",
+    "z": "4e2b26a1.db8168",
     "name": "",
     "x": 835.5,
     "y": 358.5,
     "wires": []
   },
   {
-    "id": "379410e1.9d6e6",
+    "id": "87002c89.3551f",
     "type": "json",
-    "z": "811c60ec.7ee3a",
+    "z": "4e2b26a1.db8168",
     "name": "",
     "x": 670.5,
     "y": 359.5,
     "wires": [
       [
-        "8f3558ca.50cc98"
+        "15dd72e7.7d295d"
       ]
     ]
   },
   {
-    "id": "47027320.46d5ec",
+    "id": "ed6daeb6.03cc9",
     "type": "http in",
-    "z": "811c60ec.7ee3a",
+    "z": "4e2b26a1.db8168",
     "name": "",
     "url": "/freeboard/LightControl",
     "method": "get",
@@ -364,27 +364,27 @@
     "y": 566,
     "wires": [
       [
-        "e6c6d387.4c4e4"
+        "23c6672.f60e798"
       ]
     ]
   },
   {
-    "id": "7cacf071.a39bf",
+    "id": "3d8fc78b.1d9aa8",
     "type": "json",
-    "z": "811c60ec.7ee3a",
+    "z": "4e2b26a1.db8168",
     "name": "",
     "x": 823,
     "y": 563,
     "wires": [
       [
-        "92eab1b7.a7c6c"
+        "868df96f.3e8b08"
       ]
     ]
   },
   {
-    "id": "a7f3eec2.7b0ab",
+    "id": "7375880f.c35518",
     "type": "comment",
-    "z": "811c60ec.7ee3a",
+    "z": "4e2b26a1.db8168",
     "name": "Main page---------------------------------------",
     "info": "",
     "x": 165,
@@ -392,9 +392,9 @@
     "wires": []
   },
   {
-    "id": "672194e5.138d0c",
+    "id": "75602e1d.bcbb6",
     "type": "template",
-    "z": "811c60ec.7ee3a",
+    "z": "4e2b26a1.db8168",
     "name": "",
     "field": "",
     "fieldType": "msg",
@@ -405,23 +405,23 @@
     "y": 406,
     "wires": [
       [
-        "18896b79.bddf75"
+        "35704ea.d1b90b2"
       ]
     ]
   },
   {
-    "id": "18896b79.bddf75",
+    "id": "35704ea.d1b90b2",
     "type": "http response",
-    "z": "811c60ec.7ee3a",
+    "z": "4e2b26a1.db8168",
     "name": "",
     "x": 847.5,
     "y": 412,
     "wires": []
   },
   {
-    "id": "2656867.83adc7a",
+    "id": "7dc85718.a70778",
     "type": "function",
-    "z": "811c60ec.7ee3a",
+    "z": "4e2b26a1.db8168",
     "name": "",
     "func": "if ((msg.req.body.uid==context.global.WinkUser.uid && msg.req.body.pwd==context.global.WinkUser.pwd)||context.global.getCookie('exchange_token',msg.req.headers.cookie)==context.global.FREEBOARD_TOKEN || msg.payload.token==context.global.FREEBOARD_TOKEN){\nmsg.res.statusCode=\"200\";\nmsg.payload={\"pwd_str\":context.global.FREEBOARD_TOKEN}\n} else {\nmsg.res.statusCode=\"403\";\n}\nreturn msg;",
     "outputs": 1,
@@ -430,14 +430,14 @@
     "y": 422,
     "wires": [
       [
-        "cc666ce2.937eb"
+        "f2694cbf.9025d"
       ]
     ]
   },
   {
-    "id": "adec18d9.02a038",
+    "id": "4bf688f.29f9b78",
     "type": "http in",
-    "z": "811c60ec.7ee3a",
+    "z": "4e2b26a1.db8168",
     "name": "",
     "url": "/freeboard/winkautogroup",
     "method": "get",
@@ -446,14 +446,14 @@
     "y": 422,
     "wires": [
       [
-        "2656867.83adc7a"
+        "7dc85718.a70778"
       ]
     ]
   },
   {
-    "id": "cc666ce2.937eb",
+    "id": "f2694cbf.9025d",
     "type": "switch",
-    "z": "811c60ec.7ee3a",
+    "z": "4e2b26a1.db8168",
     "name": "",
     "property": "res.statusCode",
     "rules": [
@@ -472,17 +472,17 @@
     "y": 423,
     "wires": [
       [
-        "672194e5.138d0c"
+        "75602e1d.bcbb6"
       ],
       [
-        "8d909ef0.3bc67"
+        "aaf71831.917718"
       ]
     ]
   },
   {
-    "id": "8d909ef0.3bc67",
+    "id": "aaf71831.917718",
     "type": "template",
-    "z": "811c60ec.7ee3a",
+    "z": "4e2b26a1.db8168",
     "name": "",
     "field": "payload",
     "fieldType": "msg",
@@ -493,14 +493,14 @@
     "y": 445,
     "wires": [
       [
-        "18896b79.bddf75"
+        "35704ea.d1b90b2"
       ]
     ]
   },
   {
-    "id": "2f67ff5f.fce0e",
+    "id": "5c7a0f8c.54a1b",
     "type": "comment",
-    "z": "811c60ec.7ee3a",
+    "z": "4e2b26a1.db8168",
     "name": "Summary page---------------------------------------",
     "info": "",
     "x": 201,
@@ -508,9 +508,9 @@
     "wires": []
   },
   {
-    "id": "6d6a0c6.2378af4",
+    "id": "c5ae4572.d50668",
     "type": "comment",
-    "z": "811c60ec.7ee3a",
+    "z": "4e2b26a1.db8168",
     "name": "details page---------------------------------------",
     "info": "",
     "x": 179,
@@ -518,9 +518,9 @@
     "wires": []
   },
   {
-    "id": "85f0663e.e268f8",
+    "id": "78a9ff6f.57d7c",
     "type": "comment",
-    "z": "811c60ec.7ee3a",
+    "z": "4e2b26a1.db8168",
     "name": "Controls page---------------------------------------",
     "info": "",
     "x": 183,
@@ -528,9 +528,9 @@
     "wires": []
   },
   {
-    "id": "da0e4f8d.eba11",
+    "id": "e7de6c17.8ef43",
     "type": "http in",
-    "z": "811c60ec.7ee3a",
+    "z": "4e2b26a1.db8168",
     "name": "",
     "url": "/freeboard/MyCameras",
     "method": "get",
@@ -539,14 +539,14 @@
     "y": 867,
     "wires": [
       [
-        "f3f00c68.97fab"
+        "a637fa4c.17cb08"
       ]
     ]
   },
   {
-    "id": "f3f00c68.97fab",
+    "id": "a637fa4c.17cb08",
     "type": "function",
-    "z": "811c60ec.7ee3a",
+    "z": "4e2b26a1.db8168",
     "name": "GenCameras",
     "func": "//if(msg.req.headers.authorization && msg.req.headers.authorization==\"Bearer \"+context.global.FREEBOARD_TOKEN){\nif ((msg.req.body.uid==context.global.WinkUser.uid && msg.req.body.pwd==context.global.WinkUser.pwd) ||context.global.getCookie('exchange_token',msg.req.headers.cookie)==context.global.FREEBOARD_TOKEN || msg.payload.token==context.global.FREEBOARD_TOKEN){\n//if (true){\nmsg.statusCode=\"200\";\nmsg.payload.pwd_str=context.global.FREEBOARD_TOKEN;\nmsg.payload.ifttt_token=context.global.FREEBOARD_TOKEN;\ncameras=[]\nfor (var cam in context.global.winkState.cameras){\n    var camera=context.global.winkState.cameras[cam];\n    if(camera.device_manufacturer!='canary'){\n    cameras.push({\n        name:camera.name,\n        id:camera.object_id,\n        connection:camera.connection,\n        url:camera.snap_url,\n        history_url:camera.history_url,\n        refresh_interval:30\n    });\n   }\n}\nmsg.payload.cameras=cameras;\nmsg.res.statusCode=\"200\";\n} else {\nmsg.statusCode=\"403\";\n}\nreturn msg;",
     "outputs": 1,
@@ -555,14 +555,14 @@
     "y": 866,
     "wires": [
       [
-        "dde8c433.883f58"
+        "10b55ea3.2579f1"
       ]
     ]
   },
   {
-    "id": "dde8c433.883f58",
+    "id": "10b55ea3.2579f1",
     "type": "template",
-    "z": "811c60ec.7ee3a",
+    "z": "4e2b26a1.db8168",
     "name": "",
     "field": "",
     "fieldType": "msg",
@@ -573,23 +573,23 @@
     "y": 866,
     "wires": [
       [
-        "b17d8ef5.a1711"
+        "fcedc3bd.22a45"
       ]
     ]
   },
   {
-    "id": "b17d8ef5.a1711",
+    "id": "fcedc3bd.22a45",
     "type": "http response",
-    "z": "811c60ec.7ee3a",
+    "z": "4e2b26a1.db8168",
     "name": "",
     "x": 714,
     "y": 865,
     "wires": []
   },
   {
-    "id": "b34acccf.cd0eb",
+    "id": "a1f1d97c.4308b8",
     "type": "comment",
-    "z": "811c60ec.7ee3a",
+    "z": "4e2b26a1.db8168",
     "name": "Cameras page---------------------------------------",
     "info": "",
     "x": 183.5,
@@ -597,9 +597,9 @@
     "wires": []
   },
   {
-    "id": "7e6d2fae.084b7",
+    "id": "8ca43123.79814",
     "type": "http in",
-    "z": "811c60ec.7ee3a",
+    "z": "4e2b26a1.db8168",
     "name": "",
     "url": "/freeboard/cam_history",
     "method": "get",
@@ -608,14 +608,14 @@
     "y": 916,
     "wires": [
       [
-        "632904b9.7768ec"
+        "1e43feb2.c78051"
       ]
     ]
   },
   {
-    "id": "632904b9.7768ec",
+    "id": "1e43feb2.c78051",
     "type": "function",
-    "z": "811c60ec.7ee3a",
+    "z": "4e2b26a1.db8168",
     "name": "",
     "func": "if (msg.payload.token ==context.global.FREEBOARD_TOKEN || context.global.getCookie('exchange_token',msg.req.headers.cookie)==context.global.FREEBOARD_TOKEN){\n    msg.statusCode=\"200\";\n    var cam_array=[]\n    if ( 'camera_name' in msg.payload && msg.payload.camera_name!=='' && 'activities' in context.global.winkState.cameras[msg.payload.camera_name]){\n        for (var i=0;i<context.global.winkState.cameras[msg.payload.camera_name].activities.length;i++){\n            var activity=context.global.winkState.cameras[msg.payload.camera_name].activities[i];\n             var datetime=new Date(activity.cuepoint_id*1000+context.global.Weather.Offset*60*60*1000);\n            cam_array.push({\n            position:i,\n            is_active:(i===0 ? true:false),\n            title_tm: datetime.toLocaleTimeString(),\n            title_dt: datetime.toLocaleDateString(),\n            //toString(\"dddd, MMMM dd, yyyy h:mm:ss tt\"),\n            img_url:activity.snapshot_url\n            });\n        }\n    msg.payload.cam_activities=cam_array;\n    if (!('headers' in msg)) msg.headers={}\n    msg.headers['Cache-Control']=\"max-age=0,no-cache,no-store,post-check=0,pre-check=0\"\n    } \n} else {\n    msg.statusCode=\"403\";   \n    }\nreturn msg;\n",
     "outputs": 1,
@@ -624,14 +624,14 @@
     "y": 915,
     "wires": [
       [
-        "baae61d7.fdb"
+        "19649f3.4338161"
       ]
     ]
   },
   {
-    "id": "baae61d7.fdb",
+    "id": "19649f3.4338161",
     "type": "template",
-    "z": "811c60ec.7ee3a",
+    "z": "4e2b26a1.db8168",
     "name": "",
     "field": "",
     "fieldType": "msg",
@@ -642,38 +642,38 @@
     "y": 915,
     "wires": [
       [
-        "f4e2fae4.90a438"
+        "badc8d99.f27dc"
       ]
     ]
   },
   {
-    "id": "f4e2fae4.90a438",
+    "id": "badc8d99.f27dc",
     "type": "http response",
-    "z": "811c60ec.7ee3a",
+    "z": "4e2b26a1.db8168",
     "name": "",
     "x": 684,
     "y": 915,
     "wires": []
   },
   {
-    "id": "43f09c86.d772b4",
+    "id": "baaa2b2c.761f28",
     "type": "catch",
-    "z": "811c60ec.7ee3a",
+    "z": "4e2b26a1.db8168",
     "name": "",
     "x": 143,
     "y": 1527,
     "wires": [
       [
-        "c7fe164d.2e0a38"
+        "ab0b5f78.1d1f"
       ]
     ]
   },
   {
-    "id": "c7fe164d.2e0a38",
+    "id": "ab0b5f78.1d1f",
     "type": "debug",
-    "z": "811c60ec.7ee3a",
+    "z": "4e2b26a1.db8168",
     "name": "",
-    "active": false,
+    "active": true,
     "console": "false",
     "complete": "error",
     "x": 345,
@@ -681,9 +681,9 @@
     "wires": []
   },
   {
-    "id": "cad2fe07.99e79",
+    "id": "57ff4e76.884b7",
     "type": "http in",
-    "z": "811c60ec.7ee3a",
+    "z": "4e2b26a1.db8168",
     "name": "",
     "url": "/freeboard/MySummary",
     "method": "get",
@@ -692,14 +692,14 @@
     "y": 211,
     "wires": [
       [
-        "27f7ca4c.3638d6"
+        "217cf8e8.e21188"
       ]
     ]
   },
   {
-    "id": "2a72e4eb.2f3f3c",
+    "id": "de24bc38.d6fdc",
     "type": "function",
-    "z": "811c60ec.7ee3a",
+    "z": "4e2b26a1.db8168",
     "name": "GenSummary",
     "func": "var pct = function(value) {\n    return ((value > 1.0 ? value : value * 100).toFixed(0) + '%')\n}\nvar dual_temp = function (value) {\n    return (typeof value === 'number' ? (value.toFixed(1) + 'C / ' + ((value * 1.8) + 32).toFixed(1) + 'F') : '')\n}\nif ((msg.req.body.uid==context.global.WinkUser.uid && msg.req.body.pwd==context.global.WinkUser.pwd)||context.global.getCookie('exchange_token',msg.req.headers.cookie)==context.global.FREEBOARD_TOKEN || msg.payload.token==context.global.FREEBOARD_TOKEN){\n//if (true){\nmsg.statusCode=\"200\";\nmsg.payload={}\n//msg.payload.pwd_str=context.global.FREEBOARD_TOKEN;\n//msg.payload.ifttt_token=context.global.FREEBOARD_TOKEN;\nmsg.payload.home_lat=('HomeLocation' in context.global ? context.global.HomeLocation.lat : null);\nmsg.payload.home_lon=('HomeLocation' in context.global ? context.global.HomeLocation.lon : null);\nmsg.payload.weather=context.global.Weather || null;\nmsg.payload.HoursFormat24=context.global.HoursFormat24 || false;\nmsg.payload.Schedules=('Schedules' in context.global && context.global.Schedules=='on' ? true : false);\nmsg.payload.VacationMode=('VacationMode' in context.global && context.global.VacationMode=='on' ? true : false);\n//msg.payload.lights=context.global.winkState.groups['@lights'];\n//msg.payload.wholeHouse=context.global.winkState.groups['.all'];\nvar all=context.global.winkState.groups['.all'];\nvar l=context.global.winkState.groups['@lights'];\nmsg.payload.home_components=[];\n//msg.payload.hasLocks=false;\n//msg.payload.hasCoAlarms=false;\n//msg.payload.hasLights=false;\nvar Wmsg = context.global.render_home_components('.all');\nmsg.payload.home_components=Wmsg.payload.home_components;\nmsg.res.statusCode=\"200\";\nif (msg.topic=='json'){\n    var Etag=\"\";\n    if ('CRYPTO' in context.global) Etag=context.global.CRYPTO.createHash(\"md5\").update(JSON.stringify(msg.payload),\"utf8\").digest(\"hex\");\n    msg.headers={\n      'Content-Type': 'application/json',\n      'ETag': Etag\n    };\n}\n} else {\nmsg.res.statusCode=\"403\";\n}\nreturn msg;",
     "outputs": 1,
@@ -708,14 +708,14 @@
     "y": 245,
     "wires": [
       [
-        "abb2b4e4.899828"
+        "b41627df.9be1f8"
       ]
     ]
   },
   {
-    "id": "62ba1d25.d51e74",
+    "id": "4ccb0172.8140a",
     "type": "template",
-    "z": "811c60ec.7ee3a",
+    "z": "4e2b26a1.db8168",
     "name": "",
     "field": "",
     "fieldType": "msg",
@@ -726,23 +726,23 @@
     "y": 231,
     "wires": [
       [
-        "a19e1c1.4a0d4e"
+        "4c59bbbe.0acc04"
       ]
     ]
   },
   {
-    "id": "a19e1c1.4a0d4e",
+    "id": "4c59bbbe.0acc04",
     "type": "http response",
-    "z": "811c60ec.7ee3a",
+    "z": "4e2b26a1.db8168",
     "name": "",
     "x": 1009,
     "y": 247,
     "wires": []
   },
   {
-    "id": "18378f28.a60191",
+    "id": "bd83b9f6.dc8de8",
     "type": "http in",
-    "z": "811c60ec.7ee3a",
+    "z": "4e2b26a1.db8168",
     "name": "",
     "url": "/freeboard/LockControls",
     "method": "get",
@@ -751,14 +751,14 @@
     "y": 617,
     "wires": [
       [
-        "9ad1ee43.d9b7e"
+        "9629574.2f93fa8"
       ]
     ]
   },
   {
-    "id": "ed6ac571.91faf8",
+    "id": "8fdcceb0.3ecfd",
     "type": "function",
-    "z": "811c60ec.7ee3a",
+    "z": "4e2b26a1.db8168",
     "name": "GenLocks",
     "func": "//if(msg.req.headers.authorization && msg.req.headers.authorization==\"Bearer \"+context.global.FREEBOARD_TOKEN){\nif ((msg.req.body.uid==context.global.WinkUser.uid && msg.req.body.pwd==context.global.WinkUser.pwd)||context.global.getCookie('exchange_token',msg.req.headers.cookie)==context.global.FREEBOARD_TOKEN || msg.payload.token==context.global.FREEBOARD_TOKEN){\n//if (true){\nmsg.statusCode=\"200\";\nmsg.headers={'Cache-Control':\"max-age=0,no-cache,no-store,post-check=0,pre-check=0\"};\nmsg.payload.pwd_str=context.global.FREEBOARD_TOKEN;\nmsg.payload.ifttt_token=context.global.FREEBOARD_TOKEN;\nmsg.payload.haveLLocks=false\nvar locks=[]\nif ('locks' in context.global.winkState){\n        for (var l_lock in context.global.winkState.locks){\n            var lock=context.global.winkState.locks[l_lock];\n            locks.push({\n            name:lock.name,\n            object_type:lock.object_type,\n            //class_name:'dial '+bulb.object_id,\n            object_id:lock.object_id,\n            isLock:(lock.object_type==='locks' ? true:false),\n            locked:lock.locked,\n            not_locked:!lock.locked\n        });\n    }\n    msg.payload.haveLocks=true\n}\n/*\nif ('garage_doors' in context.global.winkState){\n        for (var l_lock in context.global.winkState.garage_doors){\n            var lock=context.global.winkState.garage_doors[l_lock];\n            locks.push({\n            name:lock.name,\n            object_type:lock.object_type,            \n            //class_name:'dial '+bulb.object_id,\n            object_id:lock.object_id,\n            locked:(lock.position>0 ? false:true),\n            not_locked:(lock.position>0 ? true:false)\n        });\n    }\n    msg.payload.haveLocks=true\n}\n*/\nmsg.payload.locks=locks;\nif (msg.topic=='json'){\n    var Etag=\"\";\n    if ('CRYPTO' in context.global) Etag=context.global.CRYPTO.createHash(\"md5\").update(JSON.stringify(msg.payload),\"utf8\").digest(\"hex\");\n    msg.headers={\n      'Content-Type': 'application/json',\n      'ETag': Etag\n    };\n}\n} else {\nmsg.statusCode=\"403\";\n}\nreturn msg;",
     "outputs": 1,
@@ -767,14 +767,14 @@
     "y": 643,
     "wires": [
       [
-        "50edf171.82862"
+        "8f9c4f48.dbae7"
       ]
     ]
   },
   {
-    "id": "3c35dbdb.f1b924",
+    "id": "b623a27a.1c865",
     "type": "template",
-    "z": "811c60ec.7ee3a",
+    "z": "4e2b26a1.db8168",
     "name": "",
     "field": "",
     "fieldType": "msg",
@@ -785,14 +785,14 @@
     "y": 620,
     "wires": [
       [
-        "c331b5ce.ae9958"
+        "3beb1227.9c8cce"
       ]
     ]
   },
   {
-    "id": "b3e23e0.291e7c",
+    "id": "5d50d51e.4be99c",
     "type": "http in",
-    "z": "811c60ec.7ee3a",
+    "z": "4e2b26a1.db8168",
     "name": "",
     "url": "/freeboard/LockData",
     "method": "get",
@@ -801,36 +801,36 @@
     "y": 660,
     "wires": [
       [
-        "cd670f1e.5f2"
+        "4eb4b3ef.72399c"
       ]
     ]
   },
   {
-    "id": "bf69ad0f.ec4ec",
+    "id": "6977d7d9.2aa578",
     "type": "json",
-    "z": "811c60ec.7ee3a",
+    "z": "4e2b26a1.db8168",
     "name": "",
     "x": 832,
     "y": 675,
     "wires": [
       [
-        "c331b5ce.ae9958"
+        "3beb1227.9c8cce"
       ]
     ]
   },
   {
-    "id": "c331b5ce.ae9958",
+    "id": "3beb1227.9c8cce",
     "type": "http response",
-    "z": "811c60ec.7ee3a",
+    "z": "4e2b26a1.db8168",
     "name": "",
     "x": 973,
     "y": 649,
     "wires": []
   },
   {
-    "id": "ee9a162e.1394d8",
+    "id": "bc62d650.807198",
     "type": "http in",
-    "z": "811c60ec.7ee3a",
+    "z": "4e2b26a1.db8168",
     "name": "",
     "url": "/freeboard/LightControls",
     "method": "get",
@@ -839,14 +839,14 @@
     "y": 527,
     "wires": [
       [
-        "f5f1c3f.459cb4"
+        "497035b9.b8b1ac"
       ]
     ]
   },
   {
-    "id": "d4c43570.b1c278",
+    "id": "95b18e77.49073",
     "type": "function",
-    "z": "811c60ec.7ee3a",
+    "z": "4e2b26a1.db8168",
     "name": "GenLights",
     "func": "//if(msg.req.headers.authorization && msg.req.headers.authorization==\"Bearer \"+context.global.FREEBOARD_TOKEN){\nif ((msg.req.body.uid==context.global.WinkUser.uid && msg.req.body.pwd==context.global.WinkUser.pwd) || context.global.getCookie('exchange_token',msg.req.headers.cookie)==context.global.FREEBOARD_TOKEN || msg.payload.token==context.global.FREEBOARD_TOKEN){\n//if (true){\n//node.warn( context.global.getCookie('exchange_token',msg.req.headers.cookie));\nmsg.statusCode=\"200\";\nmsg.headers={'Cache-Control':\"max-age=0,no-cache,no-store,post-check=0,pre-check=0\"};\nmsg.payload.pwd_str=context.global.FREEBOARD_TOKEN;\nmsg.payload.ifttt_token=context.global.FREEBOARD_TOKEN;\nmsg.payload.haveLights=false;\nvar lights=[];\nif ('light_bulbs' in context.global.winkState){\n        for (var l_bulb in context.global.winkState.light_bulbs){\n            var bulb=context.global.winkState.light_bulbs[l_bulb];\n            if ('color_model' in bulb || 'hue' in bulb) {\n                var color=context.global.tinycolor('hsv '+(bulb.eco_system=='LIFX' ? bulb.hue : bulb.hue*360)+' '+bulb.saturation+' '+bulb.brightness);\n                var hexColor=color.toHexString();\n            }            \n            lights.push({\n            name:bulb.name,\n            clr_id:'.clr-'+bulb.object_id,\n            isColor: (('color_model' in bulb || 'hue' in bulb) ? true:false),\n            Color:(('color_model' in bulb || 'hue' in bulb) ? hexColor : null),\n            class_name:'dial '+bulb.object_id,\n            object_id:bulb.object_id,\n            powered:bulb.powered,\n            not_powered:!bulb.powered,\n            step:1,\n            brightness:Math.round(bulb.brightness*100)\n        });\n    }\n    msg.payload.haveLights=true;\n}\nif ('binary_switches' in context.global.winkState){\n    for (var bswitch in context.global.winkState.binary_switches){\n        var bulb=context.global.winkState.binary_switches[bswitch];\n        lights.push({\n            name:bulb.name,\n            class_name:'dial '+bulb.object_id,\n            object_id:bulb.object_id,\n            powered:bulb.powered,\n            step:100,\n            brightness:(bulb.powered ? 100:0)\n        });\n}\n    msg.payload.haveLights=true;\n}\n\nif ('powerstrips' in context.global.winkState){\n    for (var bswitch in context.global.winkState.powerstrips){\n        var bulb=context.global.winkState.powerstrips[bswitch];\n        if (bulb.object_type==='outlet'){\n        lights.push({\n            name:bulb.name,\n            class_name:'dial '+bulb.object_id,\n            object_id:bulb.object_id,\n            powered:bulb.powered,\n            step:100,\n            brightness:(bulb.powered ? 100:0)\n        });\n    }\n}\n    msg.payload.haveLights=true;\n}\nmsg.payload.lights=lights;\nif (msg.topic=='json'){\n    var Etag=\"\";\n    if ('CRYPTO' in context.global) Etag=context.global.CRYPTO.createHash(\"md5\").update(JSON.stringify(msg.payload),\"utf8\").digest(\"hex\");\n    msg.headers={\n      'Content-Type': 'application/json',\n      'ETag': Etag\n    };\n}\n} else {\nmsg.statusCode=\"403\";\n}\nreturn msg;",
     "outputs": 1,
@@ -855,14 +855,14 @@
     "y": 547,
     "wires": [
       [
-        "b95592d0.b3e6f"
+        "dad6d510.e8d268"
       ]
     ]
   },
   {
-    "id": "9f1f047f.3b6eb8",
+    "id": "cee9c759.f0db48",
     "type": "template",
-    "z": "811c60ec.7ee3a",
+    "z": "4e2b26a1.db8168",
     "name": "",
     "field": "",
     "fieldType": "msg",
@@ -873,32 +873,32 @@
     "y": 512,
     "wires": [
       [
-        "92eab1b7.a7c6c"
+        "868df96f.3e8b08"
       ]
     ]
   },
   {
-    "id": "92eab1b7.a7c6c",
+    "id": "868df96f.3e8b08",
     "type": "http response",
-    "z": "811c60ec.7ee3a",
+    "z": "4e2b26a1.db8168",
     "name": "",
     "x": 967,
     "y": 548,
     "wires": []
   },
   {
-    "id": "ae203f82.5e8f5",
+    "id": "2d528a1.6112676",
     "type": "http response",
-    "z": "811c60ec.7ee3a",
+    "z": "4e2b26a1.db8168",
     "name": "",
     "x": 719,
     "y": 1015,
     "wires": []
   },
   {
-    "id": "fcd240da.8a574",
+    "id": "be02bfaf.4c86a",
     "type": "http in",
-    "z": "811c60ec.7ee3a",
+    "z": "4e2b26a1.db8168",
     "name": "",
     "url": "/freeboard/getConfig",
     "method": "get",
@@ -907,30 +907,30 @@
     "y": 1013,
     "wires": [
       [
-        "91d59164.4dbcd"
+        "ec7e5707.d839d8"
       ]
     ]
   },
   {
-    "id": "91d59164.4dbcd",
+    "id": "ec7e5707.d839d8",
     "type": "function",
-    "z": "811c60ec.7ee3a",
+    "z": "4e2b26a1.db8168",
     "name": "Throw Config Data",
-    "func": "if (msg.payload.token ==context.global.FREEBOARD_TOKEN || context.global.getCookie('exchange_token',msg.req.headers.cookie)==context.global.FREEBOARD_TOKEN){\n//if (true){\n// text fields array\nint_txt_fields=[];\ntxt_fields=[];\n\nmsg.payload.nr_url=context.global.BlueMixUrlBase;\nmsg.payload.IFTTT_TOKEN=context.global.IFTTT_TOKEN;\n\ncheckDevCap=function(dev_fields){\n    var result=false;\n    dev_fields.forEach(function(dev_field){\n     if(dev_field.field=='vacation_mode_enabled' || dev_field.field=='alarm_mode'){\n        result=true;\n     }\n    });\n    return result;\n};\n\nint_txt_fields.push({\n    type:\"text\",\n    item:\"wink_id\",\n    label:\"Wink Client ID\",\n    isCheck:false,\n    value : context.global.wink_id || \"\" \n});\n\nint_txt_fields.push({\n    type:\"text\",\n    item:\"wink_secret\",\n    label:\"Wink Client Secret\",\n    isCheck:false,\n    value : context.global.wink_secret || \"\" \n});\n\n\nint_txt_fields.push({\n    type:\"text\",\n    item:\"lat\",\n    label:\"Home Lattitude\",\n    isCheck:false,\n    value :('HomeLocation' in context.global ?  context.global.HomeLocation.lat : \"\" )\n});\n\nint_txt_fields.push({\n    type:\"text\",\n    item:\"lon\",\n    label:\"Home Longtitude\",\n    isCheck:false,\n    value :('HomeLocation' in context.global ?  context.global.HomeLocation.lon : \"\" )\n});\n\nint_txt_fields.push({\n    type:\"text\",    \n    item:\"BlueMixUrlBase\",\n    label:\"BlueMix URL base\",\n    isCheck:false,\n    value: context.global.BlueMixUrlBase || \"\" \n});\n\nint_txt_fields.push({\n    type:\"text\",    \n    item:\"FREEBOARD_TOKEN\",\n    label:\"Application Access Token\",\n    isCheck:false,\n    value: context.global.FREEBOARD_TOKEN || \"\" \n});\n\n\n\nint_txt_fields.push({\n    type:\"text\",\n    item:\"forecastIoApiKey\",\n    label:\"Forecast.io API Key\",\n    isCheck:false,\n    value : context.global.forecastIoApiKey || \"\" \n});\n//txt_fields.push({\n//    type:\"text\",    \n//    item:\"FREEBOARD_TOKEN\",\n//    label:\"Freeboard Token\",\n//    value: context.global.FREEBOARD_TOKEN || \"\" \n//});\nint_txt_fields.push({\n    type:\"text\",    \n    item:\"IFTTT_TOKEN\",\n    label:\"IFTTT Token\",\n    isCheck:false,\n    value: context.global.IFTTT_TOKEN || \"\" \n});\nint_txt_fields.push({\n    type:\"text\",\n    item:\"LIFX_TOKEN\",\n    label:\"Lifx API Key\",\n    isCheck:false,\n    value: context.global.LIFX_TOKEN || \"\" \n});\nint_txt_fields.push({\n    type:\"text\",\n    item:\"InitialStateKey\",\n    label:\"InitialState.com API Key\",\n    isCheck:false,\n    value: context.global.InitialStateKey ||\"\"\n});\n\nint_txt_fields.push({\n    type:\"text\",\n    item:\"BloomskyKey\",\n    label:\"Bloomsky API Key\",\n    isCheck:false,\n    value: context.global.BloomskyKey ||\"\"\n});\n\nint_txt_fields.push({\n    type:\"text\",\n    item:\"PushBulletKey\",\n    label:\"PushBullet API Key\",\n    isCheck:false,\n    value: context.global.PushBulletKey ||\"\"\n});\n\n\nint_txt_fields.push({\n    type:\"text\",\n    item:\"BlueIrisHost\",\n    label:\"Blue Iris url\",\n    isCheck:false,\n    value: context.global.BlueIrisHost ||\"\"\n});\n\nint_txt_fields.push({\n    type:\"text\",\n    item:\"BlueIrisUid\",\n    label:\"Blue Iris user Id\",\n    isCheck:false,\n    value: context.global.BlueIrisUid ||\"\"\n});\n\n\nint_txt_fields.push({\n    type:\"password\",\n    item:\"BlueIrisPwd\",\n    label:\"Blue Iris user Password\",\n    isCheck:false,\n    value: context.global.BlueIrisPwd ||\"\"\n});\n\ntxt_fields.push({\n    type:\"checkbox\",    \n    item:\"motionAdjustTstat\",\n    label:\"Motion affects thermostat\",\n    isCheck:true,\n    value: context.global.motionAdjustTstat || false\n});\n\ntxt_fields.push({\n    type:\"checkbox\",    \n    item:\"HoursFormat24\",\n    label:\"Use 24 hours time format\",\n    isCheck:true,\n    value: context.global.HoursFormat24 || false\n});\n\ntxt_fields.push({\n    type:\"checkbox\",    \n    item:\"LightsNotification\",\n    label:\"Show Light Changes in the log\",\n    isCheck:true,    \n    value: context.global.LightsNotification || false\n});\ntxt_fields.push({\n    type:\"checkbox\",    \n    item:\"LightsNotificationM\",\n    label:\"Send Lights Notification via Pushbullet\",\n    isCheck:true,    \n    value: context.global.LightsNotificationM || false\n});\n\ntxt_fields.push({\n    type:\"checkbox\",    \n    item:\"SensorsNotificationM\",\n    label:\"Send Sensors Notification via Pushbullet\",\n    isCheck:true,    \n    value: context.global.SensorsNotificationM || false\n});\n\n\ntxt_fields.push({\n    type:\"checkbox\",    \n    item:\"ifttt\",\n    label:\"Send data to IFTTT\",\n    isCheck:true,    \n    value: context.global.ifttt || false\n});\n\ntxt_fields.push({\n    type:\"checkbox\",    \n    item:\"useRobots\",\n    label:\"WNR Robots\",\n    isCheck:true,    \n    value: context.global.useRobots || false\n});\n\n\ntxt_fields.push({\n    type:\"text\",\n    item:\"CustomTabName\",\n    label:\"Custom Tab Name\",\n    value: context.global.CustomTabName ||\"\"\n});\n\ntxt_fields.push({\n    type:\"text\",\n    item:\"CustomTabUrl\",\n    label:\"Custom Tab Url\",\n    value: context.global.CustomTabUrl ||\"\"\n});\n\ntxt_fields.push({\n    type:\"checkbox\",    \n    item:\"CleanNonWink\",\n    label:\"Clear non-wink devices from cache\",\n    isCheck:true,    \n    value: false\n});\n\ntxt_fields.push({\n    type:\"checkbox\",    \n    item:\"CleanPresence\",\n    label:\"Clear Presence entries\",\n    isCheck:true,    \n    value: false\n});\n\n/*\ntxt_fields.push({\n    type:\"text\",\n    item:\"note_timeout\",\n    label:\"Note message timeoue (white),sec\",\n    value: context.global.note_timeout ||\"15\"\n});\n\ntxt_fields.push({\n    type:\"text\",\n    item:\"info_timeout\",\n    label:\"Info message timeout (blue),sec\",\n    value: context.global.info_timeout ||\"60\"\n});\n\ntxt_fields.push({\n    type:\"text\",\n    item:\"warning_timeout\",\n    label:\"Warning message timeout (yellow)\",\n    value: context.global.warning_timeout ||\"90\"\n});\n\ntxt_fields.push({\n    type:\"text\",\n    item:\"weather_timeout\",\n    label:\"InitialState.com Api Key\",\n    value: context.global.weather_timeout ||\"40\"\n});\n*/\nmsg.payload.int_txt_fields=int_txt_fields;\nmsg.payload.txt_fields=txt_fields;\nmsg.payload.scenes=[]\nfor (var s in context.global.winkState.scenes){\n    var scene=context.global.winkState.scenes[s];\n    if ('name' in scene){\n    msg.payload.scenes.push({\n        name:scene.name,\n        id:scene.id,\n        selected:(context.global.tab_ui_shortcuts.indexOf(scene.name)!=-1 ? true : false)\n    });\n    } else node.warn(scene);\n}\nmsg.payload.vaca_settings=[];\n\nmsg.payload.vaca_settings.push({\n    type:\"text\",    \n    item:\"vaca_delay\",\n    label:\"Delay befor activation (minutes)\",\n    value: context.global.vaca_delay || 15\n});\n\nif ('Presence' in context.global){\nmsg.payload.vaca_settings.push({\n    type:\"checkbox\",    \n    item:\"vaca_usePresence\",\n    label:\"Use Presence to turn mode off\",\n    isCheck:true,    \n    value: context.global.vaca_usePresence || false\n});\n}\n/*\nmsg.payload.vaca_settings.push({\n    type:\"checkbox\",    \n    item:\"vaca_wnr_schedules_off\",\n    label:\"Turn WNR schedules off\",\n    isCheck:true,    \n    value: context.global.vaca_wnr_schedules_off || false\n});\n*/\nvar VacModeLock=false;\nif('winkState' in context.global && 'winkDevCap' in context.global && 'locks' in context.global.winkState){\n     for (var l in context.global.winkState.locks){\n        var fields=context.global.winkDevCap[l].fields;\n        if (checkDevCap(fields)) { \n            VacModeLock=true; \n            break;\n        }\n    }\n}\nif (VacModeLock){\n    msg.payload.vaca_settings.push({\n        type:\"checkbox\",    \n        item:\"vaca_locks_vac\",\n        label:\"Turn on locks vacation mode\",\n        isCheck:true,    \n        value: context.global.vaca_locks_vac || false\n    });\n}\n\nmsg.payload.vaca_light_bulbs=[];\nfor (var l in context.global.winkState.light_bulbs){\n    var light=context.global.winkState.light_bulbs[l];\n    if ('name' in light){\n    msg.payload.vaca_light_bulbs.push({\n        name:light.name,\n        id:light.id,\n        selected:('vaca_light_bulbs' in context.global && context.global.vaca_light_bulbs.indexOf(light.name)!=-1 ? true : false)\n    });\n    } else node.warn(light);\n}\n\nfor (var l in context.global.winkState.binary_switches){\n    var light=context.global.winkState.binary_switches[l];\n    if ('name' in light){\n    msg.payload.vaca_light_bulbs.push({\n        name:light.name,\n        id:light.id,\n        selected:('vaca_light_bulbs' in context.global && context.global.vaca_light_bulbs.indexOf(light.name)!=-1 ? true : false)\n    });\n    } else node.warn(light);\n} \nif ('groups' in context.global.winkState){\n    msg.payload.vaca_groups=[];\n    for (var g in context.global.winkState.groups){\n        var group=context.global.winkState.groups[g];\n        if ('name' in group){\n        msg.payload.vaca_groups.push({\n            name:group.name,\n            id:group.id,\n            selected:('vaca_groups' in context.global && context.global.vaca_groups.indexOf(group.name)!=-1 ? true : false)\n        });\n        } else node.warn(group);\n    }\n}\n\ntxt_area_fields=[];\n\ntxt_area_fields.push({FosCam : JSON.stringify(context.global.foscam || \"\")});\ntxt_area_fields.push({SamsungCam : JSON.stringify(context.global.SamsungCam || \"\")});\ntxt_area_fields.push({DlinkCam : JSON.stringify(context.global.DlinkCam || \"\")});\ntxt_area_fields.push({camera_motion : JSON.stringify(context.global.camera_motion || \"\")});\n//txt_area_fields.push({tab_ui_shortcuts : JSON.stringify(context.global.tab_ui_shortcuts || \"\")});\nmsg.payload.txt_area_fields=txt_area_fields;\n\nmsg.statusCode=\"200\";\nreturn msg;\n}\nelse\n{\n    //msg.payload=\"Not Authorized\";\n   msg.statusCode=\"403\";\n   return msg;\n//   msg.res.send(\"403\",\"Forbidden\");\n//  return;\n}\n",
+    "func": "if (msg.payload.token ==context.global.FREEBOARD_TOKEN || context.global.getCookie('exchange_token',msg.req.headers.cookie)==context.global.FREEBOARD_TOKEN){\n//if (true){\n// text fields array\nint_txt_fields=[];\ntxt_fields=[];\n\nmsg.payload.nr_url=context.global.BlueMixUrlBase;\nmsg.payload.IFTTT_TOKEN=context.global.IFTTT_TOKEN;\n\ncheckDevCap=function(dev_fields){\n    var result=false;\n    dev_fields.forEach(function(dev_field){\n     if(dev_field.field=='vacation_mode_enabled' || dev_field.field=='alarm_mode'){\n        result=true;\n     }\n    });\n    return result;\n};\n\nint_txt_fields.push({\n    type:\"text\",\n    item:\"wink_id\",\n    label:\"Wink Client ID\",\n    isCheck:false,\n    value : context.global.wink_id || \"\" \n});\n\nint_txt_fields.push({\n    type:\"text\",\n    item:\"wink_secret\",\n    label:\"Wink Client Secret\",\n    isCheck:false,\n    value : context.global.wink_secret || \"\" \n});\n\n\nint_txt_fields.push({\n    type:\"text\",\n    item:\"lat\",\n    label:\"Home Lattitude\",\n    isCheck:false,\n    value :('HomeLocation' in context.global ?  context.global.HomeLocation.lat : \"\" )\n});\n\nint_txt_fields.push({\n    type:\"text\",\n    item:\"lon\",\n    label:\"Home Longtitude\",\n    isCheck:false,\n    value :('HomeLocation' in context.global ?  context.global.HomeLocation.lon : \"\" )\n});\n\nint_txt_fields.push({\n    type:\"text\",    \n    item:\"BlueMixUrlBase\",\n    label:\"BlueMix URL base\",\n    isCheck:false,\n    value: context.global.BlueMixUrlBase || \"\" \n});\n\nint_txt_fields.push({\n    type:\"text\",    \n    item:\"FREEBOARD_TOKEN\",\n    label:\"Application Access Token\",\n    isCheck:false,\n    value: context.global.FREEBOARD_TOKEN || \"\" \n});\n\n\n\nint_txt_fields.push({\n    type:\"text\",\n    item:\"forecastIoApiKey\",\n    label:\"Forecast.io API Key\",\n    isCheck:false,\n    value : context.global.forecastIoApiKey || \"\" \n});\n//txt_fields.push({\n//    type:\"text\",    \n//    item:\"FREEBOARD_TOKEN\",\n//    label:\"Freeboard Token\",\n//    value: context.global.FREEBOARD_TOKEN || \"\" \n//});\nint_txt_fields.push({\n    type:\"text\",    \n    item:\"IFTTT_TOKEN\",\n    label:\"IFTTT Token\",\n    isCheck:false,\n    value: context.global.IFTTT_TOKEN || \"\" \n});\nint_txt_fields.push({\n    type:\"text\",\n    item:\"LIFX_TOKEN\",\n    label:\"Lifx API Key\",\n    isCheck:false,\n    value: context.global.LIFX_TOKEN || \"\" \n});\nint_txt_fields.push({\n    type:\"text\",\n    item:\"InitialStateKey\",\n    label:\"InitialState.com API Key\",\n    isCheck:false,\n    value: context.global.InitialStateKey ||\"\"\n});\n\nint_txt_fields.push({\n    type:\"text\",\n    item:\"BloomskyKey\",\n    label:\"Bloomsky API Key\",\n    isCheck:false,\n    value: context.global.BloomskyKey ||\"\"\n});\n\nint_txt_fields.push({\n    type:\"text\",\n    item:\"PushBulletKey\",\n    label:\"PushBullet API Key\",\n    isCheck:false,\n    value: context.global.PushBulletKey ||\"\"\n});\n\n\nint_txt_fields.push({\n    type:\"text\",\n    item:\"BlueIrisHost\",\n    label:\"Blue Iris url\",\n    isCheck:false,\n    value: context.global.BlueIrisHost ||\"\"\n});\n\nint_txt_fields.push({\n    type:\"text\",\n    item:\"BlueIrisUid\",\n    label:\"Blue Iris user Id\",\n    isCheck:false,\n    value: context.global.BlueIrisUid ||\"\"\n});\n\n\nint_txt_fields.push({\n    type:\"password\",\n    item:\"BlueIrisPwd\",\n    label:\"Blue Iris user Password\",\n    isCheck:false,\n    value: context.global.BlueIrisPwd ||\"\"\n});\n\ntxt_fields.push({\n    type:\"checkbox\",    \n    item:\"motionAdjustTstat\",\n    label:\"Motion affects thermostat\",\n    isCheck:true,\n    value: context.global.motionAdjustTstat || false\n});\n\ntxt_fields.push({\n    type:\"checkbox\",    \n    item:\"HoursFormat24\",\n    label:\"Use 24 hours time format\",\n    isCheck:true,\n    value: context.global.HoursFormat24 || false\n});\n\ntxt_fields.push({\n    type:\"checkbox\",    \n    item:\"LightsNotification\",\n    label:\"Show Light Changes in the log\",\n    isCheck:true,    \n    value: context.global.LightsNotification || false\n});\ntxt_fields.push({\n    type:\"checkbox\",    \n    item:\"LightsNotificationM\",\n    label:\"Send Lights Notification via Pushbullet\",\n    isCheck:true,    \n    value: context.global.LightsNotificationM || false\n});\n\ntxt_fields.push({\n    type:\"checkbox\",    \n    item:\"SensorsNotificationM\",\n    label:\"Send Sensors Notification via Pushbullet\",\n    isCheck:true,    \n    value: context.global.SensorsNotificationM || false\n});\n\n\ntxt_fields.push({\n    type:\"checkbox\",    \n    item:\"ifttt\",\n    label:\"Send data to IFTTT\",\n    isCheck:true,    \n    value: context.global.ifttt || false\n});\n\ntxt_fields.push({\n    type:\"checkbox\",    \n    item:\"useRobots\",\n    label:\"WNR Robots\",\n    isCheck:true,    \n    value: context.global.useRobots || false\n});\n\n\ntxt_fields.push({\n    type:\"text\",\n    item:\"CustomTabName\",\n    label:\"Custom Tab Name\",\n    value: context.global.CustomTabName ||\"\"\n});\n\ntxt_fields.push({\n    type:\"text\",\n    item:\"CustomTabUrl\",\n    label:\"Custom Tab Url\",\n    value: context.global.CustomTabUrl ||\"\"\n});\n\ntxt_fields.push({\n    type:\"checkbox\",    \n    item:\"CleanNonWink\",\n    label:\"Clear non-wink devices from cache\",\n    isCheck:true,    \n    value: false\n});\n\ntxt_fields.push({\n    type:\"checkbox\",    \n    item:\"CleanPresence\",\n    label:\"Clear Presence entries\",\n    isCheck:true,    \n    value: false\n});\n\n/*\ntxt_fields.push({\n    type:\"text\",\n    item:\"note_timeout\",\n    label:\"Note message timeoue (white),sec\",\n    value: context.global.note_timeout ||\"15\"\n});\n\ntxt_fields.push({\n    type:\"text\",\n    item:\"info_timeout\",\n    label:\"Info message timeout (blue),sec\",\n    value: context.global.info_timeout ||\"60\"\n});\n\ntxt_fields.push({\n    type:\"text\",\n    item:\"warning_timeout\",\n    label:\"Warning message timeout (yellow)\",\n    value: context.global.warning_timeout ||\"90\"\n});\n\ntxt_fields.push({\n    type:\"text\",\n    item:\"weather_timeout\",\n    label:\"InitialState.com Api Key\",\n    value: context.global.weather_timeout ||\"40\"\n});\n*/\nmsg.payload.int_txt_fields=int_txt_fields;\nmsg.payload.txt_fields=txt_fields;\nmsg.payload.scenes=[]\nfor (var s in context.global.winkState.scenes){\n    var scene=context.global.winkState.scenes[s];\n    if ('name' in scene){\n    msg.payload.scenes.push({\n        name:scene.name,\n        id:scene.id,\n        selected:('tab_ui_shortcuts' in context.global && context.global.tab_ui_shortcuts.indexOf(scene.name)!=-1 ? true : false)\n    });\n    } else node.warn(scene);\n}\nmsg.payload.vaca_settings=[];\n\nmsg.payload.vaca_settings.push({\n    type:\"text\",    \n    item:\"vaca_delay\",\n    label:\"Delay befor activation (minutes)\",\n    value: context.global.vaca_delay || 15\n});\n\nif ('Presence' in context.global){\nmsg.payload.vaca_settings.push({\n    type:\"checkbox\",    \n    item:\"vaca_usePresence\",\n    label:\"Use Presence to turn mode off\",\n    isCheck:true,    \n    value: context.global.vaca_usePresence || false\n});\n}\n/*\nmsg.payload.vaca_settings.push({\n    type:\"checkbox\",    \n    item:\"vaca_wnr_schedules_off\",\n    label:\"Turn WNR schedules off\",\n    isCheck:true,    \n    value: context.global.vaca_wnr_schedules_off || false\n});\n*/\nvar VacModeLock=false;\nif('winkState' in context.global && 'winkDevCap' in context.global && 'locks' in context.global.winkState){\n     for (var l in context.global.winkState.locks){\n        var fields=context.global.winkDevCap[l].fields;\n        if (checkDevCap(fields)) { \n            VacModeLock=true; \n            break;\n        }\n    }\n}\nif (VacModeLock){\n    msg.payload.vaca_settings.push({\n        type:\"checkbox\",    \n        item:\"vaca_locks_vac\",\n        label:\"Turn on locks vacation mode\",\n        isCheck:true,    \n        value: context.global.vaca_locks_vac || false\n    });\n}\n\nmsg.payload.vaca_light_bulbs=[];\nfor (var l in context.global.winkState.light_bulbs){\n    var light=context.global.winkState.light_bulbs[l];\n    if ('name' in light){\n    msg.payload.vaca_light_bulbs.push({\n        name:light.name,\n        id:light.id,\n        selected:('vaca_light_bulbs' in context.global && context.global.vaca_light_bulbs.indexOf(light.name)!=-1 ? true : false)\n    });\n    } else node.warn(light);\n}\n\nfor (var l in context.global.winkState.binary_switches){\n    var light=context.global.winkState.binary_switches[l];\n    if ('name' in light){\n    msg.payload.vaca_light_bulbs.push({\n        name:light.name,\n        id:light.id,\n        selected:('vaca_light_bulbs' in context.global && context.global.vaca_light_bulbs.indexOf(light.name)!=-1 ? true : false)\n    });\n    } else node.warn(light);\n} \nif ('groups' in context.global.winkState){\n    msg.payload.vaca_groups=[];\n    for (var g in context.global.winkState.groups){\n        var group=context.global.winkState.groups[g];\n        if ('name' in group){\n        msg.payload.vaca_groups.push({\n            name:group.name,\n            id:group.id,\n            selected:('vaca_groups' in context.global && context.global.vaca_groups.indexOf(group.name)!=-1 ? true : false)\n        });\n        } else node.warn(group);\n    }\n}\n\ntxt_area_fields=[];\n\ntxt_area_fields.push({FosCam : JSON.stringify(context.global.foscam || \"\")});\ntxt_area_fields.push({SamsungCam : JSON.stringify(context.global.SamsungCam || \"\")});\ntxt_area_fields.push({DlinkCam : JSON.stringify(context.global.DlinkCam || \"\")});\ntxt_area_fields.push({camera_motion : JSON.stringify(context.global.camera_motion || \"\")});\n//txt_area_fields.push({tab_ui_shortcuts : JSON.stringify(context.global.tab_ui_shortcuts || \"\")});\nmsg.payload.txt_area_fields=txt_area_fields;\n\nmsg.statusCode=\"200\";\nreturn msg;\n}\nelse\n{\n    //msg.payload=\"Not Authorized\";\n   msg.statusCode=\"403\";\n   return msg;\n//   msg.res.send(\"403\",\"Forbidden\");\n//  return;\n}\n",
     "outputs": 1,
     "noerr": 0,
     "x": 376.4999694824219,
     "y": 1014,
     "wires": [
       [
-        "a7639d20.a84bd"
+        "27776ef0.cdd882"
       ]
     ]
   },
   {
-    "id": "853aecb.a31201",
+    "id": "78650f90.60e0f",
     "type": "http in",
-    "z": "811c60ec.7ee3a",
+    "z": "4e2b26a1.db8168",
     "name": "",
     "url": "/freeboard/save_cfg",
     "method": "post",
@@ -939,15 +939,15 @@
     "y": 1068,
     "wires": [
       [
-        "c5bbc498.546828",
-        "c34c3f74.fadab"
+        "100d1826.4d4258",
+        "fbf81f6e.e615e"
       ]
     ]
   },
   {
-    "id": "c5bbc498.546828",
+    "id": "100d1826.4d4258",
     "type": "function",
-    "z": "811c60ec.7ee3a",
+    "z": "4e2b26a1.db8168",
     "name": "",
     "func": "if (msg.payload.token ==context.global.FREEBOARD_TOKEN || context.global.getCookie('exchange_token',msg.req.headers.cookie)==context.global.FREEBOARD_TOKEN){\n    msg.statusCode=200;\n    context.global.tab_ui_shortcuts=[];\n    for (var v in msg.payload){\n    if (v=='tab_ui_shortcuts' && !Array.isArray(msg.payload.tab_ui_shortcuts)) {\n        context.global.tab_ui_shortcuts[0]=msg.payload.tab_ui_shortcuts; \n    }\n    else context.global.tab_ui_shortcuts=msg.payload.tab_ui_shortcuts;\n    \n    if (v=='FREEBOARD_TOKEN' && msg.payload.FREEBOARD_TOKEN==='') msg.payload.FREEBOARD_TOKEN=context.global.generate_token('FREEBOARD_TOKEN');\n    if (v=='lat'){\n        if (typeof (context.global.HomeLocation) === 'undefined') context.global.HomeLocation={};\n        context.global.HomeLocation.lat=msg.payload['lat'];\n    } else if (v=='lon'){\n        if (typeof (context.global.HomeLocation) === 'undefined') context.global.HomeLocation={};\n        context.global.HomeLocation.lon=msg.payload['lon'];\n    }\n    else    context.global[v]=msg.payload[v];\n    }\n    if (!('motionAdjustTstat' in msg.payload)) context.global.motionAdjustTstat=false;\n    else context.global.motionAdjustTstat=true;\n    if (!('HoursFormat24' in msg.payload)) context.global.HoursFormat24=false;\n    else context.global.HoursFormat24=true;\n    \n    if (!('LightsNotification' in msg.payload)) context.global.LightsNotification=false;\n    else context.global.LightsNotification=true;\n    \n    if (!('LightsNotificationM' in msg.payload)) context.global.LightsNotificationM=false;\n    else context.global.LightsNotificationM=true;\n    \n    if (!('useRobots' in msg.payload)) context.global.useRobots=false;\n    else context.global.useRobots=true;\n    \n    if (!('SensorsNotificationM' in msg.payload)) context.global.SensorsNotificationM=false;\n    else context.global.SensorsNotificationM=true;\n    \n    if (!('vaca_usePresence' in msg.payload)) context.global.vaca_usePresence=false;\n    else context.global.vaca_usePresence=true;   \n    \n    if (!('vaca_wnr_schedules_off' in msg.payload)) context.global.vaca_wnr_schedules_off=false;\n    else context.global.vaca_wnr_schedules_off=true;\n\n    if (!('vaca_locks_vac' in msg.payload)) context.global.vaca_locks_vac=false;\n    else context.global.vaca_locks_vac=true;\n    \n    if('CleanNonWink' in msg.payload){\n        context.global.cleanNonWinkState();\n        context.global.CleanNonWink=false;\n    }\n    if('CleanPresence' in msg.payload){\n        context.global.Presence={};\n        context.global.CleanPresence=false;\n    }\n    \n}\nmsg.url=context.global.BlueMixUrlBase+'/red/update_app_cfg';\nmsg.method=\"POST\";\nmsg.headers= {\n    \"Authorization\":\"Bearer \"+context.global.FREEBOARD_TOKEN\n};\nmsg.payload={\n   db_mode:\"update\"\n}\nnode.send(msg)\n\n\n",
     "outputs": "1",
@@ -956,24 +956,24 @@
     "y": 1069,
     "wires": [
       [
-        "ec9f5788.7584e8",
-        "13775015.77a4e"
+        "d02653f5.735fc",
+        "cf3ef618.e61878"
       ]
     ]
   },
   {
-    "id": "ec9f5788.7584e8",
+    "id": "d02653f5.735fc",
     "type": "http response",
-    "z": "811c60ec.7ee3a",
+    "z": "4e2b26a1.db8168",
     "name": "",
     "x": 521,
     "y": 1104,
     "wires": []
   },
   {
-    "id": "13775015.77a4e",
+    "id": "cf3ef618.e61878",
     "type": "http request",
-    "z": "811c60ec.7ee3a",
+    "z": "4e2b26a1.db8168",
     "name": "",
     "method": "use",
     "ret": "txt",
@@ -985,9 +985,9 @@
     ]
   },
   {
-    "id": "3c9ea770.713f98",
+    "id": "5affd44.8be6e2c",
     "type": "http in",
-    "z": "811c60ec.7ee3a",
+    "z": "4e2b26a1.db8168",
     "name": "",
     "url": "/freeboard/MySummaryJson",
     "method": "get",
@@ -996,14 +996,14 @@
     "y": 268,
     "wires": [
       [
-        "b7c5c793.f2d5a8"
+        "3ac43a49.5ec776"
       ]
     ]
   },
   {
-    "id": "27f7ca4c.3638d6",
+    "id": "217cf8e8.e21188",
     "type": "function",
-    "z": "811c60ec.7ee3a",
+    "z": "4e2b26a1.db8168",
     "name": "",
     "func": "msg.topic='page';\nreturn msg;",
     "outputs": 1,
@@ -1012,14 +1012,14 @@
     "y": 214,
     "wires": [
       [
-        "2a72e4eb.2f3f3c"
+        "de24bc38.d6fdc"
       ]
     ]
   },
   {
-    "id": "b7c5c793.f2d5a8",
+    "id": "3ac43a49.5ec776",
     "type": "function",
-    "z": "811c60ec.7ee3a",
+    "z": "4e2b26a1.db8168",
     "name": "",
     "func": "msg.topic='json';\nreturn msg;",
     "outputs": 1,
@@ -1028,14 +1028,14 @@
     "y": 267,
     "wires": [
       [
-        "2a72e4eb.2f3f3c"
+        "de24bc38.d6fdc"
       ]
     ]
   },
   {
-    "id": "abb2b4e4.899828",
+    "id": "b41627df.9be1f8",
     "type": "switch",
-    "z": "811c60ec.7ee3a",
+    "z": "4e2b26a1.db8168",
     "name": "",
     "property": "topic",
     "propertyType": "msg",
@@ -1055,31 +1055,31 @@
     "y": 245,
     "wires": [
       [
-        "62ba1d25.d51e74",
-        "4950f12e.1b2e3"
+        "4ccb0172.8140a",
+        "35ad9c59.22c454"
       ],
       [
-        "cbe7d8ba.ae06b8"
+        "cfb95a53.7818a8"
       ]
     ]
   },
   {
-    "id": "cbe7d8ba.ae06b8",
+    "id": "cfb95a53.7818a8",
     "type": "json",
-    "z": "811c60ec.7ee3a",
+    "z": "4e2b26a1.db8168",
     "name": "",
     "x": 851,
     "y": 272,
     "wires": [
       [
-        "a19e1c1.4a0d4e"
+        "4c59bbbe.0acc04"
       ]
     ]
   },
   {
-    "id": "4ae2cc6a.8f8304",
+    "id": "cfdf9d4.0bc9e6",
     "type": "function",
-    "z": "811c60ec.7ee3a",
+    "z": "4e2b26a1.db8168",
     "name": "Generate Freeboard by Group",
     "func": "if (msg.payload.auth ==context.global.FREEBOARD_TOKEN){\nvar pane_idx = {};\nvar freeboard = {}\nvar bulbs = 0;\nfreeboard.version=\"2\";\nfreeboard.allow_edit=false;\nfreeboard.panes=[];\nfreeboard.plugins= [];\nvar i=0;\n\nfor (var key in context.global.winkState.sensor_pods)\n{\n    if (typeof context.global.winkState.sensor_pods[key].motion !== 'undefined') \n    { \n        if( typeof pane_idx.motion !=='undefined') \n        {\n            pane_id=pane_idx.motion; //motion\n        } else\n        {\n            freeboard.panes.push(  {\n                \"title\":\"Motion Sensors\",\n                \"width\": 1,\n                \"row\": {\n                    \"3\": 1\n                },\n                \"col\": {\n                    \"3\": 1\n                },\n                \"col_width\": 1,\n                widgets:[]\n            });\n            pane_idx.motion=i;\n            pane_id=i;\n            i++;\n        }\n    } else if (typeof context.global.winkState.sensor_pods[key].opened !== 'undefined') \n    {\n        if( typeof pane_idx.trippers !=='undefined') \n        {\n            pane_id=pane_idx.trippers; //motion\n        } else\n        {\n            freeboard.panes.push(  {\n                \"title\":\"Trippers\",\n                \"width\": 1,\n                \"row\": {\n                    \"3\": 1\n                },\n                \"col\": {\n                    \"3\": 1\n                },\n                \"col_width\": 1,\n                widgets:[]\n            });\n            pane_idx.trippers=i;\n            pane_id=i;\n            i++;\n        }\n\n    }\n    else\n    {\n        //other sensors pane\n        if( typeof pane_idx.other !=='undefined') \n        {\n            pane_id=pane_idx.other; //motion\n        } else\n        {\n            freeboard.panes.push(  {\n                \"title\":\"Multi Sensors\",\n                \"width\": 1,\n                \"row\": {\n                    \"3\": 1\n                },\n                \"col\": {\n                    \"3\": 1\n                },\n                \"col_width\": 1,\n                widgets:[]\n            });\n            pane_idx.other=i;\n            pane_id=i;\n            i++;\n        }\n    }\n    if(key in context.global.winkDevCap && context.global.winkDevCap[key].fields)\n    {\n        for (s=0; s<context.global.winkDevCap[key].fields.length;s++)\n        {\n            var field=context.global.winkDevCap[key].fields[s].field\n            if( context.global.winkState.sensor_pods[key][field] !== null)\n            {\n/*                if (field=='coordinates') {\n                    freeboard.panes[pane_id].widgets.push(\n                     {\n                         \"type\": \"google_map\",\n                         \"settings\": \n                          {\n                            lat:'datasources[\\\"Node-Red\\\"][\\\"WinkData\\\"][\\\"sensor_pods\\\"][\\\"' + key + '\\\"][\\\"lat\\\"]',\n                            lon:'datasources[\\\"Node-Red\\\"][\\\"WinkData\\\"][\\\"sensor_pods\\\"][\\\"' + key + '\\\"][\\\"lon\\\"]'\n                          }\n                     });\n                }\n                else {*/\n                freeboard.panes[pane_id].widgets.push(\n                 {\n                     \"type\": \"indicator\",\n                     \"settings\": \n                      {\n                          \"title\":key + \" \" + field.replace(\"_\",\" \").replace(/opened|detected|motion|occupied|state/,\"\"),\n                          \"value\":\"wink.indicator.value(datasources[\\\"Node-Red\\\"] && datasources[\\\"Node-Red\\\"][\\\"WinkData\\\"][\\\"sensor_pods\\\"][\\\"\" + key + \"\\\"],\\\"\" + field +\"\\\")\",\n                          \"on_text\":\"wink.indicator.on_text(datasources[\\\"Node-Red\\\"] && datasources[\\\"Node-Red\\\"][\\\"WinkData\\\"][\\\"sensor_pods\\\"][\\\"\" + key + \"\\\"],\\\"\" + field +\"\\\")\",\n                          \"off_text\":\"wink.indicator.off_text(datasources[\\\"Node-Red\\\"] && datasources[\\\"Node-Red\\\"][\\\"WinkData\\\"][\\\"sensor_pods\\\"][\\\"\" + key + \"\\\"],\\\"\" + field +\"\\\")\",\n                          \"style_element\":\"wink.indicator.style_element(datasources[\\\"Node-Red\\\"] && datasources[\\\"Node-Red\\\"][\\\"WinkData\\\"][\\\"sensor_pods\\\"][\\\"\" + key + \"\\\"],\\\"\" + field +\"\\\")\"\n                      }\n                 });\n//                } \n            }\n      }\n   }\n} //end sensor pods\n//i=0;\n\nfor (var key in context.global.winkState.groups)\n{\n    if(key.substring(0,1)!==\".\" && key.substring(0,1)!==\"@\" && context.global.winkState.groups[key].members)\n    {\n        freeboard.panes.push(  {\n            \"title\":context.global.winkState.groups[key].name + \" -  Lights and Switches\",\n            \"width\": 1,\n            \"row\": {\n                \"3\": 1\n            },\n            \"col\": {\n                \"3\": 1\n            },\n            \"col_width\": 1,\n            widgets:[]\n        });\n        pane_idx.key=i;\n        pane_id=i;\n        i++;\n        \n        for (var light_bulbs in context.global.winkState.groups[key].members)\n        {\n            light_type=context.global.winkState.groups[key].members[light_bulbs].object_type\n            freeboard.panes[pane_id].widgets.push(\n            {\n                \"type\": \"indicator\",\n                \"settings\": {\n                \"title\":light_bulbs,\n                \"value\":\"wink.indicator.value(datasources[\\\"Node-Red\\\"] && datasources[\\\"Node-Red\\\"][\\\"WinkData\\\"][\\\"\"+light_type+\"\\\"][\\\"\" + light_bulbs + \"\\\"])\",\n                \"on_text\":\"wink.indicator.on_text(datasources[\\\"Node-Red\\\"] && datasources[\\\"Node-Red\\\"][\\\"WinkData\\\"][\\\"\"+light_type+\"\\\"][\\\"\" + light_bulbs + \"\\\"])\",\n                \"off_text\":\"wink.indicator.off_text(datasources[\\\"Node-Red\\\"] && datasources[\\\"Node-Red\\\"][\\\"WinkData\\\"][\\\"\"+light_type+\"\\\"][\\\"\" + light_bulbs + \"\\\"])\",\n                \"style_element\":\"wink.indicator.style_element(datasources[\\\"Node-Red\\\"] && datasources[\\\"Node-Red\\\"][\\\"WinkData\\\"][\\\"\"+light_type+\"\\\"][\\\"\" + light_bulbs + \"\\\"])\"\n                }\n            })\n            bulbs++;\n            context.global.winkState[light_type][light_bulbs].freeboard = 1;\n        }\n    }\n}\n\n\n\nfor (var key in context.global.winkState.binary_switches){\nif (context.global.winkState.binary_switches[key].freeboard && context.global.winkState.binary_switches[key].freeboard!=1)\n{\n    if( typeof pane_idx.lights !=='undefined') \n    {\n        pane_id=pane_idx.lights; //motion\n    } else\n    {\n        freeboard.panes.push(  {\n            \"title\":\"Switches\",\n            \"width\": 1,\n            \"row\": {\n                \"3\": 1\n            },\n            \"col\": {\n                \"3\": 1\n            },\n            \"col_width\": 1,\n            widgets:[]\n        });\n        pane_idx.lights=i;\n        pane_id=i;\n        i++;\n    }\n  \n    freeboard.panes[pane_id].widgets.push(\n    {\n    \"type\": \"indicator\",\n    \"settings\": {\n        \"title\":key,\n        \"value\":\"wink.indicator.value(datasources[\\\"Node-Red\\\"] && datasources[\\\"Node-Red\\\"][\\\"WinkData\\\"][\\\"binary_switches\\\"][\\\"\" + key + \"\\\"])\",\n        \"on_text\":\"wink.indicator.on_text(datasources[\\\"Node-Red\\\"] && datasources[\\\"Node-Red\\\"][\\\"WinkData\\\"][\\\"binary_switches\\\"][\\\"\" + key + \"\\\"])\",\n        \"off_text\":\"wink.indicator.off_text(datasources[\\\"Node-Red\\\"] && datasources[\\\"Node-Red\\\"][\\\"WinkData\\\"][\\\"binary_switches\\\"][\\\"\" + key + \"\\\"])\",\n        \"style_element\":\"wink.indicator.style_element(datasources[\\\"Node-Red\\\"] && datasources[\\\"Node-Red\\\"][\\\"WinkData\\\"][\\\"binary_switches\\\"][\\\"\" + key + \"\\\"])\"\n    }\n})\n}\n}// end bin switches\n\n\nfor (var key in context.global.winkState.light_bulbs){\nif (context.global.winkState.light_bulbs[key].freeboard && context.global.winkState.light_bulbs[key].freeboard!=1)\n{\n    if( typeof pane_idx.lights !=='undefined') \n    {\n        pane_id=pane_idx.lights; //motion\n    } else\n    {\n        freeboard.panes.push(  {\n            \"title\":\"Lights and Switches\",\n            \"width\": 1,\n            \"row\": {\n                \"3\": 1\n            },\n            \"col\": {\n                \"3\": 1\n            },\n            \"col_width\": 1,\n            widgets:[]\n        });\n        pane_idx.lights=i;\n        pane_id=i;\n        i++;\n    }\n    freeboard.panes[pane_id].widgets.push(\n    {\n        \"type\": \"indicator\",\n        \"settings\": {\n            \"title\":key,\n            \"value\":\"wink.indicator.value(datasources[\\\"Node-Red\\\"] && datasources[\\\"Node-Red\\\"][\\\"WinkData\\\"][\\\"light_bulbs\\\"][\\\"\" + key + \"\\\"])\",\n            \"on_text\":\"wink.indicator.on_text(datasources[\\\"Node-Red\\\"] && datasources[\\\"Node-Red\\\"][\\\"WinkData\\\"][\\\"light_bulbs\\\"][\\\"\" + key + \"\\\"])\",\n            \"off_text\":\"wink.indicator.off_text(datasources[\\\"Node-Red\\\"] && datasources[\\\"Node-Red\\\"][\\\"WinkData\\\"][\\\"light_bulbs\\\"][\\\"\" + key + \"\\\"])\",\n            \"style_element\":\"wink.indicator.style_element(datasources[\\\"Node-Red\\\"] && datasources[\\\"Node-Red\\\"][\\\"WinkData\\\"][\\\"light_bulbs\\\"][\\\"\" + key + \"\\\"])\"\n        }\n    })\n}\n} // end light bulbs\n\n\nfor (var key in context.global.winkState.powerstrips)\n{\n    if( typeof pane_idx.powerstrips !=='undefined') \n    {\n        pane_id=pane_idx.powerstrips; //motion\n    } else\n    {\n        freeboard.panes.push(  {\n            \"title\":\"Powerstrips\",\n            \"width\": 1,\n            \"row\": {\n                \"3\": 1\n            },\n            \"col\": {\n                \"3\": 1\n            },\n            \"col_width\": 1,\n            widgets:[]\n        });\n        pane_idx.powerstrips=i;\n        pane_id=i;\n        i++;\n    }\n    if (typeof context.global.winkState.powerstrips[key].powered !== 'undefined'){\n    freeboard.panes[pane_id].widgets.push(\n    {\n        \"type\": \"indicator\",\n        \"settings\": {\n            \"title\":key,\n            \"value\":\"wink.indicator.value(datasources[\\\"Node-Red\\\"] && datasources[\\\"Node-Red\\\"][\\\"WinkData\\\"][\\\"powerstrips\\\"][\\\"\" + key + \"\\\"])\",\n            \"on_text\":\"wink.indicator.on_text(datasources[\\\"Node-Red\\\"] && datasources[\\\"Node-Red\\\"][\\\"WinkData\\\"][\\\"powerstrips\\\"][\\\"\" + key + \"\\\"])\",\n            \"off_text\":\"wink.indicator.off_text(datasources[\\\"Node-Red\\\"] && datasources[\\\"Node-Red\\\"][\\\"WinkData\\\"][\\\"powerstrips\\\"][\\\"\" + key + \"\\\"])\",\n            \"style_element\":\"wink.indicator.style_element(datasources[\\\"Node-Red\\\"] && datasources[\\\"Node-Red\\\"][\\\"WinkData\\\"][\\\"powerstrips\\\"][\\\"\" + key + \"\\\"])\"\n        }\n    })\n    }\n} // end light bulbs\n\nfor (var key in context.global.winkState.locks)\n{\n    if( typeof pane_idx.locks !=='undefined') \n    {\n        pane_id=pane_idx.locks; //motion\n    } else\n    {\n        freeboard.panes.push(  {\n            \"title\":\"Locks\",\n            \"width\": 1,\n            \"row\": {\n                \"3\": 1\n            },\n            \"col\": {\n                \"3\": 1\n            },\n            \"col_width\": 1,\n            widgets:[]\n        });\n        pane_idx.locks=i;\n        pane_id=i;\n        i++;\n    }\n    freeboard.panes[pane_id].widgets.push(\n{\n    \"type\": \"indicator\",\n    \"settings\": {\n        \"title\":key,\n        \"value\":\"wink.indicator.value(datasources[\\\"Node-Red\\\"] && datasources[\\\"Node-Red\\\"][\\\"WinkData\\\"][\\\"locks\\\"][\\\"\" + key + \"\\\"])\",\n        \"on_text\":\"wink.indicator.on_text(datasources[\\\"Node-Red\\\"] && datasources[\\\"Node-Red\\\"][\\\"WinkData\\\"][\\\"locks\\\"][\\\"\" + key + \"\\\"])\",\n        \"off_text\":\"wink.indicator.off_text(datasources[\\\"Node-Red\\\"] && datasources[\\\"Node-Red\\\"][\\\"WinkData\\\"][\\\"locks\\\"][\\\"\" + key + \"\\\"])\",\n        \"style_element\":\"wink.indicator.style_element(datasources[\\\"Node-Red\\\"] && datasources[\\\"Node-Red\\\"][\\\"WinkData\\\"][\\\"locks\\\"][\\\"\" + key + \"\\\"])\"\n    }\n})\n    if (typeof context.global.winkState.locks[key].battery !== 'undefined')\n    {\n        freeboard.panes[pane_id].widgets.push(\n{\n    \"type\": \"indicator\",\n    \"settings\": {\n        \"title\":key + \" battery\",\n        \"value\":\"wink.indicator.value(datasources[\\\"Node-Red\\\"] && datasources[\\\"Node-Red\\\"][\\\"WinkData\\\"][\\\"locks\\\"][\\\"\" + key + \"\\\"],\\\"battery\\\")\",\n        \"on_text\":\"wink.indicator.on_text(datasources[\\\"Node-Red\\\"] && datasources[\\\"Node-Red\\\"][\\\"WinkData\\\"][\\\"locks\\\"][\\\"\" + key + \"\\\"],\\\"battery\\\")\",\n        \"off_text\":\"wink.indicator.off_text(datasources[\\\"Node-Red\\\"] && datasources[\\\"Node-Red\\\"][\\\"WinkData\\\"][\\\"locks\\\"][\\\"\" + key + \"\\\"],\\\"battery\\\")\",\n        \"style_element\":\"wink.indicator.style_element(datasources[\\\"Node-Red\\\"] && datasources[\\\"Node-Red\\\"][\\\"WinkData\\\"][\\\"locks\\\"][\\\"\" + key + \"\\\"],\\\"battery\\\")\"\n    }\n})\n}\n} //end locks\nfor (var key in context.global.winkState.smoke_detectors)\n{\n    if( typeof pane_idx.smoke !=='undefined') \n    {\n        pane_id=pane_idx.smoke; //motion\n    } else\n    {\n        freeboard.panes.push(  {\n            \"title\":\"Smoke Detectors\",\n            \"width\": 1,\n            \"row\": {\n                \"3\": 1\n            },\n            \"col\": {\n                \"3\": 1\n            },\n            \"col_width\": 1,\n            widgets:[]\n        });\n        pane_idx.smoke=i;\n        pane_id=i;\n        i++;\n    }\n    freeboard.panes[pane_id].widgets.push(\n{\n    \"type\": \"indicator\",\n    \"settings\": {\n        \"title\":key + (context.global.winkState.smoke_detectors[key].connection ? \" Smoke\" : \" Offline\"),\n        \"value\":\"wink.indicator.value(datasources[\\\"Node-Red\\\"] && datasources[\\\"Node-Red\\\"][\\\"WinkData\\\"][\\\"smoke_detectors\\\"][\\\"\" + key + \"\\\"],\\\"smoke_detected\\\")\",\n        \"on_text\":\"wink.indicator.on_text(datasources[\\\"Node-Red\\\"] && datasources[\\\"Node-Red\\\"][\\\"WinkData\\\"][\\\"smoke_detectors\\\"][\\\"\" + key + \"\\\"],\\\"smoke_detected\\\")\",\n        \"off_text\":\"wink.indicator.off_text(datasources[\\\"Node-Red\\\"] && datasources[\\\"Node-Red\\\"][\\\"WinkData\\\"][\\\"smoke_detectors\\\"][\\\"\" + key + \"\\\"],\\\"smoke_detected\\\")\",\n        \"style_element\":\"wink.indicator.style_element(datasources[\\\"Node-Red\\\"] && datasources[\\\"Node-Red\\\"][\\\"WinkData\\\"][\\\"smoke_detectors\\\"][\\\"\" + key + \"\\\"],\\\"smoke_detected\\\")\"\n    }\n})\n    \n    freeboard.panes[pane_id].widgets.push(\n{\n    \"type\": \"indicator\",\n    \"settings\": {\n        \"title\":key + (context.global.winkState.smoke_detectors[key].connection ? \" CO2\" : \" Offline\"),\n        \"value\":\"wink.indicator.value(datasources[\\\"Node-Red\\\"] && datasources[\\\"Node-Red\\\"][\\\"WinkData\\\"][\\\"smoke_detectors\\\"][\\\"\" + key + \"\\\"],\\\"co_detected\\\")\",\n        \"on_text\":\"wink.indicator.on_text(datasources[\\\"Node-Red\\\"] && datasources[\\\"Node-Red\\\"][\\\"WinkData\\\"][\\\"smoke_detectors\\\"][\\\"\" + key + \"\\\"],\\\"co_detected\\\")\",\n        \"off_text\":\"wink.indicator.off_text(datasources[\\\"Node-Red\\\"] && datasources[\\\"Node-Red\\\"][\\\"WinkData\\\"][\\\"smoke_detectors\\\"][\\\"\" + key + \"\\\"],\\\"co_detected\\\")\",\n        \"style_element\":\"wink.indicator.style_element(datasources[\\\"Node-Red\\\"] && datasources[\\\"Node-Red\\\"][\\\"WinkData\\\"][\\\"smoke_detectors\\\"][\\\"\" + key + \"\\\"],\\\"co_detected\\\")\"\n    }\n})\nif (typeof context.global.winkState.smoke_detectors[key].battery !== 'undefined')\n    {\n        freeboard.panes[pane_id].widgets.push(\n{\n    \"type\": \"indicator\",\n    \"settings\": {\n        \"title\":key + \" battery\",\n        \"value\":\"wink.indicator.value(datasources[\\\"Node-Red\\\"] && datasources[\\\"Node-Red\\\"][\\\"WinkData\\\"][\\\"smoke_detectors\\\"][\\\"\" + key + \"\\\"],\\\"battery\\\")\",\n        \"on_text\":\"wink.indicator.on_text(datasources[\\\"Node-Red\\\"] && datasources[\\\"Node-Red\\\"][\\\"WinkData\\\"][\\\"smoke_detectors\\\"][\\\"\" + key + \"\\\"],\\\"battery\\\")\",\n        \"off_text\":\"wink.indicator.off_text(datasources[\\\"Node-Red\\\"] && datasources[\\\"Node-Red\\\"][\\\"WinkData\\\"][\\\"smoke_detectors\\\"][\\\"\" + key + \"\\\"],\\\"battery\\\")\",\n        \"style_element\":\"wink.indicator.style_element(datasources[\\\"Node-Red\\\"] && datasources[\\\"Node-Red\\\"][\\\"WinkData\\\"][\\\"smoke_detectors\\\"][\\\"\" + key + \"\\\"],\\\"battery\\\")\"\n    }\n})\n}\n} //end smoke detectors\n\nfor (var key in context.global.winkState.thermostats)\n{\n    if( typeof pane_idx.tstats !=='undefined') \n    {\n        pane_id=pane_idx.tstats; //motion\n    } else\n    {\n        freeboard.panes.push(  {\n            \"title\":\"Thermostats\",\n            \"width\": 1,\n            \"row\": {\n                \"3\": 1\n            },\n            \"col\": {\n                \"3\": 1\n            },\n            \"col_width\": 1,\n            widgets:[]\n        });\n        pane_idx.tstats=i;\n        pane_id=i;\n        i++;\n    }\n\n//added so thermostats without max_set_point won't show [ecobee sensor compatibility]\nif (context.global.winkState.thermostats[key].max_set_point>0)\n{\n    freeboard.panes[pane_id].widgets.push(\n    {\n        \"type\": \"indicator\",\n        \"settings\": {\n            \"title\":key,\n            \"value\":\"wink.indicator.value(datasources[\\\"Node-Red\\\"] && datasources[\\\"Node-Red\\\"][\\\"WinkData\\\"][\\\"thermostats\\\"][\\\"\" + key + \"\\\"],\\\"mode\\\")\",\n            \"on_text\":\"wink.indicator.on_text(datasources[\\\"Node-Red\\\"] && datasources[\\\"Node-Red\\\"][\\\"WinkData\\\"][\\\"thermostats\\\"][\\\"\" + key + \"\\\"],\\\"mode\\\")\",\n            \"off_text\":\"wink.indicator.off_text(datasources[\\\"Node-Red\\\"] && datasources[\\\"Node-Red\\\"][\\\"WinkData\\\"][\\\"thermostats\\\"][\\\"\" + key + \"\\\"],\\\"mode\\\")\",\n            \"style_element\":\"wink.indicator.style_element(datasources[\\\"Node-Red\\\"] && datasources[\\\"Node-Red\\\"][\\\"WinkData\\\"][\\\"thermostats\\\"][\\\"\" + key + \"\\\"],\\\"mode\\\")\"\n        }\n    })\n}\n//if (typeof context.global.winkState.thermostats[key].users_away !== 'undefined')\n//    {\nfreeboard.panes[pane_id].widgets.push(\n{\n    \"type\": \"indicator\",\n    \"settings\": {\n        \"title\":key+\" Current temperature\",\n        \"value\":\"wink.indicator.value(datasources[\\\"Node-Red\\\"] && datasources[\\\"Node-Red\\\"][\\\"WinkData\\\"][\\\"thermostats\\\"][\\\"\" + key + \"\\\"],\\\"temperature\\\")\",\n        \"on_text\":\"wink.indicator.on_text(datasources[\\\"Node-Red\\\"] && datasources[\\\"Node-Red\\\"][\\\"WinkData\\\"][\\\"thermostats\\\"][\\\"\" + key + \"\\\"],\\\"temperature\\\")\",\n        \"off_text\":\"wink.indicator.off_text(datasources[\\\"Node-Red\\\"] && datasources[\\\"Node-Red\\\"][\\\"WinkData\\\"][\\\"thermostats\\\"][\\\"\" + key + \"\\\"],\\\"temperature\\\")\",\n        \"style_element\":\"wink.indicator.style_element(datasources[\\\"Node-Red\\\"] && datasources[\\\"Node-Red\\\"][\\\"WinkData\\\"][\\\"thermostats\\\"][\\\"\" + key + \"\\\"],\\\"temperature\\\")\"\n    }\n})\n//}\n} //end thermostats\n\nfor (var key in context.global.winkState.air_conditioners)\n{\n    if( typeof pane_idx.air_con !=='undefined') \n    {\n        pane_id=pane_idx.air_con; //motion\n    } else\n    {\n        freeboard.panes.push(  {\n            \"title\":\"Air Conditioners\",\n            \"width\": 1,\n            \"row\": {\n                \"3\": 1\n            },\n            \"col\": {\n                \"3\": 1\n            },\n            \"col_width\": 1,\n            widgets:[]\n        });\n        pane_idx.air_con=i;\n        pane_id=i;\n        i++;\n    }\n    freeboard.panes[pane_id].widgets.push(\n{\n    \"type\": \"indicator\",\n    \"settings\": {\n        \"title\":key,\n        \"value\":\"wink.indicator.value(datasources[\\\"Node-Red\\\"] && datasources[\\\"Node-Red\\\"][\\\"WinkData\\\"][\\\"air_conditioners\\\"][\\\"\" + key + \"\\\"])\",\n        \"on_text\":\"wink.indicator.on_text(datasources[\\\"Node-Red\\\"] && datasources[\\\"Node-Red\\\"][\\\"WinkData\\\"][\\\"air_conditioners\\\"][\\\"\" + key + \"\\\"])\",\n        \"off_text\":\"wink.indicator.off_text(datasources[\\\"Node-Red\\\"] && datasources[\\\"Node-Red\\\"][\\\"WinkData\\\"][\\\"air_conditioners\\\"][\\\"\" + key + \"\\\"])\",\n        \"style_element\":\"wink.indicator.style_element(datasources[\\\"Node-Red\\\"] && datasources[\\\"Node-Red\\\"][\\\"WinkData\\\"][\\\"air_conditioners\\\"][\\\"\" + key + \"\\\"])\"\n    }\n})\nfreeboard.panes[pane_id].widgets.push(\n{\n    \"type\": \"indicator\",\n    \"settings\": {\n        \"title\":key+ ' temperature',\n        \"value\":\"wink.indicator.value(datasources[\\\"Node-Red\\\"] && datasources[\\\"Node-Red\\\"][\\\"WinkData\\\"][\\\"air_conditioners\\\"][\\\"\" + key + \"\\\"],\\\"temperature\\\")\",\n        \"on_text\":\"wink.indicator.on_text(datasources[\\\"Node-Red\\\"] && datasources[\\\"Node-Red\\\"][\\\"WinkData\\\"][\\\"air_conditioners\\\"][\\\"\" + key + \"\\\"],\\\"temperature\\\")\",\n        \"off_text\":\"wink.indicator.off_text(datasources[\\\"Node-Red\\\"] && datasources[\\\"Node-Red\\\"][\\\"WinkData\\\"][\\\"air_conditioners\\\"][\\\"\" + key + \"\\\"],\\\"temperature\\\")\",\n        \"style_element\":\"wink.indicator.style_element(datasources[\\\"Node-Red\\\"] && datasources[\\\"Node-Red\\\"][\\\"WinkData\\\"][\\\"air_conditioners\\\"][\\\"\" + key + \"\\\"],\\\"temperature\\\")\"\n    }\n\n})\n\n}\n\nfor (var key in context.global.winkState.propane_tanks)\n{\n    if( typeof pane_idx.prop_tnk !=='undefined') \n    {\n        pane_id=pane_idx.prop_tnk; //motion\n    } else\n    {\n        freeboard.panes.push(  {\n            \"title\":\"Propane Tanks\",\n            \"width\": 1,\n            \"row\": {\n                \"3\": 1\n            },\n            \"col\": {\n                \"3\": 1\n            },\n            \"col_width\": 1,\n            widgets:[]\n        });\n        pane_idx.prop_tnk=i;\n        pane_id=i;\n        i++;\n    }\n    freeboard.panes[pane_id].widgets.push(\n{\n    \"type\": \"indicator\",\n    \"settings\": {\n        \"title\":key,\n        \"value\":\"wink.indicator.value(datasources[\\\"Node-Red\\\"] && datasources[\\\"Node-Red\\\"][\\\"WinkData\\\"][\\\"propane_tanks\\\"][\\\"\" + key + \"\\\"])\",\n        \"on_text\":\"wink.indicator.on_text(datasources[\\\"Node-Red\\\"] && datasources[\\\"Node-Red\\\"][\\\"WinkData\\\"][\\\"propane_tanks\\\"][\\\"\" + key + \"\\\"],\\\"remaining\\\")\",\n        \"off_text\":\"wink.indicator.off_text(datasources[\\\"Node-Red\\\"] && datasources[\\\"Node-Red\\\"][\\\"WinkData\\\"][\\\"propane_tanks\\\"][\\\"\" + key + \"\\\"],\\\"remaining\\\")\",\n        \"style_element\":\"wink.indicator.style_element(datasources[\\\"Node-Red\\\"] && datasources[\\\"Node-Red\\\"][\\\"WinkData\\\"][\\\"propane_tanks\\\"][\\\"\" + key + \"\\\"])\"\n    }\n})\nfreeboard.panes[pane_id].widgets.push(\n{\n        \"type\": \"indicator\",\n         \"settings\": {\n        \"title\":key + ' Battery',\n        \"value\":\"wink.indicator.value(datasources[\\\"Node-Red\\\"] && datasources[\\\"Node-Red\\\"][\\\"WinkData\\\"][\\\"propane_tanks\\\"][\\\"\" + key + \"\\\"],\\\"battery\\\")\",\n        \"on_text\":\"wink.indicator.on_text(datasources[\\\"Node-Red\\\"] && datasources[\\\"Node-Red\\\"][\\\"WinkData\\\"][\\\"propane_tanks\\\"][\\\"\" + key + \"\\\"],\\\"battery\\\")\",\n        \"off_text\":\"wink.indicator.off_text(datasources[\\\"Node-Red\\\"] && datasources[\\\"Node-Red\\\"][\\\"WinkData\\\"][\\\"propane_tanks\\\"][\\\"\" + key + \"\\\"],\\\"battery\\\")\",\n        \"style_element\":\"wink.indicator.style_element(datasources[\\\"Node-Red\\\"] && datasources[\\\"Node-Red\\\"][\\\"WinkData\\\"][\\\"propane_tanks\\\"][\\\"\" + key + \"\\\"],\\\"battery\\\")\"\n         }\n})\n\n}\n\nfor (var key in context.global.winkState.garage_doors)\n{\n    if( typeof pane_idx.garage !=='undefined') \n    {\n        pane_id=pane_idx.garage; //motion\n    } else\n    {\n        freeboard.panes.push(  {\n            \"title\":\"Garage doors\",\n            \"width\": 1,\n            \"row\": {\n                \"3\": 1\n            },\n            \"col\": {\n                \"3\": 1\n            },\n            \"col_width\": 1,\n            widgets:[]\n        });\n        pane_idx.garage=i;\n        pane_id=i;\n        i++;\n    }\n    freeboard.panes[pane_id].widgets.push(\n{\n    \"type\": \"indicator\",\n    \"settings\": {\n        \"title\":key + (context.global.winkState.garage_doors[key].connection ? \" - Online\" : \" - Off\"),\n        \"value\":\"wink.indicator.value(datasources[\\\"Node-Red\\\"] && datasources[\\\"Node-Red\\\"][\\\"WinkData\\\"][\\\"garage_doors\\\"][\\\"\" + key + \"\\\"])\",\n        \"on_text\":\"wink.indicator.on_text(datasources[\\\"Node-Red\\\"] && datasources[\\\"Node-Red\\\"][\\\"WinkData\\\"][\\\"garage_doors\\\"][\\\"\" + key + \"\\\"])\",\n        \"off_text\":\"wink.indicator.off_text(datasources[\\\"Node-Red\\\"] && datasources[\\\"Node-Red\\\"][\\\"WinkData\\\"][\\\"garage_doors\\\"][\\\"\" + key + \"\\\"])\",\n        \"style_element\":\"wink.indicator.style_element(datasources[\\\"Node-Red\\\"] && datasources[\\\"Node-Red\\\"][\\\"WinkData\\\"][\\\"garage_doors\\\"][\\\"\" + key + \"\\\"])\"\n    }\n})\n    \n}\n\nfor (var key in context.global.winkState.piggy_banks)\n{\n    if( typeof pane_idx.porky !=='undefined') \n    {\n        pane_id=pane_idx.porky; //porky banko\n    } else\n    {\n        freeboard.panes.push(  {\n            \"title\":\"Piggy Banks\",\n            \"width\": 1,\n            \"row\": {\n                \"3\": 1\n            },\n            \"col\": {\n                \"3\": 1\n            },\n            \"col_width\": 1,\n            widgets:[]\n        });\n        pane_idx.porky=i;\n        pane_id=i;\n        i++;\n    }\n    freeboard.panes[pane_id].widgets.push(\n{\n    \"type\": \"indicator\",\n    \"settings\": {\n        \"title\":key,\n        \"value\":\"wink.indicator.value(datasources[\\\"Node-Red\\\"] && datasources[\\\"Node-Red\\\"][\\\"WinkData\\\"][\\\"piggy_banks\\\"][\\\"\" + key + \"\\\"])\",\n        \"on_text\":\"wink.indicator.on_text(datasources[\\\"Node-Red\\\"] && datasources[\\\"Node-Red\\\"][\\\"WinkData\\\"][\\\"piggy_banks\\\"][\\\"\" + key + \"\\\"])\",\n        \"off_text\":\"wink.indicator.off_text(datasources[\\\"Node-Red\\\"] && datasources[\\\"Node-Red\\\"][\\\"WinkData\\\"][\\\"piggy_banks\\\"][\\\"\" + key + \"\\\"])\",\n        \"style_element\":\"wink.indicator.style_element(datasources[\\\"Node-Red\\\"] && datasources[\\\"Node-Red\\\"][\\\"WinkData\\\"][\\\"piggy_banks\\\"][\\\"\" + key + \"\\\"])\"\n    }\n})\n    \n}\n\n\n\nfor (var key in context.global.winkState.hubs)\n{\n    if( typeof pane_idx.hubs !=='undefined') \n    {\n        pane_id=pane_idx.hubs; //motion\n    } else\n    {\n        freeboard.panes.push(  {\n            \"title\":\"Hubs\",\n            \"width\": 1,\n            \"row\": {\n                \"3\": 1\n            },\n            \"col\": {\n                \"3\": 1\n            },\n            \"col_width\": 1,\n            widgets:[]\n        });\n        pane_idx.hubs=i;\n        pane_id=i;\n        i++;\n    }\n    freeboard.panes[pane_id].widgets.push(\n{\n    \"type\": \"indicator\",\n    \"settings\": {\n        \"title\":key,\n        \"value\":\"wink.indicator.value(datasources[\\\"Node-Red\\\"] && datasources[\\\"Node-Red\\\"][\\\"WinkData\\\"][\\\"hubs\\\"][\\\"\" + key + \"\\\"])\",\n        \"on_text\":\"wink.indicator.on_text(datasources[\\\"Node-Red\\\"] && datasources[\\\"Node-Red\\\"][\\\"WinkData\\\"][\\\"hubs\\\"][\\\"\" + key + \"\\\"])\",\n        \"off_text\":\"wink.indicator.off_text(datasources[\\\"Node-Red\\\"] && datasources[\\\"Node-Red\\\"][\\\"WinkData\\\"][\\\"hubs\\\"][\\\"\" + key + \"\\\"])\",\n        \"style_element\":\"wink.indicator.style_element(datasources[\\\"Node-Red\\\"] && datasources[\\\"Node-Red\\\"][\\\"WinkData\\\"][\\\"hubs\\\"][\\\"\" + key + \"\\\"])\"\n    }\n}\n)\n\nif (context.global.winkState.hubs[key].firmware_version !== null)\n    {\nfreeboard.panes[pane_id].widgets.push(\n{\n    \"type\": \"text_widget\",\n    \"settings\": {\n        \"title\":\"Current firmware\",\n        \"value\":\"datasources[\\\"Node-Red\\\"][\\\"WinkData\\\"][\\\"hubs\\\"][\\\"\" + key + \"\\\"][\\\"firmware_version\\\"]\",\n        \"size\":\"regular\",\n        \"animate\":\"true\"\n    }\n})\n}\n}\n\nfor (var key in context.global.Presence){\n    if( typeof pane_idx.presence !=='undefined') \n        {\n            pane_id=pane_idx.presence; //motion\n        } else\n        {\n            freeboard.panes.push(  {\n                \"title\":\"Presence\",\n                \"width\": 1,\n                \"row\": {\n                    \"3\": 1\n                },\n                \"col\": {\n                    \"3\": 1\n                },\n                \"col_width\": 1,\n                widgets:[]\n            });\n            pane_idx.presence=i;\n            pane_id=i;\n            i++;\n        }\n//}\nif( typeof pane_idx.presence !=='undefined'){\n                    freeboard.panes[pane_idx.presence].widgets.push(\n                 {\n                     \"type\": \"indicator\",\n                     \"settings\": \n                      {\n                          \"title\":\"\" ,\n                          \"value\":\"(datasources[\\\"Node-Red\\\"][\\\"PresenceDetail\\\"][\\\"\" + key + \"\\\"][\\\"home\\\"]==\\\"yes\\\" ? true : false)\",\n                          \"on_text\":key+\" Home\",\n                          \"off_text\":key+\" Out\"\n                      }\n                 })\n} \n}\n/*\nvar k=0;\nvar b=0;\nfor (var key in context.global.winkState.robots){\n    if (k>9){\n        b++; \n        k=0;\n        \n    }\n    if( typeof pane_idx['robots'+b] !=='undefined') \n        {\n            pane_id=pane_idx['robots'+b]; //motion\n        } else\n        {\n            freeboard.panes.push(  {\n                \"title\":\"Robots\",\n                \"width\": 1,\n                \"row\": {\n                    \"3\": 1\n                },\n                \"col\": {\n                    \"3\": 1\n                },\n                \"col_width\": 1,\n                widgets:[]\n            });\n            pane_idx['robots'+b]=i;\n            pane_id=i;\n            i++;\n        }\n        if( typeof pane_idx['robots'+b] !=='undefined'){\n                            freeboard.panes[pane_idx['robots'+b]].widgets.push(\n                         {\n                             \"type\": \"indicator\",\n                             \"settings\": \n                              {\n//                                  \"title\":key,\n                                  \"value\":\"datasources[\\\"Node-Red\\\"][\\\"WinkData\\\"][\\\"robots\\\"][\\\"\" + key + \"\\\"][\\\"enabled\\\"]\",\n                                  \"on_text\":key,\n                                  \"off_text\":key\n                              }\n                         })\n        k++;\n        } \n}\n*/\n\n\n\nfreeboard.datasources =\n [\n    {\n        \"name\": \"Node-Red\",\n        \"type\": \"JSON\",\n        \"settings\": {\n            \"url\": context.global.BlueMixUrlBase+\"/red/getGlobalDataJson\",\n            \"use_thingproxy\": true,\n            \"refresh\": 2,\n            \"method\": \"GET\",\n            \"headers\": [\n              {\n                  \"name\": \"Authorization\",\n                  \"value\": \"Bearer \"+context.global.FREEBOARD_TOKEN\n              }\n            ],\n            \"name\":\"Node-Red\"\n        }\n    }   \n ]\nfreeboard.columns=i;\nmsg.payload=freeboard;\n}\nelse\n{\n    msg.payload=\"Bad request darling\"\n}\nreturn msg;",
     "outputs": 1,
@@ -1088,14 +1088,14 @@
     "y": 355,
     "wires": [
       [
-        "379410e1.9d6e6"
+        "87002c89.3551f"
       ]
     ]
   },
   {
-    "id": "c34c3f74.fadab",
+    "id": "fbf81f6e.e615e",
     "type": "debug",
-    "z": "811c60ec.7ee3a",
+    "z": "4e2b26a1.db8168",
     "name": "",
     "active": true,
     "console": "false",
@@ -1105,9 +1105,9 @@
     "wires": []
   },
   {
-    "id": "e23f7d5e.552bf",
+    "id": "d0b88832.c17dc8",
     "type": "http in",
-    "z": "811c60ec.7ee3a",
+    "z": "4e2b26a1.db8168",
     "name": "",
     "url": "/freeboard/RobotControls",
     "method": "get",
@@ -1116,14 +1116,14 @@
     "y": 705,
     "wires": [
       [
-        "4b9f5841.eddf08"
+        "afa9bb1b.ff1c88"
       ]
     ]
   },
   {
-    "id": "d7830d42.b7a6d",
+    "id": "19d63d73.d4a9d3",
     "type": "function",
-    "z": "811c60ec.7ee3a",
+    "z": "4e2b26a1.db8168",
     "name": "GenRobots",
     "func": "//if(msg.req.headers.authorization && msg.req.headers.authorization==\"Bearer \"+context.global.FREEBOARD_TOKEN){\nif ((msg.req.body.uid==context.global.WinkUser.uid && msg.req.body.pwd==context.global.WinkUser.pwd)||context.global.getCookie('exchange_token',msg.req.headers.cookie)==context.global.FREEBOARD_TOKEN || msg.payload.token==context.global.FREEBOARD_TOKEN){\n//if (true){\nmsg.statusCode=\"200\";\nmsg.headers={'Cache-Control':\"max-age=0,no-cache,no-store,post-check=0,pre-check=0\"};\nmsg.payload.pwd_str=context.global.FREEBOARD_TOKEN;\nmsg.payload.ifttt_token=context.global.FREEBOARD_TOKEN;\nmsg.payload.haveRobots=false\nvar robots=[]\nif ('robots' in context.global.winkState){\n        for (var l_robot in context.global.winkState.robots){\n            var robot=context.global.winkState.robots[l_robot];\n            robots.push({\n            name:robot.name,\n            //class_name:'dial '+bulb.object_id,\n            object_id:robot.object_id,\n            enabled:robot.enabled,\n            not_enabled:!robot.enabled\n        });\n    }\n    msg.payload.haveRobots=true\n}\nmsg.payload.robots=robots;\nif (msg.topic=='json'){\n    var Etag=\"\";\n    if ('CRYPTO' in context.global) Etag=context.global.CRYPTO.createHash(\"md5\").update(JSON.stringify(msg.payload),\"utf8\").digest(\"hex\");\n    msg.headers={\n      'Content-Type': 'application/json',\n      'ETag': Etag\n    };\n}\n} else {\nmsg.statusCode=\"403\";\n}\nreturn msg;",
     "outputs": 1,
@@ -1132,14 +1132,14 @@
     "y": 726,
     "wires": [
       [
-        "a1286adb.30b7d8"
+        "26389d0f.368f52"
       ]
     ]
   },
   {
-    "id": "c46f8298.cfde3",
+    "id": "71331a91.0e2684",
     "type": "template",
-    "z": "811c60ec.7ee3a",
+    "z": "4e2b26a1.db8168",
     "name": "",
     "field": "",
     "fieldType": "msg",
@@ -1150,14 +1150,14 @@
     "y": 715,
     "wires": [
       [
-        "fb44836c.c01a1"
+        "ca507848.58b558"
       ]
     ]
   },
   {
-    "id": "c69d552a.ff9238",
+    "id": "8da72cba.912a5",
     "type": "http in",
-    "z": "811c60ec.7ee3a",
+    "z": "4e2b26a1.db8168",
     "name": "",
     "url": "/freeboard/RobotsData",
     "method": "get",
@@ -1166,36 +1166,36 @@
     "y": 758,
     "wires": [
       [
-        "60ada00.f26d46"
+        "4ae689a8.f54bb8"
       ]
     ]
   },
   {
-    "id": "2d8d5d0c.be5812",
+    "id": "f24ba93b.a723c8",
     "type": "json",
-    "z": "811c60ec.7ee3a",
+    "z": "4e2b26a1.db8168",
     "name": "",
     "x": 818,
     "y": 754,
     "wires": [
       [
-        "fb44836c.c01a1"
+        "ca507848.58b558"
       ]
     ]
   },
   {
-    "id": "fb44836c.c01a1",
+    "id": "ca507848.58b558",
     "type": "http response",
-    "z": "811c60ec.7ee3a",
+    "z": "4e2b26a1.db8168",
     "name": "",
     "x": 967,
     "y": 727,
     "wires": []
   },
   {
-    "id": "4b9f5841.eddf08",
+    "id": "afa9bb1b.ff1c88",
     "type": "function",
-    "z": "811c60ec.7ee3a",
+    "z": "4e2b26a1.db8168",
     "name": "",
     "func": "msg.topic='page';\nreturn msg;",
     "outputs": 1,
@@ -1204,14 +1204,14 @@
     "y": 704,
     "wires": [
       [
-        "d7830d42.b7a6d"
+        "19d63d73.d4a9d3"
       ]
     ]
   },
   {
-    "id": "60ada00.f26d46",
+    "id": "4ae689a8.f54bb8",
     "type": "function",
-    "z": "811c60ec.7ee3a",
+    "z": "4e2b26a1.db8168",
     "name": "",
     "func": "msg.topic='json';\nreturn msg;",
     "outputs": 1,
@@ -1220,14 +1220,14 @@
     "y": 759,
     "wires": [
       [
-        "d7830d42.b7a6d"
+        "19d63d73.d4a9d3"
       ]
     ]
   },
   {
-    "id": "a1286adb.30b7d8",
+    "id": "26389d0f.368f52",
     "type": "switch",
-    "z": "811c60ec.7ee3a",
+    "z": "4e2b26a1.db8168",
     "name": "",
     "property": "topic",
     "propertyType": "msg",
@@ -1247,17 +1247,17 @@
     "y": 731,
     "wires": [
       [
-        "c46f8298.cfde3"
+        "71331a91.0e2684"
       ],
       [
-        "2d8d5d0c.be5812"
+        "f24ba93b.a723c8"
       ]
     ]
   },
   {
-    "id": "9ad1ee43.d9b7e",
+    "id": "9629574.2f93fa8",
     "type": "function",
-    "z": "811c60ec.7ee3a",
+    "z": "4e2b26a1.db8168",
     "name": "",
     "func": "msg.topic='page';\nreturn msg;",
     "outputs": 1,
@@ -1266,14 +1266,14 @@
     "y": 615,
     "wires": [
       [
-        "ed6ac571.91faf8"
+        "8fdcceb0.3ecfd"
       ]
     ]
   },
   {
-    "id": "cd670f1e.5f2",
+    "id": "4eb4b3ef.72399c",
     "type": "function",
-    "z": "811c60ec.7ee3a",
+    "z": "4e2b26a1.db8168",
     "name": "",
     "func": "msg.topic='json';\nreturn msg;",
     "outputs": 1,
@@ -1282,14 +1282,14 @@
     "y": 664,
     "wires": [
       [
-        "ed6ac571.91faf8"
+        "8fdcceb0.3ecfd"
       ]
     ]
   },
   {
-    "id": "50edf171.82862",
+    "id": "8f9c4f48.dbae7",
     "type": "switch",
-    "z": "811c60ec.7ee3a",
+    "z": "4e2b26a1.db8168",
     "name": "",
     "property": "topic",
     "propertyType": "msg",
@@ -1309,17 +1309,17 @@
     "y": 642,
     "wires": [
       [
-        "3c35dbdb.f1b924"
+        "b623a27a.1c865"
       ],
       [
-        "bf69ad0f.ec4ec"
+        "6977d7d9.2aa578"
       ]
     ]
   },
   {
-    "id": "f5f1c3f.459cb4",
+    "id": "497035b9.b8b1ac",
     "type": "function",
-    "z": "811c60ec.7ee3a",
+    "z": "4e2b26a1.db8168",
     "name": "",
     "func": "msg.topic='page';\nreturn msg;",
     "outputs": 1,
@@ -1328,14 +1328,14 @@
     "y": 528,
     "wires": [
       [
-        "d4c43570.b1c278"
+        "95b18e77.49073"
       ]
     ]
   },
   {
-    "id": "e6c6d387.4c4e4",
+    "id": "23c6672.f60e798",
     "type": "function",
-    "z": "811c60ec.7ee3a",
+    "z": "4e2b26a1.db8168",
     "name": "",
     "func": "msg.topic='json';\nreturn msg;",
     "outputs": 1,
@@ -1344,14 +1344,14 @@
     "y": 566,
     "wires": [
       [
-        "d4c43570.b1c278"
+        "95b18e77.49073"
       ]
     ]
   },
   {
-    "id": "b95592d0.b3e6f",
+    "id": "dad6d510.e8d268",
     "type": "switch",
-    "z": "811c60ec.7ee3a",
+    "z": "4e2b26a1.db8168",
     "name": "",
     "property": "topic",
     "propertyType": "msg",
@@ -1371,17 +1371,17 @@
     "y": 548,
     "wires": [
       [
-        "9f1f047f.3b6eb8"
+        "cee9c759.f0db48"
       ],
       [
-        "7cacf071.a39bf"
+        "3d8fc78b.1d9aa8"
       ]
     ]
   },
   {
-    "id": "7b232413.2793ec",
+    "id": "9d941c55.d9902",
     "type": "comment",
-    "z": "811c60ec.7ee3a",
+    "z": "4e2b26a1.db8168",
     "name": "Config page---------------------------------------",
     "info": "",
     "x": 175,
@@ -1389,9 +1389,9 @@
     "wires": []
   },
   {
-    "id": "4950f12e.1b2e3",
+    "id": "35ad9c59.22c454",
     "type": "debug",
-    "z": "811c60ec.7ee3a",
+    "z": "4e2b26a1.db8168",
     "name": "",
     "active": false,
     "console": "false",
@@ -1401,9 +1401,9 @@
     "wires": []
   },
   {
-    "id": "d31c9146.7b188",
+    "id": "8bff9b36.7024d8",
     "type": "template",
-    "z": "811c60ec.7ee3a",
+    "z": "4e2b26a1.db8168",
     "name": "",
     "field": "payload",
     "fieldType": "msg",
@@ -1417,9 +1417,9 @@
     ]
   },
   {
-    "id": "a7639d20.a84bd",
+    "id": "27776ef0.cdd882",
     "type": "template",
-    "z": "811c60ec.7ee3a",
+    "z": "4e2b26a1.db8168",
     "name": "",
     "field": "payload",
     "fieldType": "msg",
@@ -1430,7 +1430,7 @@
     "y": 972,
     "wires": [
       [
-        "ae203f82.5e8f5"
+        "2d528a1.6112676"
       ]
     ]
   }
