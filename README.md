@@ -16,11 +16,12 @@ This application is Node-Red based app which helps joining together various syst
 * Blue Iris http://blueiris.com (inexpensive solution for vide monitoring)
 * BloomSky http://bloomsky.com (community based weather station and sky camera)
 * Several ip cameras (Foscam, D-link, Samsung)
+* OwnTracks app support for geofencing and location sharing http://owntracks.org
 
 written in JavaScript and powered by Node-Red and Node.js it allows to build additional functionality like advanced scheduling very easy. It is also a fun way to learn functional and event based programming and some modern technologies at the same time enchancing your home automation experience.
 
 
-### Installation instruction:
+### Installation instructions:
 - Blue Mix Cloud
 Use following [HOWTO](README-Bluemix.md) for instructions on how to create BlueMix node.js container with node red as well as how to configure application for initial run,
 
