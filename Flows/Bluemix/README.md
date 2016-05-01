@@ -29,6 +29,7 @@ Bluemix git console:<br>
 ![new tab](images/owntracks8.png)
 * and new data in details tab on MultiSensor panel.<br>
 ![new tab](images/owntracks9.png)
+* _Presence_ will be automatically added to sensors list if you configure OwnTracks region.
 
 
 
