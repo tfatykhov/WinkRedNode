@@ -25,9 +25,9 @@ Bluemix git console:<br>
 * Click Submit button to save it.
 * Get OwnTracks application from app store on your phone.
 * Configure Owntracks app using [OwnTracks readme](owntracks.md)
-* Re-load Tablet UI (refresh browser) and if everything worked, you should have new tab _My Family_ 
+* Re-load Tablet UI (refresh browser) and if everything worked, you should have new tab _My Family_  where you will see your home marker, and markers for each sensor you add (just first letter so make then unique)
 ![new tab](images/owntracks8.png)
-* and new data in details tab on MultiSensor panel.
+* and new data in details tab on MultiSensor panel.<br>
 ![new tab](images/owntracks9.png)
 
 
