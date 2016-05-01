@@ -8,8 +8,8 @@ https://(your_app_name).mybluemix.net/freeboard/winkboardautogroup - sample free
 -
 05/01/2016
 ------------
-Added support for OwnTracks app with HTTP mode. (IOS supported currently, Android is on the way)
-Fixed Presence clearing bug.
+* Added support for OwnTracks app with HTTP mode. (IOS supported currently, Android is on the way)
+* Fixed Presence clearing bug.
 
 Flow Editor:<br>
 *  Import updated [winkIntegration.json](winkIntegration.json)
