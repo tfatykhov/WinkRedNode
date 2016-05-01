@@ -1,8 +1,8 @@
 [
   {
-    "id": "9a038391.7e7b9",
+    "id": "ab91dbc.f546e28",
     "type": "inject",
-    "z": "7c147959.8f4298",
+    "z": "29d1ef73.d62e1",
     "name": "",
     "topic": "",
     "payload": "",
@@ -10,137 +10,137 @@
     "repeat": "300",
     "crontab": "",
     "once": true,
-    "x": 82,
-    "y": 55,
+    "x": 84,
+    "y": 60,
     "wires": [
       [
-        "555a815f.43bac",
-        "e6a4cec7.0b3d8"
+        "861a71c2.79e59",
+        "e37a5c10.1c85a"
       ]
     ]
   },
   {
-    "id": "a65f567a.577008",
+    "id": "43bb1c60.bc44e4",
     "type": "function",
-    "z": "7c147959.8f4298",
+    "z": "29d1ef73.d62e1",
     "name": "Prepare OAuth Request",
     "func": "var uid=context.global.Blink.uid;\nvar pwd=context.global.Blink.pwd;\nvar newMsg ={\n    \"url\":\"https://prod.immedia-semi.com/login\",\n    \"method\": \"POST\",\n    headers: {\n        \"Content-Type\":\"application/json\"\n    },\n    payload: {\n        \"email\": uid,\n        \"password\": pwd,\n        \"client_specifier\": \"iPhone 9.2 | 2.2 | 222\"\n    }\n};\nreturn newMsg;",
     "outputs": 1,
     "noerr": 0,
-    "x": 573,
-    "y": 55,
+    "x": 575,
+    "y": 60,
     "wires": [
       [
-        "ed551676.5034e8"
+        "619725e3.9e68dc"
       ]
     ]
   },
   {
-    "id": "555a815f.43bac",
+    "id": "861a71c2.79e59",
     "type": "function",
-    "z": "7c147959.8f4298",
+    "z": "29d1ef73.d62e1",
     "name": "Define email and password",
-    "func": "if (typeof context.global.Blink == 'undefined'){\n    context.global.Blink = {};\n    context.global.Blink.uid = \"\"; // Enter your Blink User e-mail here\n    context.global.Blink.pwd = \"\"; // Enter your Blink password here\n}\nreturn msg;",
+    "func": "if (typeof context.global.Blink == 'undefined'){\n    context.global.Blink = {};\n}\n    context.global.Blink.uid = \"\"; // \n    context.global.Blink.pwd = \"\"; // \n\nreturn msg;",
     "outputs": 1,
     "noerr": 0,
-    "x": 306,
-    "y": 55,
+    "x": 308,
+    "y": 60,
     "wires": [
       [
-        "a65f567a.577008"
+        "43bb1c60.bc44e4"
       ]
     ]
   },
   {
-    "id": "ed551676.5034e8",
+    "id": "619725e3.9e68dc",
     "type": "http request",
-    "z": "7c147959.8f4298",
+    "z": "29d1ef73.d62e1",
     "name": "",
     "method": "use",
     "ret": "obj",
     "url": "",
-    "x": 785,
-    "y": 55,
+    "x": 787,
+    "y": 60,
     "wires": [
       [
-        "eb6ad93f.d72738"
+        "774f2743.88b0d8"
       ]
     ]
   },
   {
-    "id": "eb6ad93f.d72738",
+    "id": "774f2743.88b0d8",
     "type": "function",
-    "z": "7c147959.8f4298",
+    "z": "29d1ef73.d62e1",
     "name": "Define Token",
     "func": "context.global.Blink.token = msg.payload.authtoken.authtoken;\nreturn msg;",
     "outputs": 1,
     "noerr": 0,
-    "x": 955,
-    "y": 55,
+    "x": 957,
+    "y": 60,
     "wires": [
       [
-        "f26f47ab.82ef78"
+        "ca00ce24.35ff3"
       ]
     ]
   },
   {
-    "id": "dc799a99.67a3e8",
+    "id": "effe643e.100198",
     "type": "function",
-    "z": "7c147959.8f4298",
+    "z": "29d1ef73.d62e1",
     "name": "Prepare Queries",
     "func": "var newMsg2 ={\n    \"url\":\"https://prod.immedia-semi.com/network/\"+context.global.Blink.network.id+\"/syncmodules\",\n    \"method\": \"GET\",\n    headers: {\n        \"Content-Type\":\"application/json\",\n        \"TOKEN_AUTH\":context.global.Blink.token\n    }\n};\n\nvar newMsg3 ={\n    \"url\":\"https://prod.immedia-semi.com/homescreen\",\n    \"method\": \"GET\",\n    headers: {\n        \"Content-Type\":\"application/json\",\n        \"TOKEN_AUTH\":context.global.Blink.token\n    }\n};\n\nvar newMsg4 ={\n    \"url\":\"https://prod.immedia-semi.com/events/network/\"+context.global.Blink.network.id,\n    \"method\": \"GET\",\n    headers: {\n        \"Content-Type\":\"application/json\",\n        \"TOKEN_AUTH\":context.global.Blink.token\n    }\n};\n\nreturn [newMsg2, newMsg3, newMsg4];",
     "outputs": "3",
     "noerr": 0,
-    "x": 277,
-    "y": 195,
+    "x": 279,
+    "y": 200,
     "wires": [
       [
-        "968328ea.457068"
+        "e0f1360a.1f0ec8"
       ],
       [
-        "fe6641a1.88f65"
+        "fd2ec40d.02d138"
       ],
       [
-        "ca19d278.adfcc"
+        "9b8b774a.647488"
       ]
     ]
   },
   {
-    "id": "545531ea.d2b9c",
+    "id": "1cf8412b.e307bf",
     "type": "http request",
-    "z": "7c147959.8f4298",
+    "z": "29d1ef73.d62e1",
     "name": "Get Networks",
     "method": "use",
     "ret": "obj",
     "url": "",
-    "x": 543,
-    "y": 125,
+    "x": 545,
+    "y": 130,
     "wires": [
       [
-        "cd104264.24a06"
+        "16dcaf50.e92351"
       ]
     ]
   },
   {
-    "id": "cd104264.24a06",
+    "id": "16dcaf50.e92351",
     "type": "function",
-    "z": "7c147959.8f4298",
+    "z": "29d1ef73.d62e1",
     "name": "",
     "func": "mp = msg.payload.networks[0];\n\ncontext.global.Blink.network={\n\t'id' : mp.id,\n\t'armed' : mp.armed,\n\t'autoarm_geo_enable' : mp.autoarm_geo_enable,\n\t'autoarm_time_enable' : mp.autoarm_time_enable,\n\t'video_destination' : mp.video_destination,\n\t'storage_used' : mp.storage_used,\n\t'storage_total' : mp.storage_total,\n\t'video_count' : mp.video_count,\n\t'busy' : mp.busy,\n\t'camera_error' : mp.camera_error,\n\t'sync_module_error' : mp.sync_module_error\n};\ncontext.global.Blink.account_id = mp.account_id;\nreturn msg;",
     "outputs": 1,
     "noerr": 0,
-    "x": 766,
-    "y": 125,
+    "x": 768,
+    "y": 130,
     "wires": [
       [
-        "dc799a99.67a3e8"
+        "effe643e.100198"
       ]
     ]
   },
   {
-    "id": "b1ee1905.e91c98",
+    "id": "9bde5884.6421a8",
     "type": "inject",
-    "z": "7c147959.8f4298",
+    "z": "29d1ef73.d62e1",
     "name": "",
     "topic": "",
     "payload": "",
@@ -148,48 +148,48 @@
     "repeat": "",
     "crontab": "",
     "once": false,
-    "x": 94,
-    "y": 195,
+    "x": 96,
+    "y": 200,
     "wires": [
       [
-        "dc799a99.67a3e8"
+        "effe643e.100198"
       ]
     ]
   },
   {
-    "id": "968328ea.457068",
+    "id": "e0f1360a.1f0ec8",
     "type": "http request",
-    "z": "7c147959.8f4298",
+    "z": "29d1ef73.d62e1",
     "name": "Get Sync Module Info",
     "method": "use",
     "ret": "obj",
     "url": "",
-    "x": 564,
-    "y": 160,
+    "x": 566,
+    "y": 165,
     "wires": [
       [
-        "646343aa.b47ecc"
+        "9f68b127.60975"
       ]
     ]
   },
   {
-    "id": "646343aa.b47ecc",
+    "id": "9f68b127.60975",
     "type": "function",
-    "z": "7c147959.8f4298",
+    "z": "29d1ef73.d62e1",
     "name": "",
     "func": "var sm = {};\nsm = msg.payload.syncmodule;\ncontext.global.Blink.syncmodule={\n    'id':sm.id,\n    'updated':sm.updated_at,\n    'name':sm.name,\n    'mac_address':sm.mac_address,\n    'serial':sm.serial,\n    'status':sm.status,\n    'onboarded':sm.onboarded,\n    'server':sm.server\n};\nreturn msg;",
     "outputs": 1,
     "noerr": 0,
-    "x": 766,
-    "y": 160,
+    "x": 768,
+    "y": 165,
     "wires": [
       []
     ]
   },
   {
-    "id": "5b46a049.338f4",
+    "id": "b9ee20c5.4611e",
     "type": "inject",
-    "z": "7c147959.8f4298",
+    "z": "29d1ef73.d62e1",
     "name": "",
     "topic": "",
     "payload": "",
@@ -197,34 +197,34 @@
     "repeat": "",
     "crontab": "",
     "once": true,
-    "x": 92,
-    "y": 90,
+    "x": 94,
+    "y": 95,
     "wires": [
       [
-        "e6a4cec7.0b3d8"
+        "e37a5c10.1c85a"
       ]
     ]
   },
   {
-    "id": "e6a4cec7.0b3d8",
+    "id": "e37a5c10.1c85a",
     "type": "function",
-    "z": "7c147959.8f4298",
+    "z": "29d1ef73.d62e1",
     "name": "Blink Global Functions",
     "func": "context.global.executeBlinkCMD = function(command){\n    var BlinkMsg={};\n    switch (command.toLowerCase()){\n        case 'arm':\n        case 'disarm':\n        BlinkMsg = {\n            \"url\":\"https://prod.immedia-semi.com/network/\"+context.global.Blink.network.id+\"/\"+command,\n            method: \"POST\",\n            headers: {\n                \"TOKEN_AUTH\":context.global.Blink.token\n            },\n            payload:{}\n        }\n        break;\n    }\n    if (typeof BlinkMsg.url!=='undefined' && BlinkMsg.url!==\"\")\n    {\n        node.send(BlinkMsg);\n    }\n};\nreturn;",
     "outputs": 1,
     "noerr": 0,
-    "x": 287,
-    "y": 90,
+    "x": 289,
+    "y": 95,
     "wires": [
       [
-        "1351af3a.5431b1"
+        "14a74c15.eb58b4"
       ]
     ]
   },
   {
-    "id": "2b774f42.36bbf",
+    "id": "23fe1ac.fdc01e6",
     "type": "inject",
-    "z": "7c147959.8f4298",
+    "z": "29d1ef73.d62e1",
     "name": "Arm",
     "topic": "",
     "payload": "arm",
@@ -232,18 +232,18 @@
     "repeat": "",
     "crontab": "",
     "once": false,
-    "x": 84,
-    "y": 428,
+    "x": 86,
+    "y": 433,
     "wires": [
       [
-        "b0292979.4f7118"
+        "934622b7.6cb9e"
       ]
     ]
   },
   {
-    "id": "a0d7ea76.a65ba8",
+    "id": "8a1ae21d.75e52",
     "type": "inject",
-    "z": "7c147959.8f4298",
+    "z": "29d1ef73.d62e1",
     "name": "Disarm",
     "topic": "",
     "payload": "disarm",
@@ -251,80 +251,80 @@
     "repeat": "",
     "crontab": "",
     "once": false,
-    "x": 85,
-    "y": 472,
+    "x": 87,
+    "y": 477,
     "wires": [
       [
-        "b0292979.4f7118"
+        "934622b7.6cb9e"
       ]
     ]
   },
   {
-    "id": "1351af3a.5431b1",
+    "id": "14a74c15.eb58b4",
     "type": "http request",
-    "z": "7c147959.8f4298",
+    "z": "29d1ef73.d62e1",
     "name": "",
     "method": "use",
     "ret": "obj",
     "url": "",
-    "x": 533,
-    "y": 90,
+    "x": 535,
+    "y": 95,
     "wires": [
       []
     ]
   },
   {
-    "id": "b0292979.4f7118",
+    "id": "934622b7.6cb9e",
     "type": "function",
-    "z": "7c147959.8f4298",
+    "z": "29d1ef73.d62e1",
     "name": "",
     "func": "context.global.executeBlinkCMD(msg.payload);\nreturn;",
     "outputs": 1,
     "noerr": 0,
-    "x": 278,
-    "y": 448,
+    "x": 280,
+    "y": 453,
     "wires": [
       [
-        "fa64ba91.a57028"
+        "2b19359.fd4e6ca"
       ]
     ]
   },
   {
-    "id": "fe6641a1.88f65",
+    "id": "fd2ec40d.02d138",
     "type": "http request",
-    "z": "7c147959.8f4298",
+    "z": "29d1ef73.d62e1",
     "name": "Get Homescreen Data",
     "method": "use",
     "ret": "obj",
     "url": "",
-    "x": 564,
-    "y": 195,
+    "x": 566,
+    "y": 200,
     "wires": [
       [
-        "91d1093d.231c18"
+        "9bb3f202.644c1"
       ]
     ]
   },
   {
-    "id": "91d1093d.231c18",
+    "id": "9bb3f202.644c1",
     "type": "function",
-    "z": "7c147959.8f4298",
+    "z": "29d1ef73.d62e1",
     "name": "",
     "func": "context.global.Blink.wifi_strength=msg.payload.network.wifi_strength;\ncontext.global.Blink.notification_count = msg.payload.network.notifications;\ncontext.global.Blink.cameras = {};\nvar cameras = [];\ncameras = msg.payload.devices;\nfor (i=0; i<cameras.length; i++) {\n    if (typeof cameras[i].name!=='undefined'){\n        context.global.Blink.cameras[cameras[i].name]={\n            'device_type':cameras[i].device_type,\n            'device_id':cameras[i].device_id,\n            'updated_at':cameras[i].updated_at,\n            'name':cameras[i].name,\n            'thumbnail':cameras[i].thumbnail,\n            'active':cameras[i].active,\n            'notifications':cameras[i].notifications,\n            'enabled':cameras[i].enabled,\n            'armed':cameras[i].armed,\n            'wifi_strength':cameras[i].wifi_strength,\n            'lfr_strength':cameras[i].lfr_strength,\n            'temp':cameras[i].temp,\n            'battery':cameras[i].battery\n        };\n    }\n}\nreturn msg;",
     "outputs": 1,
     "noerr": 0,
-    "x": 766,
-    "y": 195,
+    "x": 768,
+    "y": 200,
     "wires": [
       [
-        "cfd589ee.ef4d28"
+        "78ee2847.8711d8"
       ]
     ]
   },
   {
-    "id": "a385c859.0e54b8",
+    "id": "655c8289.9aa37c",
     "type": "inject",
-    "z": "7c147959.8f4298",
+    "z": "29d1ef73.d62e1",
     "name": "",
     "topic": "",
     "payload": "",
@@ -332,136 +332,136 @@
     "repeat": "",
     "crontab": "",
     "once": false,
-    "x": 623,
-    "y": 513,
+    "x": 625,
+    "y": 518,
     "wires": [
       [
-        "31b049cc.ecf966"
+        "5b3fcebb.a4c03"
       ]
     ]
   },
   {
-    "id": "31b049cc.ecf966",
+    "id": "5b3fcebb.a4c03",
     "type": "function",
-    "z": "7c147959.8f4298",
+    "z": "29d1ef73.d62e1",
     "name": "Clear Blink Data",
     "func": "for (var key in context.global.Blink.cameras)\n{\n    delete context.global.winkState.cameras[key];\n}\ndelete context.global.Blink;\n\nnode.warn(\"Blink data has been cleared.\")",
     "outputs": 1,
     "noerr": 0,
-    "x": 823,
-    "y": 513,
+    "x": 825,
+    "y": 518,
     "wires": [
       []
     ]
   },
   {
-    "id": "fa64ba91.a57028",
+    "id": "2b19359.fd4e6ca",
     "type": "http request",
-    "z": "7c147959.8f4298",
+    "z": "29d1ef73.d62e1",
     "name": "",
     "method": "GET",
     "ret": "txt",
     "url": "",
-    "x": 427,
-    "y": 448,
+    "x": 429,
+    "y": 453,
     "wires": [
       []
     ]
   },
   {
-    "id": "f26f47ab.82ef78",
+    "id": "ca00ce24.35ff3",
     "type": "function",
-    "z": "7c147959.8f4298",
+    "z": "29d1ef73.d62e1",
     "name": "Prepare Network Query",
     "func": "var newMsg1 ={\n    \"url\":\"https://prod.immedia-semi.com/networks\",\n    \"method\": \"GET\",\n    headers: {\n        \"Content-Type\":\"application/json\",\n        \"TOKEN_AUTH\":context.global.Blink.token\n    }\n};\n\nreturn newMsg1;",
     "outputs": 1,
     "noerr": 0,
-    "x": 297,
-    "y": 125,
+    "x": 299,
+    "y": 130,
     "wires": [
       [
-        "545531ea.d2b9c"
+        "1cf8412b.e307bf"
       ]
     ]
   },
   {
-    "id": "300bce28.182c62",
+    "id": "cecd6397.3132a",
     "type": "http request",
-    "z": "7c147959.8f4298",
+    "z": "29d1ef73.d62e1",
     "name": "Get Events Data",
     "method": "use",
     "ret": "obj",
     "url": "",
-    "x": 555,
-    "y": 250,
+    "x": 557,
+    "y": 255,
     "wires": [
       [
-        "859415ad.1ca0b8"
+        "330dcbfb.ccf234"
       ]
     ]
   },
   {
-    "id": "859415ad.1ca0b8",
+    "id": "330dcbfb.ccf234",
     "type": "function",
-    "z": "7c147959.8f4298",
+    "z": "29d1ef73.d62e1",
     "name": "",
-    "func": "context.global.Blink.events = {};\nif (typeof context.global.Blink.lastevent==\"undefined\"){ context.global.Blink.lastevent=0 }\nvar events = [];\nevents = msg.payload.event;\nvar matches=0;\nfor (i=0; i<events.length; i++) {\n    if (typeof events[i].id!=='undefined'){\n        context.global.Blink.events[events[i].id]={\n            'id':events[i].id,\n            'updated_at':events[i].updated_at,\n            'type':events[i].type,\n            'notified':events[i].notified,\n            'camera_id':events[i].camera_id,\n            'sync_module_id':events[i].sync_module_id,\n            'network_id':events[i].network_id,\n            'account_id':events[i].account_id,\n            'syncmodule':events[i].syncmodule,\n            'camera':events[i].camera,\n            'account':events[i].account,\n            'camera_name':events[i].camera_name,\n            'video_id':events[i].video_id,\n            'video_url':events[i].video_url\n        };\n    }\n}\nvar events = [];\nevents=context.global.Blink.events;\nfor (var key in events) {\n    if (events[key].type==\"motion\" && events[key].id>context.global.Blink.lastevent)\n    {\n        context.global.winkState.cameras[events[key].camera_name].snap_url=context.global.BlueMixUrlBase+\"/blink/snap?camera_name=\"+events[key].camera_name+\"&blinkevent=\"+events[key].id+\"&iftttkey=\"+context.global.FREEBOARD_TOKEN;\n        newmsg={\n            \"url\":context.global.BlueMixUrlBase+'/red/save_images?cam_list='+context.global.camera_motion[events[key].camera_name]+'&object_name='+events[key].camera_name,\n            \"method\": \"GET\",\n            headers: {\n                \"Authorization\":\"Bearer \"+context.global.FREEBOARD_TOKEN\n            }\n        };\n        node.warn(\"New event imported: \"+events[key].id+\" for camera \"+events[key].camera_name);\n        node.send(newmsg);\n        context.global.Blink.lastevent=events[key].id;\n        matches+=1;\n        break;\n    }\n}\nif (matches===0){\n    \n    for (var key in context.global.winkState.cameras)\n    {\n        if (context.global.winkState.cameras[key].eco_system==\"Blink\"){\n            context.global.winkState.cameras[key].snap_url=context.global.BlueMixUrlBase+\"/blink/snap?camera_name=\"+context.global.winkState.cameras[key].name;\n        }\n    }\n}\nreturn;",
+    "func": "context.global.Blink.events = {};\nif (typeof context.global.Blink.lastevent==\"undefined\"){ context.global.Blink.lastevent=0 }\nvar events = [];\nevents = msg.payload.event;\nvar matches=0;\nfor (i=0; i<events.length; i++) {\n    if (typeof events[i].id!=='undefined'){\n        context.global.Blink.events[events[i].id]={\n            'id':events[i].id,\n            'updated_at':events[i].updated_at,\n            'type':events[i].type,\n            'notified':events[i].notified,\n            'camera_id':events[i].camera_id,\n            'sync_module_id':events[i].sync_module_id,\n            'network_id':events[i].network_id,\n            'account_id':events[i].account_id,\n            'syncmodule':events[i].syncmodule,\n            'camera':events[i].camera,\n            'account':events[i].account,\n            'camera_name':events[i].camera_name,\n            'video_id':events[i].video_id,\n            'video_url':events[i].video_url\n        };\n    }\n}\nvar events = [];\nevents=context.global.Blink.events;\nif(typeof context.global.winkState.cameras == 'undefined') context.global.winkState.cameras={};\nfor (var key in events) {\n    if (events[key].type==\"motion\" && events[key].id>context.global.Blink.lastevent)\n    {\n        context.global.winkState.cameras[events[key].camera_name].snap_url=context.global.BlueMixUrlBase+\"/blink/snap?camera_name=\"+events[key].camera_name+\"&blinkevent=\"+events[key].id+\"&iftttkey=\"+context.global.FREEBOARD_TOKEN;\n        newmsg={\n            \"url\":context.global.BlueMixUrlBase+'/red/save_images?cam_list='+context.global.camera_motion[events[key].camera_name]+'&object_name='+events[key].camera_name,\n            \"method\": \"GET\",\n            headers: {\n                \"Authorization\":\"Bearer \"+context.global.FREEBOARD_TOKEN\n            }\n        };\n        node.warn(\"New event imported: \"+events[key].id+\" for camera \"+events[key].camera_name);\n        node.send(newmsg);\n        context.global.Blink.lastevent=events[key].id;\n        matches+=1;\n        break;\n    }\n}\nif (matches===0){\n    \n    for (var key in context.global.winkState.cameras)\n    {\n        if (context.global.winkState.cameras[key].eco_system==\"Blink\"){\n            context.global.winkState.cameras[key].snap_url=context.global.BlueMixUrlBase+\"/blink/snap?camera_name=\"+context.global.winkState.cameras[key].name;\n        }\n    }\n}\nreturn;",
     "outputs": 1,
     "noerr": 0,
-    "x": 766,
-    "y": 230,
+    "x": 768,
+    "y": 235,
     "wires": [
       [
-        "fbdf44d3.692fd8",
-        "cebbe019.feda6"
+        "aefd759a.510288",
+        "54016923.abfe98"
       ]
     ]
   },
   {
-    "id": "6f26d290.80c99c",
+    "id": "ce7efc36.3181",
     "type": "http in",
-    "z": "7c147959.8f4298",
+    "z": "29d1ef73.d62e1",
     "name": "",
     "url": "/blink/cmd/*",
     "method": "get",
     "swaggerDoc": "",
-    "x": 85,
-    "y": 590,
+    "x": 87,
+    "y": 595,
     "wires": [
       [
-        "31a9275c.9fee78"
+        "cd3993dd.32c67"
       ]
     ]
   },
   {
-    "id": "31a9275c.9fee78",
+    "id": "cd3993dd.32c67",
     "type": "function",
-    "z": "7c147959.8f4298",
+    "z": "29d1ef73.d62e1",
     "name": "Command msg",
     "func": "var web_req=(context.global.getCookie('exchange_token',msg.req.headers.cookie)=='0' ? false:true);\nif (msg.payload.iftttkey==context.global.IFTTT_TOKEN || msg.payload.iftttkey==context.global.FREEBOARD_TOKEN || (msg.req.headers.authorization && msg.req.headers.authorization==\"Bearer \"+context.global.FREEBOARD_TOKEN)) web_req=true;\nif (web_req)\n{\n    var command=msg.req.originalUrl.split('/').pop();\n    msg.statusCode=200;\n    context.global.executeBlinkCMD(command);\n}\nelse {\n    node.warn(\"ifttt messages bad request\");\n    msg.statusCode=403;\n}\nreturn msg;\n",
     "outputs": 1,
     "noerr": 0,
-    "x": 280,
-    "y": 590,
+    "x": 282,
+    "y": 595,
     "wires": [
       [
-        "f7dfac17.f567c"
+        "321a2675.cde5da"
       ]
     ]
   },
   {
-    "id": "f7dfac17.f567c",
+    "id": "321a2675.cde5da",
     "type": "http response",
-    "z": "7c147959.8f4298",
+    "z": "29d1ef73.d62e1",
     "name": "",
-    "x": 435,
-    "y": 590,
+    "x": 437,
+    "y": 595,
     "wires": []
   },
   {
-    "id": "14230aa2.19e045",
+    "id": "f6cbb1cb.09345",
     "type": "inject",
-    "z": "7c147959.8f4298",
+    "z": "29d1ef73.d62e1",
     "name": "",
     "topic": "",
     "payload": "",
@@ -469,293 +469,293 @@
     "repeat": "",
     "crontab": "",
     "once": false,
-    "x": 91,
-    "y": 330,
+    "x": 93,
+    "y": 335,
     "wires": [
       [
-        "cfd589ee.ef4d28"
+        "78ee2847.8711d8"
       ]
     ]
   },
   {
-    "id": "cfd589ee.ef4d28",
+    "id": "78ee2847.8711d8",
     "type": "function",
-    "z": "7c147959.8f4298",
+    "z": "29d1ef73.d62e1",
     "name": "Blink Cameras into winkState",
-    "func": "for (var key in context.global.Blink.cameras)\n{\n    var bc = context.global.Blink.cameras[key];\n    context.global.camera_motion[bc.name]=[bc.name]\n    context.global.winkState.cameras[bc.name]={\n        'name':bc.name,\n        'object_type':\"cameras\",\n        'eco_system':\"Blink\",\n        'object_id':bc.device_id,\n        'manufacturer_device_model':\"Blink Camera\",\n        'connection':true,\n        'capturing_audio':false,\n        'capturing_video':false,\n        'url':context.global.BlueMixUrlBase+\"/blink/snap?camera_name=\"+bc.name,\n        'snap_url':context.global.BlueMixUrlBase+\"/blink/snap?camera_name=\"+bc.name,\n        'history_url':context.global.BlueMixUrlBase+\"/freeboard/cameraSnapshots?token=\"+context.global.FREEBOARD_TOKEN+\"&camera_name=\"+bc.name,\n        'refresh_time':30,\n        'motion': \"N/A\",\n        'activities':[]\n    };\n    context.global.winkState.sensor_pods[bc.name]={\n        'eco_system':\"Blink\",\n        'name':bc.name,\n        'object_type':\"sensor_pods\",\n        'object_id':bc.device_id,\n        'device_manufacturer':\"Blink\",\n        'temperature':((bc.temp-32)*5/9),\n        'connection':true\n    };\n    context.global.winkDevCap[bc.name]={\n        \"fields\":[{\"field\":\"temperature\",\"mutability\":\"read-only\",\"type\":\"float\"}]\n    };\n    var newmsg ={\n        \"url\":context.global.BlueMixUrlBase+'/red/retrieve_activities?camera_name='+bc.name,\n        \"method\": \"GET\",\n        headers: {\n            \"Authorization\":\"Bearer \"+context.global.FREEBOARD_TOKEN\n        }\n    };\n    node.send(newmsg);\n}\n\nreturn;",
+    "func": "for (var key in context.global.Blink.cameras)\n{\n    var bc = context.global.Blink.cameras[key];\n    if(typeof context.global.camera_motion == 'undefined') context.global.camera_motion={};\n    context.global.camera_motion[bc.name]=[bc.name]\n    if(typeof context.global.winkState.cameras == 'undefined') context.global.winkState.cameras={};\n    context.global.winkState.cameras[bc.name]={\n        'name':bc.name,\n        'object_type':\"cameras\",\n        'eco_system':\"Blink\",\n        'object_id':bc.device_id,\n        'manufacturer_device_model':\"Blink Camera\",\n        'connection':true,\n        'capturing_audio':false,\n        'capturing_video':false,\n        'url':context.global.BlueMixUrlBase+\"/blink/snap?camera_name=\"+bc.name,\n        'snap_url':context.global.BlueMixUrlBase+\"/blink/snap?camera_name=\"+bc.name,\n        'history_url':context.global.BlueMixUrlBase+\"/freeboard/cameraSnapshots?token=\"+context.global.FREEBOARD_TOKEN+\"&camera_name=\"+bc.name,\n        'refresh_time':30,\n        'motion': \"N/A\",\n        'activities':[]\n    };\n    context.global.winkState.sensor_pods[bc.name]={\n        'eco_system':\"Blink\",\n        'name':bc.name,\n        'object_type':\"sensor_pods\",\n        'object_id':bc.device_id,\n        'device_manufacturer':\"Blink\",\n        'temperature':((bc.temp-32)*5/9),\n        'connection':true\n    };\n    context.global.winkDevCap[bc.name]={\n        \"fields\":[{\"field\":\"temperature\",\"mutability\":\"read-only\",\"type\":\"float\"}]\n    };\n    var newmsg ={\n        \"url\":context.global.BlueMixUrlBase+'/red/retrieve_activities?camera_name='+bc.name,\n        \"method\": \"GET\",\n        headers: {\n            \"Authorization\":\"Bearer \"+context.global.FREEBOARD_TOKEN\n        }\n    };\n    node.send(newmsg);\n}\n\nreturn;",
     "outputs": 1,
     "noerr": 0,
-    "x": 356,
-    "y": 336,
+    "x": 358,
+    "y": 341,
     "wires": [
       [
-        "b26cbe0f.6291e"
+        "a9dacba2.562538"
       ]
     ]
   },
   {
-    "id": "435e4717.dada58",
+    "id": "6857d2b1.97a82c",
     "type": "http in",
-    "z": "7c147959.8f4298",
+    "z": "29d1ef73.d62e1",
     "name": "",
     "url": "/blink/thumb",
     "method": "get",
     "swaggerDoc": "",
-    "x": 85,
-    "y": 625,
+    "x": 87,
+    "y": 630,
     "wires": [
       [
-        "7ea397b9.8654f8"
+        "7b1994cb.84e66c"
       ]
     ]
   },
   {
-    "id": "7ea397b9.8654f8",
+    "id": "7b1994cb.84e66c",
     "type": "function",
-    "z": "7c147959.8f4298",
+    "z": "29d1ef73.d62e1",
     "name": "Get thumb jpg",
     "func": "var web_req=(context.global.getCookie('exchange_token',msg.req.headers.cookie)=='0' ? false:true);\nif (msg.payload.iftttkey==context.global.IFTTT_TOKEN || msg.payload.iftttkey==context.global.FREEBOARD_TOKEN || (msg.req.headers.authorization && msg.req.headers.authorization==\"Bearer \"+context.global.FREEBOARD_TOKEN)) web_req=true;\nif (web_req)\n{\n    msg.statusCode=200;\n    msg.url=\"https://prod.immedia-semi.com\"+context.global.Blink.cameras[msg.payload.camera_name].thumbnail+\".jpg\";\n    msg.method=\"GET\";\n    msg.headers={\"TOKEN_AUTH\":context.global.Blink.token};\n    return [msg,null];\n}\nelse {\n    node.warn(\"ifttt messages bad request\");\n    msg.payload=\"403: Bad request\";\n    msg.statusCode=403;\n    return [null,msg];\n}\nreturn msg;\n",
     "outputs": "2",
     "noerr": 0,
-    "x": 280,
-    "y": 625,
+    "x": 282,
+    "y": 630,
     "wires": [
       [
-        "6646163f.dad238"
+        "1827b5e4.e7d84a"
       ],
       [
-        "a897ed1b.253a"
+        "310e7f94.cef18"
       ]
     ]
   },
   {
-    "id": "c0ecedc9.0ef9c",
+    "id": "b84d3c58.47b2c",
     "type": "http response",
-    "z": "7c147959.8f4298",
+    "z": "29d1ef73.d62e1",
     "name": "",
-    "x": 604,
-    "y": 625,
+    "x": 606,
+    "y": 630,
     "wires": []
   },
   {
-    "id": "6646163f.dad238",
+    "id": "1827b5e4.e7d84a",
     "type": "http request",
-    "z": "7c147959.8f4298",
+    "z": "29d1ef73.d62e1",
     "name": "",
     "method": "use",
     "ret": "bin",
     "url": "",
-    "x": 454,
-    "y": 625,
+    "x": 456,
+    "y": 630,
     "wires": [
       [
-        "c0ecedc9.0ef9c"
+        "b84d3c58.47b2c"
       ]
     ]
   },
   {
-    "id": "b26cbe0f.6291e",
+    "id": "a9dacba2.562538",
     "type": "http request",
-    "z": "7c147959.8f4298",
+    "z": "29d1ef73.d62e1",
     "name": "",
     "method": "use",
     "ret": "obj",
     "url": "",
-    "x": 589,
-    "y": 336,
+    "x": 591,
+    "y": 341,
     "wires": [
       []
     ]
   },
   {
-    "id": "6b791978.8852b8",
+    "id": "697428f7.968bd8",
     "type": "http in",
-    "z": "7c147959.8f4298",
+    "z": "29d1ef73.d62e1",
     "name": "",
     "url": "/blink/snap",
     "method": "get",
     "swaggerDoc": "",
-    "x": 85,
-    "y": 715,
+    "x": 87,
+    "y": 720,
     "wires": [
       [
-        "c33d6c67.580a3",
-        "6d224586.ae18fc"
+        "303d1188.cfc2ee",
+        "fee38901.011c78"
       ]
     ]
   },
   {
-    "id": "c33d6c67.580a3",
+    "id": "303d1188.cfc2ee",
     "type": "function",
-    "z": "7c147959.8f4298",
+    "z": "29d1ef73.d62e1",
     "name": "Validate Web Req",
     "func": "var web_req=(context.global.getCookie('exchange_token',msg.req.headers.cookie)=='0' ? false:true);\nif (msg.payload.iftttkey==context.global.IFTTT_TOKEN || msg.payload.iftttkey==context.global.FREEBOARD_TOKEN || (msg.req.headers.authorization && msg.req.headers.authorization==\"Bearer \"+context.global.FREEBOARD_TOKEN)) web_req=true;\ncontext.global.snapreq = {};\nif (web_req)\n{\n    if(typeof msg.payload.blinkevent!==\"undefined\")\n    {\n        msg.payload={\n            'camera_name':msg.payload.camera_name,\n            'blinkevent':msg.payload.blinkevent\n        }\n    }\n    else {\n        msg.payload={\n            'camera_name':msg.payload.camera_name,\n        }\n    }\n    return [msg,null];\n}\nelse {\n    node.warn(\"ifttt messages bad request\");\n    msg.statusCode=403;\n    msg.payload=\"403: Bad request\";\n    return [null,msg];\n}\n",
     "outputs": "2",
     "noerr": 0,
-    "x": 290,
-    "y": 715,
+    "x": 292,
+    "y": 720,
     "wires": [
       [
-        "688b3b45.8d2c64"
+        "d773fa5a.288c08"
       ],
       [
-        "54e10a97.d390f4"
+        "ba9c32b3.4563d"
       ]
     ]
   },
   {
-    "id": "1e197bb8.9a7a74",
+    "id": "490ae9d9.b6f518",
     "type": "http response",
-    "z": "7c147959.8f4298",
+    "z": "29d1ef73.d62e1",
     "name": "",
-    "x": 904,
-    "y": 715,
+    "x": 906,
+    "y": 720,
     "wires": []
   },
   {
-    "id": "a8b2de1e.e3647",
+    "id": "6a66ec7f.959914",
     "type": "http request",
-    "z": "7c147959.8f4298",
+    "z": "29d1ef73.d62e1",
     "name": "",
     "method": "use",
     "ret": "bin",
     "url": "",
-    "x": 754,
-    "y": 715,
+    "x": 756,
+    "y": 720,
     "wires": [
       [
-        "1e197bb8.9a7a74"
+        "490ae9d9.b6f518"
       ]
     ]
   },
   {
-    "id": "688b3b45.8d2c64",
+    "id": "d773fa5a.288c08",
     "type": "function",
-    "z": "7c147959.8f4298",
+    "z": "29d1ef73.d62e1",
     "name": "",
-    "func": "var events = context.global.Blink.events;\nvar id = \"0\";\nvar snap_url=\"\";\nfor (var e in events)\n{\n    if(events[e].type==\"motion\")\n    {\n        if((typeof msg.payload.blinkevent == \"undefined\") && events[e].camera_name == msg.payload.camera_name && events[e].id>id)\n        {\n            id=events[e].id;\n            snap_url=\"https://prod.immedia-semi.com/\"+events[e].video_url.replace(\".mp4\",\".jpg\");\n        }\n        else if (msg.payload.blinkevent>0 && events[e].id==msg.payload.blinkevent && events[e].camera_name == msg.payload.camera_name)\n        {\n            id=events[e].id;\n            snap_url=\"https://prod.immedia-semi.com/\"+events[e].video_url.replace(\".mp4\",\".jpg\");\n        }\n    }\n}\nif (id>1 && snap_url!==\"\" && snap_url!==\"https://prod.immedia-semi.com/events/network/\"+context.global.Blink.network.id)\n{\n    msg.url=snap_url;\n    msg.method=\"GET\";\n    msg.headers={\"TOKEN_AUTH\":context.global.Blink.token};\n}\nelse\n{\n    msg.url=\"https://prod.immedia-semi.com\"+context.global.Blink.cameras[msg.payload.camera_name].thumbnail+\".jpg\";\n    msg.method=\"GET\";\n    msg.headers={\"TOKEN_AUTH\":context.global.Blink.token};\n}\nreturn msg;",
+    "func": "var events = context.global.Blink.events;\nvar id = \"0\";\nvar snap_url=\"\";\nfor (var e in events)\n{\n    if(events[e].type==\"motion\" && \"video_url\" in events[e])\n    {\n        if(typeof events[e].video_url=='undefined') events[e].video_url=context.global.Blink.cameras[events[e].camera_name].thumbnail\n        if((typeof msg.payload.blinkevent == \"undefined\") && events[e].camera_name == msg.payload.camera_name && events[e].id>id)\n        {\n            id=events[e].id;\n            snap_url=\"https://prod.immedia-semi.com/\"+events[e].video_url.replace(\".mp4\",\".jpg\");\n        }\n        else if (msg.payload.blinkevent>0 && events[e].id==msg.payload.blinkevent && events[e].camera_name == msg.payload.camera_name)\n        {\n            id=events[e].id;\n            snap_url=\"https://prod.immedia-semi.com/\"+events[e].video_url.replace(\".mp4\",\".jpg\");\n        }\n    }\n}\nif (id>1 && snap_url!==\"\" && snap_url!==\"https://prod.immedia-semi.com/events/network/\"+context.global.Blink.network.id)\n{\n    msg.url=snap_url;\n    msg.method=\"GET\";\n    msg.headers={\"TOKEN_AUTH\":context.global.Blink.token};\n}\nelse\n{\n    msg.url=\"https://prod.immedia-semi.com\"+context.global.Blink.cameras[msg.payload.camera_name].thumbnail+\".jpg\";\n    msg.method=\"GET\";\n    msg.headers={\"TOKEN_AUTH\":context.global.Blink.token};\n}\nreturn msg;",
     "outputs": 1,
     "noerr": 0,
-    "x": 495,
-    "y": 715,
+    "x": 497,
+    "y": 720,
     "wires": [
       [
-        "a8b2de1e.e3647",
-        "a5fbf113.0d0d",
-        "bc82801e.bac77"
+        "6a66ec7f.959914",
+        "72712ff0.8d8ed",
+        "a06e76dd.5f9188"
       ]
     ]
   },
   {
-    "id": "ca4200be.a2b7a",
+    "id": "bcc361c1.433ca",
     "type": "comment",
-    "z": "7c147959.8f4298",
+    "z": "29d1ef73.d62e1",
     "name": "Web Services",
     "info": "",
-    "x": 75,
-    "y": 553,
+    "x": 77,
+    "y": 558,
     "wires": []
   },
   {
-    "id": "c0107098.74fd9",
+    "id": "e0eda8d2.1f1258",
     "type": "comment",
-    "z": "7c147959.8f4298",
+    "z": "29d1ef73.d62e1",
     "name": "Import from Blink API into context.global.Blink",
     "info": "",
-    "x": 175,
-    "y": 20,
+    "x": 177,
+    "y": 25,
     "wires": []
   },
   {
-    "id": "f31bb45.f7af548",
+    "id": "8ec75ce.f7138a",
     "type": "comment",
-    "z": "7c147959.8f4298",
+    "z": "29d1ef73.d62e1",
     "name": "Import from context.global.Blink into winkState",
     "info": "",
-    "x": 185,
-    "y": 293,
+    "x": 187,
+    "y": 298,
     "wires": []
   },
   {
-    "id": "9e461463.2acf48",
+    "id": "ded4139b.212bf",
     "type": "comment",
-    "z": "7c147959.8f4298",
+    "z": "29d1ef73.d62e1",
     "name": "v---- Update \"Define username and password\" node to your Blink account e-mail and password",
     "info": "",
-    "x": 681,
-    "y": 20,
+    "x": 683,
+    "y": 25,
     "wires": []
   },
   {
-    "id": "2a815d85.e3ba62",
+    "id": "5b75fd1e.a48a04",
     "type": "comment",
-    "z": "7c147959.8f4298",
+    "z": "29d1ef73.d62e1",
     "name": "Arm / Disarm Blink manually through using the Inject button",
     "info": "",
-    "x": 225,
-    "y": 392,
+    "x": 227,
+    "y": 397,
     "wires": []
   },
   {
-    "id": "bc82801e.bac77",
+    "id": "a06e76dd.5f9188",
     "type": "debug",
-    "z": "7c147959.8f4298",
+    "z": "29d1ef73.d62e1",
     "name": "",
     "active": false,
     "console": "false",
     "complete": "url",
-    "x": 698,
-    "y": 776,
+    "x": 700,
+    "y": 781,
     "wires": []
   },
   {
-    "id": "54e10a97.d390f4",
+    "id": "ba9c32b3.4563d",
     "type": "http response",
-    "z": "7c147959.8f4298",
+    "z": "29d1ef73.d62e1",
     "name": "",
-    "x": 495,
-    "y": 749,
+    "x": 497,
+    "y": 754,
     "wires": []
   },
   {
-    "id": "a897ed1b.253a",
+    "id": "310e7f94.cef18",
     "type": "http response",
-    "z": "7c147959.8f4298",
+    "z": "29d1ef73.d62e1",
     "name": "",
-    "x": 434,
-    "y": 660,
+    "x": 436,
+    "y": 665,
     "wires": []
   },
   {
-    "id": "fbdf44d3.692fd8",
+    "id": "aefd759a.510288",
     "type": "http request",
-    "z": "7c147959.8f4298",
+    "z": "29d1ef73.d62e1",
     "name": "",
     "method": "use",
     "ret": "obj",
     "url": "",
-    "x": 907,
-    "y": 230,
+    "x": 904,
+    "y": 235,
     "wires": [
       []
     ]
   },
   {
-    "id": "cebbe019.feda6",
+    "id": "54016923.abfe98",
     "type": "debug",
-    "z": "7c147959.8f4298",
+    "z": "29d1ef73.d62e1",
     "name": "",
     "active": false,
     "console": "false",
     "complete": "url",
-    "x": 888,
-    "y": 274,
+    "x": 890,
+    "y": 279,
     "wires": []
   },
   {
-    "id": "ca19d278.adfcc",
+    "id": "9b8b774a.647488",
     "type": "delay",
-    "z": "7c147959.8f4298",
+    "z": "29d1ef73.d62e1",
     "name": "",
     "pauseType": "delay",
     "timeout": "10",
@@ -766,18 +766,18 @@
     "randomLast": "5",
     "randomUnits": "seconds",
     "drop": false,
-    "x": 376,
-    "y": 250,
+    "x": 378,
+    "y": 255,
     "wires": [
       [
-        "300bce28.182c62"
+        "cecd6397.3132a"
       ]
     ]
   },
   {
-    "id": "e4cbae1a.d0a3e",
+    "id": "453e361e.bac1c8",
     "type": "inject",
-    "z": "7c147959.8f4298",
+    "z": "29d1ef73.d62e1",
     "name": "",
     "topic": "",
     "payload": "",
@@ -785,54 +785,54 @@
     "repeat": "",
     "crontab": "",
     "once": false,
-    "x": 802,
-    "y": 414,
+    "x": 804,
+    "y": 419,
     "wires": [
       [
-        "5a916853.fd1298"
+        "495015ef.b6afec"
       ]
     ]
   },
   {
-    "id": "5a916853.fd1298",
+    "id": "495015ef.b6afec",
     "type": "function",
-    "z": "7c147959.8f4298",
+    "z": "29d1ef73.d62e1",
     "name": "",
     "func": "context.global.Blink.lastevent=\"21955477\";",
     "outputs": 1,
     "noerr": 0,
-    "x": 952,
-    "y": 414,
+    "x": 954,
+    "y": 419,
     "wires": [
       []
     ]
   },
   {
-    "id": "a5fbf113.0d0d",
+    "id": "72712ff0.8d8ed",
     "type": "function",
-    "z": "7c147959.8f4298",
+    "z": "29d1ef73.d62e1",
     "name": "",
     "func": "var newMsg4 ={\n    \"url\":\"https://prod.immedia-semi.com/events/network/\"+context.global.Blink.network.id,\n    \"method\": \"GET\",\n    headers: {\n        \"Content-Type\":\"application/json\",\n        \"TOKEN_AUTH\":context.global.Blink.token\n    }\n};\nreturn newMsg4;",
     "outputs": 1,
     "noerr": 0,
-    "x": 458,
-    "y": 497,
+    "x": 460,
+    "y": 502,
     "wires": [
       [
-        "300bce28.182c62"
+        "cecd6397.3132a"
       ]
     ]
   },
   {
-    "id": "6d224586.ae18fc",
+    "id": "fee38901.011c78",
     "type": "debug",
-    "z": "7c147959.8f4298",
+    "z": "29d1ef73.d62e1",
     "name": "",
     "active": false,
     "console": "false",
     "complete": "true",
-    "x": 287,
-    "y": 807,
+    "x": 289,
+    "y": 812,
     "wires": []
   }
 ]
