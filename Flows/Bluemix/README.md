@@ -6,6 +6,29 @@ https://(your_app_name).mybluemix.net/freeboard/winkboardautogroup - sample free
 
 == UPDATE ==
 -
+05/01/2016
+------------
+Added support for OwnTracks app with HTTP mode. (IOS supported currently, Android is on the way)
+Fixed Presence clearing bug.
+
+Flow Editor:<br>
+*  Import updated [winkIntegration.json](winkIntegration.json)
+*  Import updated [tabletUI.json](tabletUI.json)
+
+Bluemix git console:<br>
+*  re-deploy application 
+
+##### Setting up OwnTracks support:
+* Navigate to configuration tab in tablet ui, and Look for OwnTracks Personal Key entry in Integration Settings
+![owntracks settings](images/owntracks1.png)
+* Enter random Aplha-numeric only string _no special symbols_. You can use following [Random String Generator](https://www.random.org/strings/?num=1&len=7&digits=on&upperalpha=on&loweralpha=on&unique=on&format=html&rnd=new)
+* Click Submit button to save it.
+* Get OwnTracks application from app store on your phone.
+* Configure Owntracks app using [OwnTracks readme](owntracks.md)
+* 
+
+
+
 04/16/2016
 ------------
 Clear nonWink devices and Presence entries from cache.
