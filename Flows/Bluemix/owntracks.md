@@ -5,7 +5,7 @@
 ![image of onwtrack app](images/owntracks5.png)
  * click on Connection, then Mode and select HTTP Private
  ![image of onwtrack app](images/owntracks6.png)
- *  Click on Host and put following url: `https://your_app_name.mybluemix.net/loc/your_name/owntracks_secret_key`
+ *  Click on Host and put following url: `https://your_app_name.mybluemix.net/red/loc/your_name/owntracks_secret_key'
   *  *your_name* is a sensor name you would like to see in Node red (case sensitive)
   * *owntracks_secret_key* is a code phrase you configured in winkNodeRed configuration tab
   
