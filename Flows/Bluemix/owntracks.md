@@ -19,3 +19,4 @@
  ![image of onwtrack app](images/owntracks3.png)
  * In the Region screen - put name as home (all letters lower case), click on locate button if you are at home or populate gps coordiantes manually, then also select geofence radius in meters. And click "check" button to save it.
  ![image of onwtrack app](images/owntracks4.png)
+* make sure that _"share"_  in the region settings is turned on. This 
