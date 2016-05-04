@@ -22,9 +22,8 @@ Flow Editor:<br>
 
 #####Presence shortcut support:
 To avoid future confusion you need to define following wink shortcuts:<br>
-	1. PRESENCE DAY / PRESENCE NIGHT - these will be executed when global presence status will change to true(somebody arrived) before sunset/after sunset<br>
-
-	2.  NO PRESENCE DAY / NO PRESENCE NIGHT - these will be executed when global presence status will change to false (everybody left) before sunset/after sunset<br>
+* PRESENCE DAY / PRESENCE NIGHT - these will be executed when global presence status will change to true(somebody arrived) before sunset/after sunset<br>
+* NO PRESENCE DAY / NO PRESENCE NIGHT - these will be executed when global presence status will change to false (everybody left) before sunset/after sunset<br>
 	
 
 05/01/2016
