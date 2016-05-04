@@ -6,6 +6,27 @@ https://(your_app_name).mybluemix.net/freeboard/winkboardautogroup - sample free
 
 == UPDATE ==
 -
+05/04/2016
+------------
+* Owntracks additions:
+* Added WNR defined geo-radius.
+* Enhancements to presence detection and shortcut execution.
+
+Flow Editor:<br>
+*  Import updated [winkIntegration.json](winkIntegration.json)
+*  Import updated [tabletUI.json](tabletUI.json)
+
+* Navigate to configuration/Integration settings and scroll down to OwnTracks section and define your geofence radius.<br>
+![owntracks settings](images/owntracks10.png)
+* click "submit"
+
+#####Presence shortcut support:
+To avoid future confusion you need to define following wink shortcuts:<br>
+	1. PRESENCE DAY / PRESENCE NIGHT - these will be executed when global presence status will change to true(somebody arrived) before sunset/after sunset<br>
+
+	2.  NO PRESENCE DAY / NO PRESENCE NIGHT - these will be executed when global presence status will change to false (everybody left) before sunset/after sunset<br>
+	
+
 05/01/2016
 ------------
 * Added support for OwnTracks app with HTTP mode. (IOS supported currently, Android is on the way)
