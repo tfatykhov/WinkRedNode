@@ -13,7 +13,7 @@ This application is Node-Red based app which helps joining together various syst
 * Lifx http://lifx.com (color wifi enabled ligjt bulbs)
 * IFTTT http://ifttt.com (connecting services and more together)
 * Forecast.io http://forecast.io (one of the best weather forecast systems)
-* Blue Iris http://blueiris.com (inexpensive solution for vide monitoring)
+* Blue Iris http://blueiris.com (inexpensive solution for video monitoring)
 * BloomSky http://bloomsky.com (community based weather station and sky camera)
 * Several ip cameras (Foscam, D-link, Samsung)
 * OwnTracks app support for geofencing and location sharing http://owntracks.org
