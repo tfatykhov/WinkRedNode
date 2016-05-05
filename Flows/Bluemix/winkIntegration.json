@@ -1,5 +1,22 @@
 [
   {
+    "id": "32d823cc.59d5cc",
+    "type": "function",
+    "z": "17b3daf5.e84c25",
+    "name": "",
+    "func": "// Converts numeric degrees to radians\nfunction toRad(Value) {\n    return Value * Math.PI / 180;\n}\n\n\nfunction calcCrow(lat1, lon1, lat2, lon2) {\n  var R = 6371; // km\n  var dLat = toRad(lat2 - lat1);\n  var dLon = toRad(lon2 - lon1);\n  Rlat1 = toRad(lat1);\n  Rlat2 = toRad(lat2);\n\n  var a = Math.sin(dLat / 2) * Math.sin(dLat / 2) +\n    Math.sin(dLon/2) * Math.sin(dLon/2) * Math.cos(Rlat1) * Math.cos(Rlat2); \n  var c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a)); \n  var d = R * c;\n  return d;\n}\n\n\n\nif (context.global.OwnTracksPwd === msg.req.params.key) {\n    context.global.OwnTracksGeoRadius = context.global.OwnTracksGeoRadius || 100;    \n    if('_type' in msg.payload) {\n        if (msg.payload._type === 'encrypted') {\n            var secret = context.global.OwnTracksPwd;\n            var cypherText = new Buffer(msg.payload.data, 'base64');\n            var nonce = cypherText.slice(0,24);\n            var key = new Buffer(32);\n            key.fill(0);\n            key.write(secret);\n            try {\n                var clearText = context.global.wnr.sodium.crypto_secretbox_open_easy(cypherText.slice(24),nonce,key,\"text\");\n            } catch (e) {\n                node.warn(\"error decrypting payload\");\n                return;\n            }\n            try{\n                var clearObj = JSON.parse(clearText);\n            } catch (e) {\n                node.warn(\"decrypted message not JSON\");\n                return;\n            }\n            msg.payload = clearObj; \n        }\n        var waypoint,user,pos;\n        var dst_from_home=-1;    \n        var do_send=false;\n        if (msg.payload._type === 'transition') {\n            waypoint = true;\n            do_send = true;\n            user = msg.req.params.user;\n            pos = msg.payload;\n        }\n        if (msg.payload._type === 'location') {\n        waypoint = false;\n        do_send = true;\n        user = msg.req.params.user;\n        pos = msg.payload;\n        }\n        if (do_send) {\n            if (!('Presence' in context.global)) context.global.Presence={};\n            if (!(user in context.global.Presence)) context.global.Presence[user]={\"home\":\"no\"};\n            var event_trigger='none';\n            if ('t' in pos) event_trigger=pos.t;   \n                if ('HomeLocation' in context.global){ \n                    dst_from_home=Math.round(calcCrow(pos.lat,pos.lon,context.global.HomeLocation.lat,context.global.HomeLocation.lon)*1000);\n                }        \n            loc_msg={\n                url:context.global.BlueMixUrlBase+'/red/wink/subscribtions',\n                method:\"POST\",\n                payload: {\n                     capabilities: { fields: [ \n                      { field: 'lat', type: 'float' },\n                      { field: 'lon', type: 'float' },\n                      { field: 'battery', type: 'percentage' },\n                      { field: 'lastWaypoint', type: 'string' },\n                      { field: 'lastEvent', type: 'string' },\n                      { field: 'accuracy', type: 'float' },\n                      { field: 'distanceFromHome', type: 'float' },\n                      { field: 'trigger', type: 'string' },\n                      { field: 'lastUpdated', type: 'timestamp'}\n                      ] },\n                  device_manufacturer: 'OwnTracks',\n                  \"eco_system\" : \"NODE-RED\",\n                  last_event: \n                   { brightness_occurred_at: null,\n                     loudness_occurred_at: null,\n                     vibration_occurred_at: null },\n                  last_reading: \n                   { \n                        agent_session_id: 'FALSE',\n                        connection: true,\n                        'lat': pos.lat,\n                        'lon': pos.lon,\n                        'coordinates':  pos.lat+','+pos.lon,\n                        'battery': pos.batt,\n                        'accuracy' : pos.acc,\n                        'trigger'  : event_trigger,\n                        'lastUpdated' : pos.tst\n                   },\n                  manufacturer_device_model: 'owntracks_geolocation_sensor',\n                  model_name: 'Geolocation Sensor',\n                  name:user+'_Geo',\n                  object_id:  user+'_Geo',\n                  object_type: 'sensor_pod',\n                  radio_type: 'wifi',\n                  sensor_pod_id: user+'_Geo',\n                  triggers: [],\n                  units: {},\n                  upc_code: user+'_Geo',\n                  upc_id: user+'_Geo'\n                  }\n            };\n            pos.acc=parseInt(pos.acc);\n            context.global.OwnTracksGeoRadius = parseInt(context.global.OwnTracksGeoRadius);\n            if(dst_from_home!=-1) dst_from_home=loc_msg.payload.last_reading.distanceFromHome=(dst_from_home < pos.acc ? 0 : dst_from_home - pos.acc);   \n            \n            if (context.global.GEO_DEBUG) node.warn(\"user: \" + user);\n            if (context.global.GEO_DEBUG) node.warn(\"distance from home:\" + dst_from_home);\n            if (context.global.GEO_DEBUG) node.warn(\"message type:\" + (waypoint ? 'waypoint' : 'location'));\n            if (context.global.GEO_DEBUG) node.warn(\"WNR home geo radius:\"+ context.global.OwnTracksGeoRadius || 100);\n            if (context.global.GEO_DEBUG) node.warn(\"current user state: \"+context.global.Presence[user].home);\n\n            if (waypoint /*|| dst_from_home<=50 || (dst_from_home < pos.acc && pos.acc <100)*/) { \n                if (context.global.GEO_DEBUG) node.warn(\"waypoint branch\");\n        //            pos.desc=(dst_from_home < pos.acc  ? 'home' : pos.desc);\n        //            pos.event=(dst_from_home < pos.acc  ? 'enter' : pos.event);\n        //            loc_msg.payload.last_reading.lastWaypoint=(dst_from_home < pos.acc  ? 'home' : pos.desc);\n        //            loc_msg.payload.last_reading.lastEvent=(dst_from_home < pos.acc  ? 'enter' : pos.event);\n                if (pos.desc.toLowerCase().indexOf('home')!=-1 && context.global.Presence[user].home==\"yes\") {\n                    waypoint=false\n                }\n                else \n                {\n                    loc_msg.payload.last_reading.lastWaypoint=(pos.desc);\n                    loc_msg.payload.last_reading.lastEvent=(pos.event);            \n                }\n            } else\n            {\n                if (context.global.GEO_DEBUG) node.warn(\"location branch\");\n                if(dst_from_home > context.global.OwnTracksGeoRadius && context.global.Presence[user].home==\"yes\"){\n                    if (context.global.GEO_DEBUG) node.warn(user+ \" left\");\n                    waypoint=true;\n                    pos.desc='home';\n                    pos.event='leave';\n                loc_msg.payload.last_reading.lastWaypoint=(pos.desc);                    \n                    loc_msg.payload.last_reading.lastEvent='leave';\n                } else if (dst_from_home < context.global.OwnTracksGeoRadius && context.global.Presence[user].home==='no') {\n                    if (context.global.GEO_DEBUG) node.warn(user+\" arrived\");                    \n                    waypoint=true;\n                    pos.desc='home';\n                    pos.event='enter';\n                    loc_msg.payload.last_reading.lastWaypoint=(pos.desc);\n                    loc_msg.payload.last_reading.lastEvent='enter';    \n                }\n            }\n            node.send(loc_msg); \n            if ((waypoint  && pos.desc.toLowerCase().indexOf('home')!=-1) /*|| dst_from_home < pos.acc*/){\n                loc_msg1={\n                    url:context.global.BlueMixUrlBase+'/red/presence',\n                method:\"POST\",\n                payload: {\n                \"iftttkey\":context.global.FREEBOARD_TOKEN,\"name\":user,\"home\":(pos.event=='enter' ? \"yes\" : \"no\")\n                }\n                };\n                node.send(loc_msg1);\n            }\n        }\n    }\n}",
+    "outputs": 1,
+    "noerr": 0,
+    "x": 527,
+    "y": 2272,
+    "wires": [
+      [
+        "6dde0e7b.b00ae",
+        "34bad3dd.93ae2c"
+      ]
+    ]
+  },
+  {
     "id": "6fcc4b13.f6eea4",
     "type": "function",
     "z": "17b3daf5.e84c25",
@@ -2080,8 +2097,8 @@
     "type": "http response",
     "z": "17b3daf5.e84c25",
     "name": "",
-    "x": 586,
-    "y": 1954,
+    "x": 613,
+    "y": 1987,
     "wires": []
   },
   {
@@ -2185,23 +2202,6 @@
     "wires": []
   },
   {
-    "id": "32d823cc.59d5cc",
-    "type": "function",
-    "z": "17b3daf5.e84c25",
-    "name": "",
-    "func": "// Converts numeric degrees to radians\nfunction toRad(Value) {\n    return Value * Math.PI / 180;\n}\n\n\nfunction calcCrow(lat1, lon1, lat2, lon2) {\n  var R = 6371; // km\n  var dLat = toRad(lat2 - lat1);\n  var dLon = toRad(lon2 - lon1);\n  Rlat1 = toRad(lat1);\n  Rlat2 = toRad(lat2);\n\n  var a = Math.sin(dLat / 2) * Math.sin(dLat / 2) +\n    Math.sin(dLon/2) * Math.sin(dLon/2) * Math.cos(Rlat1) * Math.cos(Rlat2); \n  var c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a)); \n  var d = R * c;\n  return d;\n}\n\n\n\nif (context.global.OwnTracksPwd === msg.req.params.key) {\n    context.global.OwnTracksGeoRadius = context.global.OwnTracksGeoRadius || 100;    \n    if('_type' in msg.payload) {\n        var waypoint,user,pos;\n        var dst_from_home=-1;    \n        var do_send=false;\n        if (msg.payload['_type']=='transition') {\n            waypoint = true;\n            do_send = true;\n            user = msg.req.params.user;\n            pos = msg.payload;\n        }\n        if (msg.payload['_type']=='location') {\n        waypoint = false;\n        do_send = true;\n        user = msg.req.params.user;\n        pos = msg.payload;\n        }\n        if (do_send) {\n            if (!('Presence' in context.global)) context.global.Presence={};\n            if (!(user in context.global.Presence)) context.global.Presence[user]={\"home\":\"no\"};\n            var event_trigger='none';\n            if ('t' in pos) event_trigger=pos.t;   \n                if ('HomeLocation' in context.global){ \n                    dst_from_home=Math.round(calcCrow(pos.lat,pos.lon,context.global.HomeLocation.lat,context.global.HomeLocation.lon)*1000);\n                }        \n            loc_msg={\n                url:context.global.BlueMixUrlBase+'/red/wink/subscribtions',\n                method:\"POST\",\n                payload: {\n                     capabilities: { fields: [ \n                      { field: 'lat', type: 'float' },\n                      { field: 'lon', type: 'float' },\n                      { field: 'battery', type: 'percentage' },\n                      { field: 'lastWaypoint', type: 'string' },\n                      { field: 'lastEvent', type: 'string' },\n                      { field: 'accuracy', type: 'float' },\n                      { field: 'distanceFromHome', type: 'float' },\n                      { field: 'trigger', type: 'string' },\n                      { field: 'lastUpdated', type: 'timestamp'}\n                      ] },\n                  device_manufacturer: 'OwnTracks',\n                  \"eco_system\" : \"NODE-RED\",\n                  last_event: \n                   { brightness_occurred_at: null,\n                     loudness_occurred_at: null,\n                     vibration_occurred_at: null },\n                  last_reading: \n                   { \n                        agent_session_id: 'FALSE',\n                        connection: true,\n                        'lat': pos.lat,\n                        'lon': pos.lon,\n                        'coordinates':  pos.lat+','+pos.lon,\n                        'battery': pos.batt,\n                        'accuracy' : pos.acc,\n                        'trigger'  : event_trigger,\n                        'lastUpdated' : pos.tst\n                   },\n                  manufacturer_device_model: 'owntracks_geolocation_sensor',\n                  model_name: 'Geolocation Sensor',\n                  name:user+'_Geo',\n                  object_id:  user+'_Geo',\n                  object_type: 'sensor_pod',\n                  radio_type: 'wifi',\n                  sensor_pod_id: user+'_Geo',\n                  triggers: [],\n                  units: {},\n                  upc_code: user+'_Geo',\n                  upc_id: user+'_Geo'\n                  }\n            };\n            pos.acc=parseInt(pos.acc);\n            context.global.OwnTracksGeoRadius = parseInt(context.global.OwnTracksGeoRadius);\n            if(dst_from_home!=-1) dst_from_home=loc_msg.payload.last_reading.distanceFromHome=(dst_from_home < pos.acc ? 0 : dst_from_home - pos.acc);   \n            \n            if (context.global.GEO_DEBUG) node.warn(\"user: \" + user);\n            if (context.global.GEO_DEBUG) node.warn(\"distance from home:\" + dst_from_home);\n            if (context.global.GEO_DEBUG) node.warn(\"message type:\" + (waypoint ? 'waypoint' : 'location'));\n            if (context.global.GEO_DEBUG) node.warn(\"WNR home geo radius:\"+ context.global.OwnTracksGeoRadius || 100);\n            if (context.global.GEO_DEBUG) node.warn(\"current user state: \"+context.global.Presence[user].home);\n\n            if (waypoint /*|| dst_from_home<=50 || (dst_from_home < pos.acc && pos.acc <100)*/) { \n            if (context.global.GEO_DEBUG) node.warn(\"waypoint branch\");\n    //            pos.desc=(dst_from_home < pos.acc  ? 'home' : pos.desc);\n    //            pos.event=(dst_from_home < pos.acc  ? 'enter' : pos.event);\n    //            loc_msg.payload.last_reading.lastWaypoint=(dst_from_home < pos.acc  ? 'home' : pos.desc);\n    //            loc_msg.payload.last_reading.lastEvent=(dst_from_home < pos.acc  ? 'enter' : pos.event);\n\n                loc_msg.payload.last_reading.lastWaypoint=(pos.desc);\n                loc_msg.payload.last_reading.lastEvent=(pos.event);            \n\n            } else\n            {\n                if (context.global.GEO_DEBUG) node.warn(\"location branch\");\n                if(dst_from_home > context.global.OwnTracksGeoRadius && context.global.Presence[user].home==\"yes\"){\n                    if (context.global.GEO_DEBUG) node.warn(user+ \" left\");\n                    waypoint=true;\n                    pos.desc='home';\n                    pos.event='leave';\n                loc_msg.payload.last_reading.lastWaypoint=(pos.desc);                    \n                    loc_msg.payload.last_reading.lastEvent='leave';\n                } else if (dst_from_home < context.global.OwnTracksGeoRadius && context.global.Presence[user].home==='no') {\n                    if (context.global.GEO_DEBUG) node.warn(user+\" arrived\");                    \n                    waypoint=true;\n                    pos.desc='home';\n                    pos.event='enter';\n                    loc_msg.payload.last_reading.lastWaypoint=(pos.desc);\n                    loc_msg.payload.last_reading.lastEvent='enter';    \n                }\n                node.send(loc_msg); \n                if ((waypoint  && pos.desc.toLowerCase().indexOf(pos.desc)!=-1) /*|| dst_from_home < pos.acc*/){\n                    loc_msg1={\n                        url:context.global.BlueMixUrlBase+'/red/presence',\n                    method:\"POST\",\n                    payload: {\n                    \"iftttkey\":context.global.FREEBOARD_TOKEN,\"name\":user,\"home\":(pos.event=='enter' ? \"yes\" : \"no\")\n                    }\n                    };\n                    node.send(loc_msg1);\n                }\n            }\n        }\n    }\n}",
-    "outputs": 1,
-    "noerr": 0,
-    "x": 527,
-    "y": 2272,
-    "wires": [
-      [
-        "6dde0e7b.b00ae",
-        "34bad3dd.93ae2c"
-      ]
-    ]
-  },
-  {
     "id": "b5bc728b.4105f",
     "type": "delay",
     "z": "17b3daf5.e84c25",
@@ -2247,8 +2247,8 @@
     "active": false,
     "console": "false",
     "complete": "true",
-    "x": 855,
-    "y": 2302,
+    "x": 722,
+    "y": 2308,
     "wires": []
   },
   {
@@ -2266,9 +2266,9 @@
     "type": "debug",
     "z": "17b3daf5.e84c25",
     "name": "",
-    "active": true,
+    "active": false,
     "console": "false",
-    "complete": "false",
+    "complete": "payload",
     "x": 199,
     "y": 2340,
     "wires": []
@@ -2327,8 +2327,8 @@
     "randomLast": "5",
     "randomUnits": "seconds",
     "drop": false,
-    "x": 733,
-    "y": 2256,
+    "x": 720,
+    "y": 2260,
     "wires": [
       [
         "da7a6f3b.daab7"
