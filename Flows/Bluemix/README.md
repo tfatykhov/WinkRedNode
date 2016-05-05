@@ -6,6 +6,17 @@ https://(your_app_name).mybluemix.net/freeboard/winkboardautogroup - sample free
 
 == UPDATE ==
 -
+05/05/2016
+------------
+* Owntracks additions:
+* WNR defined home geofence radious is displayed on the map.
+* Enhancements to presence detection and shortcut execution (owntracks region transitions are turned on).
+
+Flow Editor:<br>
+*  Import updated [winkIntegration.json](winkIntegration.json)
+*  Import updated [tabletUI.json](tabletUI.json)
+
+
 05/04/2016
 ------------
 * Owntracks additions:
