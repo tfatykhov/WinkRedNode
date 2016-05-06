@@ -11,6 +11,9 @@ https://(your_app_name).mybluemix.net/freeboard/winkboardautogroup - sample free
 * Owntracks additions:
 * WNR defined home geofence radious is displayed on the map.
 * Enhancements to presence detection and shortcut execution (owntracks region transitions are turned on).
+* Navigate to configuration/Integration settings and scroll down to OwnTracks section and define your geofence radius.<br>
+![owntracks settings](images/owntracks11.png)
+* click "submit"
 
 Flow Editor:<br>
 *  Import updated [winkIntegration.json](winkIntegration.json)
