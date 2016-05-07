@@ -6,6 +6,19 @@ https://(your_app_name).mybluemix.net/freeboard/winkboardautogroup - sample free
 
 == UPDATE ==
 -
+05/07/2016
+------------
+* Presence automation additions:
+* Option to turn on/off auto execution of wink shortcuts for Presence.
+* Enhancements to presence detection and shortcut execution (owntracks region transitions are turned on).
+* Navigate to configuration/Applicationsettings and Look for Execute presence shortcuts switch (turned on by default)<br>
+![owntracks settings](images/owntracks12.png)
+
+Flow Editor:<br>
+*  Import updated [winkIntegration.json](winkIntegration.json)
+*  Import updated [tabletUI.json](tabletUI.json)
+
+
 05/05/2016
 ------------
 * Owntracks additions:
