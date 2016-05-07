@@ -1,5 +1,22 @@
 [
   {
+    "id": "cf1433c8.bbfa3",
+    "type": "function",
+    "z": "811c60ec.7ee3a",
+    "name": "",
+    "func": "if (msg.payload.token ==context.global.FREEBOARD_TOKEN || context.global.getCookie('exchange_token',msg.req.headers.cookie)==context.global.FREEBOARD_TOKEN){\n    msg.statusCode=200;\n    context.global.tab_ui_shortcuts=[];\n    for (var v in msg.payload){\n    if (v=='tab_ui_shortcuts' && !Array.isArray(msg.payload.tab_ui_shortcuts)) {\n        context.global.tab_ui_shortcuts[0]=msg.payload.tab_ui_shortcuts; \n    }\n    else context.global.tab_ui_shortcuts=msg.payload.tab_ui_shortcuts;\n    \n    if (v=='FREEBOARD_TOKEN' && msg.payload.FREEBOARD_TOKEN==='') msg.payload.FREEBOARD_TOKEN=context.global.generate_token('FREEBOARD_TOKEN');\n    if (v=='lat'){\n        if (typeof (context.global.HomeLocation) === 'undefined') context.global.HomeLocation={};\n        context.global.HomeLocation.lat=msg.payload['lat'];\n    } else if (v=='lon'){\n        if (typeof (context.global.HomeLocation) === 'undefined') context.global.HomeLocation={};\n        context.global.HomeLocation.lon=msg.payload['lon'];\n    }\n    else    context.global[v]=msg.payload[v];\n    }\n    if (!('motionAdjustTstat' in msg.payload)) context.global.motionAdjustTstat=false;\n    else context.global.motionAdjustTstat=true;\n    if (!('HoursFormat24' in msg.payload)) context.global.HoursFormat24=false;\n    else context.global.HoursFormat24=true;\n    \n    if (!('LightsNotification' in msg.payload)) context.global.LightsNotification=false;\n    else context.global.LightsNotification=true;\n    \n    if (!('LightsNotificationM' in msg.payload)) context.global.LightsNotificationM=false;\n    else context.global.LightsNotificationM=true;\n    \n    if (!('useRobots' in msg.payload)) context.global.useRobots=false;\n    else context.global.useRobots=true;\n    \n    if (!('SensorsNotificationM' in msg.payload)) context.global.SensorsNotificationM=false;\n    else context.global.SensorsNotificationM=true;\n    \n    if (!('vaca_usePresence' in msg.payload)) context.global.vaca_usePresence=false;\n    else context.global.vaca_usePresence=true;   \n    \n    if (!('vaca_wnr_schedules_off' in msg.payload)) context.global.vaca_wnr_schedules_off=false;\n    else context.global.vaca_wnr_schedules_off=true;\n\n    if (!('vaca_locks_vac' in msg.payload)) context.global.vaca_locks_vac=false;\n    else context.global.vaca_locks_vac=true;\n    \n    \n    if (!('PresenceShortcuts' in msg.payload)) context.global.PresenceShortcuts=false;\n    else context.global.PresenceShortcuts=true;\n    \n    if('CleanNonWink' in msg.payload){\n        context.global.cleanNonWinkState();\n        context.global.CleanNonWink=false;\n    }\n    if('CleanPresence' in msg.payload){\n        context.global.Presence={};\n        context.global.CleanPresence=false;\n    }\n    \n}\nmsg.url=context.global.BlueMixUrlBase+'/red/update_app_cfg';\nmsg.method=\"POST\";\nmsg.headers= {\n    \"Authorization\":\"Bearer \"+context.global.FREEBOARD_TOKEN\n};\nmsg.payload={\n   db_mode:\"update\"\n}\nnode.send(msg)\n\n\n",
+    "outputs": "1",
+    "noerr": 0,
+    "x": 341,
+    "y": 1069,
+    "wires": [
+      [
+        "2747ff02.74889",
+        "2381366b.2591aa"
+      ]
+    ]
+  },
+  {
     "id": "96e71954.3c5238",
     "type": "http in",
     "z": "811c60ec.7ee3a",
@@ -941,23 +958,6 @@
       [
         "cf1433c8.bbfa3",
         "965a08fa.3f70c8"
-      ]
-    ]
-  },
-  {
-    "id": "cf1433c8.bbfa3",
-    "type": "function",
-    "z": "811c60ec.7ee3a",
-    "name": "",
-    "func": "if (msg.payload.token ==context.global.FREEBOARD_TOKEN || context.global.getCookie('exchange_token',msg.req.headers.cookie)==context.global.FREEBOARD_TOKEN){\n    msg.statusCode=200;\n    context.global.tab_ui_shortcuts=[];\n    for (var v in msg.payload){\n    if (v=='tab_ui_shortcuts' && !Array.isArray(msg.payload.tab_ui_shortcuts)) {\n        context.global.tab_ui_shortcuts[0]=msg.payload.tab_ui_shortcuts; \n    }\n    else context.global.tab_ui_shortcuts=msg.payload.tab_ui_shortcuts;\n    \n    if (v=='FREEBOARD_TOKEN' && msg.payload.FREEBOARD_TOKEN==='') msg.payload.FREEBOARD_TOKEN=context.global.generate_token('FREEBOARD_TOKEN');\n    if (v=='lat'){\n        if (typeof (context.global.HomeLocation) === 'undefined') context.global.HomeLocation={};\n        context.global.HomeLocation.lat=msg.payload['lat'];\n    } else if (v=='lon'){\n        if (typeof (context.global.HomeLocation) === 'undefined') context.global.HomeLocation={};\n        context.global.HomeLocation.lon=msg.payload['lon'];\n    }\n    else    context.global[v]=msg.payload[v];\n    }\n    if (!('motionAdjustTstat' in msg.payload)) context.global.motionAdjustTstat=false;\n    else context.global.motionAdjustTstat=true;\n    if (!('HoursFormat24' in msg.payload)) context.global.HoursFormat24=false;\n    else context.global.HoursFormat24=true;\n    \n    if (!('LightsNotification' in msg.payload)) context.global.LightsNotification=false;\n    else context.global.LightsNotification=true;\n    \n    if (!('LightsNotificationM' in msg.payload)) context.global.LightsNotificationM=false;\n    else context.global.LightsNotificationM=true;\n    \n    if (!('useRobots' in msg.payload)) context.global.useRobots=false;\n    else context.global.useRobots=true;\n    \n    if (!('SensorsNotificationM' in msg.payload)) context.global.SensorsNotificationM=false;\n    else context.global.SensorsNotificationM=true;\n    \n    if (!('vaca_usePresence' in msg.payload)) context.global.vaca_usePresence=false;\n    else context.global.vaca_usePresence=true;   \n    \n    if (!('vaca_wnr_schedules_off' in msg.payload)) context.global.vaca_wnr_schedules_off=false;\n    else context.global.vaca_wnr_schedules_off=true;\n\n    if (!('vaca_locks_vac' in msg.payload)) context.global.vaca_locks_vac=false;\n    else context.global.vaca_locks_vac=true;\n    \n    if('CleanNonWink' in msg.payload){\n        context.global.cleanNonWinkState();\n        context.global.CleanNonWink=false;\n    }\n    if('CleanPresence' in msg.payload){\n        context.global.Presence={};\n        context.global.CleanPresence=false;\n    }\n    \n}\nmsg.url=context.global.BlueMixUrlBase+'/red/update_app_cfg';\nmsg.method=\"POST\";\nmsg.headers= {\n    \"Authorization\":\"Bearer \"+context.global.FREEBOARD_TOKEN\n};\nmsg.payload={\n   db_mode:\"update\"\n}\nnode.send(msg)\n\n\n",
-    "outputs": "1",
-    "noerr": 0,
-    "x": 341,
-    "y": 1069,
-    "wires": [
-      [
-        "2747ff02.74889",
-        "2381366b.2591aa"
       ]
     ]
   },
