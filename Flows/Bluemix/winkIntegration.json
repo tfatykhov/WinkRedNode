@@ -1,22 +1,5 @@
 [
   {
-    "id": "32d823cc.59d5cc",
-    "type": "function",
-    "z": "17b3daf5.e84c25",
-    "name": "",
-    "func": "// Converts numeric degrees to radians\nfunction toRad(Value) {\n    return Value * Math.PI / 180;\n}\n\n\nfunction calcCrow(lat1, lon1, lat2, lon2) {\n  var R = 6371; // km\n  var dLat = toRad(lat2 - lat1);\n  var dLon = toRad(lon2 - lon1);\n  Rlat1 = toRad(lat1);\n  Rlat2 = toRad(lat2);\n\n  var a = Math.sin(dLat / 2) * Math.sin(dLat / 2) +\n    Math.sin(dLon/2) * Math.sin(dLon/2) * Math.cos(Rlat1) * Math.cos(Rlat2); \n  var c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a)); \n  var d = R * c;\n  return d;\n}\n\n\n\nif (context.global.OwnTracksPwd === msg.req.params.key) {\n    context.global.OwnTracksMaxAcc = context.global.OwnTracksMaxAcc || 100;\n    context.global.OwnTracksGeoRadius = context.global.OwnTracksGeoRadius || 100;    \n    if('_type' in msg.payload) {\n        if (msg.payload._type === 'encrypted') {\n            var secret = context.global.OwnTracksPwd;\n            var cypherText = new Buffer(msg.payload.data, 'base64');\n            var nonce = cypherText.slice(0,24);\n            var key = new Buffer(32);\n            key.fill(0);\n            key.write(secret);\n            try {\n                var clearText = context.global.wnr.sodium.crypto_secretbox_open_easy(cypherText.slice(24),nonce,key,\"text\");\n            } catch (e) {\n                node.warn(\"error decrypting payload\");\n                return;\n            }\n            try{\n                var clearObj = JSON.parse(clearText);\n            } catch (e) {\n                node.warn(\"decrypted message not JSON\");\n                return;\n            }\n            msg.payload = clearObj; \n        }\n        var waypoint,user,pos;\n        var dst_from_home=-1;    \n        var do_send=false;\n        if (msg.payload._type === 'transition') {\n            waypoint = true;\n            do_send = true;\n            user = msg.req.params.user;\n            pos = msg.payload;\n        }\n        if (msg.payload._type === 'location') {\n        waypoint = false;\n        do_send = true;\n        user = msg.req.params.user;\n        pos = msg.payload;\n        }\n        if (do_send && pos.acc <= context.global.OwnTracksMaxAcc) {\n            if (!('Presence' in context.global)) context.global.Presence={};\n            if (!(user in context.global.Presence)) context.global.Presence[user]={\"home\":\"no\"};\n            var event_trigger='none';\n            if ('t' in pos) event_trigger=pos.t;   \n                if ('HomeLocation' in context.global){ \n                    dst_from_home=Math.round(calcCrow(pos.lat,pos.lon,context.global.HomeLocation.lat,context.global.HomeLocation.lon)*1000);\n                }        \n            loc_msg={\n                url:context.global.BlueMixUrlBase+'/red/wink/subscribtions',\n                method:\"POST\",\n                payload: {\n                     capabilities: { fields: [ \n                      { field: 'lat', type: 'float' },\n                      { field: 'lon', type: 'float' },\n                      { field: 'battery', type: 'percentage' },\n                      { field: 'lastWaypoint', type: 'string' },\n                      { field: 'lastEvent', type: 'string' },\n                      { field: 'accuracy', type: 'float' },\n                      { field: 'distanceFromHome', type: 'float' },\n                      { field: 'trigger', type: 'string' },\n                      { field: 'lastUpdated', type: 'timestamp'}\n                      ] },\n                  device_manufacturer: 'OwnTracks',\n                  \"eco_system\" : \"NODE-RED\",\n                  last_event: \n                   { brightness_occurred_at: null,\n                     loudness_occurred_at: null,\n                     vibration_occurred_at: null },\n                  last_reading: \n                   { \n                        agent_session_id: 'FALSE',\n                        connection: true,\n                        'lat': pos.lat,\n                        'lon': pos.lon,\n                        'coordinates':  pos.lat+','+pos.lon,\n                        'battery': pos.batt,\n                        'accuracy' : pos.acc,\n                        'trigger'  : event_trigger,\n                        'lastUpdated' : pos.tst\n                   },\n                  manufacturer_device_model: 'owntracks_geolocation_sensor',\n                  model_name: 'Geolocation Sensor',\n                  name:user+'_Geo',\n                  object_id:  user+'_Geo',\n                  object_type: 'sensor_pod',\n                  radio_type: 'wifi',\n                  sensor_pod_id: user+'_Geo',\n                  triggers: [],\n                  units: {},\n                  upc_code: user+'_Geo',\n                  upc_id: user+'_Geo'\n                  }\n            };\n            pos.acc=parseInt(pos.acc);\n            context.global.OwnTracksGeoRadius = parseInt(context.global.OwnTracksGeoRadius);\n            if(dst_from_home!=-1) dst_from_home=loc_msg.payload.last_reading.distanceFromHome=(dst_from_home < pos.acc ? 0 : dst_from_home - pos.acc);   \n            \n            if (context.global.GEO_DEBUG) node.warn(\"user: \" + user);\n            if (context.global.GEO_DEBUG) node.warn(\"distance from home:\" + dst_from_home);\n            if (context.global.GEO_DEBUG) node.warn(\"message type:\" + (waypoint ? 'waypoint' : 'location'));\n            if (context.global.GEO_DEBUG) node.warn(\"WNR home geo radius:\"+ context.global.OwnTracksGeoRadius || 100);\n            if (context.global.GEO_DEBUG) node.warn(\"current user state: \"+context.global.Presence[user].home);\n\n            if (waypoint /*|| dst_from_home<=50 || (dst_from_home < pos.acc && pos.acc <100)*/) { \n                if (context.global.GEO_DEBUG) node.warn(\"waypoint branch\");\n        //            pos.desc=(dst_from_home < pos.acc  ? 'home' : pos.desc);\n        //            pos.event=(dst_from_home < pos.acc  ? 'enter' : pos.event);\n        //            loc_msg.payload.last_reading.lastWaypoint=(dst_from_home < pos.acc  ? 'home' : pos.desc);\n        //            loc_msg.payload.last_reading.lastEvent=(dst_from_home < pos.acc  ? 'enter' : pos.event);\n                if (pos.desc.toLowerCase().indexOf('home')!=-1 && context.global.Presence[user].home==\"yes\") {\n                    waypoint=false\n                }\n                else \n                {\n                    loc_msg.payload.last_reading.lastWaypoint=(pos.desc);\n                    loc_msg.payload.last_reading.lastEvent=(pos.event);            \n                }\n            } else\n            {\n                if (context.global.GEO_DEBUG) node.warn(\"location branch\");\n                if(dst_from_home > context.global.OwnTracksGeoRadius && context.global.Presence[user].home==\"yes\"){\n                    if (context.global.GEO_DEBUG) node.warn(user+ \" left\");\n                    waypoint=true;\n                    pos.desc='home';\n                    pos.event='leave';\n                loc_msg.payload.last_reading.lastWaypoint=(pos.desc);                    \n                    loc_msg.payload.last_reading.lastEvent='leave';\n                } else if (dst_from_home < context.global.OwnTracksGeoRadius && context.global.Presence[user].home==='no') {\n                    if (context.global.GEO_DEBUG) node.warn(user+\" arrived\");                    \n                    waypoint=true;\n                    pos.desc='home';\n                    pos.event='enter';\n                    loc_msg.payload.last_reading.lastWaypoint=(pos.desc);\n                    loc_msg.payload.last_reading.lastEvent='enter';    \n                }\n            }\n            node.send(loc_msg); \n            if ((waypoint  && pos.desc.toLowerCase().indexOf('home')!=-1) /*|| dst_from_home < pos.acc*/){\n                loc_msg1={\n                    url:context.global.BlueMixUrlBase+'/red/presence',\n                method:\"POST\",\n                payload: {\n                \"iftttkey\":context.global.FREEBOARD_TOKEN,\"name\":user,\"home\":(pos.event=='enter' ? \"yes\" : \"no\")\n                }\n                };\n                node.send(loc_msg1);\n            }\n        }\n    }\n}",
-    "outputs": 1,
-    "noerr": 0,
-    "x": 527,
-    "y": 2272,
-    "wires": [
-      [
-        "6dde0e7b.b00ae",
-        "34bad3dd.93ae2c"
-      ]
-    ]
-  },
-  {
     "id": "6fcc4b13.f6eea4",
     "type": "function",
     "z": "17b3daf5.e84c25",
@@ -254,7 +237,7 @@
     "type": "function",
     "z": "17b3daf5.e84c25",
     "name": "",
-    "func": "var currDate= new Date();\ncurr_presence=context.global.checkPresence()\nif (msg.payload.new_value!=='ERROR' && msg.payload.new_value!==msg.payload.old_value){\n    if('old_presence' in  msg.payload){\n        var HistP={}\n        HistP.timestamp=new Date();\n        HistP.offset=context.global.Weather.Offset\n        HistP.details=msg.payload.old_presence\n//        node.warn(HistP)\n        context.global.PresenceHistory.unshift(HistP)\n    }\n    if (context.global.PresenceHistory.length > 15) context.global.PresenceHistory.pop();\n\n    var currDate= new Date();\n    var currHours=currDate.getHours();\n    var currMins=currDate.getMinutes();\n    currHours=currHours+context.global.Weather.Offset;\n    if ((currHours > context.global.Weather.SunriseHour && currHours < context.global.Weather.SunsetHour) || (currHours==context.global.Weather.SunsetHour && currMins <context.global.Weather.SunsetMin))\n    {\n        var timeFrame=\"DAY\";\n    }\n    else {\n        var timeFrame=\"NIGHT\";\n    }    \n    var scene_name=(msg.payload.new_value ? 'PRESENCE' : 'NO PRESENCE')+' '+timeFrame;\n    for (var key in context.global.winkState.scenes){\n        if ( context.global.winkState.scenes[key].name.toUpperCase()==scene_name)\n        {\n            var newMsg ={\n            \"url\":\"https://winkapi.quirky.com/scenes/\"+context.global.winkState.scenes[key].object_id+\"/activate\",\n            \"method\": \"POST\",\n            headers: {\n                \"Authorization\":\"Bearer \"+context.global.WinkToken,\n                \"Content-Type\":\"application/json\"\n                }\n            }\n        if (context.global.DEBUG) node.warn(\"sending:\" + newMsg);            \n        node.send(newMsg);\n        break;\n        }\n    }\n    if ('VacationMode' in context.global && context.global.VacationMode && msg.payload.new_value){\n            var newMsg1 ={\n                url:context.global.BlueMixUrlBase+'/red/ifttt',\n                \"method\": \"POST\",\n                headers: {\n                    \"Authorization\":\"Bearer \"+context.global.FREEBOARD_TOKEN\n                },\n                payload:{\n                    \"nodeRedVar\":\"VacationMode\",\n                    \"value\":\"off\",\n                    \"iftttkey\":context.global.FREEBOARD_TOKEN\n                    }\n            };\n        node.send(newMsg1)\n    }\n    return;\n}\nreturn;",
+    "func": "var currDate= new Date();\ncurr_presence=context.global.checkPresence()\nif (msg.payload.new_value!=='ERROR' && msg.payload.new_value!==msg.payload.old_value){\n    if('old_presence' in  msg.payload){\n        var HistP={}\n        HistP.timestamp=new Date();\n        HistP.offset=context.global.Weather.Offset\n        HistP.details=msg.payload.old_presence\n//        node.warn(HistP)\n        context.global.PresenceHistory.unshift(HistP)\n    }\n    if (context.global.PresenceHistory.length > 15) context.global.PresenceHistory.pop();\n\n    var currDate= new Date();\n    var currHours=currDate.getHours();\n    var currMins=currDate.getMinutes();\n    currHours=currHours+context.global.Weather.Offset;\n    if ((currHours > context.global.Weather.SunriseHour && currHours < context.global.Weather.SunsetHour) || (currHours==context.global.Weather.SunsetHour && currMins <context.global.Weather.SunsetMin))\n    {\n        var timeFrame=\"DAY\";\n    }\n    else {\n        var timeFrame=\"NIGHT\";\n    } \n    if (!('PresenceShortcuts' in context.global)) context.global.PresenceShortcuts = true;\n    if(context.global.PresenceShortcuts) \n    {\n        var scene_name=(msg.payload.new_value ? 'PRESENCE' : 'NO PRESENCE')+' '+timeFrame;\n        for (var key in context.global.winkState.scenes){\n            if ( context.global.winkState.scenes[key].name.toUpperCase()==scene_name)\n            {\n                var newMsg ={\n                \"url\":\"https://winkapi.quirky.com/scenes/\"+context.global.winkState.scenes[key].object_id+\"/activate\",\n                \"method\": \"POST\",\n                headers: {\n                    \"Authorization\":\"Bearer \"+context.global.WinkToken,\n                    \"Content-Type\":\"application/json\"\n                    }\n                }\n            if (context.global.DEBUG) node.warn(\"sending:\" + newMsg);            \n            node.send(newMsg);\n            break;\n            }\n        }\n    }    \n    if ('VacationMode' in context.global && context.global.VacationMode && msg.payload.new_value){\n            var newMsg1 ={\n                url:context.global.BlueMixUrlBase+'/red/ifttt',\n                \"method\": \"POST\",\n                headers: {\n                    \"Authorization\":\"Bearer \"+context.global.FREEBOARD_TOKEN\n                },\n                payload:{\n                    \"nodeRedVar\":\"VacationMode\",\n                    \"value\":\"off\",\n                    \"iftttkey\":context.global.FREEBOARD_TOKEN\n                    }\n            };\n        node.send(newMsg1)\n    }\n    return;\n}\nreturn;",
     "outputs": 1,
     "noerr": 0,
     "x": 945.8958129882812,
@@ -1052,8 +1035,8 @@
     "repeat": "82800",
     "crontab": "",
     "once": true,
-    "x": 107.5,
-    "y": 962,
+    "x": 95.5,
+    "y": 956,
     "wires": [
       [
         "10ee56d1.137699"
@@ -1074,8 +1057,8 @@
     "randomLast": "5",
     "randomUnits": "seconds",
     "drop": false,
-    "x": 267.5,
-    "y": 963,
+    "x": 243.5,
+    "y": 955,
     "wires": [
       [
         "cec1220b.ba4f7"
@@ -1090,8 +1073,8 @@
     "func": "if (context.global.CloudantBkUP) {\n    msg.url=context.global.VCAP_SERVICES.cloudantNoSQLDB[0].credentials.url+\"/winkapp/app_data\";\n    msg.method=\"GET\";\n    node.send(msg); \n}\nreturn;",
     "outputs": 1,
     "noerr": 0,
-    "x": 536.5,
-    "y": 959,
+    "x": 645.5,
+    "y": 953,
     "wires": [
       [
         "441073f3.3c9dcc",
@@ -1107,8 +1090,8 @@
     "method": "use",
     "ret": "obj",
     "url": "",
-    "x": 771.5,
-    "y": 959,
+    "x": 880.5,
+    "y": 953,
     "wires": [
       [
         "73acee37.55415"
@@ -1120,11 +1103,11 @@
     "type": "function",
     "z": "17b3daf5.e84c25",
     "name": "create or update config ",
-    "func": "if ((\"error\" in msg.payload && msg.payload.error=='not_found') || msg.db_mode=='update'){\n    if (context.global.DEBUG ) node.warn((\"error\" in msg.payload && msg.payload.error=='not_found' ? 'Save Data: no app_data exists in cloudant DB creating and saving globals to database' : ' Save Data: updating globals in database'))\n    var DBMsg={\n        url:context.global.VCAP_SERVICES.cloudantNoSQLDB[0].credentials.url+\"/winkapp\",\n        method:(msg.db_mode=='update' ? \"PUT\":\"POST\"),\n        headers: \n            {\n                \"Content-Type\":\"application/json\"\n            },\n        payload: {\n            \"_id\":\"app_data\",\n            \"item\":\"app_data\",\n            \"app_cfg\":{\n            FREEBOARD_TOKEN:context.global.FREEBOARD_TOKEN || context.global.generate_token('FREEBOARD_TOKEN'),\n            vaca_delay:context.global.vaca_delay || 15, \n            ifttt:context.global.ifttt || false,\n            useRobots:context.global.useRobots || false,\n            vaca_wnr_schedules_off: context.global.vaca_wnr_schedules_off|| false,\n            vaca_usePresence: context.global.vaca_usePresence || false,\n            vaca_light_bulbs : context.global.vaca_light_bulbs || [],\n            vaca_binary_switches : context.global.vaca_binary_switches || [],\n            vaca_locks_vac:context.global.vaca_locks_vac || false,\n            motionAdjustTstat: context.global.motionAdjustTstat||false,\n            BlueMixUrlBase:context.global.BlueMixUrlBase,\n            HomeLocation:context.global.HomeLocation,\n            HoursFormat24:context.global.HoursFormat24 || false,\n            LightsNotification:context.global.LightsNotification || false,\n            LightsNotificationM:context.global.LightsNotificationM || false,\n            SensorsNotificationM:context.global.SensorsNotificationM || false,    \n            Schedules:context.global.Schedules || false,\n            VacationMode:context.global.VacationMode || false,            \n            CustomTabUrl:context.global.CustomTabUrl || '',\n            CustomTabName:context.global.CustomTabName|| '',\n            BlueIrisHost:context.global.BlueIrisHost,\n            BlueIrisUid:context.global.BlueIrisUid,\n            BlueIrisPwd:context.global.BlueIrisPwd,\n            wink_id:context.global.wink_id,\n            wink_secret:context.global.wink_secret,\n            BloomskyKey:context.global.BloomskyKey || '',\n            OwnTracksPwd:context.global.OwnTracksPwd,\n            OwnTracksGeoRadius:context.global.OwnTracksGeoRadius||50,\n            OwnTracksMaxAcc:context.global.OwnTracksMaxAcc || 100\n            }\n        }\n    }\n    if(msg.db_mode=='update' && !(\"error\" in msg.payload && msg.payload.error=='not_found')){\n    DBMsg.url=DBMsg.url+\"/app_data\"    \n    DBMsg.payload._rev=msg.payload._rev;\n    }\n    \n    if ('HomeLocation' in context.global) DBMsg.payload.app_cfg.HomeLocation=context.global.HomeLocation;\n//\tif ('FosCam' in context.global) DBMsg.payload.app_cfg.FosCam=context.global.FosCam;\n//\tif ('SamsungCam' in context.global) DBMsg.payload.app_cfg.SamsungCam=context.global.SamsungCam;\n//\tif ('DlinkCam' in context.global) DBMsg.payload.app_cfg.DlinkCam=context.global.DlinkCam;\n    if ('camera_motion' in context.global) DBMsg.payload.app_cfg.camera_motion=context.global.camera_motion;\n    if ('tab_ui_shortcuts' in context.global) DBMsg.payload.app_cfg.tab_ui_shortcuts=context.global.tab_ui_shortcuts;\n//    if ('netatmo' in context.global) DBMsg.payload.app_cfg.netatmo=context.global.netatmo;\n    if ('winkState' in context.global) DBMsg.payload.app_cfg.winkState=context.global.winkState;\n    if ('LIFX_TOKEN' in context.global) DBMsg.payload.app_cfg.LIFX_TOKEN=context.global.LIFX_TOKEN;\n    if ('IFTTT_TOKEN' in context.global)DBMsg.payload.app_cfg.IFTTT_TOKEN=context.global.IFTTT_TOKEN;\n    if ('forecastIoApiKey' in context.global)DBMsg.payload.app_cfg.forecastIoApiKey=context.global.forecastIoApiKey;\n    if ('InitialStateKey' in context.global)DBMsg.payload.app_cfg.InitialStateKey=context.global.InitialStateKey;\n    if ('PushBulletKey' in context.global)DBMsg.payload.app_cfg.PushBulletKey=context.global.PushBulletKey;    \nnode.send(DBMsg);    \n}\nelse {\n        if (context.global.DEBUG ) node.warn('config data exists, restoring');\n    for (var key in msg.payload.app_cfg){\n            if (context.global.DEBUG ) node.warn('Restoring '+key+' settings')\n        if (key!=='winkState' && key!=='DlinkCam' && key!=='FosCam' && key!=='SamsungCam'){\n            context.global[key]=msg.payload.app_cfg[key];\n        } else if(msg.restore_wink||0===1) {\n            context.global[key]=msg.payload.app_cfg[key];\n        }\n    }\n}    \nreturn;",
+    "func": "if ((\"error\" in msg.payload && msg.payload.error=='not_found') || msg.db_mode=='update'){\n    if (context.global.DEBUG ) node.warn((\"error\" in msg.payload && msg.payload.error=='not_found' ? 'Save Data: no app_data exists in cloudant DB creating and saving globals to database' : ' Save Data: updating globals in database'))\n    var DBMsg={\n        url:context.global.VCAP_SERVICES.cloudantNoSQLDB[0].credentials.url+\"/winkapp\",\n        method:(msg.db_mode=='update' ? \"PUT\":\"POST\"),\n        headers: \n            {\n                \"Content-Type\":\"application/json\"\n            },\n        payload: {\n            \"_id\":\"app_data\",\n            \"item\":\"app_data\",\n            \"app_cfg\":{\n            FREEBOARD_TOKEN:context.global.FREEBOARD_TOKEN || context.global.generate_token('FREEBOARD_TOKEN'),\n            vaca_delay:context.global.vaca_delay || 15, \n            ifttt:context.global.ifttt || false,\n            useRobots:context.global.useRobots || false,\n            vaca_wnr_schedules_off: context.global.vaca_wnr_schedules_off|| false,\n            vaca_usePresence: context.global.vaca_usePresence || false,\n            vaca_light_bulbs : context.global.vaca_light_bulbs || [],\n            vaca_binary_switches : context.global.vaca_binary_switches || [],\n            vaca_locks_vac:context.global.vaca_locks_vac || false,\n            motionAdjustTstat: context.global.motionAdjustTstat||false,\n            BlueMixUrlBase:context.global.BlueMixUrlBase,\n            HomeLocation:context.global.HomeLocation,\n            HoursFormat24:context.global.HoursFormat24 || false,\n            LightsNotification:context.global.LightsNotification || false,\n            LightsNotificationM:context.global.LightsNotificationM || false,\n            SensorsNotificationM:context.global.SensorsNotificationM || false,    \n            Schedules:context.global.Schedules || false,\n            VacationMode:context.global.VacationMode || false,            \n            CustomTabUrl:context.global.CustomTabUrl || '',\n            CustomTabName:context.global.CustomTabName|| '',\n            BlueIrisHost:context.global.BlueIrisHost,\n            BlueIrisUid:context.global.BlueIrisUid,\n            BlueIrisPwd:context.global.BlueIrisPwd,\n            wink_id:context.global.wink_id,\n            wink_secret:context.global.wink_secret,\n            BloomskyKey:context.global.BloomskyKey || '',\n            OwnTracksPwd:context.global.OwnTracksPwd,\n            OwnTracksGeoRadius:context.global.OwnTracksGeoRadius||50,\n            OwnTracksMaxAcc:context.global.OwnTracksMaxAcc || 100,\n            PresenceShortcuts:context.global.PresenceShortcuts || true\n            }\n        }\n    }\n    if(msg.db_mode=='update' && !(\"error\" in msg.payload && msg.payload.error=='not_found')){\n    DBMsg.url=DBMsg.url+\"/app_data\"    \n    DBMsg.payload._rev=msg.payload._rev;\n    }\n    \n    if ('HomeLocation' in context.global) DBMsg.payload.app_cfg.HomeLocation=context.global.HomeLocation;\n//\tif ('FosCam' in context.global) DBMsg.payload.app_cfg.FosCam=context.global.FosCam;\n//\tif ('SamsungCam' in context.global) DBMsg.payload.app_cfg.SamsungCam=context.global.SamsungCam;\n//\tif ('DlinkCam' in context.global) DBMsg.payload.app_cfg.DlinkCam=context.global.DlinkCam;\n    if ('camera_motion' in context.global) DBMsg.payload.app_cfg.camera_motion=context.global.camera_motion;\n    if ('tab_ui_shortcuts' in context.global) DBMsg.payload.app_cfg.tab_ui_shortcuts=context.global.tab_ui_shortcuts;\n//    if ('netatmo' in context.global) DBMsg.payload.app_cfg.netatmo=context.global.netatmo;\n    if ('winkState' in context.global) DBMsg.payload.app_cfg.winkState=context.global.winkState;\n    if ('LIFX_TOKEN' in context.global) DBMsg.payload.app_cfg.LIFX_TOKEN=context.global.LIFX_TOKEN;\n    if ('IFTTT_TOKEN' in context.global)DBMsg.payload.app_cfg.IFTTT_TOKEN=context.global.IFTTT_TOKEN;\n    if ('forecastIoApiKey' in context.global)DBMsg.payload.app_cfg.forecastIoApiKey=context.global.forecastIoApiKey;\n    if ('InitialStateKey' in context.global)DBMsg.payload.app_cfg.InitialStateKey=context.global.InitialStateKey;\n    if ('PushBulletKey' in context.global)DBMsg.payload.app_cfg.PushBulletKey=context.global.PushBulletKey;    \nnode.send(DBMsg);    \n}\nelse {\n        if (context.global.DEBUG ) node.warn('config data exists, restoring');\n    for (var key in msg.payload.app_cfg){\n            if (context.global.DEBUG ) node.warn('Restoring '+key+' settings')\n        if (key!=='winkState' && key!=='DlinkCam' && key!=='FosCam' && key!=='SamsungCam'){\n            context.global[key]=msg.payload.app_cfg[key];\n        } else if(key=='winkState' &&'restore_wink' in msg && msg.restore_wink) {\n            context.global[key]=msg.payload.app_cfg[key];\n        }\n    }\n}    \nreturn;",
     "outputs": 1,
     "noerr": 0,
-    "x": 986.5,
-    "y": 958,
+    "x": 1095.5,
+    "y": 952,
     "wires": [
       [
         "3c4c4c02.e33c24"
@@ -1139,8 +1122,8 @@
     "method": "use",
     "ret": "obj",
     "url": "",
-    "x": 1236.5,
-    "y": 957,
+    "x": 1345.5,
+    "y": 951,
     "wires": [
       [
         "2c968b99.4d2c64"
@@ -1155,8 +1138,8 @@
     "url": "/red/update_app_cfg",
     "method": "post",
     "swaggerDoc": "",
-    "x": 125,
-    "y": 1043,
+    "x": 132,
+    "y": 1071,
     "wires": [
       [
         "aa194ed6.9b85f"
@@ -1168,11 +1151,11 @@
     "type": "function",
     "z": "17b3daf5.e84c25",
     "name": "",
-    "func": "if(msg.req.headers.authorization && msg.req.headers.authorization==\"Bearer \"+context.global.FREEBOARD_TOKEN){\nmsg.statusCode=\"200\";\nvar msg1={}\nmsg1.db_mode=msg.payload.db_mode||\"read\";\nnode.send([msg1,msg])\n} else\n{\n    msg.statusCode=\"400\";\n    node.send([null,msg])\n}\nreturn;",
+    "func": "if(msg.req.headers.authorization && msg.req.headers.authorization==\"Bearer \"+context.global.FREEBOARD_TOKEN){\nmsg.statusCode=\"200\";\nvar msg1={}\nmsg1.db_mode=msg.payload.db_mode||\"read\";\nif ('restore_wink' in msg) msg1.restore_wink=msg.restore_wink;\nnode.send([msg1,msg])\n} else\n{\n    msg.statusCode=\"400\";\n    node.send([null,msg])\n}\nreturn;",
     "outputs": "2",
     "noerr": 0,
-    "x": 315.5,
-    "y": 1047,
+    "x": 403.5,
+    "y": 1070,
     "wires": [
       [
         "cec1220b.ba4f7"
@@ -1187,8 +1170,8 @@
     "type": "http response",
     "z": "17b3daf5.e84c25",
     "name": "",
-    "x": 460.5,
-    "y": 1054,
+    "x": 547.5,
+    "y": 1075,
     "wires": []
   },
   {
@@ -2202,6 +2185,23 @@
     "wires": []
   },
   {
+    "id": "32d823cc.59d5cc",
+    "type": "function",
+    "z": "17b3daf5.e84c25",
+    "name": "",
+    "func": "// Converts numeric degrees to radians\nfunction toRad(Value) {\n    return Value * Math.PI / 180;\n}\n\n\nfunction calcCrow(lat1, lon1, lat2, lon2) {\n  var R = 6371; // km\n  var dLat = toRad(lat2 - lat1);\n  var dLon = toRad(lon2 - lon1);\n  Rlat1 = toRad(lat1);\n  Rlat2 = toRad(lat2);\n\n  var a = Math.sin(dLat / 2) * Math.sin(dLat / 2) +\n    Math.sin(dLon/2) * Math.sin(dLon/2) * Math.cos(Rlat1) * Math.cos(Rlat2); \n  var c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a)); \n  var d = R * c;\n  return d;\n}\n\n\n\nif (context.global.OwnTracksPwd === msg.req.params.key) {\n    context.global.OwnTracksMaxAcc = context.global.OwnTracksMaxAcc || 100;\n    context.global.OwnTracksGeoRadius = context.global.OwnTracksGeoRadius || 100;    \n    if('_type' in msg.payload) {\n        if (msg.payload._type === 'encrypted') {\n            var secret = context.global.OwnTracksPwd;\n            var cypherText = new Buffer(msg.payload.data, 'base64');\n            var nonce = cypherText.slice(0,24);\n            var key = new Buffer(32);\n            key.fill(0);\n            key.write(secret);\n            try {\n                var clearText = context.global.wnr.crypto_open_easy(cypherText.slice(24),nonce,key,\"text\");\n            } catch (e) {\n                node.warn(\"error decrypting payload\");\n                return;\n            }\n            try{\n                var clearObj = JSON.parse(clearText);\n            } catch (e) {\n                node.warn(\"decrypted message not JSON\");\n                return;\n            }\n            msg.payload = clearObj; \n        }\n        var waypoint,user,pos;\n        var dst_from_home=-1;    \n        var do_send=false;\n        if (msg.payload._type === 'transition') {\n            waypoint = true;\n            do_send = true;\n            user = msg.req.params.user;\n            pos = msg.payload;\n        }\n        if (msg.payload._type === 'location') {\n        waypoint = false;\n        do_send = true;\n        user = msg.req.params.user;\n        pos = msg.payload;\n        }\n        if (do_send && pos.acc <= context.global.OwnTracksMaxAcc) {\n            if (!('Presence' in context.global)) context.global.Presence={};\n            if (!(user in context.global.Presence)) context.global.Presence[user]={\"home\":\"no\"};\n            var event_trigger='none';\n            if ('t' in pos) event_trigger=pos.t;\n            if ('trigger' in pos) event_trigger=pos.trigger;\n                if ('HomeLocation' in context.global){ \n                    dst_from_home=Math.round(calcCrow(pos.lat,pos.lon,context.global.HomeLocation.lat,context.global.HomeLocation.lon)*1000);\n                }        \n            loc_msg={\n                url:context.global.BlueMixUrlBase+'/red/wink/subscribtions',\n                method:\"POST\",\n                payload: {\n                     capabilities: { fields: [ \n                      { field: 'lat', type: 'float' },\n                      { field: 'lon', type: 'float' },\n                      { field: 'battery', type: 'percentage' },\n                      { field: 'lastWaypoint', type: 'string' },\n                      { field: 'lastEvent', type: 'string' },\n                      { field: 'accuracy', type: 'float' },\n                      { field: 'distanceFromHome', type: 'float' },\n                      { field: 'trigger', type: 'string' },\n                      { field: 'lastUpdated', type: 'timestamp'}\n                      ] },\n                  device_manufacturer: 'OwnTracks',\n                  \"eco_system\" : \"NODE-RED\",\n                  last_event: \n                   { brightness_occurred_at: null,\n                     loudness_occurred_at: null,\n                     vibration_occurred_at: null },\n                  last_reading: \n                   { \n                        agent_session_id: 'FALSE',\n                        connection: true,\n                        'lat': pos.lat,\n                        'lon': pos.lon,\n                        'coordinates':  pos.lat+','+pos.lon,\n                        'battery': pos.batt,\n                        'accuracy' : pos.acc,\n                        'trigger'  : event_trigger,\n                        'lastUpdated' : pos.tst\n                   },\n                  manufacturer_device_model: 'owntracks_geolocation_sensor',\n                  model_name: 'Geolocation Sensor',\n                  name:user+'_Geo',\n                  object_id:  user+'_Geo',\n                  object_type: 'sensor_pod',\n                  radio_type: 'wifi',\n                  sensor_pod_id: user+'_Geo',\n                  triggers: [],\n                  units: {},\n                  upc_code: user+'_Geo',\n                  upc_id: user+'_Geo'\n                  }\n            };\n            pos.acc=parseInt(pos.acc);\n            context.global.OwnTracksGeoRadius = parseInt(context.global.OwnTracksGeoRadius);\n            if(dst_from_home!=-1) dst_from_home=loc_msg.payload.last_reading.distanceFromHome=(dst_from_home < pos.acc ? 0 : dst_from_home - pos.acc);   \n            \n            if (context.global.GEO_DEBUG) node.warn(\"user: \" + user);\n            if (context.global.GEO_DEBUG) node.warn(\"distance from home:\" + dst_from_home);\n            if (context.global.GEO_DEBUG) node.warn(\"message type:\" + (waypoint ? 'waypoint' : 'location'));\n            if (context.global.GEO_DEBUG) node.warn(\"WNR home geo radius:\"+ context.global.OwnTracksGeoRadius || 100);\n            if (context.global.GEO_DEBUG) node.warn(\"current user state: \"+context.global.Presence[user].home);\n\n            if (waypoint /*|| dst_from_home<=50 || (dst_from_home < pos.acc && pos.acc <100)*/) { \n                if (context.global.GEO_DEBUG) node.warn(\"waypoint branch\");\n        //            pos.desc=(dst_from_home < pos.acc  ? 'home' : pos.desc);\n        //            pos.event=(dst_from_home < pos.acc  ? 'enter' : pos.event);\n        //            loc_msg.payload.last_reading.lastWaypoint=(dst_from_home < pos.acc  ? 'home' : pos.desc);\n        //            loc_msg.payload.last_reading.lastEvent=(dst_from_home < pos.acc  ? 'enter' : pos.event);\n                if (pos.desc.toLowerCase().indexOf('home')!=-1 && context.global.Presence[user].home==\"yes\") {\n                    waypoint=false\n                }\n                else \n                {\n                    loc_msg.payload.last_reading.lastWaypoint=(pos.desc);\n                    loc_msg.payload.last_reading.lastEvent=(pos.event);            \n                }\n            } else\n            {\n                if (context.global.GEO_DEBUG) node.warn(\"location branch\");\n                if(dst_from_home > context.global.OwnTracksGeoRadius && context.global.Presence[user].home==\"yes\"){\n                    if (context.global.GEO_DEBUG) node.warn(user+ \" left\");\n                    waypoint=true;\n                    pos.desc='home';\n                    pos.event='leave';\n                loc_msg.payload.last_reading.lastWaypoint=(pos.desc);                    \n                    loc_msg.payload.last_reading.lastEvent='leave';\n                } else if (dst_from_home < context.global.OwnTracksGeoRadius && context.global.Presence[user].home==='no') {\n                    if (context.global.GEO_DEBUG) node.warn(user+\" arrived\");                    \n                    waypoint=true;\n                    pos.desc='home';\n                    pos.event='enter';\n                    loc_msg.payload.last_reading.lastWaypoint=(pos.desc);\n                    loc_msg.payload.last_reading.lastEvent='enter';    \n                }\n            }\n            node.send(loc_msg); \n            if ((waypoint  && pos.desc.toLowerCase().indexOf('home')!=-1) /*|| dst_from_home < pos.acc*/){\n                loc_msg1={\n                    url:context.global.BlueMixUrlBase+'/red/presence',\n                method:\"POST\",\n                payload: {\n                \"iftttkey\":context.global.FREEBOARD_TOKEN,\"name\":user,\"home\":(pos.event=='enter' ? \"yes\" : \"no\")\n                }\n                };\n                node.send(loc_msg1);\n            }\n        }\n    }\n}",
+    "outputs": 1,
+    "noerr": 0,
+    "x": 527,
+    "y": 2272,
+    "wires": [
+      [
+        "6dde0e7b.b00ae",
+        "34bad3dd.93ae2c"
+      ]
+    ]
+  },
+  {
     "id": "b5bc728b.4105f",
     "type": "delay",
     "z": "17b3daf5.e84c25",
@@ -2422,6 +2422,63 @@
     "wires": [
       [
         "87217136.82f48"
+      ]
+    ]
+  },
+  {
+    "id": "ca6a10de.7e53e",
+    "type": "inject",
+    "z": "17b3daf5.e84c25",
+    "name": "",
+    "topic": "",
+    "payload": "",
+    "payloadType": "date",
+    "repeat": "3600",
+    "crontab": "",
+    "once": true,
+    "x": 105,
+    "y": 1011,
+    "wires": [
+      [
+        "c2377ced.4ca7a"
+      ]
+    ]
+  },
+  {
+    "id": "6b3e5449.696f8c",
+    "type": "function",
+    "z": "17b3daf5.e84c25",
+    "name": "",
+    "func": "msg.db_mode=\"update\";\nreturn msg;",
+    "outputs": 1,
+    "noerr": 0,
+    "x": 408,
+    "y": 1010,
+    "wires": [
+      [
+        "cec1220b.ba4f7"
+      ]
+    ]
+  },
+  {
+    "id": "c2377ced.4ca7a",
+    "type": "delay",
+    "z": "17b3daf5.e84c25",
+    "name": "",
+    "pauseType": "delay",
+    "timeout": "10",
+    "timeoutUnits": "minutes",
+    "rate": "1",
+    "rateUnits": "second",
+    "randomFirst": "1",
+    "randomLast": "5",
+    "randomUnits": "seconds",
+    "drop": false,
+    "x": 264,
+    "y": 1011,
+    "wires": [
+      [
+        "6b3e5449.696f8c"
       ]
     ]
   }
