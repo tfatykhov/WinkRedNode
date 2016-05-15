@@ -7,7 +7,8 @@
         "url":"https://github.com/tfatykhov/WinkRedNode/new/master"
     },
     "dependencies" : {
-        "libsodium-wrappers":"~0.x"
+        "libsodium-wrappers":"~0.x",
+        "wnr-ui" : "git://github.com/tfatykhov/wnrUI.git"
     },
     "files":["defaults"],
     "license": "MIT",
