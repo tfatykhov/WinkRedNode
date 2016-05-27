@@ -11,7 +11,7 @@ https://(your_app_name).mybluemix.net/freeboard/winkboardautogroup - sample free
 Added command that can be used in Robots to adjust theromstat settings:<br>
 #####Usage in robots/schedules
 it is similar to other commands:<br>
-mycmd= msg=context.global.executeTstatCMD(TstatName,command,extra parameter);
+mycmd= context.global.executeTstatCMD(TstatName,command,extra parameter);
 
 commands :
 
