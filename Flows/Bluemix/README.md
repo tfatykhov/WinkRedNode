@@ -8,7 +8,16 @@ https://(your_app_name).mybluemix.net/freeboard/winkboardautogroup - sample free
 -
 05/27/2016
 ------------
-Added command that can be used in Robots to adjust theromstat settings:<br>
+###Owntracks: Added ability to ignore iPhone ping events.
+* Navigate to configuration/Applicationsettings ignore iPhonePing switch (turned off by default)<br>
+![owntracks settings](images/owntracks13.png)
+
+Flow Editor:<br>
+*  Import updated [winkIntegration.json](winkIntegration.json)
+*  Import updated [tabletUI.json](tabletUI.json)
+
+
+###Added command that can be used in Robots to adjust theromstat settings:<br>
 #####Usage in robots/schedules
 it is similar to other commands:<br>
 mycmd= context.global.executeTstatCMD(TstatName,command,extra parameter);
