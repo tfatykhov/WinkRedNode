@@ -14,6 +14,7 @@ it is similar to other commands:<br>
 mycmd= msg=context.global.executeTstatCMD(TstatName,command,extra parameter);
 
 commands :
+
 	'mode' 
 	extra parameter : 'heat_only' , 'cool_only' , 'auto' (if your model permits this)
 
