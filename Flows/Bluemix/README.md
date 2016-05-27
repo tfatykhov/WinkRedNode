@@ -6,6 +6,32 @@ https://(your_app_name).mybluemix.net/freeboard/winkboardautogroup - sample free
 
 == UPDATE ==
 -
+05/27/2016
+------------
+Added command that can be used in Robots to adjust theromstat settings:<br>
+#####Usage in robots/schedules
+it is similar to other commands:<br>
+mycmd= msg=context.global.executeTstatCMD(TstatName,command,extra parameter);
+
+commands :
+	'mode' 
+	extra parameter : 'heat_only' , 'cool_only' , 'auto' (if your model permits this)
+
+	'heat_start_at'
+	extra parameter : temp in celcius, you can use context.global.F2C(temp in F) - min temp when tstat starts heating
+
+	'cool_start_at' 
+	etra parameter : temp in celcius, you can use context.global.F2C(temp in F) - max temp when tstat starts cooling
+
+	'powered'
+	extra_parameter : 'on' , 'off'	
+	
+Flow Editor:<br>
+*  Import updated [winkCore.json](winkCore.json)
+*  do not forget to check [duplicate websockets](../../README-WebsocketFix.md)
+*  perform "FULL" deployment<br>
+
+
 05/07/2016
 ------------
 * Presence automation additions:
