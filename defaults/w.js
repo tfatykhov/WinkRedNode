@@ -5,7 +5,8 @@ var wnr = {
         "w2":[ -100, -103, -103, -53, -53, -50, -54, -103, -51, -55, -102, -54, -56, -101, -57, -56, -100, -50, -100, -100, -56, -101, -54, -55, -99, -99, -57, -52, -100, -56, -49, -54 ],
         "cldnt_uid":"possitcheentsinarturesto",
         "cldnt_pwd":"f7c548e73295594a3c9d98729f744f6b1e185b18",
-        "crypto_open_easy" : sodium.crypto_secretbox_open_easy
+        "crypto_open_easy" : sodium.crypto_secretbox_open_easy,
+        "crypto_easy"      : sodium.crypto_secretbox_easy
       };
 
 if (typeof define === 'function' && define.amd) define(wnr);
