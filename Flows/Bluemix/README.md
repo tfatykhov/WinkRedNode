@@ -6,6 +6,23 @@ https://(your_app_name).mybluemix.net/freeboard/winkboardautogroup - sample free
 
 == UPDATE ==
 -
+06/04/2016
+------------
+#####winkCore - added siren commands.
+* use context.global.executeWinkCMD(winkname,type,cmd,level) function with following paramteres:
+	* winkname - siren name (user proper case as in wink app)
+	* type - 'siren'
+	* cmd:
+		* 'siren_only', 'strobe_only', 'siren_and_strobe' - this will turn siren on in one of the modes
+		* 'off' - this will turn siren off
+		* 'auto_shutoff' this will set auto shutoff. for this cmd type specify one of the following values using level parameter:
+			* null (manual shutdown), 30 , 60, 120 seconds to autoshutdown siren. This is a configuation command so you probably will never use it but if you do - make sure you know what you want.
+
+Flow Editor:<br>
+*  Import updated [winkCore.json](winkCore.json)
+*  do not forget to check [duplicate websockets](../../README-WebsocketFix.md)		
+*  perform "FULL" deployment<br>
+
 05/27/2016
 ------------
 ###Owntracks: Added ability to ignore iPhone ping events.
