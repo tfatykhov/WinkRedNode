@@ -8,7 +8,7 @@
     "method": "get",
     "swaggerDoc": "",
     "x": 123,
-    "y": 1202,
+    "y": 1335,
     "wires": [
       [
         "ddedc26f.2054e"
@@ -24,7 +24,7 @@
     "outputs": 1,
     "noerr": 0,
     "x": 521,
-    "y": 1226,
+    "y": 1359,
     "wires": [
       [
         "32df243.59850dc"
@@ -37,7 +37,7 @@
     "z": "811c60ec.7ee3a",
     "name": "",
     "x": 989,
-    "y": 1222,
+    "y": 1355,
     "wires": []
   },
   {
@@ -51,7 +51,7 @@
     "syntax": "mustache",
     "template": "<!DOCTYPE html>\n<html>\n  <head>\n    <meta charset=\"utf-8\">\n\t<meta name=\"mobile-web-app-capable\" content=\"yes\">\n    <meta name=\"apple-mobile-web-app-capable\" content=\"yes\" />\n    <meta name=\"apple-mobile-web-app-status-bar-style\" content=\"black\" />\n    <meta name=\"viewport\" content = \"width = device-width, initial-scale = 1.0, user-scalable = yes\" />\n    <title>Cameras control</title>\n\n    <link rel=\"stylesheet\" type=\"text/css\" href=\"bootstrap/css/bootstrap.min.css\" />\n    <link rel=\"stylesheet\" type=\"text/css\" href=\"font-awesome/css/font-awesome.min.css\" />\n    <link rel=\"stylesheet\" type=\"text/css\" href=\"css/local.css\" />\n    <style>\n        ::-webkit-scrollbar {\n            width: 12px;\n        }\n         \n        ::-webkit-scrollbar-track {\n            -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.3); \n            border-radius: 10px;\n        }\n         \n        ::-webkit-scrollbar-thumb {\n            border-radius: 10px;\n            -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.5); \n        }\n\n      html, body {\n        height: 100%;\n        margin: 0;\n        padding: 0;\n      }\n      #map {\n        height: 100%;\n      }\n    </style>\n    <script src=\"https://maps.googleapis.com/maps/api/js?key=AIzaSyBscuO_7CupdIdn3xIT7fnCh7clEvgeiqE\"></script>\n    <script type=\"text/javascript\" src=\"js/jquery-1.10.2.min.js\"></script>\n    <script type=\"text/javascript\" src=\"bootstrap/js/bootstrap.min.js\" async></script>\n    <script type=\"text/javascript\" src=\"js/jquery.noty.packaged.min.js\" async></script>\n    <script type=\"text/javascript\" src=\"js/eModalBl.min.js\" async></script>    \n    <script>\n      function initialize() {\n        var home = {lat:{{payload.home_location.lat}},lng:{{payload.home_location.lng}} }\n        //{ lat: 12.97, lng: 77.59 };\n        var map = new google.maps.Map(document.getElementById('map'), {\n          zoom: 14,\n          center: home\n        });\n        // Add a marker at the center of the map.\n        addMarker(home, map,'Home');\n        var homeCircle = new google.maps.Circle({\n      strokeColor: '#99e6ff',\n      strokeOpacity: 0.8,\n      strokeWeight: 2,\n      fillColor: ' #99e6ff',\n      fillOpacity: 0.25,\n      map: map,\n      center: home,\n      radius: {{payload.home_radius}}\n    });\n    Regions.homeCircle=homeCircle;\n      {{#payload.geo_locations}}\n       addMarker({lat:{{lat}},lng:{{lng}}},map,'{{name}}');\n      {{/payload.geo_locations}}  \n      };\n\n      // Adds a marker to the map.\n      function addMarker(location, map,label) {\n        // Add the marker at the clicked location, and add the next-available label\n        // from the array of alphabetical characters.\n          marker = new google.maps.Marker({\n          position: location,\n          label: label,\n          map: map\n        });\n        Markers[label]={\"marker\":marker};\n      };\nfunction moveMarker(marker,lat,lng ) {\n    marker.setPosition(new google.maps.LatLng(lat, lng));\n}\nfunction executeQuery() {\n        $.ajax({\n        url: 'myfamilyjson',\n        method: 'GET',\n        ifModified:true,\n//        dataType: 'JSON',\n        headers: {\n//        'Authorization':'Bearer {{payload.pwd_str}}',\n        'Content-Type':'application/json',\n        'If-None-Match':$eTag\n        },\n        success: function(data,status, xhr) {\n            if (xhr.status===200){\n                if (Regions.homeCircle) Regions.homeCircle.setRadius(data.home_radius);\n                var geo_markers=data.geo_locations;// JSON.parse(data);\n                $eTag=xhr.getResponseHeader('Etag');\n                for(var i=0;i<geo_markers.length;i++){\n                    var g=geo_markers[i];\n                    moveMarker(Markers[g.name].marker,g.lat,g.lng);\n                }\n            }\n        } \n  });\n};\n    $(document).ready(function() {\n    Markers={};\n    Regions={};\n    $eTag=\"sasd12312sdfsdf=\"; \n    google.maps.event.addDomListener(window, 'load', initialize);\n    setInterval(executeQuery, 12000);    \n    });\n    </script>\n  </head>\n<body>\n<div id=\"map\"></div>\n</body>\n</html>\n<!-- data-angleOffset=-125 data-angleArc=250 -->",
     "x": 844,
-    "y": 1192,
+    "y": 1325,
     "wires": [
       [
         "2defb42f.f3c91c"
@@ -67,7 +67,7 @@
     "method": "get",
     "swaggerDoc": "",
     "x": 125,
-    "y": 1268,
+    "y": 1401,
     "wires": [
       [
         "9f0e12d3.b20cf"
@@ -83,7 +83,7 @@
     "outputs": 1,
     "noerr": 0,
     "x": 324,
-    "y": 1203,
+    "y": 1336,
     "wires": [
       [
         "92a0228f.597d3"
@@ -99,7 +99,7 @@
     "outputs": 1,
     "noerr": 0,
     "x": 315,
-    "y": 1267,
+    "y": 1400,
     "wires": [
       [
         "92a0228f.597d3"
@@ -126,7 +126,7 @@
     "checkall": "true",
     "outputs": 2,
     "x": 692,
-    "y": 1226,
+    "y": 1359,
     "wires": [
       [
         "10a38b9.7161074"
@@ -142,7 +142,7 @@
     "z": "811c60ec.7ee3a",
     "name": "",
     "x": 850,
-    "y": 1246,
+    "y": 1379,
     "wires": [
       [
         "2defb42f.f3c91c"
@@ -661,7 +661,7 @@
     "z": "811c60ec.7ee3a",
     "name": "",
     "x": 96,
-    "y": 1350,
+    "y": 1483,
     "wires": [
       [
         "3f13827c.16c26e"
@@ -677,7 +677,7 @@
     "console": "true",
     "complete": "error",
     "x": 298,
-    "y": 1374,
+    "y": 1507,
     "wires": []
   },
   {
@@ -701,7 +701,7 @@
     "type": "function",
     "z": "811c60ec.7ee3a",
     "name": "GenSummary",
-    "func": "var pct = function(value) {\n    return ((value > 1.0 ? value : value * 100).toFixed(0) + '%')\n}\nvar dual_temp = function (value) {\n    return (typeof value === 'number' ? (value.toFixed(1) + 'C / ' + ((value * 1.8) + 32).toFixed(1) + 'F') : '')\n}\n//if ((msg.req.body.uid==context.global.WinkUser.uid && msg.req.body.pwd==context.global.WinkUser.pwd)||context.global.getCookie('exchange_token',msg.req.headers.cookie)==context.global.FREEBOARD_TOKEN || msg.payload.token==context.global.FREEBOARD_TOKEN){\nif (true){\nmsg.statusCode=\"200\";\nmsg.payload={}\n//msg.payload.pwd_str=context.global.FREEBOARD_TOKEN;\n//msg.payload.ifttt_token=context.global.FREEBOARD_TOKEN;\nmsg.payload.home_lat=('HomeLocation' in context.global ? context.global.HomeLocation.lat : null);\nmsg.payload.home_lon=('HomeLocation' in context.global ? context.global.HomeLocation.lon : null);\nmsg.payload.weather=context.global.Weather || null;\nmsg.payload.HoursFormat24=context.global.HoursFormat24 || false;\nmsg.payload.Schedules=('Schedules' in context.global && context.global.Schedules=='on' ? true : false);\nmsg.payload.VacationMode=('VacationMode' in context.global && context.global.VacationMode=='on' ? true : false);\n//msg.payload.lights=context.global.winkState.groups['@lights'];\n//msg.payload.wholeHouse=context.global.winkState.groups['.all'];\nvar all=context.global.winkState.groups['.all'];\nvar l=context.global.winkState.groups['@lights'];\nmsg.payload.home_components=[];\n//msg.payload.hasLocks=false;\n//msg.payload.hasCoAlarms=false;\n//msg.payload.hasLights=false;\nvar Wmsg = context.global.render_home_components('.all');\nmsg.payload.home_components=Wmsg.payload.home_components;\nmsg.res.statusCode=\"200\";\nif (msg.topic=='json'){\n    var Etag=\"\";\n    if ('CRYPTO' in context.global) Etag=context.global.CRYPTO.createHash(\"md5\").update(JSON.stringify(msg.payload),\"utf8\").digest(\"hex\");\n    msg.headers={\n      'Content-Type': 'application/json',\n      'ETag': Etag\n    };\n}\n} else {\nmsg.res.statusCode=\"403\";\n}\nreturn msg;",
+    "func": "var pct = function(value) {\n    return ((value > 1.0 ? value : value * 100).toFixed(0) + '%')\n}\nvar dual_temp = function (value) {\n    return (typeof value === 'number' ? (value.toFixed(1) + 'C / ' + ((value * 1.8) + 32).toFixed(1) + 'F') : '')\n}\nif ((msg.req.body.uid==context.global.WinkUser.uid && msg.req.body.pwd==context.global.WinkUser.pwd)||context.global.getCookie('exchange_token',msg.req.headers.cookie)==context.global.FREEBOARD_TOKEN || msg.payload.token==context.global.FREEBOARD_TOKEN){\n//if (true){\nmsg.statusCode=\"200\";\nmsg.payload={}\n//msg.payload.pwd_str=context.global.FREEBOARD_TOKEN;\n//msg.payload.ifttt_token=context.global.FREEBOARD_TOKEN;\nmsg.payload.home_lat=('HomeLocation' in context.global ? context.global.HomeLocation.lat : null);\nmsg.payload.home_lon=('HomeLocation' in context.global ? context.global.HomeLocation.lon : null);\nmsg.payload.weather=context.global.Weather || null;\nmsg.payload.HoursFormat24=context.global.HoursFormat24 || false;\nmsg.payload.Schedules=('Schedules' in context.global && context.global.Schedules=='on' ? true : false);\nmsg.payload.VacationMode=('VacationMode' in context.global && context.global.VacationMode=='on' ? true : false);\n//msg.payload.lights=context.global.winkState.groups['@lights'];\n//msg.payload.wholeHouse=context.global.winkState.groups['.all'];\nvar all=context.global.winkState.groups['.all'];\nvar l=context.global.winkState.groups['@lights'];\nmsg.payload.home_components=[];\n//msg.payload.hasLocks=false;\n//msg.payload.hasCoAlarms=false;\n//msg.payload.hasLights=false;\nvar Wmsg = context.global.render_home_components('.all');\nmsg.payload.home_components=Wmsg.payload.home_components;\nmsg.res.statusCode=\"200\";\nif (msg.topic=='json'){\n    var Etag=\"\";\n    if ('CRYPTO' in context.global) Etag=context.global.CRYPTO.createHash(\"md5\").update(JSON.stringify(msg.payload),\"utf8\").digest(\"hex\");\n    msg.headers={\n      'Content-Type': 'application/json',\n      'ETag': Etag\n    };\n}\n} else {\nmsg.res.statusCode=\"403\";\n}\nreturn msg;",
     "outputs": 1,
     "noerr": 0,
     "x": 528,
@@ -892,7 +892,7 @@
     "z": "811c60ec.7ee3a",
     "name": "",
     "x": 719,
-    "y": 1015,
+    "y": 1148,
     "wires": []
   },
   {
@@ -904,7 +904,7 @@
     "method": "get",
     "swaggerDoc": "",
     "x": 118,
-    "y": 1013,
+    "y": 1146,
     "wires": [
       [
         "3f156dce.19e132"
@@ -920,7 +920,7 @@
     "outputs": 1,
     "noerr": 0,
     "x": 376.4999694824219,
-    "y": 1014,
+    "y": 1147,
     "wires": [
       [
         "f8777463.9de528"
@@ -936,7 +936,7 @@
     "method": "post",
     "swaggerDoc": "",
     "x": 122,
-    "y": 1068,
+    "y": 1201,
     "wires": [
       [
         "cf1433c8.bbfa3",
@@ -953,7 +953,7 @@
     "outputs": "1",
     "noerr": 0,
     "x": 341,
-    "y": 1069,
+    "y": 1202,
     "wires": [
       [
         "2747ff02.74889",
@@ -967,7 +967,7 @@
     "z": "811c60ec.7ee3a",
     "name": "",
     "x": 521,
-    "y": 1104,
+    "y": 1237,
     "wires": []
   },
   {
@@ -979,7 +979,7 @@
     "ret": "txt",
     "url": "",
     "x": 548,
-    "y": 1057,
+    "y": 1190,
     "wires": [
       []
     ]
@@ -1099,9 +1099,9 @@
     "name": "",
     "active": true,
     "console": "false",
-    "complete": "payload.OwnTracksIgnorePing",
-    "x": 384,
-    "y": 1147,
+    "complete": "payload",
+    "x": 304,
+    "y": 1280,
     "wires": []
   },
   {
@@ -1341,7 +1341,7 @@
     "outputs": 1,
     "noerr": 0,
     "x": 339,
-    "y": 566,
+    "y": 568,
     "wires": [
       [
         "9314be7f.a2a16"
@@ -1385,7 +1385,7 @@
     "name": "Config page---------------------------------------",
     "info": "",
     "x": 175,
-    "y": 968,
+    "y": 1101,
     "wires": []
   },
   {
@@ -1410,8 +1410,8 @@
     "format": "html",
     "syntax": "mustache",
     "template": "\n<!DOCTYPE html>\n<head>\n    <meta charset=\"utf-8\">\n    <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">\n    <meta name=\"mobile-web-app-capable\" content=\"yes\">\n    <meta name=\"apple-mobile-web-app-capable\" content=\"yes\" />\n    <meta name=\"apple-mobile-web-app-status-bar-style\" content=\"black\" />\n    <title>Home Dashboard</title>\n  <!--<link rel=\"stylesheet\" type=\"text/css\" href=\"bootstrap/css/bootstrap.min.css\" /> -->\n  <!--  <link rel=\"stylesheet\" type=\"text/css\" href=\"font-awesome/css/font-awesome.min.css\" /> -->\n  <!-- <link rel=\"stylesheet\" type=\"text/css\" href=\"css/local.css\" /> -->\n    <!-- Material Design fonts -->\n    <!-- Bootstrap -->\n    <link href=\"//maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css\" rel=\"stylesheet\">    \n    <link rel=\"stylesheet\" href=\"//fonts.googleapis.com/css?family=Roboto:300,400,500,700\" type=\"text/css\">\n    <link href=\"//fonts.googleapis.com/icon?family=Material+Icons\" rel=\"stylesheet\">\n\n  \n    <link href=\"//maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css\" rel=\"stylesheet\"> \n    <link rel=\"stylesheet\" href=\"//cdnjs.cloudflare.com/ajax/libs/bootstrap-material-design/0.2.1/css/material.min.css\" />\n    <link rel=\"stylesheet\" href=\"//cdnjs.cloudflare.com/ajax/libs/bootstrap-material-design/0.2.1/css/ripples.min.css\" />    \n  \n    <link rel=\"shortcut icon\" href=\"assets/img/main_ico_02.png\">\n    <style>\n  .container {\n        background-color: rgb(12, 12, 12);\n        height: 100vh;\n        width: 100vw;\n    }\n\n.panel-primary {\n       /* background-color: rgb(12, 12, 12); */\n\n    }\n\n.panel-primary>.panel-heading {\n    background-color: #2A9FD6;\n}    \n    </style>\n</head>\n<body>\n<div class=\"container\">\n<form role=\"form\" class=\"form-signin\" action=\"/freeboard/ui\" method=\"POST\">        \n        <br>\n        <br>\n        <br>\n        <br>\n        <div class=\"col-md-9 col-md-offset-1\">\n       <div class=\"panel panel-primary\">\n        <div class=\"panel-heading\">\n            <h3>Please login using Wink app credentials</h3>\n        </div>    \n        <div class=\"panel-body\">\n            <div class=\"col-md-9 col-lg-9 col-sm-12 col-xs-12\">\n                <div class=\"input-group input-primary\">\n                    <span class=\"input-group-addon input-primary\"><i class=\"glyphicon glyphicon-user\"></i></span>\n                    <input type=\"email\" name=\"uid\" class=\"form-control input-lg\"  id=\"emailaddress\" placeholder=\"Enter email address\">\n                </div>\n            </div>\n            <div class=\"col-md-9 col-lg-9 col-sm-12 col-xs-12\">\n            <br>\n                <div class=\"input-group\">\n                    <span class=\"input-group-addon input-primary\"><i class=\"glyphicon glyphicon-lock\"></i></span>\n                    <input type=\"password\" name=\"pwd\" class=\"form-control input-lg\"  id=\"password\" placeholder=\"Enter Password\">\n                </div>\n            </div>\n        <div class=\"col-md-4 col-lg-4 col-sm-4 col-xs-4\">\n        <br>\n        <br>\n            <div class=\"form-group\">\n                <button type=\"submit\" class=\"btn btn-info btn-raised btn-lg\">\n                    Login\n                </button>\n            </div>\n        </div>\n    </div> \n  </div>\n </div> \n</form> \n</div>\n    <!-- /#wrapper -->\n    <script type=\"text/javascript\" src=\"js/jquery-1.10.2.min.js\"></script>\n    <script type=\"text/javascript\" src=\"bootstrap/js/bootstrap.min.js\" async></script>\n    <!--<script type=\"text/javascript\" src=\"https://www.prepbootstrap.com/Content/js/gridData.js\" async></script> -->\n</body>\n</html>\n",
-    "x": 560,
-    "y": 163,
+    "x": 575,
+    "y": 167,
     "wires": [
       []
     ]
@@ -1427,10 +1427,64 @@
     "syntax": "mustache",
     "template": "<!DOCTYPE html>\n<html lang=\"en\"><!--manifest=\"manifest.cache\"-->\n<head>\n    <meta charset=\"utf-8\">\n\t<meta name=\"mobile-web-app-capable\" content=\"yes\">\n    <meta name=\"apple-mobile-web-app-capable\" content=\"yes\" />\n    <meta name=\"apple-mobile-web-app-status-bar-style\" content=\"black\" />\n    <meta name=\"viewport\" content = \"width = device-width, initial-scale = 1.0, user-scalable = yes\" />\n    <title>Configuration</title>\n    <!--    <link rel=\"stylesheet\" type=\"text/css\" href=\"bootstrap/css/bootstrap.min.css\" /> -->\n    <!-- Material Design fonts -->\n    <!-- Bootstrap -->\n    <link href=\"//maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css\" rel=\"stylesheet\">    \n    <link rel=\"stylesheet\" href=\"//fonts.googleapis.com/css?family=Roboto:300,400,500,700\" type=\"text/css\">\n    <link href=\"//fonts.googleapis.com/icon?family=Material+Icons\" rel=\"stylesheet\">\n\n  \n    <link href=\"//maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css\" rel=\"stylesheet\"> \n    <link rel=\"stylesheet\" href=\"//cdnjs.cloudflare.com/ajax/libs/bootstrap-material-design/0.5.9/css/bootstrap-material-design.min.css\" />\n    <link rel=\"stylesheet\" href=\"//cdnjs.cloudflare.com/ajax/libs/bootstrap-material-design/0.5.9/css/ripples.min.css\" />    \n\n    <!--<link rel=\"stylesheet\" type=\"text/css\" href=\"css/local.css\" />\n    <link rel=\"stylesheet\" href=\"css/weather-icons.css\">\n    <link rel=\"stylesheet\" href=\"css/weather-icons-wind.css\">\n    <link rel=\"stylesheet\" type=\"text/css\" href=\"css/animate.css\" />-->\n    <!--<link rel=\"stylesheet\" type=\"text/css\" href=\"css/c-ico.css\"> -->\n    <link rel=\"stylesheet\" type=\"text/css\" href=\"css/selectize.bootstrap3.css\" />\n    <link rel=\"stylesheet\" type=\"text/css\" href=\"//cdnjs.cloudflare.com/ajax/libs/selectize.js/0.12.1/css/selectize.bootstrap3.min.css\" /> \n    <style>\n        ::-webkit-scrollbar {\n            width: 12px;\n        }\n         \n        ::-webkit-scrollbar-track {\n            -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.3); \n            border-radius: 10px;\n        }\n         \n        ::-webkit-scrollbar-thumb {\n            border-radius: 10px;\n            -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.5); \n        }\n            a, a:hover, a:focus {\n            color: #97E005;\n        }\n    .form-horizontal .control-label {\n        padding-top: 0px;\n        margin-bottom: 0;\n        text-align: right;\n    }\n    .form-control {\n        display: block;\n        width: 100%;\n        height: 38px;\n        padding: 8px 12px;\n        font-size: 14px;\n        line-height: 1.42857143;\n        color: #337AB7;\n    }\n    .form_config{\n        padding-top: 0px;\n    }\n    .config_label {\n        padding-top: 0px;\n        color: #C7A173;\n    }\n    .h-scroll {\n    height: 70vh; /* %-height of the viewport */\n    overflow-y: scroll;\n    background-color:#242424;\n    }\n    .container-fluid {\n        background-color: rgb(12, 12, 12);\n    }\n \n .selectize-control.plugin-remove_button {\n    background: #242424; \n    background-image:none;\n }\n \n  .selectize-control.plugin-remove_button.multi {\n    background: #242424; \n    background-image:none;\n }\n    \n\n    .selectize-control.multi .selectize-input {\n    padding-left: 9px;\n    padding-right: 9px;\n    border: 1px solid #3c763d;\n    }\n   \n    .selectize-control.multi .selectize-input>.item, .selectize-control.single .selectize-input.input-active>.item, .selectize-control.multi .selectize-input.input-active>.item {\n    display: inline-block;\n    margin: 0 8px 3px 0;\n    padding-left: 15px;\n    color: aquamarine;\n    background: #2F8686;\n    /* border: 0; */\n}  \n\n.selectize-control.multi>.selectize-input.input-active  {\n    border: 1px solid #3c763d;    \n    background-color:#242424;\n}\n\n.selectize-dropdown .active {\n  color: azure;\n  background-color: #2F8686;\n}\n.selectize-dropdown-content{\n    border: 1px solid #3c763d;    \n    background-color:#242424;\n}\n.form-primary .is-active{\n    background-color:#242424;\n}\n\n.list-group-item-warning {\n    color: #FFA100;\n    background-color: #fcf8e3;\n}\n\n.panel-primary>.panel-heading {\n    background-color: #2A9FD6;\n}\n\n.panel.panel-primary>.panel-heading  {\n    background-color: #2A9FD6;\n}\n\n.form-group.is-focused .togglebutton label:hover{\n    color:rgb(42, 159, 214);\n}\n\n.togglebutton label input[type=checkbox]:first-child:checked+.toggle:after {\n    background-color: #2A9FD6;\n}\n\n.togglebutton label input[type=checkbox]:first-child:checked+.toggle {\n    background-color: rgba(42, 159, 214, 0.52);\n}\n.form-group label.control-label {\n    font-size: 15px;\n    line-height: 1.07142857;\n    color: #337ab7;\n    font-weight: 400;\n    margin: 16px 0 0 0;\n}\n.form-group .checkbox label, .form-group .radio label, .form-group label {\n    font-size: 16px;\n    color: rgba(42, 159, 214, 0.58);\n\n}\n  .container {\n        background-color: rgb(0, 0, 0);\n        height: 98vh;\n        width: 98vw;\n    }\nbody {\n    background-color: #000000;\n}\n\n.form-group.label-floating.is-focused label.control-label, .form-group.label-floating:not(.is-empty) label.control-label, .form-group.label-static label.control-label {\n    font-size: 14px;\n    color: #22B1B1;\n}\n\n.modal-content>.modal-header {\n    border-bottom: none;\n    padding-top: 12px;\n    padding-right: 24px;\n    padding-bottom: 12px;\n    padding-left: 24px;\n    background-color: rgb(0, 195, 220);\n}\n\n.modal-content>.modal-body {\n    padding-top: 24px;\n    padding-right: 24px;\n    padding-bottom: 16px;\n    padding-left: 24px;\n    background-color: #1F1F1F;\n    color: #2487B6;\n}\n.modal-content>.modal-footer {\n        background-color: #1F1F1F;\n}\n\n.list-group .list-group-item .list-group-item-heading {\n    color: #2196F3;\n}\n\n.list-group>.list-group-separator {\n    clear: both;\n    overflow: hidden;\n    margin-top: 10px;\n    margin-bottom: 10px;\n    background-color: #273F52;\n}\n\n.list-group>.list-group-item>.row-action-primary i {\n    background: rgba(0, 0, 0, 0);\n    border-radius: 100%;\n    text-align: center;\n    line-height: 56px;\n    font-size: 20px;\n    color: #2487B6;\n}\n.btn>i.material-icons:hover {\n color:#6CFF00;\n}\n.btn-raised:hover {\n    background:azure;\n}\n </style>\n</head>\n<body >\n<form class=\"form-horizontal form_config bs-component\" role=\"form\" id=\"cfg_form\">    \n<div class=\"container\">\n    <div class=\"panel-group\" id=\"accordion\" role=\"tablist\" aria-multiselectable=\"true\">\n        <div class=\"panel panel-primary\" clearfix style=\"background:none;\">        \n            <div class=\"panel-heading\" role=\"tab\" id=\"headingOne\">\n              <h5 class=\"panel-title\">\n                <a role=\"button\" data-toggle=\"collapse\" data-parent=\"#accordion\" href=\"#collapseOne\" aria-expanded=\"true\" aria-controls=\"collapseOne\">\n                <!--    <span class=\"fa fa-cogs\" aria-hidden=\"true\"></span> -->\n                <i class=\"material-icons\">device_hub</i>                \n                    Integration settings\n                </a>\n              </h5>\n            </div>\n            <div id=\"collapseOne\" class=\"panel-collapse collapse in\" role=\"tabpanel\" aria-labelledby=\"headingOne\">    \n            <div class=\"panel-body  h-scroll scrollspy\">\n            <div class=\"col-md-11\" data-spy=\"affix\">\n        <!--    <a href=\"javascript:void(0)\"  -->\n            <button  type=\"button\" class=\"btn btn-info btn-raised btn-fab pull-right\"  data-toggle=\"modal\" data-target=\"#intsetHelp\"><i class=\"material-icons\">help_outline</i></button>                                \n            </div>            \n             <div class=\"col-md-8 col-md-offset-1\">   \n             {{#payload.int_txt_fields}}\n                 <div class=\"form-group label-floating\">\n                    {{^isCheck}}<label class=\"control-label config_label\" for=\"{{item}}\">{{label}}</label>{{/isCheck}}\n                    {{#isCheck}}<div class=\"togglebutton\"><label>{{/isCheck}}                    \n                      <input type=\"{{type}}\" {{^isCheck}}class=\"form-control\"{{/isCheck}} name=\"{{item}}\" id=\"{{item}}\"   {{^isCheck}}value=\"{{value}}\"{{/isCheck}}  {{#value}}checked{{/value}} > {{#isCheck}}<b>{{label}}</b>{{/isCheck}}\n                    {{#isCheck}}</label></div>{{/isCheck}}\n                </div>\n                   {{/payload.int_txt_fields}}\n             </div>       \n            </div>    \n        </div>\n    </div> <!--first panel -->\n    <div class=\"panel panel-primary\" clearfix style=\"background:none;\">\n        <div class=\"panel-heading\" role=\"tab\" id=\"headingTwo\">\n          <h5 class=\"panel-title\">\n            <a class=\"collapsed\" role=\"button\" data-toggle=\"collapse\" data-parent=\"#accordion\" href=\"#collapseTwo\" aria-expanded=\"false\" aria-controls=\"collapseTwo\">\n            <!--   <p class=\"text-nowrap\"> -->\n            <!--<span class=\"fa fa-wrench\" aria-hidden=\"true\"></span>  -->\n            <i class=\"material-icons\">settings_applications</i>                \n                Application Settings\n            <!--  </p>  -->\n            </a>\n          </h5>\n        </div>\n        <div id=\"collapseTwo\" class=\"panel-collapse collapse\" role=\"tabpanel\" aria-labelledby=\"headingTwo\">\n            <div class=\"panel-body h-scroll\">\n            <div class=\"col-md-11\" data-spy=\"affix\">                \n            <button  type=\"button\" class=\"btn btn-info btn-raised  btn-fab pull-right\"  data-toggle=\"modal\" data-target=\"#appsetHelp\"><i class=\"material-icons\">help_outline</i></button>                \n            </div>            \n<!--            <button type=\"button\" class=\"btn btn-info btn-raised btn-sm pull-right\" data-toggle=\"modal\" data-target=\"#appsetHelp\">Help</buton> -->\n             <div class=\"col-md-8 col-md-offset-1\">                 \n            {{#payload.txt_fields}}\n              <div class=\"form-group label-floating\">\n                {{^isCheck}}<label class=\"control-label config_label\" for=\"{{item}}\">{{label}}</label>{{/isCheck}}\n                {{#isCheck}}<div class=\"togglebutton\"><label>{{/isCheck}}                    \n                  <input type=\"{{type}}\" {{^isCheck}}class=\"form-control\"{{/isCheck}} name=\"{{item}}\" id=\"{{item}}\"   {{^isCheck}}value=\"{{value}}\"{{/isCheck}}  {{#value}}checked{{/value}} > {{#isCheck}}<b>{{label}}</b>{{/isCheck}}\n                {{#isCheck}}</label></div>{{/isCheck}}                  \n              </div>\n           {{/payload.txt_fields}}                \n                <div class=\"form-group\">\n                    <label class=\"control-label config_label\">UI Shortcuts</label>\n                        <select class=\"form-control\" name=\"tab_ui_shortcuts\" id=\"tab_ui_shortcuts\" multiple>\n                            {{#payload.scenes}}\n                                <option class=\"option option-info\" value=\"{{name}}\" {{#selected}} selected=\"selected\"{{/selected}} >{{name}}</option>\n                            {{/payload.scenes}}\n                        </select>\n                </div>\n             </div>    \n            </div>\n        </div>\n     </div>\n       <div class=\"panel panel-primary\" clearfix style=\"background:none;\">\n        <div class=\"panel-heading\" role=\"tab\" id=\"headingThree\">\n          <h5 class=\"panel-title\">\n            <a class=\"collapsed\" role=\"button\" data-toggle=\"collapse\" data-parent=\"#accordion\" href=\"#collapseThree\" aria-expanded=\"false\" aria-controls=\"collapseThree\">\n                <!--<span class=\"fa fa-wrench\" aria-hidden=\"true\"></span>  -->\n                <i class=\"material-icons\">event_available</i>\n                Vacation Mode Settings\n            </a>\n          </h5>\n        </div>\n        <div id=\"collapseThree\" class=\"panel-collapse collapse\" role=\"tabpanel\" aria-labelledby=\"headingThree\">\n            <div class=\"panel-body h-scroll\">\n             <div class=\"col-md-8 col-md-offset-1\">                  \n            {{#payload.vaca_settings}}\n              <div class=\"form-group label-floating\">\n                {{^isCheck}}<label class=\"control-label config_label label-large\" for=\"{{item}}\">{{label}}</label>{{/isCheck}}\n                {{#isCheck}}<div class=\"togglebutton\"><label>{{/isCheck}}                    \n                  <input type=\"{{type}}\" {{^isCheck}}class=\"form-control\"{{/isCheck}} name=\"{{item}}\" id=\"{{item}}\"  {{^isCheck}}value=\"{{value}}\"{{/isCheck}}  {{#value}}checked{{/value}} >{{#isCheck}}<b>{{label}}</b>{{/isCheck}}\n                {{#isCheck}}</label></div>{{/isCheck}}                \n              </div>\n           {{/payload.vaca_settings}}                \n                <div class=\"form-group\">\n\n                    <label class=\"control-label config_label\">Select light bulbs to use</label>\n                        <select class=\"form-control\" name=\"vaca_light_bulbs\" id=\"vaca_light_bulbs\" multiple>\n                            {{#payload.vaca_light_bulbs}}\n                                <option class=\"option\" value=\"{{name}}\" {{#selected}} selected=\"selected\"{{/selected}} >{{name}}</option>\n                            {{/payload.vaca_light_bulbs}}\n                        </select>\n\n<!--                    <br>\n                    <label class=\"control-label config_label label-large\">Select binary switches to use</label>\n                        <select class=\"form-control\" name=\"vaca_binary_switches\" id=\"vaca_binary_switches\" multiple>\n                            {{#payload.vaca_binary_switches}}\n                                <option class=\"option\" value=\"{{name}}\" {{#selected}} selected=\"selected\"{{/selected}} >{{name}}</option>\n                            {{/payload.vaca_binary_switches}}\n                        </select>\n-->\n                </div>\n             </div>    \n            </div>\n        </div>\n     </div> \n  </div>\n     <button type=\"submit\" id=\"sbmt_form\" class=\"btn btn-primary btn-block btn-raised\">Submit</button>\n    <button type=\"button\"  id=\"refresh_wink\" class=\"btn btn-warning btn-block btn-raised\">Refresh Wink Data</button>\n </div> \n</form>\n\n<div id=\"appsetHelp\" class=\"modal fade\" role=\"dialog\">\n  <div class=\"modal-dialog\">\n    <div class=\"modal-content\">\n      <div class=\"modal-header\">\n        <button type=\"button\" class=\"close\" data-dismiss=\"modal\" aria-hidden=\"true\"><i class=\"material-icons\">highlight_off</i></button>\n        <h4 class=\"modal-title\">Additional information</h4>\n      </div>\n      <div class=\"modal-body\">\n          \n    <div class=\"list-group\">\n      <div class=\"list-group-item\">\n        <div class=\"row-action-primary\">\n         <i class=\"material-icons\">info_outline</i>\n        </div>\n        <div class=\"row-content\">\n                   <h5 class=\"list-group-item-heading\">Motion affects thermostat</h5>\n          <p class=\"list-group-item-text\">This option will allow system to prevent thermostat switch to away mode if any motion sensor detecting motion</p>\n        </div>\n      </div>\n        <div class=\"list-group-separator\"></div>\n      <div class=\"list-group-item\">\n        <div class=\"row-action-primary\">\n         <i class=\"material-icons\">info_outline</i>\n        </div>\n        <div class=\"row-content\">\n                   <h5 class=\"list-group-item-heading\">Use 24 hour format</h5>\n    \n          <p class=\"list-group-item-text\">This option will change time display format on summary page</p>\n        </div>\n      </div>\n        <div class=\"list-group-separator\"></div>         \n    </div>    \n    <div class=\"list-group\">\n      <div class=\"list-group-item\">\n        <div class=\"row-action-primary\">\n         <i class=\"material-icons\">info_outline</i>\n        </div>\n        <div class=\"row-content\">\n                   <h5 class=\"list-group-item-heading\">Show Light Changes in the log</h5>\n    \n          <p class=\"list-group-item-text\">This option will turn on/off light status log on summary page</p>\n        </div>\n      </div>\n        <div class=\"list-group-separator\"></div>\n    </div>   \n    <div class=\"list-group\">\n      <div class=\"list-group-item\">\n        <div class=\"row-action-primary\">\n         <i class=\"material-icons\">info_outline</i>\n        </div>\n        <div class=\"row-content\">\n                   <h5 class=\"list-group-item-heading\">Send Ligths/Sensors Notification via Pushbullet</h5>\n    \n          <p class=\"list-group-item-text\">This option will turn data flow via pushbullet to mobile device<br>\n        You can sign in and get you Access token <a href=\"https://www.pushbullet.com/#settings\" target=\"_blank\">Here</a></p>\n        </div>\n      </div>\n        <div class=\"list-group-separator\"></div>         \n    </div>   \n    <div class=\"list-group\">\n      <div class=\"list-group-item\">\n        <div class=\"row-action-primary\">\n         <i class=\"material-icons\">info_outline</i>\n        </div>\n        <div class=\"row-content\">\n                   <h5 class=\"list-group-item-heading\">Send data to IFTTT</h5>\n    \n          <p class=\"list-group-item-text\">This option allows application to send various status updates to IFTTT Maker channel<br>\n          you can get your Maker Channel key <a href=\"https://ifttt.com/maker\" target=\"_blank\">Here</a><br>\n          Check this <a href=\"https://ifttt.com/recipes/391068-push-ifttt-notifications-from-wink-node-red-to-google-sheets-to-create-a-wink-activity-log\" target=\"_blank\">recipe</a>\n           It will allow you to save updates from your devices to google spreadsheet.<br><br>\n           Your \"URL\" for IFTTT recipe<br> <b><i>{{payload.nr_url}}/red/ifttt</i></b><br>\n           Your ifttt key<br> <b><i>{{payload.IFTTT_TOKEN}}</i></b>\n          </p>\n        </div>\n      </div>\n        <div class=\"list-group-separator\"></div>         \n    </div>\n\n      </div>\n      <div class=\"modal-footer\">\n        <button type=\"button\" class=\"btn btn-info\" data-dismiss=\"modal\">Close</button>\n      </div>\n    </div>\n  </div>\n</div>\n\n<div id=\"intsetHelp\" class=\"modal fade\" role=\"dialog\">\n  <div class=\"modal-dialog\">\n    <div class=\"modal-content\">\n      <div class=\"modal-header\">\n        <button type=\"button\" class=\"close\" data-dismiss=\"modal\" aria-hidden=\"true\"><i class=\"material-icons\">highlight_off</i></button>\n        <h4 class=\"modal-title\">Additional information</h4>\n      </div>\n      <div class=\"modal-body\">\n          \n    <div class=\"list-group\">\n      <div class=\"list-group-item\">\n        <div class=\"row-action-primary\">\n         <i class=\"material-icons\">info_outline</i>\n        </div>\n        <div class=\"row-content\">\n                   <h5 class=\"list-group-item-heading\">Home Lattitude/Longtitude</h5>\n          <p class=\"list-group-item-text\">You can get this information <a href=\"http://www.gps-coordinates.net\" target=\"_blank\">Here</a></p>\n        </div>\n      </div>\n        <div class=\"list-group-separator\"></div>\n      <div class=\"list-group-item\">\n        <div class=\"row-action-primary\">\n         <i class=\"material-icons\">info_outline</i>\n        </div>\n        <div class=\"row-content\">\n                   <h5 class=\"list-group-item-heading\">Forecast.io API key</h5>\n    \n          <p class=\"list-group-item-text\">You can get this information <a href=\"https://developer.forecast.io\" target=\"_blank\">Here</a></p>\n        </div>\n      </div>\n        <div class=\"list-group-separator\"></div>         \n    </div>    \n    <div class=\"list-group\">\n      <div class=\"list-group-item\">\n        <div class=\"row-action-primary\">\n         <i class=\"material-icons\">info_outline</i>\n        </div>\n        <div class=\"row-content\">\n                   <h5 class=\"list-group-item-heading\">IFTTT Token</h5>\n    \n          <p class=\"list-group-item-text\">You can get your Maker Channel key <a href=\"https://ifttt.com/maker\" target=\"_blank\">Here</a></p>\n        </div>\n      </div>\n        <div class=\"list-group-separator\"></div>\n    </div>   \n    <div class=\"list-group\">\n      <div class=\"list-group-item\">\n        <div class=\"row-action-primary\">\n         <i class=\"material-icons\">info_outline</i>\n        </div>\n        <div class=\"row-content\">\n                   <h5 class=\"list-group-item-heading\">LIFX API Key</h5>\n    \n          <p class=\"list-group-item-text\">You can sign in and get you API Key <a href=\"http://api.developer.lifx.com\" target=\"_blank\">Here</a></p>\n        </div>\n      </div>\n        <div class=\"list-group-separator\"></div>         \n    </div>   \n    <div class=\"list-group\">\n      <div class=\"list-group-item\">\n        <div class=\"row-action-primary\">\n         <i class=\"material-icons\">info_outline</i>\n        </div>\n        <div class=\"row-content\">\n                   <h5 class=\"list-group-item-heading\">PushBullet API Key</h5>\n    \n          <p class=\"list-group-item-text\">You can sign in and get you Access token <a href=\"https://www.pushbullet.com/#settings\" target=\"_blank\">Here</a></p>\n        </div>\n      </div>\n        <div class=\"list-group-separator\"></div>         \n    </div>\n    <div class=\"list-group\">\n      <div class=\"list-group-item\">\n        <div class=\"row-action-primary\">\n         <i class=\"material-icons\">info_outline</i>\n        </div>\n        <div class=\"row-content\">\n                   <h5 class=\"list-group-item-heading\">Bloomsky API Key</h5>\n    \n          <p class=\"list-group-item-text\">You can get it <a href=\"https://bloomsky.desk.com/customer/en/portal/articles/2341662-how-do-i-get-my-api-key-\" target=\"_blank\">Here</a></p>\n        </div>\n      </div>\n        <div class=\"list-group-separator\"></div>         \n    </div>\n      </div>\n      <div class=\"modal-footer\">\n        <button type=\"button\" class=\"btn btn-info\" data-dismiss=\"modal\">Close</button>\n      </div>\n    </div>\n  </div>\n</div>\n\n<script type=\"text/javascript\" src=\"js/jquery-1.10.2.min.js\"></script>\n<script type=\"text/javascript\" src=\"bootstrap/js/bootstrap.min.js\" async></script>\n<!--<script type=\"text/javascript\" src=\"js/standalone/selectize.min.js\"></script> -->\n<script type=\"text/javascript\" src=\"//cdnjs.cloudflare.com/ajax/libs/selectize.js/0.12.1/js/standalone/selectize.min.js\"></script>\n<script type=\"text/javascript\" src=\"js/jquery.noty.packaged.min.js\" async></script>\n<script src=\"//cdnjs.cloudflare.com/ajax/libs/bootstrap-material-design/0.5.9/js/material.min.js\"></script>\n<script src=\"//cdnjs.cloudflare.com/ajax/libs/bootstrap-material-design/0.5.9/js/ripples.min.js\"></script>\n\n<script>\n  $(document).ready(function() {\n    $('#tab_ui_shortcuts').selectize({\n         plugins: ['remove_button'],\n         delimiter: ',',\n         highlight: false,\n        maxItems: 6\n        });\n    $('#vaca_light_bulbs').selectize({\n         plugins: ['remove_button'],\n         delimiter: ',',\n          highlight: false,\n        maxItems: 100\n        });\n    $('#vaca_binary_switches').selectize({\n         plugins: ['remove_button'],\n         delimiter: ',',\n          highlight: false,\n        maxItems: 100\n        }); \n    $.material.init();\n    \n        $(\"#refresh_wink\").on('click', function(event){\n        event.preventDefault();\n        $.ajax({\n            url: \"/red/wink_query\",\n            type: \"POST\",\n            data: $(this).serialize(),\n\n            success: function(){\n                //alert(\"Information has been updated successfully\");\n            var n1 =  noty({\n                    layout      : 'center',\n                    text        : '<i class=\"fa fa-2x fa-spinner fa-spin active\"></i><font size=\"4\">  Refreshing Wink data...</font>',\n                    type        : 'warning',\n                    modal       : true,\n                    theme       : 'bootstrapTheme'\n            });\n            setTimeout(function () {\n                            n1.close();\n                            window.parent.location.reload();\n            }, 35000);\n            }\n        });\n        });\n        $(\"#cfg_form\").submit(function(e){\n        e.preventDefault();\n        $.ajax({\n            url: \"/freeboard/save_cfg\",\n            type: \"POST\",\n            data: $(this).serialize(),\n\n            success: function(){\n                //alert(\"Information has been updated successfully\");\n                var n =  noty({\n                    layout      : 'center',\n                    text        : '<b>Success<b><br>Configuration has been saved successfully',\n                    type        : 'information',\n                    modal       : true,\n                    theme       : 'relax',\n                    buttons     : [\n                        { addClass: 'btn btn-primary', text: 'Ok', onClick: function (n) {\n                            n.close();\n                            }\n                        }\n                    ]\n                });\n            }\n\n\n        });\n    });\n  });\n</script>\n</body>\n</html>",
     "x": 572,
-    "y": 971,
+    "y": 1104,
     "wires": [
       [
         "874de0fc.d56d"
+      ]
+    ]
+  },
+  {
+    "id": "395a57c6.a2d378",
+    "type": "http in",
+    "z": "811c60ec.7ee3a",
+    "name": "",
+    "url": "/freeboard/MyCameras/json",
+    "method": "get",
+    "swaggerDoc": "",
+    "x": 182,
+    "y": 971,
+    "wires": [
+      [
+        "c2598f20.4e986"
+      ]
+    ]
+  },
+  {
+    "id": "c2598f20.4e986",
+    "type": "function",
+    "z": "811c60ec.7ee3a",
+    "name": "GenCameras",
+    "func": "//if(msg.req.headers.authorization && msg.req.headers.authorization==\"Bearer \"+context.global.FREEBOARD_TOKEN){\nif ((msg.req.body.uid==context.global.WinkUser.uid && msg.req.body.pwd==context.global.WinkUser.pwd) ||context.global.getCookie('exchange_token',msg.req.headers.cookie)==context.global.FREEBOARD_TOKEN || msg.payload.token==context.global.FREEBOARD_TOKEN){\n//if (true){\nmsg.statusCode=\"200\";\nmsg.payload.pwd_str=context.global.FREEBOARD_TOKEN;\nmsg.payload.ifttt_token=context.global.FREEBOARD_TOKEN;\ncameras=[]\nfor (var cam in context.global.winkState.cameras){\n    var camera=context.global.winkState.cameras[cam];\n    if(camera.device_manufacturer!='canary'){\n    cameras.push({\n        name:camera.name,\n        id:camera.object_id,\n        connection:camera.connection,\n        url:camera.snap_url,\n        history_url:camera.history_url,\n        refresh_interval:30\n    });\n   }\n}\nmsg.payload.cameras=cameras;\nmsg.res.statusCode=\"200\";\n} else {\nmsg.statusCode=\"403\";\n}\nreturn msg;",
+    "outputs": 1,
+    "noerr": 0,
+    "x": 412,
+    "y": 970,
+    "wires": [
+      [
+        "181536e3.c7dfc9"
+      ]
+    ]
+  },
+  {
+    "id": "a4c492c5.ee5e5",
+    "type": "http response",
+    "z": "811c60ec.7ee3a",
+    "name": "",
+    "x": 763,
+    "y": 957,
+    "wires": []
+  },
+  {
+    "id": "181536e3.c7dfc9",
+    "type": "json",
+    "z": "811c60ec.7ee3a",
+    "name": "",
+    "x": 593,
+    "y": 965,
+    "wires": [
+      [
+        "a4c492c5.ee5e5"
       ]
     ]
   }
