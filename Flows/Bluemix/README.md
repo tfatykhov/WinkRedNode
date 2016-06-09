@@ -6,6 +6,19 @@ https://(your_app_name).mybluemix.net/freeboard/winkboardautogroup - sample free
 
 == UPDATE ==
 -
+06/09/2016
+------------
+#####winkCore - added schedules to controls/robots tab.
+* use context.global.executeWinkCMD(winkname,type,cmd) function with following paramteres:
+	* winkname - Robot or Schedule name (user proper case as in wink app)
+	* type - 'robot'
+	* cmd - 'enable'/'disable'<br>
+
+Flow Editor:
+*  Import updated [winkCore.json](winkCore.json)
+*  do not forget to check [duplicate websockets](../../README-WebsocketFix.md)		
+*  perform "FULL" deployment<br>
+
 06/04/2016
 ------------
 #####winkCore - added siren commands.
