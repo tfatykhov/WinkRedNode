@@ -44,6 +44,7 @@ on your raspbery pi session, execute the following prior to logging into the nod
 * npm install node-red-contrib-freeboard@"git://github.com/tfatykhov/node-red-contrib-freeboard.git"
 * npm install "suncalc"@"git://github.com/mourner/suncalc.git"
 * npm install tinycolor2
+* npm install "wnr-ui"@"git://github.com/tfatykhov/wnrUI.git"  (run this if you would like to get WNR UI v 2.0)
 
 
 Once you have Node-RED running, you can deploy your flows described below
