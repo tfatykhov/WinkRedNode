@@ -2487,14 +2487,15 @@
     "type": "function",
     "z": "17b3daf5.e84c25",
     "name": "",
-    "func": "if ((msg.req.body.uid==context.global.WinkUser.uid && msg.req.body.pwd==context.global.WinkUser.pwd) || msg.payload.token==context.global.FREEBOARD_TOKEN){\n    msg.statusCode=\"200\";\n    msg.payload={\"status\":\"OK\"};    \n    msg.headers={\n        \"Set-Cookie\":\"exchange_token=\"+context.global.FREEBOARD_TOKEN+'; Path=/'\n        }\n} else \n    {\n        msg.res.statusCode=\"401\";\n    }\nreturn msg;",
+    "func": "if ('uid' in msg.req.body && 'pwd' in msg.req.body && msg.req.body.uid==context.global.WinkUser.uid && msg.req.body.pwd==context.global.WinkUser.pwd){\n    msg.statusCode=\"200\";\n    msg.payload={\"status\":\"OK\"};    \n    msg.headers={\n        \"Set-Cookie\":\"exchange_token=\"+context.global.FREEBOARD_TOKEN+'; Path=/'\n        }\n} else \n    {\n        msg.statusCode=\"401\";\n        msg.payload={\"status\":\"Unathorized\"};  \n    }\nreturn msg;",
     "outputs": 1,
     "noerr": 0,
     "x": 250,
     "y": 2555,
     "wires": [
       [
-        "5b263e94.3f2d4"
+        "5b263e94.3f2d4",
+        "e569a826.bbe508"
       ]
     ]
   },
@@ -2510,7 +2511,8 @@
     "y": 2554,
     "wires": [
       [
-        "7fd11824.0455a8"
+        "7fd11824.0455a8",
+        "c0dd45f2.f14cb8"
       ]
     ]
   },
@@ -2531,6 +2533,30 @@
     "name": "",
     "x": 422,
     "y": 2555,
+    "wires": []
+  },
+  {
+    "id": "c0dd45f2.f14cb8",
+    "type": "debug",
+    "z": "17b3daf5.e84c25",
+    "name": "",
+    "active": true,
+    "console": "false",
+    "complete": "false",
+    "x": 219,
+    "y": 2645,
+    "wires": []
+  },
+  {
+    "id": "e569a826.bbe508",
+    "type": "debug",
+    "z": "17b3daf5.e84c25",
+    "name": "",
+    "active": true,
+    "console": "false",
+    "complete": "true",
+    "x": 383,
+    "y": 2614,
     "wires": []
   }
 ]
