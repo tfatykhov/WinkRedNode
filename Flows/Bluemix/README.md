@@ -25,7 +25,8 @@ commands :
 	etra parameter : temp in celcius, you can use context.global.F2C(temp in F) - max temp when tstat starts cooling
 
 	'powered'
-	extra_parameter : 'on' , 'off'	
+	extra_parameter : 'on' , 'off'
+	
 	'users_away'
 	extra_parameter : 'true' , 'false'
 	
