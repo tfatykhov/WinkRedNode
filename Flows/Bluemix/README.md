@@ -6,6 +6,35 @@ https://(your_app_name).mybluemix.net/freeboard/winkboardautogroup - sample free
 
 == UPDATE ==
 -
+06/21/2016
+------------
+###Added missed command for supported thermostats to set users_away
+#####Usage in robots/schedules
+it is similar to other commands:<br>
+mycmd= context.global.executeTstatCMD(TstatName,command,extra parameter);
+
+commands :
+
+	'mode' 
+	extra parameter : 'heat_only' , 'cool_only' , 'auto' (if your model permits this)
+
+	'heat_start_at'
+	extra parameter : temp in celcius, you can use context.global.F2C(temp in F) - min temp when tstat starts heating
+
+	'cool_start_at' 
+	etra parameter : temp in celcius, you can use context.global.F2C(temp in F) - max temp when tstat starts cooling
+
+	'powered'
+	extra_parameter : 'on' , 'off'	
+	'users_away'
+	extra_parameter : 'true' , 'false'
+	
+Flow Editor:<br>
+*  Import updated [winkCore.json](winkCore.json)
+*  do not forget to check [duplicate websockets](../../README-WebsocketFix.md)
+*  perform "FULL" deployment<br>
+
+
 06/09/2016
 ------------
 #####winkCore - added schedules to controls/robots tab.
