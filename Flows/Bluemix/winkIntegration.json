@@ -1,6 +1,6 @@
 [
   {
-    "id": "6fcc4b13.f6eea4",
+    "id": "1c41686b.5bfd08",
     "type": "function",
     "z": "17b3daf5.e84c25",
     "name": "",
@@ -11,12 +11,12 @@
     "y": 868.5,
     "wires": [
       [
-        "6bb5c809.5f72f8"
+        "7e943f2b.f87b4"
       ]
     ]
   },
   {
-    "id": "a830643a.3af6b8",
+    "id": "63a478ba.152528",
     "type": "function",
     "z": "17b3daf5.e84c25",
     "name": "",
@@ -27,15 +27,15 @@
     "y": 245.49993896484375,
     "wires": [
       [
-        "7fad256d.bfd00c"
+        "76cc9990.5ec7b8"
       ],
       [
-        "74e89d40.bb20f4"
+        "8ca3563.fe626a8"
       ]
     ]
   },
   {
-    "id": "bde27635.0f2fd8",
+    "id": "9d9124d5.f4f4a8",
     "type": "http in",
     "z": "17b3daf5.e84c25",
     "name": "",
@@ -46,13 +46,13 @@
     "y": 238.5,
     "wires": [
       [
-        "deb24fe3.2d914",
-        "ecb3cff1.6ef94"
+        "88b76a7.0c81298",
+        "34f8e227.fa61de"
       ]
     ]
   },
   {
-    "id": "7fad256d.bfd00c",
+    "id": "76cc9990.5ec7b8",
     "type": "http response",
     "z": "17b3daf5.e84c25",
     "name": "",
@@ -61,7 +61,7 @@
     "wires": []
   },
   {
-    "id": "a5be95c4.9b0b28",
+    "id": "20cba590.ec233a",
     "type": "comment",
     "z": "17b3daf5.e84c25",
     "name": "IFTTT Integration-------------------------------------------------------------------------------------------------------------------------------",
@@ -71,24 +71,25 @@
     "wires": []
   },
   {
-    "id": "5c387068.3131b",
+    "id": "915081be.e989a",
     "type": "http request",
     "z": "17b3daf5.e84c25",
     "name": "",
     "method": "use",
     "ret": "obj",
     "url": "",
+    "tls": "",
     "x": 1148.5,
     "y": 245.49993896484375,
     "wires": [
       [
-        "1b785d0f.0db4b3",
-        "67340f05.a811"
+        "3a39d3dc.1f5f5c",
+        "ce467e03.22ea5"
       ]
     ]
   },
   {
-    "id": "9624116c.c8aac",
+    "id": "6ed97e01.ca27a",
     "type": "comment",
     "z": "17b3daf5.e84c25",
     "name": "Wink API Apdex-------------------------------------------------------------------------------------------------------------------------------",
@@ -98,7 +99,7 @@
     "wires": []
   },
   {
-    "id": "6a234792.94a838",
+    "id": "cf3f1fde.23a91",
     "type": "inject",
     "z": "17b3daf5.e84c25",
     "name": "",
@@ -112,12 +113,12 @@
     "y": 466.4998779296875,
     "wires": [
       [
-        "6adef8eb.5a1328"
+        "68051fef.f371d"
       ]
     ]
   },
   {
-    "id": "6adef8eb.5a1328",
+    "id": "68051fef.f371d",
     "type": "function",
     "z": "17b3daf5.e84c25",
     "name": "",
@@ -128,12 +129,12 @@
     "y": 467.49993896484375,
     "wires": [
       [
-        "c602710d.93c7b"
+        "fe799f8c.79ff6"
       ]
     ]
   },
   {
-    "id": "c602710d.93c7b",
+    "id": "fe799f8c.79ff6",
     "type": "http request",
     "z": "17b3daf5.e84c25",
     "name": "",
@@ -144,12 +145,12 @@
     "y": 479.49993896484375,
     "wires": [
       [
-        "ecb61726.e89f18"
+        "5a3cf30.df0600c"
       ]
     ]
   },
   {
-    "id": "ecb61726.e89f18",
+    "id": "5a3cf30.df0600c",
     "type": "function",
     "z": "17b3daf5.e84c25",
     "name": "",
@@ -163,7 +164,7 @@
     ]
   },
   {
-    "id": "bc3e90aa.8fe48",
+    "id": "23d263b8.93695c",
     "type": "comment",
     "z": "17b3daf5.e84c25",
     "name": "DromCam/NestCam Integration-------------------------------------------------------------------------------------------------------------------------------",
@@ -173,7 +174,7 @@
     "wires": []
   },
   {
-    "id": "34785b37.a13fa4",
+    "id": "aa727ee1.c2efa",
     "type": "comment",
     "z": "17b3daf5.e84c25",
     "name": "Presence  via IFTTT/Tasker/etc. -------------------------------------------------------------------------------------------------------------------------------",
@@ -183,7 +184,7 @@
     "wires": []
   },
   {
-    "id": "9239e6a6.550878",
+    "id": "53356b83.61b134",
     "type": "http in",
     "z": "17b3daf5.e84c25",
     "name": "",
@@ -194,15 +195,15 @@
     "y": 668.9998779296875,
     "wires": [
       [
-        "bbe21926.db25b8",
-        "47bccbe6.ebe3a4",
-        "fb2898e8.4922c8",
-        "934e8636.8f8228"
+        "b31e56a6.e753b8",
+        "9dde2e1a.a7725",
+        "bf9a6323.14c46",
+        "ce9a9854.326c18"
       ]
     ]
   },
   {
-    "id": "fb2898e8.4922c8",
+    "id": "bf9a6323.14c46",
     "type": "function",
     "z": "17b3daf5.e84c25",
     "name": "Update Presence entry",
@@ -213,18 +214,18 @@
     "y": 662.9998779296875,
     "wires": [
       [
-        "1d67a189.19471e",
-        "349742ba.107fbe",
-        "d4c38ab.17a2078"
+        "2cf3cacd.40fe96",
+        "c96631c.9ac14d",
+        "76dc2c20.32d124"
       ],
       [
-        "a9ae159.d005de8",
-        "cf7cd173.7ae92"
+        "225b2207.0e451e",
+        "18627609.e6704a"
       ]
     ]
   },
   {
-    "id": "1d67a189.19471e",
+    "id": "2cf3cacd.40fe96",
     "type": "http response",
     "z": "17b3daf5.e84c25",
     "name": "",
@@ -233,7 +234,7 @@
     "wires": []
   },
   {
-    "id": "6d701ecd.b3b6",
+    "id": "b150abb.822cf58",
     "type": "function",
     "z": "17b3daf5.e84c25",
     "name": "",
@@ -244,12 +245,12 @@
     "y": 760.22216796875,
     "wires": [
       [
-        "8863b0d8.1b2bd"
+        "f39bfb48.e4b4a8"
       ]
     ]
   },
   {
-    "id": "8863b0d8.1b2bd",
+    "id": "f39bfb48.e4b4a8",
     "type": "http request",
     "z": "17b3daf5.e84c25",
     "name": "",
@@ -260,12 +261,12 @@
     "y": 761.333251953125,
     "wires": [
       [
-        "9f237982.277fc8"
+        "bcef62a6.56824"
       ]
     ]
   },
   {
-    "id": "8143ac4e.a9a65",
+    "id": "3672e35e.ecc9fc",
     "type": "comment",
     "z": "17b3daf5.e84c25",
     "name": "Integration with Ecobee Node Red ----------------------------------------------------------------------------------------------",
@@ -275,7 +276,7 @@
     "wires": []
   },
   {
-    "id": "8ed996b3.632618",
+    "id": "990c6833.e08448",
     "type": "http in",
     "z": "17b3daf5.e84c25",
     "name": "",
@@ -286,12 +287,12 @@
     "y": 572.4999694824219,
     "wires": [
       [
-        "e5e4f8f5.bb0c88"
+        "344301b3.e5baae"
       ]
     ]
   },
   {
-    "id": "e5e4f8f5.bb0c88",
+    "id": "344301b3.e5baae",
     "type": "function",
     "z": "17b3daf5.e84c25",
     "name": "",
@@ -302,12 +303,12 @@
     "y": 571.4999694824219,
     "wires": [
       [
-        "37d52525.888faa"
+        "32ce76ae.fb630a"
       ]
     ]
   },
   {
-    "id": "37d52525.888faa",
+    "id": "32ce76ae.fb630a",
     "type": "http request",
     "z": "17b3daf5.e84c25",
     "name": "",
@@ -318,12 +319,12 @@
     "y": 573.4999694824219,
     "wires": [
       [
-        "d3676228.8ee2a"
+        "98ceccae.7dbed"
       ]
     ]
   },
   {
-    "id": "d3676228.8ee2a",
+    "id": "98ceccae.7dbed",
     "type": "http response",
     "z": "17b3daf5.e84c25",
     "name": "",
@@ -332,7 +333,7 @@
     "wires": []
   },
   {
-    "id": "2033c088.10ae7",
+    "id": "31246be7.9aade4",
     "type": "function",
     "z": "17b3daf5.e84c25",
     "name": "",
@@ -343,12 +344,12 @@
     "y": 706.611083984375,
     "wires": [
       [
-        "5b1fa9c.d25a758"
+        "1c0bd811.15f798"
       ]
     ]
   },
   {
-    "id": "349742ba.107fbe",
+    "id": "c96631c.9ac14d",
     "type": "function",
     "z": "17b3daf5.e84c25",
     "name": "",
@@ -359,12 +360,12 @@
     "y": 705.611083984375,
     "wires": [
       [
-        "5ce63dfa.cb88b4"
+        "227b6cbf.7eeea4"
       ]
     ]
   },
   {
-    "id": "5ce63dfa.cb88b4",
+    "id": "227b6cbf.7eeea4",
     "type": "http request",
     "z": "17b3daf5.e84c25",
     "name": "",
@@ -375,12 +376,12 @@
     "y": 705.611083984375,
     "wires": [
       [
-        "2033c088.10ae7"
+        "31246be7.9aade4"
       ]
     ]
   },
   {
-    "id": "5b1fa9c.d25a758",
+    "id": "1c0bd811.15f798",
     "type": "http request",
     "z": "17b3daf5.e84c25",
     "name": "",
@@ -394,7 +395,7 @@
     ]
   },
   {
-    "id": "a637b06d.7ba71",
+    "id": "e3a2be1b.bf923",
     "type": "inject",
     "z": "17b3daf5.e84c25",
     "name": "",
@@ -408,12 +409,12 @@
     "y": 1113.8333129882812,
     "wires": [
       [
-        "a0eb429.48d09c"
+        "2da3f113.94172e"
       ]
     ]
   },
   {
-    "id": "a0eb429.48d09c",
+    "id": "2da3f113.94172e",
     "type": "function",
     "z": "17b3daf5.e84c25",
     "name": "Try to create DB",
@@ -424,12 +425,12 @@
     "y": 1114.8332824707031,
     "wires": [
       [
-        "2d9690ca.53196"
+        "4b414dfe.eb5e24"
       ]
     ]
   },
   {
-    "id": "2d9690ca.53196",
+    "id": "4b414dfe.eb5e24",
     "type": "http request",
     "z": "17b3daf5.e84c25",
     "name": "db req",
@@ -440,12 +441,12 @@
     "y": 1114.8332824707031,
     "wires": [
       [
-        "4c13ecd7.2de024"
+        "46d93f63.9e23c"
       ]
     ]
   },
   {
-    "id": "4c13ecd7.2de024",
+    "id": "46d93f63.9e23c",
     "type": "function",
     "z": "17b3daf5.e84c25",
     "name": "Check response",
@@ -456,28 +457,28 @@
     "y": 1114.8332824707031,
     "wires": [
       [
-        "a56c26ed.4c48f8"
+        "f14d8fee.81961"
       ]
     ]
   },
   {
-    "id": "a56c26ed.4c48f8",
+    "id": "f14d8fee.81961",
     "type": "http request",
     "z": "17b3daf5.e84c25",
     "name": "",
     "method": "use",
     "ret": "obj",
     "url": "",
-    "x": 831.3958282470703,
+    "x": 823.3958129882812,
     "y": 1115.72216796875,
     "wires": [
       [
-        "eb0885ac.773768"
+        "5678d882.951cf8"
       ]
     ]
   },
   {
-    "id": "eb0885ac.773768",
+    "id": "5678d882.951cf8",
     "type": "function",
     "z": "17b3daf5.e84c25",
     "name": "restore from db",
@@ -488,12 +489,12 @@
     "y": 1113.72216796875,
     "wires": [
       [
-        "accec1a7.bd715"
+        "8ce6d048.a3af7"
       ]
     ]
   },
   {
-    "id": "bd1c40e5.7b38e",
+    "id": "1b61ab65.36d615",
     "type": "comment",
     "z": "17b3daf5.e84c25",
     "name": "Cloundant DB -------------------------------------------------------------------------------------------------------------------------------",
@@ -503,7 +504,7 @@
     "wires": []
   },
   {
-    "id": "fb033215.c7139",
+    "id": "2870cd89.711f92",
     "type": "function",
     "z": "17b3daf5.e84c25",
     "name": "Save Snapshots to db",
@@ -514,15 +515,15 @@
     "y": 1214.833251953125,
     "wires": [
       [
-        "622e7eca.c3d7f"
+        "ea2e6dff.9028e"
       ],
       [
-        "c7c0c1c5.ace2a"
+        "e06df095.5f03c"
       ]
     ]
   },
   {
-    "id": "c7c0c1c5.ace2a",
+    "id": "e06df095.5f03c",
     "type": "http request",
     "z": "17b3daf5.e84c25",
     "name": "getPic",
@@ -533,12 +534,12 @@
     "y": 1220.8332824707031,
     "wires": [
       [
-        "9bc7dc88.3481c"
+        "f3c20685.e6c5a8"
       ]
     ]
   },
   {
-    "id": "9bc7dc88.3481c",
+    "id": "f3c20685.e6c5a8",
     "type": "function",
     "z": "17b3daf5.e84c25",
     "name": "save picture",
@@ -549,12 +550,12 @@
     "y": 1220.8332824707031,
     "wires": [
       [
-        "dcdcdd1f.68b0f"
+        "81be8565.808dd8"
       ]
     ]
   },
   {
-    "id": "dcdcdd1f.68b0f",
+    "id": "81be8565.808dd8",
     "type": "http request",
     "z": "17b3daf5.e84c25",
     "name": "",
@@ -565,12 +566,12 @@
     "y": 1221.72216796875,
     "wires": [
       [
-        "c10efb9b.5fecb8"
+        "b9df718.7acc19"
       ]
     ]
   },
   {
-    "id": "acfc8ff9.f002b",
+    "id": "6b32804f.533a8",
     "type": "http in",
     "z": "17b3daf5.e84c25",
     "name": "",
@@ -581,12 +582,12 @@
     "y": 1214.72216796875,
     "wires": [
       [
-        "fb033215.c7139"
+        "2870cd89.711f92"
       ]
     ]
   },
   {
-    "id": "622e7eca.c3d7f",
+    "id": "ea2e6dff.9028e",
     "type": "http response",
     "z": "17b3daf5.e84c25",
     "name": "",
@@ -595,7 +596,7 @@
     "wires": []
   },
   {
-    "id": "c10efb9b.5fecb8",
+    "id": "b9df718.7acc19",
     "type": "function",
     "z": "17b3daf5.e84c25",
     "name": "cache results",
@@ -606,12 +607,12 @@
     "y": 1217.72216796875,
     "wires": [
       [
-        "7f73c2ca.7c820c"
+        "751d868.a393178"
       ]
     ]
   },
   {
-    "id": "7f73c2ca.7c820c",
+    "id": "751d868.a393178",
     "type": "http request",
     "z": "17b3daf5.e84c25",
     "name": "",
@@ -622,12 +623,12 @@
     "y": 1101.72216796875,
     "wires": [
       [
-        "ea5fb666.468928"
+        "c9231a9a.c93668"
       ]
     ]
   },
   {
-    "id": "ea5fb666.468928",
+    "id": "c9231a9a.c93668",
     "type": "function",
     "z": "17b3daf5.e84c25",
     "name": "delete old pics",
@@ -641,7 +642,7 @@
     ]
   },
   {
-    "id": "1aabe77.e975319",
+    "id": "7d5d077c.b07748",
     "type": "http in",
     "z": "17b3daf5.e84c25",
     "name": "",
@@ -652,12 +653,12 @@
     "y": 1272.72216796875,
     "wires": [
       [
-        "c2bf4ef9.3ed2a"
+        "9673f03e.0fe9d"
       ]
     ]
   },
   {
-    "id": "c2bf4ef9.3ed2a",
+    "id": "9673f03e.0fe9d",
     "type": "function",
     "z": "17b3daf5.e84c25",
     "name": "gen CLD url",
@@ -668,12 +669,12 @@
     "y": 1272.72216796875,
     "wires": [
       [
-        "f9833f1c.f0822"
+        "8cee64f1.495a58"
       ]
     ]
   },
   {
-    "id": "f9833f1c.f0822",
+    "id": "8cee64f1.495a58",
     "type": "http request",
     "z": "17b3daf5.e84c25",
     "name": "",
@@ -684,12 +685,12 @@
     "y": 1274.72216796875,
     "wires": [
       [
-        "aa662a9c.e5b6d8"
+        "efa777cd.6426a8"
       ]
     ]
   },
   {
-    "id": "aa662a9c.e5b6d8",
+    "id": "efa777cd.6426a8",
     "type": "http response",
     "z": "17b3daf5.e84c25",
     "name": "",
@@ -698,7 +699,7 @@
     "wires": []
   },
   {
-    "id": "39aa6250.ecf6be",
+    "id": "88e57db2.4afd",
     "type": "http in",
     "z": "17b3daf5.e84c25",
     "name": "",
@@ -709,12 +710,12 @@
     "y": 1365.72216796875,
     "wires": [
       [
-        "b70b8bfb.21c7e8"
+        "e2daff5d.d91f9"
       ]
     ]
   },
   {
-    "id": "b70b8bfb.21c7e8",
+    "id": "e2daff5d.d91f9",
     "type": "function",
     "z": "17b3daf5.e84c25",
     "name": "get activities from db",
@@ -725,15 +726,15 @@
     "y": 1365.72216796875,
     "wires": [
       [
-        "88781b62.71c438"
+        "cbc22c33.baf8"
       ],
       [
-        "c532e578.f67868"
+        "42096bc9.88b2a4"
       ]
     ]
   },
   {
-    "id": "c532e578.f67868",
+    "id": "42096bc9.88b2a4",
     "type": "http request",
     "z": "17b3daf5.e84c25",
     "name": "",
@@ -744,12 +745,12 @@
     "y": 1398.72216796875,
     "wires": [
       [
-        "1154258f.9bea4a"
+        "f66452e9.5fce1"
       ]
     ]
   },
   {
-    "id": "1154258f.9bea4a",
+    "id": "f66452e9.5fce1",
     "type": "function",
     "z": "17b3daf5.e84c25",
     "name": "cache cam history",
@@ -763,7 +764,7 @@
     ]
   },
   {
-    "id": "88781b62.71c438",
+    "id": "cbc22c33.baf8",
     "type": "http response",
     "z": "17b3daf5.e84c25",
     "name": "",
@@ -772,7 +773,7 @@
     "wires": []
   },
   {
-    "id": "a1adf53d.131008",
+    "id": "cdb08831.b88858",
     "type": "inject",
     "z": "17b3daf5.e84c25",
     "name": "",
@@ -786,12 +787,12 @@
     "y": 867.7499389648438,
     "wires": [
       [
-        "6fcc4b13.f6eea4"
+        "1c41686b.5bfd08"
       ]
     ]
   },
   {
-    "id": "6bb5c809.5f72f8",
+    "id": "7e943f2b.f87b4",
     "type": "debug",
     "z": "17b3daf5.e84c25",
     "name": "",
@@ -803,7 +804,7 @@
     "wires": []
   },
   {
-    "id": "6827fcba.55b5c4",
+    "id": "3940af0d.54eb3",
     "type": "comment",
     "z": "17b3daf5.e84c25",
     "name": "Integration with LIFX Bulbs ---------------------------------------------------------------------------------------",
@@ -813,7 +814,7 @@
     "wires": []
   },
   {
-    "id": "fed0869d.53f2b8",
+    "id": "9101c8d.6d6da38",
     "type": "function",
     "z": "17b3daf5.e84c25",
     "name": "Throw Config Data",
@@ -824,12 +825,12 @@
     "y": 62.5,
     "wires": [
       [
-        "40810221.73d1ac"
+        "86ea2aa2.9569e8"
       ]
     ]
   },
   {
-    "id": "40810221.73d1ac",
+    "id": "86ea2aa2.9569e8",
     "type": "http response",
     "z": "17b3daf5.e84c25",
     "name": "",
@@ -838,7 +839,7 @@
     "wires": []
   },
   {
-    "id": "ee7756d6.d87c68",
+    "id": "ddd7ad41.dc547",
     "type": "comment",
     "z": "17b3daf5.e84c25",
     "name": "Section for web services---------------------------------------------------------------------------------------------------------------------------------",
@@ -848,7 +849,7 @@
     "wires": []
   },
   {
-    "id": "c2b4cdcd.6e06a",
+    "id": "2aa01ee1.a5fb22",
     "type": "http in",
     "z": "17b3daf5.e84c25",
     "name": "",
@@ -859,12 +860,12 @@
     "y": 112.5,
     "wires": [
       [
-        "68d9b755.9c5aa8"
+        "c5ce98f1.35efc8"
       ]
     ]
   },
   {
-    "id": "68d9b755.9c5aa8",
+    "id": "c5ce98f1.35efc8",
     "type": "function",
     "z": "17b3daf5.e84c25",
     "name": "Throw Cameras Data",
@@ -875,12 +876,12 @@
     "y": 115.5,
     "wires": [
       [
-        "c9a17e43.d89fc"
+        "859efbcf.1cd2b8"
       ]
     ]
   },
   {
-    "id": "c9a17e43.d89fc",
+    "id": "859efbcf.1cd2b8",
     "type": "http response",
     "z": "17b3daf5.e84c25",
     "name": "",
@@ -889,7 +890,7 @@
     "wires": []
   },
   {
-    "id": "1207aa26.ca1bb6",
+    "id": "804fd877.097b48",
     "type": "catch",
     "z": "17b3daf5.e84c25",
     "name": "",
@@ -897,12 +898,12 @@
     "y": 2088,
     "wires": [
       [
-        "ed505f7c.1e238"
+        "b23b2283.e958"
       ]
     ]
   },
   {
-    "id": "ed505f7c.1e238",
+    "id": "b23b2283.e958",
     "type": "debug",
     "z": "17b3daf5.e84c25",
     "name": "",
@@ -914,7 +915,7 @@
     "wires": []
   },
   {
-    "id": "c0e69cde.3b827",
+    "id": "8df82acf.373ab8",
     "type": "inject",
     "z": "17b3daf5.e84c25",
     "name": "",
@@ -928,12 +929,12 @@
     "y": 1552,
     "wires": [
       [
-        "92e5c52f.d11b38"
+        "377fa9ac.e7da36"
       ]
     ]
   },
   {
-    "id": "92e5c52f.d11b38",
+    "id": "377fa9ac.e7da36",
     "type": "function",
     "z": "17b3daf5.e84c25",
     "name": "",
@@ -944,12 +945,12 @@
     "y": 1552,
     "wires": [
       [
-        "413a74a2.89046c"
+        "3aabad1b.1d0442"
       ]
     ]
   },
   {
-    "id": "413a74a2.89046c",
+    "id": "3aabad1b.1d0442",
     "type": "http request",
     "z": "17b3daf5.e84c25",
     "name": "",
@@ -960,12 +961,12 @@
     "y": 1551,
     "wires": [
       [
-        "d896fc61.7dfec"
+        "3436b6ce.d4dfda"
       ]
     ]
   },
   {
-    "id": "98e50652.baa948",
+    "id": "7bef94f7.6f895c",
     "type": "function",
     "z": "17b3daf5.e84c25",
     "name": "",
@@ -976,12 +977,12 @@
     "y": 1550.1428833007812,
     "wires": [
       [
-        "2c53f974.6a2766"
+        "792df3a3.f23b2c"
       ]
     ]
   },
   {
-    "id": "2c53f974.6a2766",
+    "id": "792df3a3.f23b2c",
     "type": "http request",
     "z": "17b3daf5.e84c25",
     "name": "",
@@ -995,7 +996,7 @@
     ]
   },
   {
-    "id": "bbe21926.db25b8",
+    "id": "b31e56a6.e753b8",
     "type": "function",
     "z": "17b3daf5.e84c25",
     "name": "",
@@ -1006,12 +1007,12 @@
     "y": 760,
     "wires": [
       [
-        "caa66854.750078"
+        "5eaa1764.a26c28"
       ]
     ]
   },
   {
-    "id": "caa66854.750078",
+    "id": "5eaa1764.a26c28",
     "type": "http request",
     "z": "17b3daf5.e84c25",
     "name": "",
@@ -1025,7 +1026,7 @@
     ]
   },
   {
-    "id": "fe8fd050.630c",
+    "id": "503d2f41.06865",
     "type": "inject",
     "z": "17b3daf5.e84c25",
     "name": "",
@@ -1039,12 +1040,12 @@
     "y": 956,
     "wires": [
       [
-        "10ee56d1.137699"
+        "2202b.a24d9fd56"
       ]
     ]
   },
   {
-    "id": "10ee56d1.137699",
+    "id": "2202b.a24d9fd56",
     "type": "delay",
     "z": "17b3daf5.e84c25",
     "name": "",
@@ -1061,29 +1062,29 @@
     "y": 955,
     "wires": [
       [
-        "cec1220b.ba4f7"
+        "6f837a8d.a497c4"
       ]
     ]
   },
   {
-    "id": "cec1220b.ba4f7",
+    "id": "6f837a8d.a497c4",
     "type": "function",
     "z": "17b3daf5.e84c25",
     "name": "try to refresh app_config data",
     "func": "if (context.global.CloudantBkUP) {\n    msg.url=context.global.VCAP_SERVICES.cloudantNoSQLDB[0].credentials.url+\"/winkapp/app_data\";\n    msg.method=\"GET\";\n    node.send(msg); \n}\nreturn;",
     "outputs": 1,
     "noerr": 0,
-    "x": 645.5,
-    "y": 953,
+    "x": 653.5,
+    "y": 949,
     "wires": [
       [
-        "441073f3.3c9dcc",
-        "349742ba.107fbe"
+        "8b911a13.fe4708",
+        "c96631c.9ac14d"
       ]
     ]
   },
   {
-    "id": "441073f3.3c9dcc",
+    "id": "8b911a13.fe4708",
     "type": "http request",
     "z": "17b3daf5.e84c25",
     "name": "",
@@ -1094,12 +1095,12 @@
     "y": 953,
     "wires": [
       [
-        "73acee37.55415"
+        "319f0dae.d19162"
       ]
     ]
   },
   {
-    "id": "73acee37.55415",
+    "id": "319f0dae.d19162",
     "type": "function",
     "z": "17b3daf5.e84c25",
     "name": "create or update config ",
@@ -1110,12 +1111,12 @@
     "y": 952,
     "wires": [
       [
-        "3c4c4c02.e33c24"
+        "aa5019f5.a1e648"
       ]
     ]
   },
   {
-    "id": "3c4c4c02.e33c24",
+    "id": "aa5019f5.a1e648",
     "type": "http request",
     "z": "17b3daf5.e84c25",
     "name": "",
@@ -1126,12 +1127,12 @@
     "y": 951,
     "wires": [
       [
-        "2c968b99.4d2c64"
+        "b9fef18.d877e1"
       ]
     ]
   },
   {
-    "id": "e1844dbe.96aca",
+    "id": "904e6659.7a5668",
     "type": "http in",
     "z": "17b3daf5.e84c25",
     "name": "",
@@ -1139,43 +1140,43 @@
     "method": "post",
     "swaggerDoc": "",
     "x": 132,
-    "y": 1071,
+    "y": 1063,
     "wires": [
       [
-        "aa194ed6.9b85f"
+        "84709d6c.dd7c1"
       ]
     ]
   },
   {
-    "id": "aa194ed6.9b85f",
+    "id": "84709d6c.dd7c1",
     "type": "function",
     "z": "17b3daf5.e84c25",
     "name": "",
     "func": "if(msg.req.headers.authorization && msg.req.headers.authorization==\"Bearer \"+context.global.FREEBOARD_TOKEN){\nmsg.statusCode=\"200\";\nvar msg1={}\nmsg1.db_mode=msg.payload.db_mode||\"read\";\nif ('restore_wink' in msg) msg1.restore_wink=msg.restore_wink;\nnode.send([msg1,msg])\n} else\n{\n    msg.statusCode=\"400\";\n    node.send([null,msg])\n}\nreturn;",
     "outputs": "2",
     "noerr": 0,
-    "x": 403.5,
-    "y": 1070,
+    "x": 404.5,
+    "y": 1064,
     "wires": [
       [
-        "cec1220b.ba4f7"
+        "6f837a8d.a497c4"
       ],
       [
-        "66617eba.1ebf5"
+        "e915621d.1c7a"
       ]
     ]
   },
   {
-    "id": "66617eba.1ebf5",
+    "id": "e915621d.1c7a",
     "type": "http response",
     "z": "17b3daf5.e84c25",
     "name": "",
-    "x": 547.5,
-    "y": 1075,
+    "x": 540.5,
+    "y": 1070,
     "wires": []
   },
   {
-    "id": "2c968b99.4d2c64",
+    "id": "b9fef18.d877e1",
     "type": "function",
     "z": "17b3daf5.e84c25",
     "name": "",
@@ -1186,12 +1187,12 @@
     "y": 1046,
     "wires": [
       [
-        "1858d39d.603e1c"
+        "99daab77.6c5fd8"
       ]
     ]
   },
   {
-    "id": "66b6bb4f.c89db4",
+    "id": "ab3882ed.099c1",
     "type": "json",
     "z": "17b3daf5.e84c25",
     "name": "",
@@ -1199,12 +1200,12 @@
     "y": 210,
     "wires": [
       [
-        "a830643a.3af6b8"
+        "63a478ba.152528"
       ]
     ]
   },
   {
-    "id": "deb24fe3.2d914",
+    "id": "88b76a7.0c81298",
     "type": "switch",
     "z": "17b3daf5.e84c25",
     "name": "",
@@ -1226,15 +1227,15 @@
     "y": 236,
     "wires": [
       [
-        "66b6bb4f.c89db4"
+        "ab3882ed.099c1"
       ],
       [
-        "a830643a.3af6b8"
+        "63a478ba.152528"
       ]
     ]
   },
   {
-    "id": "1858d39d.603e1c",
+    "id": "99daab77.6c5fd8",
     "type": "http request",
     "z": "17b3daf5.e84c25",
     "name": "",
@@ -1248,7 +1249,7 @@
     ]
   },
   {
-    "id": "47bccbe6.ebe3a4",
+    "id": "9dde2e1a.a7725",
     "type": "function",
     "z": "17b3daf5.e84c25",
     "name": "",
@@ -1259,12 +1260,12 @@
     "y": 712,
     "wires": [
       [
-        "3e7bb9bb.5d2ba6"
+        "dade7f2.96ede8"
       ]
     ]
   },
   {
-    "id": "3e7bb9bb.5d2ba6",
+    "id": "dade7f2.96ede8",
     "type": "http request",
     "z": "17b3daf5.e84c25",
     "name": "",
@@ -1278,7 +1279,7 @@
     ]
   },
   {
-    "id": "51841e7.7e077e",
+    "id": "2975e91.240e416",
     "type": "http in",
     "z": "17b3daf5.e84c25",
     "name": "",
@@ -1289,12 +1290,12 @@
     "y": 63,
     "wires": [
       [
-        "fed0869d.53f2b8"
+        "9101c8d.6d6da38"
       ]
     ]
   },
   {
-    "id": "de1e1166.b2693",
+    "id": "da69be05.6a66",
     "type": "http in",
     "z": "17b3daf5.e84c25",
     "name": "",
@@ -1305,12 +1306,12 @@
     "y": 296,
     "wires": [
       [
-        "cba10ebf.93dbc"
+        "7b01b94b.41fce8"
       ]
     ]
   },
   {
-    "id": "27f96284.d3d82e",
+    "id": "9ff0bd6a.aac6c",
     "type": "http response",
     "z": "17b3daf5.e84c25",
     "name": "",
@@ -1319,7 +1320,7 @@
     "wires": []
   },
   {
-    "id": "b6a2cfaa.e7d18",
+    "id": "4207f305.6f74cc",
     "type": "function",
     "z": "17b3daf5.e84c25",
     "name": "",
@@ -1330,15 +1331,15 @@
     "y": 310,
     "wires": [
       [
-        "27f96284.d3d82e"
+        "9ff0bd6a.aac6c"
       ],
       [
-        "b109258d.d164a8"
+        "ca9bd553.423c58"
       ]
     ]
   },
   {
-    "id": "cba10ebf.93dbc",
+    "id": "7b01b94b.41fce8",
     "type": "switch",
     "z": "17b3daf5.e84c25",
     "name": "",
@@ -1360,15 +1361,15 @@
     "y": 302,
     "wires": [
       [
-        "1b876037.42322"
+        "ef79c0ae.66458"
       ],
       [
-        "b6a2cfaa.e7d18"
+        "4207f305.6f74cc"
       ]
     ]
   },
   {
-    "id": "1b876037.42322",
+    "id": "ef79c0ae.66458",
     "type": "json",
     "z": "17b3daf5.e84c25",
     "name": "",
@@ -1376,12 +1377,12 @@
     "y": 273,
     "wires": [
       [
-        "b6a2cfaa.e7d18"
+        "4207f305.6f74cc"
       ]
     ]
   },
   {
-    "id": "b109258d.d164a8",
+    "id": "ca9bd553.423c58",
     "type": "switch",
     "z": "17b3daf5.e84c25",
     "name": "",
@@ -1410,18 +1411,18 @@
     "y": 334,
     "wires": [
       [
-        "fa15a046.3fc75"
+        "e5781a2b.7ac358"
       ],
       [
-        "4fa0ab66.1b7694"
+        "beb49ccc.5c5d8"
       ],
       [
-        "9331d3d8.9ed06"
+        "a1e45c72.0f27e"
       ]
     ]
   },
   {
-    "id": "fa15a046.3fc75",
+    "id": "e5781a2b.7ac358",
     "type": "function",
     "z": "17b3daf5.e84c25",
     "name": "fadein",
@@ -1432,12 +1433,12 @@
     "y": 296,
     "wires": [
       [
-        "6bd16695.bcc708"
+        "3d1e6bb.c522294"
       ]
     ]
   },
   {
-    "id": "4fa0ab66.1b7694",
+    "id": "beb49ccc.5c5d8",
     "type": "function",
     "z": "17b3daf5.e84c25",
     "name": "fadeout",
@@ -1448,12 +1449,12 @@
     "y": 336,
     "wires": [
       [
-        "6bd16695.bcc708"
+        "3d1e6bb.c522294"
       ]
     ]
   },
   {
-    "id": "9331d3d8.9ed06",
+    "id": "a1e45c72.0f27e",
     "type": "function",
     "z": "17b3daf5.e84c25",
     "name": "pulse",
@@ -1464,12 +1465,12 @@
     "y": 375,
     "wires": [
       [
-        "6bd16695.bcc708"
+        "3d1e6bb.c522294"
       ]
     ]
   },
   {
-    "id": "8df17c6f.d09ed",
+    "id": "c57c0bb.14d7df8",
     "type": "http request",
     "z": "17b3daf5.e84c25",
     "name": "",
@@ -1480,12 +1481,12 @@
     "y": 329,
     "wires": [
       [
-        "1b785d0f.0db4b3"
+        "3a39d3dc.1f5f5c"
       ]
     ]
   },
   {
-    "id": "d4c38ab.17a2078",
+    "id": "76dc2c20.32d124",
     "type": "function",
     "z": "17b3daf5.e84c25",
     "name": "",
@@ -1496,12 +1497,12 @@
     "y": 810,
     "wires": [
       [
-        "5d26ffb5.3c5b8"
+        "364a6a48.db3206"
       ]
     ]
   },
   {
-    "id": "5d26ffb5.3c5b8",
+    "id": "364a6a48.db3206",
     "type": "http request",
     "z": "17b3daf5.e84c25",
     "name": "",
@@ -1515,21 +1516,21 @@
     ]
   },
   {
-    "id": "accec1a7.bd715",
+    "id": "8ce6d048.a3af7",
     "type": "http request",
     "z": "17b3daf5.e84c25",
     "name": "",
     "method": "use",
     "ret": "txt",
     "url": "",
-    "x": 1095,
-    "y": 1160,
+    "x": 1038,
+    "y": 1170,
     "wires": [
       []
     ]
   },
   {
-    "id": "adff6c8d.35872",
+    "id": "e467331f.01104",
     "type": "delay",
     "z": "17b3daf5.e84c25",
     "name": "",
@@ -1546,13 +1547,13 @@
     "y": 246,
     "wires": [
       [
-        "5c387068.3131b",
-        "ecb3cff1.6ef94"
+        "915081be.e989a",
+        "34f8e227.fa61de"
       ]
     ]
   },
   {
-    "id": "6bd16695.bcc708",
+    "id": "3d1e6bb.c522294",
     "type": "delay",
     "z": "17b3daf5.e84c25",
     "name": "",
@@ -1569,12 +1570,12 @@
     "y": 329,
     "wires": [
       [
-        "8df17c6f.d09ed"
+        "c57c0bb.14d7df8"
       ]
     ]
   },
   {
-    "id": "1b785d0f.0db4b3",
+    "id": "3a39d3dc.1f5f5c",
     "type": "debug",
     "z": "17b3daf5.e84c25",
     "name": "",
@@ -1586,7 +1587,7 @@
     "wires": []
   },
   {
-    "id": "74e89d40.bb20f4",
+    "id": "8ca3563.fe626a8",
     "type": "function",
     "z": "17b3daf5.e84c25",
     "name": "",
@@ -1597,12 +1598,12 @@
     "y": 248,
     "wires": [
       [
-        "adff6c8d.35872"
+        "e467331f.01104"
       ]
     ]
   },
   {
-    "id": "ed26a4eb.fc3d38",
+    "id": "aab47a2e.f165a8",
     "type": "http in",
     "z": "17b3daf5.e84c25",
     "name": "activate VacMode",
@@ -1613,13 +1614,13 @@
     "y": 1630,
     "wires": [
       [
-        "9e3cc979.118f78",
-        "b1593de8.ad366"
+        "962131ec.7312",
+        "38ced73b.76b0a8"
       ]
     ]
   },
   {
-    "id": "9e3cc979.118f78",
+    "id": "962131ec.7312",
     "type": "debug",
     "z": "17b3daf5.e84c25",
     "name": "",
@@ -1631,7 +1632,7 @@
     "wires": []
   },
   {
-    "id": "453e5b2a.9774f4",
+    "id": "667442e6.7bf81c",
     "type": "http response",
     "z": "17b3daf5.e84c25",
     "name": "",
@@ -1640,7 +1641,7 @@
     "wires": []
   },
   {
-    "id": "67340f05.a811",
+    "id": "ce467e03.22ea5",
     "type": "function",
     "z": "17b3daf5.e84c25",
     "name": "",
@@ -1651,12 +1652,12 @@
     "y": 195,
     "wires": [
       [
-        "941d83e5.b18eb"
+        "e4c2bd09.3840c"
       ]
     ]
   },
   {
-    "id": "941d83e5.b18eb",
+    "id": "e4c2bd09.3840c",
     "type": "http request",
     "z": "17b3daf5.e84c25",
     "name": "",
@@ -1670,7 +1671,7 @@
     ]
   },
   {
-    "id": "b1593de8.ad366",
+    "id": "38ced73b.76b0a8",
     "type": "function",
     "z": "17b3daf5.e84c25",
     "name": "",
@@ -1681,12 +1682,12 @@
     "y": 1661,
     "wires": [
       [
-        "57e2725.9cd588c"
+        "7a665a46.f5fe44"
       ]
     ]
   },
   {
-    "id": "57e2725.9cd588c",
+    "id": "7a665a46.f5fe44",
     "type": "switch",
     "z": "17b3daf5.e84c25",
     "name": "",
@@ -1713,18 +1714,18 @@
     "y": 1642,
     "wires": [
       [
-        "44d4afe9.5c06e"
+        "5474a41d.c600ac"
       ],
       [
-        "44d4afe9.5c06e"
+        "5474a41d.c600ac"
       ],
       [
-        "453e5b2a.9774f4"
+        "667442e6.7bf81c"
       ]
     ]
   },
   {
-    "id": "44d4afe9.5c06e",
+    "id": "5474a41d.c600ac",
     "type": "http request",
     "z": "17b3daf5.e84c25",
     "name": "",
@@ -1735,12 +1736,12 @@
     "y": 1615,
     "wires": [
       [
-        "51c750f7.2d90e"
+        "b78eb646.fdf828"
       ]
     ]
   },
   {
-    "id": "51c750f7.2d90e",
+    "id": "b78eb646.fdf828",
     "type": "debug",
     "z": "17b3daf5.e84c25",
     "name": "",
@@ -1752,7 +1753,7 @@
     "wires": []
   },
   {
-    "id": "f8c27ca5.cebb7",
+    "id": "c2c50140.b047b",
     "type": "inject",
     "z": "17b3daf5.e84c25",
     "name": "",
@@ -1766,12 +1767,12 @@
     "y": 1724,
     "wires": [
       [
-        "1f1337ae.aae9e8"
+        "4ff7977f.310488"
       ]
     ]
   },
   {
-    "id": "1f1337ae.aae9e8",
+    "id": "4ff7977f.310488",
     "type": "function",
     "z": "17b3daf5.e84c25",
     "name": "",
@@ -1782,12 +1783,12 @@
     "y": 1726,
     "wires": [
       [
-        "558de1c5.ec44b"
+        "f9bef1b7.4ec8b"
       ]
     ]
   },
   {
-    "id": "d7bde082.83c0b",
+    "id": "7e8c041b.2f646c",
     "type": "inject",
     "z": "17b3daf5.e84c25",
     "name": "",
@@ -1801,12 +1802,12 @@
     "y": 366,
     "wires": [
       [
-        "74294c69.26e664"
+        "caaab0cc.255f8"
       ]
     ]
   },
   {
-    "id": "74294c69.26e664",
+    "id": "caaab0cc.255f8",
     "type": "function",
     "z": "17b3daf5.e84c25",
     "name": "",
@@ -1820,7 +1821,7 @@
     ]
   },
   {
-    "id": "558de1c5.ec44b",
+    "id": "f9bef1b7.4ec8b",
     "type": "delay",
     "z": "17b3daf5.e84c25",
     "name": "",
@@ -1837,12 +1838,12 @@
     "y": 1725,
     "wires": [
       [
-        "8c299cbc.a05a4"
+        "e10bd671.180008"
       ]
     ]
   },
   {
-    "id": "8c299cbc.a05a4",
+    "id": "e10bd671.180008",
     "type": "http request",
     "z": "17b3daf5.e84c25",
     "name": "",
@@ -1856,7 +1857,7 @@
     ]
   },
   {
-    "id": "1da47763.461dc9",
+    "id": "4b5276af.4a2fc8",
     "type": "inject",
     "z": "17b3daf5.e84c25",
     "name": "",
@@ -1870,12 +1871,12 @@
     "y": 1875,
     "wires": [
       [
-        "6642abc.0054454"
+        "98790c8b.89154"
       ]
     ]
   },
   {
-    "id": "ed9e23c8.e0113",
+    "id": "c850e395.0fa63",
     "type": "http request",
     "z": "17b3daf5.e84c25",
     "name": "",
@@ -1886,13 +1887,13 @@
     "y": 1873,
     "wires": [
       [
-        "31d54696.ebee7a",
-        "50faf2c3.005c8c"
+        "4e175c5e.9a8bc4",
+        "5c5c678a.5f4bc8"
       ]
     ]
   },
   {
-    "id": "6642abc.0054454",
+    "id": "48935862.d816c8",
     "type": "function",
     "z": "17b3daf5.e84c25",
     "name": "",
@@ -1903,12 +1904,12 @@
     "y": 1874,
     "wires": [
       [
-        "ed9e23c8.e0113"
+        "c850e395.0fa63"
       ]
     ]
   },
   {
-    "id": "31d54696.ebee7a",
+    "id": "4e175c5e.9a8bc4",
     "type": "debug",
     "z": "17b3daf5.e84c25",
     "name": "",
@@ -1920,7 +1921,7 @@
     "wires": []
   },
   {
-    "id": "50faf2c3.005c8c",
+    "id": "5c5c678a.5f4bc8",
     "type": "function",
     "z": "17b3daf5.e84c25",
     "name": "",
@@ -1931,13 +1932,13 @@
     "y": 1925,
     "wires": [
       [
-        "f8e9b36f.d02b4",
-        "a5d1ff7c.a16ff"
+        "168dafe8.90a4b",
+        "ca0d528d.5ba5"
       ]
     ]
   },
   {
-    "id": "f8e9b36f.d02b4",
+    "id": "168dafe8.90a4b",
     "type": "http request",
     "z": "17b3daf5.e84c25",
     "name": "",
@@ -1948,12 +1949,12 @@
     "y": 1920,
     "wires": [
       [
-        "53981059.e6193"
+        "98bd863.c495b78"
       ]
     ]
   },
   {
-    "id": "458ae02e.eadbc",
+    "id": "1a1eaf43.2ca9e1",
     "type": "comment",
     "z": "17b3daf5.e84c25",
     "name": "Integration with BloomSky ---------------------------------------------------------------------------------------",
@@ -1963,7 +1964,7 @@
     "wires": []
   },
   {
-    "id": "a5d1ff7c.a16ff",
+    "id": "ca0d528d.5ba5",
     "type": "debug",
     "z": "17b3daf5.e84c25",
     "name": "",
@@ -1975,7 +1976,7 @@
     "wires": []
   },
   {
-    "id": "53981059.e6193",
+    "id": "98bd863.c495b78",
     "type": "function",
     "z": "17b3daf5.e84c25",
     "name": "",
@@ -1989,7 +1990,7 @@
     ]
   },
   {
-    "id": "ecb3cff1.6ef94",
+    "id": "34f8e227.fa61de",
     "type": "debug",
     "z": "17b3daf5.e84c25",
     "name": "",
@@ -2001,7 +2002,7 @@
     "wires": []
   },
   {
-    "id": "4d17cbde.8d81c4",
+    "id": "ba09bbf.6168a48",
     "type": "http request",
     "z": "17b3daf5.e84c25",
     "name": "",
@@ -2012,13 +2013,13 @@
     "y": 1968,
     "wires": [
       [
-        "39307e54.0f45e2",
-        "eb1334ca.9e3f58"
+        "26e2e9b7.b37946",
+        "d4796342.97723"
       ]
     ]
   },
   {
-    "id": "64645c1e.8d7704",
+    "id": "e657ea25.f7bc98",
     "type": "http in",
     "z": "17b3daf5.e84c25",
     "name": "",
@@ -2029,12 +2030,12 @@
     "y": 1965,
     "wires": [
       [
-        "e49c8ede.cd963"
+        "12022a72.13fd66"
       ]
     ]
   },
   {
-    "id": "e49c8ede.cd963",
+    "id": "12022a72.13fd66",
     "type": "function",
     "z": "17b3daf5.e84c25",
     "name": "",
@@ -2045,14 +2046,14 @@
     "y": 1965,
     "wires": [
       [
-        "4d17cbde.8d81c4",
-        "6cfbe7c4.480b88"
+        "ba09bbf.6168a48",
+        "f29480aa.9d0db"
       ],
       []
     ]
   },
   {
-    "id": "6cfbe7c4.480b88",
+    "id": "f29480aa.9d0db",
     "type": "debug",
     "z": "17b3daf5.e84c25",
     "name": "",
@@ -2064,7 +2065,7 @@
     "wires": []
   },
   {
-    "id": "39307e54.0f45e2",
+    "id": "26e2e9b7.b37946",
     "type": "debug",
     "z": "17b3daf5.e84c25",
     "name": "",
@@ -2076,7 +2077,7 @@
     "wires": []
   },
   {
-    "id": "eb1334ca.9e3f58",
+    "id": "d4796342.97723",
     "type": "http response",
     "z": "17b3daf5.e84c25",
     "name": "",
@@ -2085,7 +2086,7 @@
     "wires": []
   },
   {
-    "id": "d896fc61.7dfec",
+    "id": "3436b6ce.d4dfda",
     "type": "switch",
     "z": "17b3daf5.e84c25",
     "name": "",
@@ -2109,15 +2110,15 @@
     "y": 1551.4284934997559,
     "wires": [
       [
-        "a7954abb.c565b8"
+        "d5d30f9c.1b2d9"
       ],
       [
-        "4bde7ebe.6b718"
+        "5fbe9600.62292c"
       ]
     ]
   },
   {
-    "id": "4bde7ebe.6b718",
+    "id": "5fbe9600.62292c",
     "type": "json",
     "z": "17b3daf5.e84c25",
     "name": "",
@@ -2125,12 +2126,12 @@
     "y": 1549.9999389648438,
     "wires": [
       [
-        "98e50652.baa948"
+        "7bef94f7.6f895c"
       ]
     ]
   },
   {
-    "id": "a7954abb.c565b8",
+    "id": "d5d30f9c.1b2d9",
     "type": "debug",
     "z": "17b3daf5.e84c25",
     "name": "",
@@ -2142,7 +2143,7 @@
     "wires": []
   },
   {
-    "id": "47167d5a.78e644",
+    "id": "235f6162.a3c79e",
     "type": "http in",
     "z": "17b3daf5.e84c25",
     "name": "",
@@ -2153,14 +2154,14 @@
     "y": 2208,
     "wires": [
       [
-        "78cdd7f1.035e68",
-        "cd99ff21.5a4e9",
-        "b5bc728b.4105f"
+        "ee0c50b9.263a6",
+        "594cf125.4675d",
+        "f8a71d23.473ed"
       ]
     ]
   },
   {
-    "id": "78cdd7f1.035e68",
+    "id": "ee0c50b9.263a6",
     "type": "function",
     "z": "17b3daf5.e84c25",
     "name": "",
@@ -2171,12 +2172,12 @@
     "y": 2197,
     "wires": [
       [
-        "a135fe42.0a4be"
+        "7ae1403.30f00c"
       ]
     ]
   },
   {
-    "id": "a135fe42.0a4be",
+    "id": "7ae1403.30f00c",
     "type": "http response",
     "z": "17b3daf5.e84c25",
     "name": "",
@@ -2185,7 +2186,7 @@
     "wires": []
   },
   {
-    "id": "32d823cc.59d5cc",
+    "id": "6f879335.ba1b8c",
     "type": "function",
     "z": "17b3daf5.e84c25",
     "name": "",
@@ -2196,13 +2197,13 @@
     "y": 2272,
     "wires": [
       [
-        "6dde0e7b.b00ae",
-        "34bad3dd.93ae2c"
+        "5713bf70.0918d",
+        "70f06fab.3b1f2"
       ]
     ]
   },
   {
-    "id": "b5bc728b.4105f",
+    "id": "f8a71d23.473ed",
     "type": "delay",
     "z": "17b3daf5.e84c25",
     "name": "",
@@ -2219,12 +2220,12 @@
     "y": 2243,
     "wires": [
       [
-        "32d823cc.59d5cc"
+        "6f879335.ba1b8c"
       ]
     ]
   },
   {
-    "id": "da7a6f3b.daab7",
+    "id": "1eac72a.7dd828d",
     "type": "http request",
     "z": "17b3daf5.e84c25",
     "name": "",
@@ -2235,12 +2236,12 @@
     "y": 2258,
     "wires": [
       [
-        "61de7df4.fa1c44"
+        "59f3a88e.2d3a28"
       ]
     ]
   },
   {
-    "id": "6dde0e7b.b00ae",
+    "id": "5713bf70.0918d",
     "type": "debug",
     "z": "17b3daf5.e84c25",
     "name": "",
@@ -2252,7 +2253,7 @@
     "wires": []
   },
   {
-    "id": "f8094d8a.6b936",
+    "id": "3d0e58f4.7d5b78",
     "type": "comment",
     "z": "17b3daf5.e84c25",
     "name": "Integration with OwnTracks ---------------------------------------------------------------------------------------",
@@ -2262,7 +2263,7 @@
     "wires": []
   },
   {
-    "id": "cd99ff21.5a4e9",
+    "id": "594cf125.4675d",
     "type": "debug",
     "z": "17b3daf5.e84c25",
     "name": "",
@@ -2274,7 +2275,7 @@
     "wires": []
   },
   {
-    "id": "a9ae159.d005de8",
+    "id": "225b2207.0e451e",
     "type": "rbe",
     "z": "17b3daf5.e84c25",
     "name": "",
@@ -2285,12 +2286,12 @@
     "y": 745,
     "wires": [
       [
-        "6d701ecd.b3b6"
+        "b150abb.822cf58"
       ]
     ]
   },
   {
-    "id": "9f237982.277fc8",
+    "id": "bcef62a6.56824",
     "type": "debug",
     "z": "17b3daf5.e84c25",
     "name": "",
@@ -2302,7 +2303,7 @@
     "wires": []
   },
   {
-    "id": "61de7df4.fa1c44",
+    "id": "59f3a88e.2d3a28",
     "type": "debug",
     "z": "17b3daf5.e84c25",
     "name": "",
@@ -2314,7 +2315,7 @@
     "wires": []
   },
   {
-    "id": "34bad3dd.93ae2c",
+    "id": "70f06fab.3b1f2",
     "type": "delay",
     "z": "17b3daf5.e84c25",
     "name": "",
@@ -2331,12 +2332,12 @@
     "y": 2260,
     "wires": [
       [
-        "da7a6f3b.daab7"
+        "1eac72a.7dd828d"
       ]
     ]
   },
   {
-    "id": "cf7cd173.7ae92",
+    "id": "18627609.e6704a",
     "type": "debug",
     "z": "17b3daf5.e84c25",
     "name": "",
@@ -2348,7 +2349,7 @@
     "wires": []
   },
   {
-    "id": "934e8636.8f8228",
+    "id": "ce9a9854.326c18",
     "type": "debug",
     "z": "17b3daf5.e84c25",
     "name": "",
@@ -2360,7 +2361,7 @@
     "wires": []
   },
   {
-    "id": "8a2f146b.3c51d8",
+    "id": "5a344246.23a95c",
     "type": "function",
     "z": "17b3daf5.e84c25",
     "name": "",
@@ -2374,7 +2375,7 @@
     ]
   },
   {
-    "id": "d88e3ca9.be10b",
+    "id": "e90ec6c6.9c48d8",
     "type": "inject",
     "z": "17b3daf5.e84c25",
     "name": "Turn Geo Debug On",
@@ -2388,12 +2389,12 @@
     "y": 2415,
     "wires": [
       [
-        "8a2f146b.3c51d8"
+        "5a344246.23a95c"
       ]
     ]
   },
   {
-    "id": "87217136.82f48",
+    "id": "8373082e.9940d8",
     "type": "function",
     "z": "17b3daf5.e84c25",
     "name": "",
@@ -2407,7 +2408,7 @@
     ]
   },
   {
-    "id": "6206d28c.533b0c",
+    "id": "e6443788.820418",
     "type": "inject",
     "z": "17b3daf5.e84c25",
     "name": "Turn Geo Debug Off",
@@ -2421,12 +2422,12 @@
     "y": 2458,
     "wires": [
       [
-        "87217136.82f48"
+        "8373082e.9940d8"
       ]
     ]
   },
   {
-    "id": "ca6a10de.7e53e",
+    "id": "69c62e0f.8114f",
     "type": "inject",
     "z": "17b3daf5.e84c25",
     "name": "",
@@ -2440,12 +2441,12 @@
     "y": 1011,
     "wires": [
       [
-        "c2377ced.4ca7a"
+        "c04940da.c8645"
       ]
     ]
   },
   {
-    "id": "6b3e5449.696f8c",
+    "id": "7a139a34.8aec74",
     "type": "function",
     "z": "17b3daf5.e84c25",
     "name": "",
@@ -2456,12 +2457,12 @@
     "y": 1010,
     "wires": [
       [
-        "cec1220b.ba4f7"
+        "6f837a8d.a497c4"
       ]
     ]
   },
   {
-    "id": "c2377ced.4ca7a",
+    "id": "c04940da.c8645",
     "type": "delay",
     "z": "17b3daf5.e84c25",
     "name": "",
@@ -2478,59 +2479,245 @@
     "y": 1011,
     "wires": [
       [
-        "6b3e5449.696f8c"
+        "7a139a34.8aec74"
       ]
     ]
   },
   {
-    "id": "7fd11824.0455a8",
+    "id": "6835e9ba.fb2178",
     "type": "function",
     "z": "17b3daf5.e84c25",
     "name": "",
     "func": "if ('uid' in msg.req.body && 'pwd' in msg.req.body && msg.req.body.uid==context.global.WinkUser.uid && msg.req.body.pwd==context.global.WinkUser.pwd){\n    msg.statusCode=\"200\";\n    msg.payload={\"status\":\"OK\"};    \n    msg.headers={\n        \"Set-Cookie\":\"exchange_token=\"+context.global.FREEBOARD_TOKEN+'; Path=/'\n        }\n} else \n    {\n        msg.statusCode=\"401\";\n        msg.payload={\"status\":\"Unathorized\"};  \n    }\nreturn msg;",
     "outputs": 1,
     "noerr": 0,
-    "x": 250,
-    "y": 2555,
+    "x": 262,
+    "y": 2566,
     "wires": [
       [
-        "5b263e94.3f2d4"
+        "cbf0a984.842db8"
       ]
     ]
   },
   {
-    "id": "ebeb9661.234738",
+    "id": "8a610fba.636d1",
     "type": "http in",
     "z": "17b3daf5.e84c25",
     "name": "",
     "url": "/auth",
     "method": "post",
     "swaggerDoc": "",
-    "x": 97,
-    "y": 2554,
+    "x": 109,
+    "y": 2565,
     "wires": [
       [
-        "7fd11824.0455a8"
+        "6835e9ba.fb2178"
       ]
     ]
   },
   {
-    "id": "994aa130.d58e5",
+    "id": "98348cf1.15b2a",
     "type": "comment",
     "z": "17b3daf5.e84c25",
-    "name": "Authentication service ---------------------------------------------------------------------------------------",
+    "name": "WNR 2.0 ---------------------------------------------------------------------------------------",
     "info": "",
-    "x": 325,
-    "y": 2507,
+    "x": 297,
+    "y": 2518,
     "wires": []
   },
   {
-    "id": "5b263e94.3f2d4",
+    "id": "cbf0a984.842db8",
     "type": "http response",
     "z": "17b3daf5.e84c25",
     "name": "",
-    "x": 422,
-    "y": 2555,
+    "x": 434,
+    "y": 2566,
     "wires": []
+  },
+  {
+    "id": "a5f524e2.c4fa08",
+    "type": "http in",
+    "z": "17b3daf5.e84c25",
+    "name": "",
+    "url": "/red/getApplDataJSon",
+    "method": "get",
+    "swaggerDoc": "",
+    "x": 138,
+    "y": 2651,
+    "wires": [
+      [
+        "a7d4ffe4.cd99e"
+      ]
+    ]
+  },
+  {
+    "id": "a7d4ffe4.cd99e",
+    "type": "function",
+    "z": "17b3daf5.e84c25",
+    "name": "Throw Wink Data",
+    "func": "//if(msg.req.headers.authorization && msg.req.headers.authorization==\"Bearer \"+context.global.FREEBOARD_TOKEN){\nif ((msg.req.body.uid==context.global.WinkUser.uid && msg.req.body.pwd==context.global.WinkUser.pwd)||context.global.getCookie('exchange_token',msg.req.headers.cookie)==context.global.FREEBOARD_TOKEN || msg.payload.token==context.global.FREEBOARD_TOKEN){\nmsg.payload.WinkData=context.global.winkState;\nmsg.payload.WinkCapbs=context.global.winkDevCap;\n//msg.payload.WeatherData=context.global.Weather;\n//msg.payload.Weather=context.global.Weather;\n//msg.payload.WinkSubscriptions=context.global.WinkSubscriptions;\nmsg.payload.Presence=context.global.checkPresence();\nmsg.payload.PresenceDetail=context.global.Presence;\nmsg.payload.PresenceHistory=context.global.PresenceHistory;\n\n//msg.payload.foscamP=context.global.FosCam;\n//msg.payload.SamsungP=context.global.SamsungCam;\n//msg.payload.DlinkCam=context.global.DlinkCam;\n//msg.payload.VCAP_SERVICES=context.global.VCAP_SERVICES\n//msg.payload.ImageArchive=context.global.ImageArchive\n//msg.payload.camera_motion=context.global.camera_motion\n//msg.payload.netatmo=context.global.netatmo\nmsg.statusCode=\"200\";\nvar Etag=\"\";\nif ('CRYPTO' in context.global){\n    Etag=context.global.CRYPTO.createHash(\"md5\").update(JSON.stringify(msg.payload),\"utf8\").digest(\"hex\");\n    msg.headers={\n       'ETag': Etag,\n       'Content-Type': 'application/json'\n    };\n//    msg.res.set({\n//       'ETag': Etag,\n//       'Content-Type': 'application/json'\n//    });\n}\nreturn msg;\n}\nelse\n{\n    //msg.payload=\"Not Authorized\";\n   msg.statusCode=\"403\";\n   node.send(msg);\n   //res.send(\"403\",\"Forbidden\");\n  return;\n}\n",
+    "outputs": 1,
+    "noerr": 0,
+    "x": 482.4999694824219,
+    "y": 2647,
+    "wires": [
+      [
+        "3d3a3e79.f83162"
+      ]
+    ]
+  },
+  {
+    "id": "3d3a3e79.f83162",
+    "type": "http response",
+    "z": "17b3daf5.e84c25",
+    "name": "",
+    "x": 707.5,
+    "y": 2648,
+    "wires": []
+  },
+  {
+    "id": "9969bbfb.8af378",
+    "type": "http in",
+    "z": "17b3daf5.e84c25",
+    "name": "",
+    "url": "/red/components/:component",
+    "method": "get",
+    "swaggerDoc": "",
+    "x": 158,
+    "y": 2729,
+    "wires": [
+      [
+        "a9d88cdd.be663"
+      ]
+    ]
+  },
+  {
+    "id": "a9d88cdd.be663",
+    "type": "function",
+    "z": "17b3daf5.e84c25",
+    "name": "component_details",
+    "func": "if(msg.req.headers.authorization && msg.req.headers.authorization==\"Bearer \"+context.global.FREEBOARD_TOKEN){\n//if (context.global.getCookie('exchange_token',msg.req.headers.cookie)==context.global.FREEBOARD_TOKEN){\n    if (msg.req.params.component in context.global.winkState) {\n        msg.payload=context.global.winkState[msg.req.params.component];\n        msg.statusCode=\"200\";\n    } else if (msg.req.params.component=='weather'){\n        msg.payload=context.global.Weather;\n        msg.statusCode=\"200\";\n    } else\n    {\n        msg.payload={\n            \"error\":\"unknown component\"\n        };\n        msg.statusCode=\"500\";        \n    }\n    var Etag=\"\";\n    if ('CRYPTO' in context.global){\n        Etag=context.global.CRYPTO.createHash(\"md5\").update(JSON.stringify(msg.payload),\"utf8\").digest(\"hex\");\n        msg.headers={\n           'ETag': Etag,\n           'Content-Type': 'application/json'\n        };\n    }\n    return msg;\n} else\n{\n   msg.statusCode=\"403\";\n   return (msg);\n}\n",
+    "outputs": 1,
+    "noerr": 0,
+    "x": 469.4999694824219,
+    "y": 2727,
+    "wires": [
+      [
+        "31536db4.36c6a2"
+      ]
+    ]
+  },
+  {
+    "id": "31536db4.36c6a2",
+    "type": "http response",
+    "z": "17b3daf5.e84c25",
+    "name": "",
+    "x": 676.5,
+    "y": 2726,
+    "wires": []
+  },
+  {
+    "id": "7f06de05.c27b2",
+    "type": "http in",
+    "z": "17b3daf5.e84c25",
+    "name": "",
+    "url": "/red/group_members/:group",
+    "method": "get",
+    "swaggerDoc": "",
+    "x": 157,
+    "y": 2787,
+    "wires": [
+      [
+        "c7257508.930488"
+      ]
+    ]
+  },
+  {
+    "id": "c7257508.930488",
+    "type": "function",
+    "z": "17b3daf5.e84c25",
+    "name": "group_members",
+    "func": "if(msg.req.headers.authorization && msg.req.headers.authorization==\"Bearer \"+context.global.FREEBOARD_TOKEN){\n//if (context.global.getCookie('exchange_token',msg.req.headers.cookie)==context.global.FREEBOARD_TOKEN){\n//    node.warn(msg.req.params.group);\n    if (msg.req.params.group in context.global.winkState.groups) {\n        msg.payload=context.global.winkState.groups[msg.req.params.group].members;\n        msg.statusCode=\"200\";\n    } else\n    {\n        msg.payload={\n            \"error\":\"unknown component\"\n        };\n        msg.statusCode=\"500\";        \n    }\n    var Etag=\"\";\n    if ('CRYPTO' in context.global){\n        Etag=context.global.CRYPTO.createHash(\"md5\").update(JSON.stringify(msg.payload),\"utf8\").digest(\"hex\");\n        msg.headers={\n           'ETag': Etag,\n           'Content-Type': 'application/json'\n        };\n    }\n    return msg;\n} else\n{\n   msg.statusCode=\"403\";\n   return (msg);\n}\n",
+    "outputs": 1,
+    "noerr": 0,
+    "x": 440.4999694824219,
+    "y": 2786,
+    "wires": [
+      [
+        "28a4e941.b9d7a6"
+      ]
+    ]
+  },
+  {
+    "id": "28a4e941.b9d7a6",
+    "type": "http response",
+    "z": "17b3daf5.e84c25",
+    "name": "",
+    "x": 647.5,
+    "y": 2785,
+    "wires": []
+  },
+  {
+    "id": "2c6460a5.8dccc",
+    "type": "http in",
+    "z": "17b3daf5.e84c25",
+    "name": "",
+    "url": "/red/sensors/:type",
+    "method": "get",
+    "swaggerDoc": "",
+    "x": 117,
+    "y": 2847,
+    "wires": [
+      [
+        "564b97a6.8c3d88"
+      ]
+    ]
+  },
+  {
+    "id": "564b97a6.8c3d88",
+    "type": "function",
+    "z": "17b3daf5.e84c25",
+    "name": "component_details",
+    "func": "if(msg.req.headers.authorization && msg.req.headers.authorization==\"Bearer \"+context.global.FREEBOARD_TOKEN){\n//if (context.global.getCookie('exchange_token',msg.req.headers.cookie)==context.global.FREEBOARD_TOKEN){\n    if (msg.req.params.component in context.global.winkState) {\n        msg.payload=context.global.winkState[msg.req.params.component];\n        msg.statusCode=\"200\";\n    } else if (msg.req.params.component=='weather'){\n        msg.payload=context.global.Weather;\n        msg.statusCode=\"200\";\n    } else\n    {\n        msg.payload={\n            \"error\":\"unknown component\"\n        };\n        msg.statusCode=\"500\";        \n    }\n    var Etag=\"\";\n    if ('CRYPTO' in context.global){\n        Etag=context.global.CRYPTO.createHash(\"md5\").update(JSON.stringify(msg.payload),\"utf8\").digest(\"hex\");\n        msg.headers={\n           'ETag': Etag,\n           'Content-Type': 'application/json'\n        };\n    }\n    return msg;\n} else\n{\n   msg.statusCode=\"403\";\n   return (msg);\n}\n",
+    "outputs": 1,
+    "noerr": 0,
+    "x": 468.4999694824219,
+    "y": 2845,
+    "wires": [
+      [
+        "ca02fec1.41a96"
+      ]
+    ]
+  },
+  {
+    "id": "ca02fec1.41a96",
+    "type": "http response",
+    "z": "17b3daf5.e84c25",
+    "name": "",
+    "x": 675.5,
+    "y": 2844,
+    "wires": []
+  },
+  {
+    "id": "98790c8b.89154",
+    "type": "delay",
+    "z": "17b3daf5.e84c25",
+    "name": "",
+    "pauseType": "delay",
+    "timeout": "45",
+    "timeoutUnits": "seconds",
+    "rate": "1",
+    "rateUnits": "second",
+    "randomFirst": "1",
+    "randomLast": "5",
+    "randomUnits": "seconds",
+    "drop": false,
+    "x": 274,
+    "y": 1876,
+    "wires": [
+      [
+        "48935862.d816c8"
+      ]
+    ]
   }
 ]
