@@ -14,6 +14,7 @@ https://(your_app_name).mybluemix.net/wnrUI <br>
 controls are functional both directions. (no garage doors, robots and groups for this release)<br>
 Flow Editor:<br>
 *  Import updated [winkCore.json](winkCore.json)
+*  Import updated [winkIntegration.json](winkIntegration.json)
 *  Import updated [tabletUI.json](tabletUI.json)
 *  do not forget to check [duplicate websockets](../../README-WebsocketFix.md)
 *  perform "FULL" deployment<br>
