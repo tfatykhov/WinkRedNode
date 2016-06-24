@@ -8,6 +8,21 @@ UI 2.0
 https://(your_app_name).mybluemix.net/wnrUI <br>
 == UPDATE ==
 -
+06/24/2016
+------------
+#####Milestone for WNR UI 2.0
+controls are functional both directions. (no garage doors, robots and groups for this release)<br>
+Flow Editor:<br>
+*  Import updated [winkCore.json](winkCore.json)
+*  Import updated [tabletUI.json](tabletUI.json)
+*  do not forget to check [duplicate websockets](../../README-WebsocketFix.md)
+*  perform "FULL" deployment<br>
+
+Bluemix git console:<br>
+*  re-deploy application in git<br>
+<img src="images/deploy.png">
+
+
 06/23/2016
 ------------
 Node-Red core 0.14.3 has been released.
