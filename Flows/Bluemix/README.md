@@ -14,6 +14,7 @@ Wink changed it's api server name and I probably missed it but today old server 
 Please update winkCore flow
 Flow Editor:<br>
 *  Import updated [winkCore.json](winkCore.json)
+*  Import updated [winkIntegration.json](winkIntegration.json)
 *  do not forget to check [duplicate websockets](../../README-WebsocketFix.md)
 *  perform "FULL" deployment<br>
 
