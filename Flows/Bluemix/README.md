@@ -8,6 +8,15 @@ UI 2.0
 https://(your_app_name).mybluemix.net/wnrUI <br>
 == UPDATE ==
 -
+07/12/2016
+-----------
+Wink changed it's api server name and I probably missed it but today old server stopped working due to expired certificate
+Please update winkCore flow
+Flow Editor:<br>
+*  Import updated [winkCore.json](winkCore.json)
+*  do not forget to check [duplicate websockets](../../README-WebsocketFix.md)
+*  perform "FULL" deployment<br>
+
 06/24/2016
 ------------
 #####Milestone for WNR UI 2.0
