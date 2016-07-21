@@ -8,6 +8,39 @@ UI 2.0
 https://(your_app_name).mybluemix.net/wnrUI <br>
 == UPDATE ==
 -
+07/21/2016
+-----------
+It seems I missed documentation on how to use fadein/out/pulse effect commands inside node-red robots/schedules
+
+fade in/fade out:
+mycmd= context.global.executeEffectCMD(effect,winkName,winkType,min,max,period);
+
+parameters :
+
+	'effect': 'fadein','fadeout'
+	'winkName': dimmable light name or group name
+	'winkType': 'light' or 'group'
+	'min': min brightness (0-100)
+	'max': max brightness (0-100)
+	'period' : effect period in seconds
+	
+pulse:
+mycmd= context.global.executeEffectCMD(effect,winkName,winkType,min,max,period,repeat,delay);
+
+parameters :
+
+	'effect': 'pulse'
+	'winkName': dimmable light name or group name
+	'winkType': 'light' or 'group'
+	'min': min brightness (0-100)
+	'max': max brightness (0-100)
+	'period' : put null or 0
+	'repeat' : 'number of "pulses"
+	'delay' : delay between "pulse" in seconds
+
+then as usual type
+	node.send(mycmd);
+
 07/12/2016
 -----------
 Wink changed it's api server name and I probably missed it but today old server stopped working due to expired certificate
