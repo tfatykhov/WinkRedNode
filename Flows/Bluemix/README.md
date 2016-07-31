@@ -18,7 +18,7 @@ https://(your_app_name).mybluemix.net/wnrUI <br>
 		* 'open' - this will open valve
 		* 'close' - this will close valve<br>
 
-#####winkCore - added advanced lock commands.
+####winkCore - added advanced lock commands.
 * use context.global.executeWinkCMD(winkname,type,cmd,param) function with following paramteres:
 	* winkname - Wink Lock Name (user proper case as in wink app)
 	* type - 'lock'
