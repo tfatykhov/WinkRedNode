@@ -8,6 +8,34 @@ UI 2.0
 https://(your_app_name).mybluemix.net/wnrUI <br>
 == UPDATE ==
 -
+07/30/2016
+------------
+####winkCore - added valve commands.
+* use context.global.executeWinkCMD(winkname,type,cmd,level) function with following paramteres:
+	* winkname - LeakSmart Valve Name (user proper case as in wink app)
+	* type - 'valve'
+	* cmd:
+		* 'open' - this will open valve
+		* 'close' - this will close valce
+#####winkCore - added advanced lock commands.
+* use context.global.executeWinkCMD(winkname,type,cmd,param) function with following paramteres:
+	* winkname - Wink Lock Name (user proper case as in wink app)
+	* type - 'lock'
+	* cmd:
+		* 'vacation_mode' - this will enable/disable vacation mode
+			* param = "true" or "false"
+		* 'beeper' - this will enable/disable beeper
+			* param = "true" or "false"
+		* 'auto_lock' - this will enable/disable auto lock
+			* param = "true" or "false"
+		* 'alarm' - this will activate lock alarm mode
+			* param = "null", "activity", "tamper", "forced_entry"
+
+Flow Editor:<br>
+*  Import updated [winkCore.json](winkCore.json)
+*  do not forget to check [duplicate websockets](../../README-WebsocketFix.md)		
+*  perform "FULL" deployment<br>
+-
 07/21/2016
 -----------
 It seems I missed documentation on how to use fadein/out/pulse effect commands inside node-red robots/schedules
@@ -120,7 +148,7 @@ Flow Editor:
 
 06/04/2016
 ------------
-#####winkCore - added siren commands.
+####winkCore - added siren commands.
 * use context.global.executeWinkCMD(winkname,type,cmd,level) function with following paramteres:
 	* winkname - siren name (user proper case as in wink app)
 	* type - 'siren'
