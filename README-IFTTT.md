@@ -75,9 +75,9 @@ example of Maker channel body
 format:
 winkName - name of wink device/group/shortcut as defined in the wink app
 
-type: lock/light/group/shortcut/garage/robot
+type: lock/light/group/shortcut/garage/robot/valve
 
-cmd: light/group: on/off, lock: lock/unlock   robot: enable/disable, garage: open/close
+cmd: light/group: on/off, lock: lock/unlock   robot: enable/disable, garage: open/close, valve: open/close
 
 level - dim level 0-100 required for light dimmers and groups if not present will be auto set to 100 for on and 0 for off commands.
 
