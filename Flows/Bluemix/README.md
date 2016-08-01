@@ -11,7 +11,7 @@ https://(your_app_name).mybluemix.net/wnrUI <br>
 08/01/2016
 ------------
 #####Added LeakSmart valves data to summary page (wnr UI 2.0 and 1.0)
-![valve summary](images/valve.png)
+![valve summary](images/valve1.png)
 
 Flow Editor:<br>
 *  Import updated [winkCore.json](winkCore.json)
