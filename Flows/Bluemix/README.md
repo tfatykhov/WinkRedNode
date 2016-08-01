@@ -8,6 +8,23 @@ UI 2.0
 https://(your_app_name).mybluemix.net/wnrUI <br>
 == UPDATE ==
 -
+08/01/2016
+------------
+#####Added LeakSmart valves data to summary page (wnr UI 2.0 and 1.0)
+![valve summary](images/valve.png)
+
+Flow Editor:<br>
+*  Import updated [winkCore.json](winkCore.json)
+*  Import updated [winkIntegration.json](winkIntegration.json)
+*  Import updated [tabletUI.json](tabletUI.json)
+*  do not forget to check [duplicate websockets](../../README-WebsocketFix.md)
+*  perform "FULL" deployment<br>
+
+Bluemix git console:<br>
+*  re-deploy application in git<br>
+<img src="images/deploy.png">
+
+
 07/31/2016
 -----------
 URL for wink API index has been changed after it was not accessible for some time last week
