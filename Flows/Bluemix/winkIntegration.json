@@ -122,11 +122,11 @@
     "type": "function",
     "z": "17b3daf5.e84c25",
     "name": "",
-    "func": "context.global.new_version=\"Y\";\nvar newMsg ={\n    \"url\":\"http://status.winkapp.com/metrics-display/009ykpcmnm25/day.json\",\n    \"method\":\"GET\",\n    headers: {\n        \"Content-Type\":\"application/json\"\n    }\n};\nreturn newMsg;",
+    "func": "context.global.new_version=\"Y\";\nvar newMsg ={\n    \"url\":\"http://status.winkapp.com/metrics-display/drtvg3y4p2ff/day.json\",\n    \"method\":\"GET\",\n    headers: {\n        \"Content-Type\":\"application/json\"\n    }\n};\nreturn newMsg;",
     "outputs": 1,
     "noerr": 0,
-    "x": 273.5,
-    "y": 467.49993896484375,
+    "x": 301.5,
+    "y": 468.49993896484375,
     "wires": [
       [
         "fe799f8c.79ff6"
@@ -160,7 +160,9 @@
     "x": 708.5,
     "y": 467.49993896484375,
     "wires": [
-      []
+      [
+        "aac7814c.0e565"
+      ]
     ]
   },
   {
@@ -2719,5 +2721,17 @@
         "48935862.d816c8"
       ]
     ]
+  },
+  {
+    "id": "aac7814c.0e565",
+    "type": "debug",
+    "z": "17b3daf5.e84c25",
+    "name": "",
+    "active": true,
+    "console": "false",
+    "complete": "false",
+    "x": 898,
+    "y": 479,
+    "wires": []
   }
 ]
