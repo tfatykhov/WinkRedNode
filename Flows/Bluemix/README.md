@@ -8,6 +8,15 @@ UI 2.0
 https://(your_app_name).mybluemix.net/wnrUI <br>
 == UPDATE ==
 -
+07/31/2016
+-----------
+URL for wink API index has been changed after it was not accessible for some time last week
+I updated winkIntegration flow so it should work again.
+
+Flow Editor:<br>
+*  Import updated [winkIntegration.json](winkIntegration.json)
+*  perform "FULL" deployment<br>
+
 07/30/2016
 ------------
 ####winkCore - added valve commands.
