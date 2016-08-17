@@ -758,6 +758,90 @@ node.send(WinkCMDmsg);
     } ,30*1000 );
 }
 ```
+### Alarm Robot Variation 2 (Brian Olsen Version)
+
+This variation uses a sacrificial device to essentially turn the alarm on and off. And allows for bypassing a door or window by leaving it open for 1 minute before powering on the sac device should you want to arm the system and leave something open. I use multiple methods to turn on the sac device in order to arm the alarm system (by voice with my Echo, wink app shortcut, connected bulb remote in shortcut mode and it is also presence based)
+
+_**All parts go into the robot tab**_
+
+_**This part is defining the variable used in the alarm flows to follow**_
+
+I have go control sensors on every exterior door and window. If any of the are opened it sets the variable to 1. When all the doors and window are closed it returns the variable to 0. I also have it setup so if a door or window if left open it will retun the variable to 0 after 1 min, allowing me to bypass that door or window should I want it open and the alarm on. Also in this block of code I define a no repeat variable which will be used further in the alarm flows.
+```
+//Variable for House Alarm
+
+if ((changed.name=='Main Door' || changed.name=='Rear Door' || changed.name=='Master left' || changed.name=='Master right' || changed.name=='Nikki left' || changed.name=='Nikki right' || changed.name=='Jacob center' || changed.name=='Living room left' || changed.name=='Living room center' || changed.name=='Living room right' || changed.name=='Kitchen Window' || changed.name=='Laundry') && (changed.old_state!=="Opened" && changed.new_state==="Opened"))
+{
+context.global.HouseAlarm=1;
+}
+ 
+if (context.global.HouseAlarm===1)
+{
+      setTimeout(function(){
+{
+    context.global.HouseAlarm=0;
+    }
+      },1*60*1000);
+      }
+
+if (((context.global.winkState.sensor_pods["Main Door"].opened===false) && (context.global.winkState.sensor_pods["Rear Door"].opened===false) && (context.global.winkState.sensor_pods["Master right"].opened===false)&& (context.global.winkState.sensor_pods["Master left"].opened===false)&& (context.global.winkState.sensor_pods["Nikki right"].opened===false)&& (context.global.winkState.sensor_pods["Nikki left"].opened===false)&& (context.global.winkState.sensor_pods["Jacob center"].opened===false)&& (context.global.winkState.sensor_pods["Living room right"].opened===false)&& (context.global.winkState.sensor_pods["Living room left"].opened===false)&& (context.global.winkState.sensor_pods["Living room center"].opened===false)&& (context.global.winkState.sensor_pods["Kitchen Window"].opened===false)&& (context.global.winkState.sensor_pods["Laundry"].opened===false)))
+{
+context.global.HouseAlarm=0;
+}
+
+if(context.global.DEBUG){ node.warn(context.global.HouseAlarm); }
+
+
+if (typeof context.global.AlarmStop=="undefined")
+{
+    context.global.AlarmStop=1;
+}
+```
+
+_**House in Alarm Flow**_
+
+This is the actual alarm flow. If the sacrifical device is powered on and a door or window is opened the alarm will be sounded 30 seconds later, unless the sac device is powered off. It doesn't matter if the door or window that was opened is reclosed. 
+```
+if ((context.global.winkState.binary_switches.Alarm.powered===true) && (context.global.HouseAlarm===1) && (context.global.AlarmStop===1))
+{
+    setTimeout(function(){
+    if(context.global.winkState.binary_switches.Alarm.powered===true)
+        {
+            context.global.AlarmStop=0;
+        try {
+            node.send(context.global.executeWinkCMD('Siren','siren','siren_and_strobe','null'));
+	        node.send(WinkCMDmsg);
+            node.send(context.global.send_ui_note('information',600000,'House in Alarm',Math.floor(Math.random()*1800000)));
+            pmsg=context.global.sendViaPushBullet('note', 'House Alarm','House Alarm!!');
+            node.send(pmsg);
+        }
+            catch(error){
+            node.warn(error.message);
+            }
+        }
+    } ,30*1000 );
+```
+
+_**Disarm or Silence Alarm**_
+
+The following flow will disarm or silcence the alarm, very simply by powering off the sac device.
+
+```
+if ((context.global.winkState.binary_switches.Alarm.powered===false) && (context.global.AlarmStop===0))
+        {
+            context.global.AlarmStop=1;
+        try {
+            node.send(context.global.executeWinkCMD('Siren','siren','off'));
+            node.send(WinkCMDmsg);
+            node.send(context.global.send_ui_note('information',600000,'Alarm Silenced',Math.floor(Math.random()*1800000)));
+            pmsg=context.global.sendViaPushBullet('note', 'Alarm Silenced','Alarm Silenced');
+            node.send(pmsg);
+        }
+        catch(error){
+            node.warn(error.message);
+        }
+        }
+```        
 
 ##### Motion Based Robots
 
