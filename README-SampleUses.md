@@ -811,7 +811,7 @@ if (changed.name=="Kitchen" && changed.old_state!==false && changed.new_state===
 if (changed.name=="Master Bedroom Remote" && context.global.winkState.remotes['Master Bedroom Remote'].button_off_pressed===true) //Robot: if bottom button on MB remote pushed, activate Alexa Bedtime Shortcut
 {
     node.warn("bedroom button pressed");
-    WinkCMDmsg = context.global.executeWinkCMD("Alexa Bedtime","shortcut");
+    WinkCMDmsg = context.global.executeWinkCMD("Shortcut Name","shortcut");
     node.send(WinkCMDmsg);
 }
 ```
