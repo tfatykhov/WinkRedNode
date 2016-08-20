@@ -565,6 +565,43 @@ node.warn(error.message);
 } ,300000);
 }
 ```
+
+**These go in schedule tab.**
+
+- **Hub Power Notifications**  
+This series of flows will first notify you if your hub loses its connection to Node Red, which could be due to a power loss or offline for any other reason. It will then send you another notification when the hub goes back online.
+```
+if (context.global.HubPower===undefined)
+{
+    context.global.HubPower=0;
+}
+
+
+if (context.global.winkState.hubs.Home.connection===false && context.global.HubPower===0)
+    try{
+        pmsg=context.global.sendViaPushBullet('note','Wink Hub Offline','Wink Hub Offline');
+        node.send(pmsg);
+        node.send(context.global.send_ui_note('information',30*60*1000, 'Wink Hub Offline',Math.floor(Math.random()*1800000)));
+        context.global.HubPower=1;
+
+}
+    catch(error){
+    node.warn(error.message);
+}
+ 
+if (context.global.winkState.hubs.Home.connection===true && context.global.HubPower===1)
+    try{
+        pmsg=context.global.sendViaPushBullet('note','Wink Hub Back Online','Wink Hub Back Online');
+        node.send(pmsg);
+        node.send(context.global.send_ui_note('information',30*60*1000, 'Wink Hub Back Online',Math.floor(Math.random()*1800000)));
+        context.global.HubPower=0;
+ }
+    catch(error){
+    node.warn(error.message);
+}
+``` 
+
+
 ### Presence Based Robots
 
 To check for someone’s presence in an if statement use context.global.checkPresence()
