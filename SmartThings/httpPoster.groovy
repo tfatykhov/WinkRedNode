@@ -1,5 +1,5 @@
 /**
- *  HTTP POSTer
+ *  HTTP POSTer for WNR
  *
  *  Copyright 2016 Timur Fatykhov
  *
