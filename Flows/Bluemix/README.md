@@ -35,7 +35,6 @@ Required steps (SmartThings):
 * at the bottom you need to populate your WNR url
 * populate same SmartThings secret key that you entered in WNR configuration
 * click Install
-![add stapp](images/STApp4.png)
 
 Once events start happening on ST side - data will flow to WNR so do not expect to see all devices immediately.
 
