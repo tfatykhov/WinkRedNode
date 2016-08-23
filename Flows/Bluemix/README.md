@@ -8,6 +8,37 @@ UI 2.0
 https://(your_app_name).mybluemix.net/wnrUI <br>
 == UPDATE ==
 -
+-
+08/22/2016
+------------
+#####SmartThings to Node Red integration for Sensors
+This update starts new chapter in WNR. SmartThings integration.
+First drop will allow sensor data from SmartThings hub to be avaliable in WNR. <br>
+Required steps (WNR)
+*  Import updated [winkIntegration.json](winkIntegration.json)
+*  Import updated [tabletUI.json](tabletUI.json)
+*  perform "FULL" deployment<br>
+
+Bluemix git console:<br>
+*  re-deploy application in git<br>
+* Open UI version 1, navigate to configuration tab/Integration settings, find "SmartThings Secret key" line and put some random string (you can use https://www.random.org/strings/)
+
+Required steps (SmartThings):
+* You need to open SmartThings management page (https://graph.api.smartthings.com/)
+* Navigate to "My SmartApps" page and click on "add smart app" button, select "from Code"
+![add stapp](images/STApp1.png)
+![add stapp](images/STApp2.png)
+* Open folloeing link [WNR Poster](../../SmartThings/httpPoster.groovy) and copy all code to the "code" section
+* Click on "save" and "publish" " for me"
+![add stapp](images/STApp3.png)
+* then on the right side - select you Location, devices and actions that should go to Wnr
+* at the bottom you need to populate your WNR url
+* populate same SmartThings secret key that you entered in WNR configuration
+* click Install
+![add stapp](images/STApp4.png)
+
+Once events start happening on ST side - data will flow to WNR so do not expect to see all devices immediately.
+
 08/01/2016
 ------------
 #####Added LeakSmart valves data to summary page (wnr UI 2.0 and 1.0)
