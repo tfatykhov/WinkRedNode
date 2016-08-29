@@ -571,7 +571,7 @@ node.warn(error.message);
 - **Hub Power Notifications**  
 This series of flows will first notify you if your hub loses its connection to Node Red, which could be due to a power loss or offline for any other reason. It will then send you another notification when the hub goes back online.
 ```
-if (context.global.HubPower===undefined)
+if (context.global.HubPower==="undefined")
 {
     context.global.HubPower=0;
 }
