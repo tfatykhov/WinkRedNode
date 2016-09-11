@@ -9,6 +9,24 @@ https://(your_app_name).mybluemix.net/wnrUI <br>
 == UPDATE ==
 -
 -
+09/11/2016
+------------
+###### Updates
+* SmartThings Leak sensors properly report "leak"
+* fan on/off command for thermostat<br>
+
+mycmd= context.global.executeTstatCMD(TstatName,command,extra parameter);
+
+	command :
+		'fan' 
+		extra parameter : 'on' , 'off'
+	
+Flow Editor:<br>	
+*  Import updated [winkCore.json](winkCore.json)
+*  Import updated [winkIntegration.json](winkIntegration.json)
+*  do not forget to check [duplicate websockets](../../README-WebsocketFix.md)
+*  perform "FULL" deployment<br>
+
 08/22/2016
 ------------
 #####SmartThings to Node Red integration for Sensors
