@@ -9,6 +9,18 @@ https://(your_app_name).mybluemix.net/wnrUI <br>
 == UPDATE ==
 -
 -
+09/13/2016
+------------
+###### Updates
+* Send robot Event to IFTTT
+When WINK robot is fired event is sent to ifttt via Maker channel:
+	* event name  equal to wink Robot name if robot name has more than one word, space is replaced to _<br> 
+	* example: If WINK Robot Name is My Robot, Maker Channel Event Name will be My_Robot<br>
+Flow Editor:<br>	
+*  Import updated [winkCore.json](winkCore.json)
+*  do not forget to check [duplicate websockets](../../README-WebsocketFix.md)
+*  perform "FULL" deployment<br>
+
 09/11/2016
 ------------
 ###### Updates
