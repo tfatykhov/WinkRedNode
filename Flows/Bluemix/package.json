@@ -21,7 +21,7 @@
         "suncalc":"git://github.com/mourner/suncalc.git",
         "node-red-contrib-ui":"~1.X",
         "winknodered":"git://github.com/tfatykhov/WinkRedNode.git#master",
-	"tinycolor2":"~1.x",
+ 	"tinycolor2":"git://github.com/bgrins/TinyColor.git" ,
 	"wnr-ui" : "git://github.com/tfatykhov/wnrUI.git" 
     },
     "engines": {
