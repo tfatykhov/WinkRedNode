@@ -9,7 +9,7 @@
     "payloadType": "str",
     "repeat": "82800",
     "crontab": "",
-    "once": true,
+    "once": false,
     "x": 76.99995422363281,
     "y": 245,
     "wires": [
@@ -268,14 +268,15 @@
     "type": "function",
     "z": "3cc9f29d.c3360e",
     "name": "Send message to IFTTT",
-    "func": "if (context.global.ifttt){\nvar WinkEvent=\"WinkEvent\"\nvar extra_param=\"\"\nvar Event_desc=\"\"\n\nif (msg.payload.device_manufacturer == \"OwnTracks\"){\n     Event_desc= (msg.payload.last_reading.coordinates);\n}\n\nif (msg.payload.model_name==\"Motion Sensor\") \n{\n    Event_desc= (msg.payload.last_reading.motion ? \"motion detected\":\"no motion\")\n}\nif (msg.payload.model_name==\"Tripper\") \n{\n    Event_desc= (msg.payload.last_reading.opened ? \"Opened\":\"Closed\")\n}\n\nif ('last_reading' in msg.payload && 'locked' in msg.payload.last_reading) \n{ \n    Event_desc= (msg.payload.last_reading.locked ? \"Locked\":\"Unlocked\")\n}\n\nif (msg.payload.object_type==\"binary_switch\" && (!('powered' in msg.payload.desired_state) || msg.payload.desired_state.powered===false) )\n{\n    Event_desc= (msg.payload.last_reading.powered ? \"On\":\"Off\")\n}\n\nif (msg.payload.object_type==\"garage_doors\")\n{\n    Event_desc= (msg.payload.last_reading.garage_doors==\"0\" ? \"Closed\":\"Opened\")\n}\n\nif (msg.payload.object_type==\"light_bulb\" && !('powered' in msg.payload.desired_state))\n{\n    Event_desc= (msg.payload.last_reading.powered ? \"On\":\"Off\")\n    extra_param=(msg.payload.last_reading.powered ? msg.payload.last_reading.brightness*100 : 0)\n}\nif ('last_reading' in msg.payload &&  'liquid_detected' in msg.payload.last_reading)\n{\n    Event_desc= (msg.payload.last_reading.liquid_detected ? \"Water detected\":\"No water detected\")\n}\n\nif ('last_reading' in msg.payload && 'fired' in msg.payload.last_reading && msg.payload.last_reading.fired)\n{\n    WinkEvent=msg.payload.name.replace(' ','_');\n    Event_desc='Robot '+msg.payload.name+' fired';\n}\nif (msg.payload.object_type ==\"propane_tanks\")\n{\n    Event_desc= (\"Propane level - \"+msg.payload.last_reading.remaining)\n}\n\nif (msg.payload.object_type ==\"powerstrips\")\n{\n    Event_Desc = msg.payload.outlets[0].name+\" \"+ (msg.payload.outlets[0].powered ? \"On, \":\"Off, \")+msg.payload.outlets[0].name+\" \"+(msg.payload.outlets[1].powered ? \"On\":\"Off\")\n}\n\nif (Event_desc!==\"\")\n{\n var newMsg ={\n                    \"url\":\"https://maker.ifttt.com/trigger/\"+WinkEvent+\"/with/key/\"+context.global.IFTTT_TOKEN,\n                    \"method\": \"POST\",\n                    headers: \n                    {\n                        \"Content-Type\":\"application/json\"\n                    },\n                    payload: \n                    {\"value1\":msg.payload.name,\"value2\":Event_desc,\"value3\":extra_param}\n            }\nnode.send(newMsg);\n}\n}\nreturn;",
+    "func": "if (context.global.ifttt){\nvar WinkEvent=\"WinkEvent\"\nvar extra_param=\"\"\nvar Event_desc=\"\"\n\nif (msg.payload.device_manufacturer == \"OwnTracks\"){\n     Event_desc= (msg.payload.last_reading.coordinates);\n}\n\nif (msg.payload.model_name==\"Motion Sensor\") \n{\n    Event_desc= (msg.payload.last_reading.motion ? \"motion detected\":\"no motion\")\n}\nif (msg.payload.model_name==\"Tripper\") \n{\n    Event_desc= (msg.payload.last_reading.opened ? \"Opened\":\"Closed\")\n}\n\nif ('last_reading' in msg.payload && 'locked' in msg.payload.last_reading) \n{ \n    Event_desc= (msg.payload.last_reading.locked ? \"Locked\":\"Unlocked\")\n}\n\nif (msg.payload.object_type==\"binary_switch\" && (!('powered' in msg.payload.desired_state) || msg.payload.desired_state.powered===false) )\n{\n    Event_desc= (msg.payload.last_reading.powered ? \"On\":\"Off\")\n}\n\nif (msg.payload.object_type==\"garage_doors\")\n{\n    Event_desc= (msg.payload.last_reading.garage_doors==\"0\" ? \"Closed\":\"Opened\")\n}\n\nif (msg.payload.object_type==\"light_bulb\" && !('powered' in msg.payload.desired_state))\n{\n    Event_desc= (msg.payload.last_reading.powered ? \"On\":\"Off\")\n    extra_param=(msg.payload.last_reading.powered ? msg.payload.last_reading.brightness*100 : 0)\n}\nif ('last_reading' in msg.payload &&  'liquid_detected' in msg.payload.last_reading)\n{\n    Event_desc= (msg.payload.last_reading.liquid_detected ? \"Water detected\":\"No water detected\")\n}\n\nif ('last_reading' in msg.payload && 'fired' in msg.payload.last_reading)\n{\n    WinkEvent=msg.payload.name.replace(' ','_');\n    Event_desc='Robot '+msg.payload.name+' fired';\n}\nif (msg.payload.object_type ==\"propane_tanks\")\n{\n    Event_desc= (\"Propane level - \"+msg.payload.last_reading.remaining)\n}\n\nif (msg.payload.object_type ==\"powerstrips\")\n{\n    Event_Desc = msg.payload.outlets[0].name+\" \"+ (msg.payload.outlets[0].powered ? \"On, \":\"Off, \")+msg.payload.outlets[0].name+\" \"+(msg.payload.outlets[1].powered ? \"On\":\"Off\")\n}\n\nif (Event_desc!==\"\")\n{\n var newMsg ={\n                    \"url\":\"https://maker.ifttt.com/trigger/\"+WinkEvent+\"/with/key/\"+context.global.IFTTT_TOKEN,\n                    \"method\": \"POST\",\n                    headers: \n                    {\n                        \"Content-Type\":\"application/json\"\n                    },\n                    payload: \n                    {\"value1\":msg.payload.name,\"value2\":Event_desc,\"value3\":extra_param}\n            }\nnode.send(newMsg);\n}\n}\nreturn;",
     "outputs": 1,
     "noerr": 0,
-    "x": 820,
-    "y": 607.5,
+    "x": 843,
+    "y": 609.5,
     "wires": [
       [
-        "93090bac.b85078"
+        "93090bac.b85078",
+        "b97683f0.85295"
       ]
     ]
   },
@@ -1734,6 +1735,18 @@
     "wires": [
       []
     ]
+  },
+  {
+    "id": "b97683f0.85295",
+    "type": "debug",
+    "z": "3cc9f29d.c3360e",
+    "name": "",
+    "active": false,
+    "console": "false",
+    "complete": "true",
+    "x": 1198,
+    "y": 698,
+    "wires": []
   },
   {
     "id": "db7a5fe0.c5033",
