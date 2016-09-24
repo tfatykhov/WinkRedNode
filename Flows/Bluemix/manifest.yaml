@@ -8,7 +8,6 @@ applications:
   disk_quota: 1024M
   services:
   - xxx-cloudantNoSQLDB
-  - xxx-MonitoringAndAnalytics
   env:
     NODE_RED_USERNAME: uid
     NODE_RED_PASSWORD: pwd
