@@ -7,7 +7,8 @@
         "url":"https://github.com/tfatykhov/WinkRedNode/new/master"
     },
     "dependencies" : {
-        "libsodium-wrappers":"git://github.com/tfatykhov/libsodium.js.git"
+        "libsodium-wrappers":"git://github.com/tfatykhov/libsodium.js.git",
+        "randomcolor":"git://github.com/tfatykhov/randomColor.git"
     },
     "files":["defaults"],
     "license": "MIT",
