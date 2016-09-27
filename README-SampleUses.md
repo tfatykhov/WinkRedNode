@@ -688,7 +688,7 @@ if(changed.name=="Ken" && changed.old_state===false && changed.new_state===true)
     	}   
 	}
 ```
-### Alarm Robots
+### Alarm Robots (Scott R)
 This alarm checks for a family member's arrival after sensing door opening. If no arrival within the specified time and failsafe switch is not on the alarm sounds
  
 _**This part goes in schedule tab**_  
@@ -755,6 +755,7 @@ if ((changed.name=="Front Door"||changed.name=="Back Door") && (changed.old_stat
     } ,30*1000 );
 }
 ```
+-**The two alarm robots below were replaced by the one above**-
 - **Front Door Opens with No One Home**  
 This robot detects front door open when no one is home, if the island light is not turned on within 30 seconds the siren is activated and I get a pushbullet notification.
 ```
