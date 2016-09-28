@@ -731,25 +731,25 @@ if(kdiff<=10 && context.global.winkState.sensor_pods.Kaitlen_Geo.lastEvent=="ent
 setTimeout(function(){
         
     context.global.someoneArrived=false;
-},6*60*1000 );
+},12*60*1000 );
 }}
 
-if(adiff<=5 && context.global.winkState.sensor_pods.Angie_Geo.lastEvent=="enter" && context.global.winkState.sensor_pods.Angie_Geo.lastWaypoint=="home")
+if(adiff<=10 && context.global.winkState.sensor_pods.Angie_Geo.lastEvent=="enter" && context.global.winkState.sensor_pods.Angie_Geo.lastWaypoint=="home")
 {
     context.global.someoneArrived=true;{
 setTimeout(function(){
         
     context.global.someoneArrived=false;
-},6*60*1000 );
+},12*60*1000 );
 }}
 
-if(sdiff<=5 && context.global.winkState.sensor_pods.Scott_Geo.lastEvent=="enter" && context.global.winkState.sensor_pods.Scott_Geo.lastWaypoint=="home")
+if(sdiff<=10 && context.global.winkState.sensor_pods.Scott_Geo.lastEvent=="enter" && context.global.winkState.sensor_pods.Scott_Geo.lastWaypoint=="home")
 {
     context.global.someoneArrived=true;{
 setTimeout(function(){
         
     context.global.someoneArrived=false;
-},6*60*1000 );
+},12*60*1000 );
 }}
 
 if(typeof context.global.someoneArrived=="undefined")
@@ -759,15 +759,15 @@ if(typeof context.global.someoneArrived=="undefined")
 ```
 _**This is the actual alarm robot and goes in the robot tab**_
 ```
-if ((changed.name=="Front Door"||changed.name=="Back Door") && (changed.old_state=="Closed" && changed.new_state=="Opened")&& context.global.alarmArmed==1)
+if ((changed.name=="Front Door"||changed.name=="Back Door") && (changed.old_state=="Closed" && changed.new_state=="Opened")&& context.global.alarmArmed=='on')
 {
     setTimeout(function(){
     if((context.global.winkState.light_bulbs.Island.powered===false) && (context.global.someoneArrived===false))
      try {
             node.send(context.global.executeWinkCMD('Siren','siren','siren_only','null'));
-            node.send(context.global.send_ui_note('information',600000,changed.name +'  Alarm!!!',Math.floor(Math.random()*1000)));
+            node.send(context.global.send_ui_note('information',600000,changed.name + ' Alarm!!!',Math.floor(Math.random()*1000)));
             node.send(WinkCMDmsg);
-            pmsg=context.global.sendViaPushBullet('note', changed.name + ' Alarm!!!','alarm has been triggered');
+            pmsg=context.global.sendViaPushBullet('note', changed.name + ' Alarm!!!',changed.name + ' alarm has been triggered');
             node.send(pmsg);
         }
         catch(error){
