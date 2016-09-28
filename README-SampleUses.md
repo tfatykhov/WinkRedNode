@@ -56,7 +56,7 @@ if(hours==6 & minutes==30 && intday!==0 && intday!=6)
 
 
 ##### Sunrise based Schedule Entry
-- **Lights on at Dawn**
+###### **Lights on at Dawn**
 ```
 if(hours==(context.global.sunTimes.goldenHour.hour) && minutes==context.global.sunTimes.goldenHour.minute) // Indoor Lights at Dawn
 {
@@ -67,7 +67,7 @@ if(hours==(context.global.sunTimes.goldenHour.hour) && minutes==context.global.s
     
 }
 ```
-- **Turns lights off an hour after Sunrise**
+###### **Turns lights off an hour after Sunrise**
 ```
 if(hours==(context.global.Weather.SunriseHour+1) && minutes==context.global.Weather.SunriseMin) 
 // Indoor Lights off after sunrise
@@ -81,7 +81,7 @@ if(hours==(context.global.Weather.SunriseHour+1) && minutes==context.global.Weat
 
 ### Robots
 
-- **Outlink on at certain times when door opens**
+###### **Outlink on at certain times when door opens**
 
 Times aren’t easily used in robot tab so I have created variables in the **schedules tab** that define certain times.
 
@@ -136,7 +136,7 @@ if (changed.name=="Master Bath" && changed.old_state.powered=="Off" && changed.n
  _The line },30x60x1000 ); is defining the delay by },minutes x seconds x milliseconds;_  
 
 
-- **Light or group off when another light is turned off**  
+###### **Light or group off when another light is turned off**  
 This robot turns all kitchen lights off when the island is turned on and left on for 15 minutes between 9pm and 5am. Use case would be someone forgetting to turn the light off.
 ```
 //                                   Kitchen off with island at night
@@ -157,7 +157,7 @@ if ((changed.name=="Island" && changed.old_state.powered=="Off" && changed.new_s
 ```
 
 
-- **Light on when another light is turned on**
+###### **Light on when another light is turned on**
 ```
 //                                              Cabinet on with Island evening
 if ((changed.name=="Island" && changed.old_state.powered=="Off" && changed.new_state.powered=="On") && ((context.global.evening=="true")||(context.global.lateEvening===true)))
@@ -171,7 +171,7 @@ if ((changed.name=="Island" && changed.old_state.powered=="Off" && changed.new_s
     }
 ```
 
-- **Light on when a door opens then have it fade back to previous state**  
+###### **Light on when a door opens then have it fade back to previous state**  
 _Thanks Ken Vermillion_
 
 _Anything following”//” is a note for information about the line_
@@ -208,7 +208,7 @@ if ((changed.name=="Front Door" && changed.new_state=="Opened") && ((context.glo
 ```
 
 
-- **Lock door during overnight if closed for 5 mins**
+###### **Lock door during overnight if closed for 5 mins**
 ```
 if ((changed.name=="Main Door" && changed.old_state!=="Closed" && changed.new_state=="Closed" ) && (context.global.overnight===true)) 
   {
@@ -228,7 +228,7 @@ if ((changed.name=="Main Door" && changed.old_state!=="Closed" && changed.new_st
     }
 ```
   
-- **Turn on a light using a tripper**
+###### **Turn on a light using a tripper**
 ```
 if (changed.name=="Attic" && changed.old_state!=="Opened" && changed.new_state=="Opened" )
     {
@@ -243,7 +243,7 @@ if (changed.name=="Attic" && changed.old_state!=="Opened" && changed.new_state==
     }
 ```
 
-- **Turn off a light using a tripper**
+###### **Turn off a light using a tripper**
 ```
  if (changed.name=="Attic" && changed.old_state!=="Closed" && changed.new_state=="Closed" )
     {
@@ -293,7 +293,7 @@ if ((changed.name=='Laundry Water Sensor' || changed.name=='Kitchen Water Sensor
 ```
 
 
-- **Turn on lights when Ring Doorbell detects motion and turn them off again 10 minutes after motion stops. Also will only run if the house is empty (no presence)**
+###### **Turn on lights when Ring Doorbell detects motion and turn them off again 10 minutes after motion stops. Also will only run if the house is empty (no presence)**
 ```
 if ((changed.name=='Doorbell' && changed.old_state!==true && changed.new_state===true) && (!context.global.checkPresence()))
         try {
@@ -336,7 +336,7 @@ if ((changed.name=='Doorbell' && changed.old_state!==false && changed.new_state=
 
 
 
-- **Turn humidifier on and off using Spotter or any other device that reports humidity levels**
+###### **Turn humidifier on and off using Spotter or any other device that reports humidity levels**
 ```
 if (typeof context.global.highHumidity=="undefined")
 {
@@ -376,7 +376,7 @@ catch(error){
 
 
 
-- **Using Echo via IFTTT to set variables and trigger WNR actions**
+###### **Using Echo via IFTTT to set variables and trigger WNR actions**
 
 Create IFTTT recipe with Echo custom Phrase as If then Maker then
 
@@ -388,7 +388,7 @@ See  (https://github.com/tfatykhov/WinkRedNode/blob/master/README-IFTTT.md) for 
 
 
 
-- **The schedule entry below is triggered by the above Echo/IFTTT event and turns off the Kitchen Group, Bedroom Group, Left Lamp, and sets the Right Lamp to 1%. It also sends a message to the activity feed and sets my alarm variable to 1 (arms alarm).** 
+###### **The schedule entry below is triggered by the above Echo/IFTTT event and turns off the Kitchen Group, Bedroom Group, Left Lamp, and sets the Right Lamp to 1%. It also sends a message to the activity feed and sets my alarm variable to 1 (arms alarm).** 
 
 It is important to make sure that your device names match the **Wink App** names exactly in case, spelling, and spacing
 ```
@@ -412,7 +412,7 @@ try {
 When you say “trigger bedtime” ,or whatever phrase, the variable is made true and the above fires then changes variable back to false.
 
 
-- **Bloomsky Integrated Lights**  
+###### **Bloomsky Integrated Lights**  
 This schedule entry turns lights off during the day if the Bloomsky reads a luminance of above 3350 between one hour after sunrise and one hour before sunset and someone is home and on if the reading is below 3350
 ```
 if(hours > context.global.Weather.SunriseHour+1 && hours < context.global.Weather.SunsetHour-1 && context.global.checkPresence())
@@ -436,7 +436,7 @@ if(hours > context.global.Weather.SunriseHour+1 && hours < context.global.Weathe
 ```
 
 
-- **Change Nest Thermostat depending on an individual’s presence**  
+###### **Change Nest Thermostat depending on an individual’s presence**  
 ```
 // if Angie presence is yes and after 8am and before 5pm and temp outside is over 77 degrees and Angie home during day isn't already running.
 
@@ -473,7 +473,7 @@ if(context.global.Presence.Angie.home=="yes")
 ### Start of PushBullet Notification flows. 
 **These go in robot tab.**
 
-- **Basic entry to send PushBullet Notification in Robots**
+###### **Basic entry to send PushBullet Notification in Robots**
 ```
 pmsg=context.global.sendViaPushBullet('note','Header','Message');
 node.send(pmsg);
@@ -589,7 +589,7 @@ node.warn(error.message);
 
 **These go in schedule tab.**
 
-- **Hub Power Notifications**  
+###### **Hub Power Notifications**  
 This series of flows will first notify you if your hub loses its connection to Node Red, which could be due to a power loss or offline for any other reason. It will then send you another notification when the hub goes back online.
 ```
 if (context.global.HubPower==="undefined")
@@ -627,7 +627,7 @@ if (context.global.winkState.hubs.Home.connection===true && context.global.HubPo
 
 To check for someone’s presence in an if statement use context.global.checkPresence()
 
-- **Day Presence**
+#### **Day Presence**
 ```
 if(typeof context.global.nopresence=="undefined")
 {
@@ -656,7 +656,7 @@ if(context.global.daylight==1 && context.global.checkPresence() && context.globa
     context.global.nopresence=1;
 }
 ```
-- **Night Presence**
+#### **Night Presence**
 ```
 //                              No Presence Night
 if(context.global.daylight===0 && !context.global.checkPresence() && context.global.nopresence==1)
@@ -685,7 +685,7 @@ if(context.global.daylight===0 && context.global.checkPresence() && context.glob
     context.global.nopresence=1;
 }
 ```
-- **Presence activating Wink App shortcuts**  
+#### **Presence activating Wink App shortcuts**  
 This robot activates the wink PRESENCE shortcut if Ken arrives and Katie was already home
 Thanks Ken
 ``` 
@@ -776,8 +776,8 @@ if ((changed.name=="Front Door"||changed.name=="Back Door") && (changed.old_stat
     } ,30*1000 );
 }
 ```
--**The two alarm robots below were replaced by the one above**-
-- **Front Door Opens with No One Home**  
+#### **The two alarm robots below were replaced by the one above**-
+##### **Front Door Opens with No One Home**  
 This robot detects front door open when no one is home, if the island light is not turned on within 30 seconds the siren is activated and I get a pushbullet notification.
 ```
 if ((changed.name=="Front Door" && changed.old_state=="Closed" && changed.new_state=="Opened") && (!context.global.checkPresence()) && context.global.duringDay=="true" )
@@ -797,7 +797,7 @@ if ((changed.name=="Front Door" && changed.old_state=="Closed" && changed.new_st
     } ,30*1000 );
 }
 ```
-- **Front Door Opens with Individual Arrival**  
+##### **Front Door Opens with Individual Arrival**  
 This robot detects front door open and if alarm is armed using alarmArmed variable==1 it waits 30 seconds then checks to see if Kaitlen just arrived. If she didn’t just arrive it activates siren and notifies via pushbullet. Also has the failsafe of Island being turned on to prevent alarm
 ```
 if ((changed.name=="Front Door" && changed.old_state=="Closed" && changed.new_state=="Opened") && context.global.alarmArmed==1)
@@ -904,7 +904,7 @@ if ((context.global.winkState.binary_switches.Alarm.powered===false) && (context
 
 ##### Motion Based Robots
 
-- **Close Garage Door after 30 seconds if no motion**
+###### **Close Garage Door after 30 seconds if no motion**
 ```
 if (changed.name=="Garage Door" && changed.old_state=="Closed" && changed.new_state=="Opened")
 	{
@@ -915,7 +915,7 @@ if (changed.name=="Garage Door" && changed.old_state=="Closed" && changed.new_st
         	node.send(WinkCMDmsg)}},30000);
 	}
 ```
-- **Kitchen light on**
+###### **Kitchen light on**
 ```
 if (changed.name=="Kitchen" && changed.old_state!==true && changed.new_state===true) 
 {
@@ -930,7 +930,7 @@ if (changed.name=="Kitchen" && changed.old_state!==true && changed.new_state===t
 }
 ```    
 
-- **Kitchen light off after 10 mins no motion**
+###### **Kitchen light off after 10 mins no motion**
 ```
 if (changed.name=="Kitchen" && changed.old_state!==false && changed.new_state===false)
 {
@@ -949,7 +949,7 @@ if (changed.name=="Kitchen" && changed.old_state!==false && changed.new_state===
 },600000);
 ```    
 ##### Remote Based Robots  
-- **Activating a schedule using a remote**
+###### **Activating a schedule using a remote**
 ```
 if (changed.name=="Master Bedroom Remote" && context.global.winkState.remotes['Master Bedroom Remote'].button_off_pressed===true) //Robot: if bottom button on MB remote pushed, activate Alexa Bedtime Shortcut
 {
@@ -986,5 +986,4 @@ Can also check state of Cameras, Smoke detectors, using the same format as above
 
 
         
-
 
