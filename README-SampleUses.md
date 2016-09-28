@@ -5,13 +5,39 @@
 ##### &ensp;&ensp;[Fade In Entry](https://github.com/tfatykhov/WinkRedNode/blob/master/README-SampleUses.md#fade-in-schedule-entry)
 ##### &ensp;&ensp;[Sunrise Based Entry](https://github.com/tfatykhov/WinkRedNode/blob/master/README-SampleUses.md#sunrise-based-schedule-entry)
 #### [Robots](https://github.com/tfatykhov/WinkRedNode/blob/master/README-SampleUses.md#robots)
+##### &ensp;&ensp;[Outlink on at certain times with door opening](https://github.com/tfatykhov/WinkRedNode/blob/master/README-SampleUses.md#outlink-on-at-certain-times-when-door-opens)
+##### &ensp;&ensp;[Light or Group off with another light](https://github.com/tfatykhov/WinkRedNode/blob/master/README-SampleUses.md#light-or-group-off-when-another-light-is-turned-off)
+##### &ensp;&ensp;[Light on with another light](https://github.com/tfatykhov/WinkRedNode/blob/master/README-SampleUses.md#light-on-when-another-light-is-turned-on)
+##### &ensp;&ensp;[Light on when door opens then fades back to intial state](https://github.com/tfatykhov/WinkRedNode/blob/master/README-SampleUses.md#light-on-when-a-door-opens-then-have-it-fade-back-to-previous-state)
+##### &ensp;&ensp;[Lock door at night if closed for 5 minutes](https://github.com/tfatykhov/WinkRedNode/blob/master/README-SampleUses.md#lock-door-during-overnight-if-closed-for-5-mins)
+##### &ensp;&ensp;[Light triggered by Tripper](https://github.com/tfatykhov/WinkRedNode/blob/master/README-SampleUses.md#turn-on-a-light-using-a-tripper)
 #### [Advanced Schedules and Robots](https://github.com/tfatykhov/WinkRedNode/blob/master/README-SampleUses.md#advanced-schedules-and-robots)
+##### &ensp;&ensp;[Leaksmart Valve off if leak is detected](https://github.com/tfatykhov/WinkRedNode/blob/master/README-SampleUses.md#shuts-leaksmart-valve-if-sensors-detect-a-leak)
+##### &ensp;&ensp;[Lights on when Ring Doorbell detects motion then back off again](https://github.com/tfatykhov/WinkRedNode/blob/master/README-SampleUses.md#turn-on-lights-when-ring-doorbell-detects-motion-and-turn-them-off-again-10-minutes-after-motion-stops-also-will-only-run-if-the-house-is-empty-no-presence)
+##### &ensp;&ensp;[Humidifier on and off according to spotter reading](https://github.com/tfatykhov/WinkRedNode/blob/master/README-SampleUses.md#turn-humidifier-on-and-off-using-spotter-or-any-other-device-that-reports-humidity-levels)
+##### &ensp;&ensp;[Using Echo via IFTTT to change global variables](https://github.com/tfatykhov/WinkRedNode/blob/master/README-SampleUses.md#using-echo-via-ifttt-to-set-variables-and-trigger-wnr-actions)
+##### &ensp;&ensp;[Triggering Bedtime event with Echo and IFTTT](https://github.com/tfatykhov/WinkRedNode/blob/master/README-SampleUses.md#the-schedule-entry-below-is-triggered-by-the-above-echoifttt-event-and-turns-off-the-kitchen-group-bedroom-group-left-lamp-and-sets-the-right-lamp-to-1-it-also-sends-a-message-to-the-activity-feed-and-sets-my-alarm-variable-to-1-arms-alarm)
+##### &ensp;&ensp;[Bloomsky Integration](https://github.com/tfatykhov/WinkRedNode/blob/master/README-SampleUses.md#bloomsky-integrated-lights)
+##### &ensp;&ensp;[Nest adjustment depending on individual presence](https://github.com/tfatykhov/WinkRedNode/blob/master/README-SampleUses.md#change-nest-thermostat-depending-on-an-individuals-presence)
 #### [Pushbullet Notifications](https://github.com/tfatykhov/WinkRedNode/blob/master/README-SampleUses.md#start-of-pushbullet-notification-flows)
+##### &ensp;&ensp;[Basic Pushbullet Notification](https://github.com/tfatykhov/WinkRedNode/blob/master/README-SampleUses.md#basic-entry-to-send-pushbullet-notification-in-robots)
+##### &ensp;&ensp;[Wink Hub power notification](https://github.com/tfatykhov/WinkRedNode/blob/master/README-SampleUses.md#hub-power-notifications)
 #### [Presence Based Robots](https://github.com/tfatykhov/WinkRedNode/blob/master/README-SampleUses.md#presence-based-robots)
+##### &ensp;&ensp;[Daytime Presence](https://github.com/tfatykhov/WinkRedNode/blob/master/README-SampleUses.md#day-presence)
+##### &ensp;&ensp;[Nighttime Presence](https://github.com/tfatykhov/WinkRedNode/blob/master/README-SampleUses.md#night-presence)
+##### &ensp;&ensp;[Presence activating Wink App shortcuts](https://github.com/tfatykhov/WinkRedNode/blob/master/README-SampleUses.md#presence-activating-wink-app-shortcuts)
 #### [Alarm Robots- Scott R](https://github.com/tfatykhov/WinkRedNode/blob/master/README-SampleUses.md#alarm-robots-scott-r)
+##### &ensp;&ensp;[Door opens with no one home](https://github.com/tfatykhov/WinkRedNode/blob/master/README-SampleUses.md#front-door-opens-with-no-one-home)
+##### &ensp;&ensp;[Door opens with individual's arrival](https://github.com/tfatykhov/WinkRedNode/blob/master/README-SampleUses.md#front-door-opens-with-individual-arrival)
 #### [Alarm Robot- Variation 2 Brian O](https://github.com/tfatykhov/WinkRedNode/blob/master/README-SampleUses.md#alarm-robot-variation-2-brian-olsen-version)
-##### &ensp;&ensp;[Motion Based Robots](https://github.com/tfatykhov/WinkRedNode/blob/master/README-SampleUses.md#motion-based-robots)
-##### &ensp;&ensp;[Remote Based Robots](https://github.com/tfatykhov/WinkRedNode/blob/master/README-SampleUses.md#remote-based-robots)
+#### [Motion Based Robots](https://github.com/tfatykhov/WinkRedNode/blob/master/README-SampleUses.md#motion-based-robots)
+##### &ensp;&ensp;[Close garage door after no motion](https://github.com/tfatykhov/WinkRedNode/blob/master/README-SampleUses.md#close-garage-door-after-30-seconds-if-no-motion)
+##### &ensp;&ensp;[Kitchen light on with motion](https://github.com/tfatykhov/WinkRedNode/blob/master/README-SampleUses.md#kitchen-light-on)
+##### &ensp;&ensp;[Kitchen light off after no motion for 10 minutes](https://github.com/tfatykhov/WinkRedNode/blob/master/README-SampleUses.md#kitchen-light-off-after-10-mins-no-motion)
+#### [Remote Based Robots](https://github.com/tfatykhov/WinkRedNode/blob/master/README-SampleUses.md#remote-based-robots)
+##### &ensp;&ensp;[Activating a Wink Shortcut via remote button press](https://github.com/tfatykhov/WinkRedNode/blob/master/README-SampleUses.md#activating-a-schedule-using-a-remote)
+#### [Coming Soon...Alexa Skill integration without IFTTT]()
+#### [Coming Soon...Color Changing light control]()
 #### [Quick Reference](https://github.com/tfatykhov/WinkRedNode/blob/master/README-SampleUses.md#quick-reference)
 
 
@@ -276,7 +302,7 @@ if (changed.name=="Attic" && changed.old_state!=="Opened" && changed.new_state==
          
 
 ### Advanced Schedules and Robots
-- **Shuts Leaksmart valve if sensors detect a leak**
+#### **Shuts Leaksmart valve if sensors detect a leak**
 ```
 if ((changed.name=='Laundry Water Sensor' || changed.name=='Kitchen Water Sensor' || changed.name=='Bathroom Water Sensor') && (changed.old_state!==true && changed.new_state===true))
         try {
@@ -293,7 +319,7 @@ if ((changed.name=='Laundry Water Sensor' || changed.name=='Kitchen Water Sensor
 ```
 
 
-###### **Turn on lights when Ring Doorbell detects motion and turn them off again 10 minutes after motion stops. Also will only run if the house is empty (no presence)**
+#### **Turn on lights when Ring Doorbell detects motion and turn them off again 10 minutes after motion stops. Also will only run if the house is empty (no presence)**
 ```
 if ((changed.name=='Doorbell' && changed.old_state!==true && changed.new_state===true) && (!context.global.checkPresence()))
         try {
@@ -336,7 +362,7 @@ if ((changed.name=='Doorbell' && changed.old_state!==false && changed.new_state=
 
 
 
-###### **Turn humidifier on and off using Spotter or any other device that reports humidity levels**
+#### **Turn humidifier on and off using Spotter or any other device that reports humidity levels**
 ```
 if (typeof context.global.highHumidity=="undefined")
 {
@@ -376,7 +402,7 @@ catch(error){
 
 
 
-###### **Using Echo via IFTTT to set variables and trigger WNR actions**
+#### **Using Echo via IFTTT to set variables and trigger WNR actions**
 
 Create IFTTT recipe with Echo custom Phrase as If then Maker then
 
@@ -412,7 +438,7 @@ try {
 When you say “trigger bedtime” ,or whatever phrase, the variable is made true and the above fires then changes variable back to false.
 
 
-###### **Bloomsky Integrated Lights**  
+#### **Bloomsky Integrated Lights**  
 This schedule entry turns lights off during the day if the Bloomsky reads a luminance of above 3350 between one hour after sunrise and one hour before sunset and someone is home and on if the reading is below 3350
 ```
 if(hours > context.global.Weather.SunriseHour+1 && hours < context.global.Weather.SunsetHour-1 && context.global.checkPresence())
@@ -436,7 +462,7 @@ if(hours > context.global.Weather.SunriseHour+1 && hours < context.global.Weathe
 ```
 
 
-###### **Change Nest Thermostat depending on an individual’s presence**  
+#### **Change Nest Thermostat depending on an individual’s presence**  
 ```
 // if Angie presence is yes and after 8am and before 5pm and temp outside is over 77 degrees and Angie home during day isn't already running.
 
@@ -776,7 +802,7 @@ if ((changed.name=="Front Door"||changed.name=="Back Door") && (changed.old_stat
     } ,30*1000 );
 }
 ```
-#### **The two alarm robots below were replaced by the one above**-
+#### **The two alarm robots below were replaced by the one above**
 ##### **Front Door Opens with No One Home**  
 This robot detects front door open when no one is home, if the island light is not turned on within 30 seconds the siren is activated and I get a pushbullet notification.
 ```
@@ -949,7 +975,7 @@ if (changed.name=="Kitchen" && changed.old_state!==false && changed.new_state===
 },600000);
 ```    
 ##### Remote Based Robots  
-###### **Activating a schedule using a remote**
+###### **Activating a shortcut using a remote**
 ```
 if (changed.name=="Master Bedroom Remote" && context.global.winkState.remotes['Master Bedroom Remote'].button_off_pressed===true) //Robot: if bottom button on MB remote pushed, activate Alexa Bedtime Shortcut
 {
