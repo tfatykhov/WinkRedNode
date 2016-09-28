@@ -1,8 +1,29 @@
+# __Table of Contents__
+#### [Introduction](https://github.com/tfatykhov/WinkRedNode/blob/master/README-SampleUses.md#introduction)
+#### [Schedule Entries](https://github.com/tfatykhov/WinkRedNode/blob/master/README-SampleUses.md#schedule-entries)
+##### &ensp;&ensp;[Basic Schedule Entry](https://github.com/tfatykhov/WinkRedNode/blob/master/README-SampleUses.md#basic-schedule-entry)
+##### &ensp;&ensp;[Fade In Entry](https://github.com/tfatykhov/WinkRedNode/blob/master/README-SampleUses.md#fade-in-schedule-entry)
+##### &ensp;&ensp;[Sunrise Based Entry](https://github.com/tfatykhov/WinkRedNode/blob/master/README-SampleUses.md#sunrise-based-schedule-entry)
+#### [Robots](https://github.com/tfatykhov/WinkRedNode/blob/master/README-SampleUses.md#robots)
+#### [Advanced Schedules and Robots](https://github.com/tfatykhov/WinkRedNode/blob/master/README-SampleUses.md#advanced-schedules-and-robots)
+#### [Pushbullet Notifications](https://github.com/tfatykhov/WinkRedNode/blob/master/README-SampleUses.md#start-of-pushbullet-notification-flows)
+#### [Presence Based Robots](https://github.com/tfatykhov/WinkRedNode/blob/master/README-SampleUses.md#presence-based-robots)
+#### [Alarm Robots- Scott R](https://github.com/tfatykhov/WinkRedNode/blob/master/README-SampleUses.md#alarm-robots-scott-r)
+#### [Alarm Robot- Variation 2 Brian O](https://github.com/tfatykhov/WinkRedNode/blob/master/README-SampleUses.md#alarm-robot-variation-2-brian-olsen-version)
+##### &ensp;&ensp;[Motion Based Robots](https://github.com/tfatykhov/WinkRedNode/blob/master/README-SampleUses.md#motion-based-robots)
+##### &ensp;&ensp;[Remote Based Robots](https://github.com/tfatykhov/WinkRedNode/blob/master/README-SampleUses.md#remote-based-robots)
+#### [Quick Reference](https://github.com/tfatykhov/WinkRedNode/blob/master/README-SampleUses.md#quick-reference)
+
+
+
+
+
+
+### Introduction   
 Most of the robots and schedule entries in this document **do not utilize any Wink App robots or Schedules**, they are designed to operate independently of the Wink App other than using the devices specified in each flow. When putting a device name into the flow it must match the case, spelling, and spacing **EXACTLY** as in the Wink App.
 
-These samples are a collection and combination of ideas posted on Wink Node Red Users Group and through individual trial and error and must be adapted to fit the individual situations of the user. They were collected by Brian Olsen and Scott Rainey as a resource for all WNR users but special recognition must be given to Tim Fatykhov, Brian Meissen, and Ken Vermillion.
+These samples are a collection and combination of ideas posted on Wink Node Red Users Group and through individual trial and error and must be adapted to fit the individual situations of the user. They were collected by Brian Olsen and Scott Rainey as a resource for all WNR users but special recognition must be given to Tim Fatykhov, Brian Meissen, and Ken Vermillion. Brian and Scott will try to update the document as new ideas and integrations become available. 
 
-### Schedule Entries
 ##### Basic Schedule Entry
 
 - **At 6:40pm turn the island light on and set the living room group to 75%**
@@ -965,6 +986,5 @@ Can also check state of Cameras, Smoke detectors, using the same format as above
 
 
         
-
 
 
