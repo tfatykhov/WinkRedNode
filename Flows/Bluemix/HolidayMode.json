@@ -1,0 +1,155 @@
+[
+  {
+    "id": "9ec6d971.876088",
+    "type": "inject",
+    "z": "cc10b0bb.a2452",
+    "name": "",
+    "topic": "",
+    "payload": "",
+    "payloadType": "date",
+    "repeat": "15",
+    "crontab": "",
+    "once": true,
+    "x": 149,
+    "y": 126,
+    "wires": [
+      [
+        "90e7db10.7b98d8"
+      ]
+    ]
+  },
+  {
+    "id": "c6415a29.8b0448",
+    "type": "function",
+    "z": "cc10b0bb.a2452",
+    "name": "",
+    "func": "get_color=function(){\n    return context.global.wnr.randomColor({\n        hue: context.global.holiday_light_mode,\n        luminosity: 'bright'\n        }).replace(\"#\",\"\");\n}\n\ngen_msg=function(winkName,color){\n    if (context.global.HOLIDAY_DEBUG ) {\n        node.warn(\"   Activating bulb: \"+ winkName);\n        node.warn(\"   color: \"+ color);\n    }\n    var WinkCMDmsg = context.global.executeWinkCMD(winkName,\"light\",\"color\",color);\n    node.send(WinkCMDmsg);\n};\n\nfunction doAndRepeat(delay){\n    setTimeout( function(){\n        var color=('holiday_mode_group' in context.global && context.global.holiday_mode_group ? get_color() : null);\n     if ('holiday_mode_on' in context.global && context.global.holiday_mode_on){        \n        if ('holiday_light_bulbs' in context.global) {\n            for (var i=0;i<context.global.holiday_light_bulbs.length;i++){\n                var light=context.global.holiday_light_bulbs[i];\n                gen_msg(light,(color===null ? get_color() : color));\n            }\n            doAndRepeat(1000*context.global.holiday_keep_color);\n         } \n        } else{\n                context.global.holiday_mode_running = false;   \n                if (context.global.HOLIDAY_DEBUG ) {\n                    node.warn(\"   Holiday mode off, stopping...\");\n                }                \n            } \n    },delay);\n}\n\nif (!('holiday_mode_running' in context.global)) context.global.holiday_mode_running=false;\n    if (context.global.HOLIDAY_DEBUG ) {\n        node.warn(\"Holiday Mode: \"+context.global.holiday_mode_on);\n        node.warn(\"Holiday Mode running: \"+context.global.holiday_mode_running);\n        node.warn(\"Holiday Mode bulbs: \"+context.global.holiday_light_bulbs);\n        node.warn(\"Holiday Mode grouping: \"+context.global.holiday_mode_group);        \n    }\nif ('holiday_mode_on' in context.global && context.global.holiday_mode_on && !context.global.holiday_mode_running) {\n    context.global.holiday_mode_running=true;\n    var effect_delay = 1000*context.global.holiday_keep_color;\n    var colorRng=context.global.wnr.randomColor({\n        hue: context.global.holiday_light_mode,\n        luminosity: 'bright'\n        });\n        doAndRepeat(0);\n}",
+    "outputs": 1,
+    "noerr": 0,
+    "x": 503,
+    "y": 124,
+    "wires": [
+      [
+        "9fb37da5.5d7d3",
+        "d4a913ba.98565"
+      ]
+    ]
+  },
+  {
+    "id": "d4a913ba.98565",
+    "type": "http request",
+    "z": "cc10b0bb.a2452",
+    "name": "",
+    "method": "use",
+    "ret": "txt",
+    "url": "",
+    "tls": "",
+    "x": 662,
+    "y": 88,
+    "wires": [
+      [
+        "9fb37da5.5d7d3"
+      ]
+    ]
+  },
+  {
+    "id": "9fb37da5.5d7d3",
+    "type": "debug",
+    "z": "cc10b0bb.a2452",
+    "name": "",
+    "active": false,
+    "console": "false",
+    "complete": "payload",
+    "x": 839,
+    "y": 124,
+    "wires": []
+  },
+  {
+    "id": "2cfbe034.59527",
+    "type": "function",
+    "z": "cc10b0bb.a2452",
+    "name": "",
+    "func": "context.global.HOLIDAY_DEBUG=true;\nnode.warn('Holiday Debug mode on');\nreturn msg;",
+    "outputs": 1,
+    "noerr": 0,
+    "x": 316,
+    "y": 229,
+    "wires": [
+      []
+    ]
+  },
+  {
+    "id": "8013f8d3.7edfd8",
+    "type": "inject",
+    "z": "cc10b0bb.a2452",
+    "name": "Turn Debug On",
+    "topic": "",
+    "payload": "",
+    "payloadType": "date",
+    "repeat": "",
+    "crontab": "",
+    "once": false,
+    "x": 147,
+    "y": 226.99996948242188,
+    "wires": [
+      [
+        "2cfbe034.59527"
+      ]
+    ]
+  },
+  {
+    "id": "c39a4f2e.6671b",
+    "type": "function",
+    "z": "cc10b0bb.a2452",
+    "name": "",
+    "func": "context.global.HOLIDAY_DEBUG=false;\nnode.warn('Holiday Debug mode off');",
+    "outputs": 1,
+    "noerr": 0,
+    "x": 313,
+    "y": 272,
+    "wires": [
+      []
+    ]
+  },
+  {
+    "id": "cc4470f8.67278",
+    "type": "inject",
+    "z": "cc10b0bb.a2452",
+    "name": "Turn Debug Off",
+    "topic": "",
+    "payload": "",
+    "payloadType": "date",
+    "repeat": "",
+    "crontab": "",
+    "once": false,
+    "x": 144,
+    "y": 269.9999694824219,
+    "wires": [
+      [
+        "c39a4f2e.6671b"
+      ]
+    ]
+  },
+  {
+    "id": "90e7db10.7b98d8",
+    "type": "delay",
+    "z": "cc10b0bb.a2452",
+    "name": "",
+    "pauseType": "rate",
+    "timeout": "5",
+    "timeoutUnits": "seconds",
+    "rate": "2",
+    "rateUnits": "second",
+    "randomFirst": "1",
+    "randomLast": "5",
+    "randomUnits": "seconds",
+    "drop": false,
+    "x": 352,
+    "y": 125,
+    "wires": [
+      [
+        "c6415a29.8b0448"
+      ]
+    ]
+  }
+]
