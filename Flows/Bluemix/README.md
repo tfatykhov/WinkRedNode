@@ -27,6 +27,7 @@ Added ability to specify PushBullet Channel so multiple users can get messages:
 *  Import updated [winkCore.json](winkCore.json)
 *  Import updated [winkIntegration.json](winkIntegration.json)
 *  Import updated [tabletUI.json](tabletUI.json)
+*  Add new tab in flow editor.
 *  Import <b>new</b> [HolidayMode.json](HolidayMode.json) if you have color bulbs.
 *  do not forget to check [duplicate websockets](../../README-WebsocketFix.md)
 *  perform "FULL" deployment<br>
