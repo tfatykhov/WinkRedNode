@@ -30,7 +30,7 @@ Required steps (WNR)
 
 Bluemix git console:<br>
 *  re-deploy application in git<br>
-* Open UI version 1, navigate to configuration tab/Integration settings, find "SmartThings Secret key" line and put some random string (you can use https://www.random.org/strings/)
+
 
 -
 09/13/2016
