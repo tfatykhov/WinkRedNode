@@ -12,18 +12,18 @@ https://(your_app_name).mybluemix.net/wnrUI <br>
 ------------
 ###Holiday Mode, pushbullet channel, bug fixes
 
-######New addition:
+#####New addition:
 Holiday mode that allows to cycle color bulbs using random color or color palette:
 ![add stapp](images/holidaymode.png)
 <br>
 <b> Do not forget to click "submit" every time you change something on config page</b>
-######Updates:
+#####Updates:
 Added ability to specify PushBullet Channel so multiple users can get messages:
 ![add stapp](images/pbullet_4.png)
 <br>
 
 
-######Required steps (WNR)
+#####Required steps (WNR)
 *  Import updated [winkCore.json](winkCore.json)
 *  Import updated [winkIntegration.json](winkIntegration.json)
 *  Import updated [tabletUI.json](tabletUI.json)
