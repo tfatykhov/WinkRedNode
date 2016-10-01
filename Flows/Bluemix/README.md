@@ -21,7 +21,9 @@ Holiday mode that allows to cycle color bulbs using random color or color palett
 Added ability to specify PushBullet Channel so multiple users can get messages:
 ![add stapp](images/pbullet_4.png)
 <br>
-Required steps (WNR)
+
+
+######Required steps (WNR)
 *  Import updated [winkCore.json](winkCore.json)
 *  Import updated [winkIntegration.json](winkIntegration.json)
 *  Import updated [tabletUI.json](tabletUI.json)
@@ -29,7 +31,7 @@ Required steps (WNR)
 *  do not forget to check [duplicate websockets](../../README-WebsocketFix.md)
 *  perform "FULL" deployment<br>
 
-Bluemix git console:<br>
+######Bluemix git console:<br>
 *  re-deploy application in git<br>
 
 
