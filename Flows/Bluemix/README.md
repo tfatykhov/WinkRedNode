@@ -33,7 +33,7 @@ Added ability to specify PushBullet Channel so multiple users can get messages:
 
 ######Bluemix git console:<br>
 *  re-deploy application in git<br>
-
+<img src="images/deploy.png">
 
 -
 09/13/2016
