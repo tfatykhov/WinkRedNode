@@ -13,7 +13,7 @@ https://(your_app_name).mybluemix.net/wnrUI <br>
 #####Holiday Mode, pushbullet channel, bug fixes
 
 ######New addition:
-Holiday mode that allows to cycle color bulbs using random color or color palletes:
+Holiday mode that allows to cycle color bulbs using random color or color palette:
 ![add stapp](images/holidaymode.png)
 <br>
 ######Updates:
