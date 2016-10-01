@@ -16,6 +16,7 @@ https://(your_app_name).mybluemix.net/wnrUI <br>
 Holiday mode that allows to cycle color bulbs using random color or color palette:
 ![add stapp](images/holidaymode.png)
 <br>
+<b> Do not forget to click "submit" every time you change something on config page</b>
 ######Updates:
 Added ability to specify PushBullet Channel so multiple users can get messages:
 ![add stapp](images/pbullet_4.png)
