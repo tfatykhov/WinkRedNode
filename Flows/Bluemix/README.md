@@ -8,6 +8,30 @@ UI 2.0
 https://(your_app_name).mybluemix.net/wnrUI <br>
 == UPDATE ==
 -
+10/01/2016
+------------
+#####Holiday Mode, pushbullet channel, bug fixes
+
+######New addition:
+Holiday mode that allows to cycle color bulbs using random color or color palletes:
+![add stapp](images/holidaymode.png)
+<br>
+######Updates:
+Added ability to specify PushBullet Channel so multiple users can get messages:
+![add stapp](images/pbullet_4.png)
+<br>
+Required steps (WNR)
+*  Import updated [winkCore.json](winkCore.json)
+*  Import updated [winkIntegration.json](winkIntegration.json)
+*  Import updated [tabletUI.json](tabletUI.json)
+*  Import <b>new</b> [HolidayMode.json](HolidayMode.json) if you have color bulbs.
+*  do not forget to check [duplicate websockets](../../README-WebsocketFix.md)
+*  perform "FULL" deployment<br>
+
+Bluemix git console:<br>
+*  re-deploy application in git<br>
+* Open UI version 1, navigate to configuration tab/Integration settings, find "SmartThings Secret key" line and put some random string (you can use https://www.random.org/strings/)
+
 -
 09/13/2016
 ------------
