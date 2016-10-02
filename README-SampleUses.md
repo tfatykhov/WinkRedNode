@@ -488,6 +488,36 @@ if(context.global.Presence.Angie.home=="yes")
     context.global.AngieHome=true;
 }
 ```
+#### **Nest set to away if window is open**
+```
+//                                              Window left open
+
+if(context.global.winkState.sensor_pods['Middle Window'].opened===true && context.global.Weather.Bloomsky.TemperatureF>=74 && context.global.windowOpen===0)
+{
+    setTimeout(function(){
+        if(context.global.winkState.sensor_pods['Middle Window'].opened===true)
+        try{
+            node.send(context.global.send_ui_note('information',200000,'Window open and temp rising',Math.floor(Math.random()*1000)));
+            node.send(WinkCMDmsg);
+            pmsg=context.global.sendViaPushBullet('note','Window is still open','temp above 71','personal');
+            node.send(pmsg);
+            context.global.windowOpen=1;
+        }
+        catch(error){
+            node.warn(error.message);
+        }
+    } ,10*1000);
+}
+
+if(context.global.winkState.sensor_pods['Middle Window'].opened===false)
+        try{
+            context.global.windowOpen=0;
+        }
+        catch(error){
+            node.warn(error.message);
+        }
+```
+
 
 
 
@@ -497,8 +527,6 @@ if(context.global.Presence.Angie.home=="yes")
 
 
 ### Start of PushBullet Notification flows. 
-**These go in robot tab.**
-
 ###### **Basic entry to send PushBullet Notification in Robots**
 _this sends message to channel if one has been defined in configuration tab of WNR_
 ```
@@ -506,12 +534,14 @@ pmsg=context.global.sendViaPushBullet('note','Header','Message');
 node.send(pmsg);
 ```
 You can also add a pushbullet channel tag to the configuration page of WNR which would allow multiple pushbullet accounts to get push notifications such as husband and wife both getting notified if alarm is sounded. If you have added a channel to the configuration tab the above format will send the message to the **channel** if you would like certain notifications to be sent to the primary Pushbullet account holder only use the below format
-
 ```
 pmsg=context.global.sendViaPushBullet('note','Header','Message','personal') ; 
 node.send(pmsg);
 ```
 
+**Pushbullet Notification Examples**
+
+**These go in robot tab.**
 
 - **Lower Cabinet Opened**  
 This flow notifies me if any of my lower cabinets are opened for more than 5 secs. Helps me know if my little girl is getting into stuff that she shouldn’t.
@@ -991,7 +1021,7 @@ if (changed.name=="Master Bedroom Remote" && context.global.winkState.remotes['M
     node.send(WinkCMDmsg);
 }
 ```
-### Color Changing Lights
+###Color Changing Lights
 Under Construction
 
 ### Quick Reference  
