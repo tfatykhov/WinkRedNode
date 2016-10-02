@@ -8,6 +8,19 @@ UI 2.0
 https://(your_app_name).mybluemix.net/wnrUI <br>
 == UPDATE ==
 -
+10/02/2016
+------------
+###Holiday Mode bug fixes.
+If you imported yesterday's update prior to seing this, bug was identified which prevented system to work when only one bulb was selected.
+
+#####Required steps (WNR)
+*  Import updated [winkCore.json](winkCore.json)
+*  Import updated [HolidayMode.json](HolidayMode.json) if you have color bulbs.
+*  do not forget to check [duplicate websockets](../../README-WebsocketFix.md)
+*  perform "FULL" deployment<br
+
+Otherwise just follow steps from 10/01/2016.
+
 10/01/2016
 ------------
 ###Holiday Mode, pushbullet channel, bug fixes
