@@ -500,8 +500,15 @@ if(context.global.Presence.Angie.home=="yes")
 **These go in robot tab.**
 
 ###### **Basic entry to send PushBullet Notification in Robots**
+_this sends message to channel if one has been defined in configuration tab of WNR_
 ```
 pmsg=context.global.sendViaPushBullet('note','Header','Message');
+node.send(pmsg);
+```
+You can also add a pushbullet channel tag to the configuration page of WNR which would allow multiple pushbullet accounts to get push notifications such as husband and wife both getting notified if alarm is sounded. If you have added a channel to the configuration tab the above format will send the message to the **channel** if you would like certain notifications to be sent to the primary Pushbullet account holder only use the below format
+
+```
+pmsg=context.global.sendViaPushBullet('note','Header','Message','personal') ; 
 node.send(pmsg);
 ```
 
@@ -1012,4 +1019,3 @@ Can also check state of Cameras, Smoke detectors, using the same format as above
 
 
         
-
