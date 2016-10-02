@@ -37,7 +37,7 @@
 #### [Remote Based Robots](https://github.com/tfatykhov/WinkRedNode/blob/master/README-SampleUses.md#remote-based-robots)
 ##### &ensp;&ensp;[Activating a Wink Shortcut via remote button press](https://github.com/tfatykhov/WinkRedNode/blob/master/README-SampleUses.md#activating-a-schedule-using-a-remote)
 #### [Coming Soon...Alexa Skill integration without IFTTT]()
-#### [Coming Soon...Color Changing light control]()
+#### [Color Changing Lights](https://github.com/tfatykhov/WinkRedNode/blob/master/README-SampleUses.md#color-changing-lights)
 #### [Quick Reference](https://github.com/tfatykhov/WinkRedNode/blob/master/README-SampleUses.md#quick-reference)
 
 
@@ -991,8 +991,8 @@ if (changed.name=="Master Bedroom Remote" && context.global.winkState.remotes['M
     node.send(WinkCMDmsg);
 }
 ```
-
-
+###Color Changing Lights
+Under Construction
 
 ### Quick Reference  
 ```
