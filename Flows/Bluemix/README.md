@@ -8,6 +8,13 @@ UI 2.0
 https://(your_app_name).mybluemix.net/wnrUI <br>
 == UPDATE ==
 -
+10/05/2016
+###Holiday Mode improvements.
+When holiday mode is turned off affected lights are turned off as well
+#####Required steps (WNR)
+*  Import updated [HolidayMode.json](HolidayMode.json) if you have color bulbs.
+*  perform "FULL" deployment<br>
+
 10/02/2016
 ------------
 ###Holiday Mode bug fixes.
