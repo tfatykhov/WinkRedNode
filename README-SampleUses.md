@@ -566,39 +566,12 @@ node.warn(error.message);
 }
 ```
 
-**These go in schedule tab.**
+**This can go into any tab. It is imported onto a tab just like you do a Timur update. Only except is don't delete the tab. Just pick a tab and import this to it.**
 
 - **Hub Power Notifications**  
-This series of flows will first notify you if your hub loses its connection to Node Red, which could be due to a power loss or offline for any other reason. It will then send you another notification when the hub goes back online.
+Open the function node and add in your hub name. Then open the pushbullet nodes and enter your name and pushbullet API key. Thats it. Flow should now work.
 ```
-if (context.global.HubPower==="undefined")
-{
-    context.global.HubPower=0;
-}
-
-
-if (context.global.winkState.hubs.Home.connection===false && context.global.HubPower===0)
-    try{
-        pmsg=context.global.sendViaPushBullet('note','Wink Hub Offline','Wink Hub Offline');
-        node.send(pmsg);
-        node.send(context.global.send_ui_note('information',30*60*1000, 'Wink Hub Offline',Math.floor(Math.random()*1800000)));
-        context.global.HubPower=1;
-
-}
-    catch(error){
-    node.warn(error.message);
-}
- 
-if (context.global.winkState.hubs.Home.connection===true && context.global.HubPower===1)
-    try{
-        pmsg=context.global.sendViaPushBullet('note','Wink Hub Back Online','Wink Hub Back Online');
-        node.send(pmsg);
-        node.send(context.global.send_ui_note('information',30*60*1000, 'Wink Hub Back Online',Math.floor(Math.random()*1800000)));
-        context.global.HubPower=0;
- }
-    catch(error){
-    node.warn(error.message);
-}
+[{"id":"5049a7cf.033188","type":"inject","z":"5c3b32a8.69856c","name":"","topic":"","payload":"","payloadType":"date","repeat":"5","crontab":"","once":true,"x":101,"y":117,"wires":[["59534679.a3bc9"]]},{"id":"59534679.a3bc9","type":"function","z":"5c3b32a8.69856c","name":"","func":"if(context.global.winkState.hubs[\"insert hub name\"].connection===false)\n{\n    msg.payload=\"offline\";\n}\nelse\n{\n    msg.payload=\"online\";\n}\nreturn [msg];","outputs":"2","noerr":0,"x":234,"y":115,"wires":[["4e9ebaee.2eba14"],["8b235a09.edcb08"]]},{"id":"4e9ebaee.2eba14","type":"rbe","z":"5c3b32a8.69856c","name":"","func":"rbe","gap":"","start":"","inout":"out","x":376,"y":115,"wires":[["b0e9334f.6ddd7","5e73787b.ff239"]]},{"id":"b0e9334f.6ddd7","type":"template","z":"5c3b32a8.69856c","name":"Alarm","field":"payload","fieldType":"msg","format":"handlebars","syntax":"mustache","template":"Wink Hub is {{payload}} !","x":529,"y":170,"wires":[["a90ee8ba.f823f8"]]},{"id":"1d50155.c4df7eb","type":"pushbullet","z":"5c3b32a8.69856c","config":"caff2018.462bd8","pushtype":"note","title":"Wink Hub is back online !","chan":"","name":"Online","x":664,"y":136,"wires":[]},{"id":"a90ee8ba.f823f8","type":"debug","z":"5c3b32a8.69856c","name":"","active":true,"console":"false","complete":"payload","x":684,"y":177,"wires":[]},{"id":"8b235a09.edcb08","type":"http request","z":"5c3b32a8.69856c","name":"","method":"use","ret":"txt","url":"","tls":"","x":361,"y":166,"wires":[[]]},{"id":"a33104ec.7bebc","type":"pushbullet","z":"5c3b32a8.69856c","config":"caff2018.462bd8","pushtype":"note","title":"Wink Hub is offline !","chan":"","name":"Offline","x":671.5,"y":97,"wires":[]},{"id":"5e73787b.ff239","type":"switch","z":"5c3b32a8.69856c","name":"","property":"payload","propertyType":"msg","rules":[{"t":"eq","v":"offline","vt":"str"},{"t":"eq","v":"online","vt":"str"}],"checkall":"true","outputs":2,"x":530,"y":117,"wires":[["a33104ec.7bebc"],["1d50155.c4df7eb"]]},{"id":"caff2018.462bd8","type":"pushbullet-config","z":"5c3b32a8.69856c","name":""}]
 ``` 
 
 
