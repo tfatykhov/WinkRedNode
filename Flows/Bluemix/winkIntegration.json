@@ -2486,221 +2486,6 @@
     ]
   },
   {
-    "id": "6835e9ba.fb2178",
-    "type": "function",
-    "z": "17b3daf5.e84c25",
-    "name": "",
-    "func": "if ('uid' in msg.req.body && 'pwd' in msg.req.body && msg.req.body.uid==context.global.WinkUser.uid && msg.req.body.pwd==context.global.WinkUser.pwd){\n    msg.statusCode=\"200\";\n    msg.payload={\"status\":\"OK\"};    \n    msg.headers={\n        \"Set-Cookie\":\"exchange_token=\"+context.global.FREEBOARD_TOKEN+'; Path=/'\n        }\n} else \n    {\n        msg.statusCode=\"401\";\n        msg.payload={\"status\":\"Unathorized\"};  \n    }\nreturn msg;",
-    "outputs": 1,
-    "noerr": 0,
-    "x": 262,
-    "y": 2566,
-    "wires": [
-      [
-        "cbf0a984.842db8"
-      ]
-    ]
-  },
-  {
-    "id": "8a610fba.636d1",
-    "type": "http in",
-    "z": "17b3daf5.e84c25",
-    "name": "",
-    "url": "/auth",
-    "method": "post",
-    "swaggerDoc": "",
-    "x": 109,
-    "y": 2565,
-    "wires": [
-      [
-        "6835e9ba.fb2178"
-      ]
-    ]
-  },
-  {
-    "id": "98348cf1.15b2a",
-    "type": "comment",
-    "z": "17b3daf5.e84c25",
-    "name": "WNR 2.0 ---------------------------------------------------------------------------------------",
-    "info": "",
-    "x": 297,
-    "y": 2518,
-    "wires": []
-  },
-  {
-    "id": "cbf0a984.842db8",
-    "type": "http response",
-    "z": "17b3daf5.e84c25",
-    "name": "",
-    "x": 434,
-    "y": 2566,
-    "wires": []
-  },
-  {
-    "id": "a5f524e2.c4fa08",
-    "type": "http in",
-    "z": "17b3daf5.e84c25",
-    "name": "",
-    "url": "/red/getApplDataJSon",
-    "method": "get",
-    "swaggerDoc": "",
-    "x": 138,
-    "y": 2651,
-    "wires": [
-      [
-        "a7d4ffe4.cd99e"
-      ]
-    ]
-  },
-  {
-    "id": "a7d4ffe4.cd99e",
-    "type": "function",
-    "z": "17b3daf5.e84c25",
-    "name": "Throw Wink Data",
-    "func": "//if(msg.req.headers.authorization && msg.req.headers.authorization==\"Bearer \"+context.global.FREEBOARD_TOKEN){\nif ((msg.req.body.uid==context.global.WinkUser.uid && msg.req.body.pwd==context.global.WinkUser.pwd)||context.global.getCookie('exchange_token',msg.req.headers.cookie)==context.global.FREEBOARD_TOKEN || msg.payload.token==context.global.FREEBOARD_TOKEN){\nmsg.payload.WinkData=context.global.winkState;\nmsg.payload.WinkCapbs=context.global.winkDevCap;\n//msg.payload.WeatherData=context.global.Weather;\n//msg.payload.Weather=context.global.Weather;\n//msg.payload.WinkSubscriptions=context.global.WinkSubscriptions;\nmsg.payload.Presence=context.global.checkPresence();\nmsg.payload.PresenceDetail=context.global.Presence;\nmsg.payload.PresenceHistory=context.global.PresenceHistory;\n\n//msg.payload.foscamP=context.global.FosCam;\n//msg.payload.SamsungP=context.global.SamsungCam;\n//msg.payload.DlinkCam=context.global.DlinkCam;\n//msg.payload.VCAP_SERVICES=context.global.VCAP_SERVICES\n//msg.payload.ImageArchive=context.global.ImageArchive\n//msg.payload.camera_motion=context.global.camera_motion\n//msg.payload.netatmo=context.global.netatmo\nmsg.statusCode=\"200\";\nvar Etag=\"\";\nif ('CRYPTO' in context.global){\n    Etag=context.global.CRYPTO.createHash(\"md5\").update(JSON.stringify(msg.payload),\"utf8\").digest(\"hex\");\n    msg.headers={\n       'ETag': Etag,\n       'Content-Type': 'application/json'\n    };\n//    msg.res.set({\n//       'ETag': Etag,\n//       'Content-Type': 'application/json'\n//    });\n}\nreturn msg;\n}\nelse\n{\n    //msg.payload=\"Not Authorized\";\n   msg.statusCode=\"403\";\n   node.send(msg);\n   //res.send(\"403\",\"Forbidden\");\n  return;\n}\n",
-    "outputs": 1,
-    "noerr": 0,
-    "x": 482.4999694824219,
-    "y": 2647,
-    "wires": [
-      [
-        "3d3a3e79.f83162"
-      ]
-    ]
-  },
-  {
-    "id": "3d3a3e79.f83162",
-    "type": "http response",
-    "z": "17b3daf5.e84c25",
-    "name": "",
-    "x": 707.5,
-    "y": 2648,
-    "wires": []
-  },
-  {
-    "id": "9969bbfb.8af378",
-    "type": "http in",
-    "z": "17b3daf5.e84c25",
-    "name": "",
-    "url": "/red/components/:component",
-    "method": "get",
-    "swaggerDoc": "",
-    "x": 158,
-    "y": 2729,
-    "wires": [
-      [
-        "a9d88cdd.be663"
-      ]
-    ]
-  },
-  {
-    "id": "a9d88cdd.be663",
-    "type": "function",
-    "z": "17b3daf5.e84c25",
-    "name": "component_details",
-    "func": "if(msg.req.headers.authorization && msg.req.headers.authorization==\"Bearer \"+context.global.FREEBOARD_TOKEN){\n//if (context.global.getCookie('exchange_token',msg.req.headers.cookie)==context.global.FREEBOARD_TOKEN){\n    if (msg.req.params.component in context.global.winkState) {\n        msg.payload=context.global.winkState[msg.req.params.component];\n        msg.statusCode=\"200\";\n    } else if (msg.req.params.component=='weather'){\n        msg.payload=context.global.Weather;\n        msg.statusCode=\"200\";\n    } else\n    {\n        msg.payload={\n            \"error\":\"unknown component\"\n        };\n        msg.statusCode=\"500\";        \n    }\n    var Etag=\"\";\n    if ('CRYPTO' in context.global){\n        Etag=context.global.CRYPTO.createHash(\"md5\").update(JSON.stringify(msg.payload),\"utf8\").digest(\"hex\");\n        msg.headers={\n           'ETag': Etag,\n           'Content-Type': 'application/json'\n        };\n    }\n    return msg;\n} else\n{\n   msg.statusCode=\"403\";\n   return (msg);\n}\n",
-    "outputs": 1,
-    "noerr": 0,
-    "x": 469.4999694824219,
-    "y": 2727,
-    "wires": [
-      [
-        "31536db4.36c6a2"
-      ]
-    ]
-  },
-  {
-    "id": "31536db4.36c6a2",
-    "type": "http response",
-    "z": "17b3daf5.e84c25",
-    "name": "",
-    "x": 676.5,
-    "y": 2726,
-    "wires": []
-  },
-  {
-    "id": "7f06de05.c27b2",
-    "type": "http in",
-    "z": "17b3daf5.e84c25",
-    "name": "",
-    "url": "/red/group_members/:group",
-    "method": "get",
-    "swaggerDoc": "",
-    "x": 157,
-    "y": 2787,
-    "wires": [
-      [
-        "c7257508.930488"
-      ]
-    ]
-  },
-  {
-    "id": "c7257508.930488",
-    "type": "function",
-    "z": "17b3daf5.e84c25",
-    "name": "group_members",
-    "func": "if(msg.req.headers.authorization && msg.req.headers.authorization==\"Bearer \"+context.global.FREEBOARD_TOKEN){\n//if (context.global.getCookie('exchange_token',msg.req.headers.cookie)==context.global.FREEBOARD_TOKEN){\n//    node.warn(msg.req.params.group);\n    if (msg.req.params.group in context.global.winkState.groups) {\n        msg.payload=context.global.winkState.groups[msg.req.params.group].members;\n        msg.statusCode=\"200\";\n    } else\n    {\n        msg.payload={\n            \"error\":\"unknown component\"\n        };\n        msg.statusCode=\"500\";        \n    }\n    var Etag=\"\";\n    if ('CRYPTO' in context.global){\n        Etag=context.global.CRYPTO.createHash(\"md5\").update(JSON.stringify(msg.payload),\"utf8\").digest(\"hex\");\n        msg.headers={\n           'ETag': Etag,\n           'Content-Type': 'application/json'\n        };\n    }\n    return msg;\n} else\n{\n   msg.statusCode=\"403\";\n   return (msg);\n}\n",
-    "outputs": 1,
-    "noerr": 0,
-    "x": 440.4999694824219,
-    "y": 2786,
-    "wires": [
-      [
-        "28a4e941.b9d7a6"
-      ]
-    ]
-  },
-  {
-    "id": "28a4e941.b9d7a6",
-    "type": "http response",
-    "z": "17b3daf5.e84c25",
-    "name": "",
-    "x": 647.5,
-    "y": 2785,
-    "wires": []
-  },
-  {
-    "id": "2c6460a5.8dccc",
-    "type": "http in",
-    "z": "17b3daf5.e84c25",
-    "name": "",
-    "url": "/red/sensors/:type",
-    "method": "get",
-    "swaggerDoc": "",
-    "x": 117,
-    "y": 2847,
-    "wires": [
-      [
-        "564b97a6.8c3d88"
-      ]
-    ]
-  },
-  {
-    "id": "564b97a6.8c3d88",
-    "type": "function",
-    "z": "17b3daf5.e84c25",
-    "name": "component_details",
-    "func": "if(msg.req.headers.authorization && msg.req.headers.authorization==\"Bearer \"+context.global.FREEBOARD_TOKEN){\n//if (context.global.getCookie('exchange_token',msg.req.headers.cookie)==context.global.FREEBOARD_TOKEN){\n    if (msg.req.params.component in context.global.winkState) {\n        msg.payload=context.global.winkState[msg.req.params.component];\n        msg.statusCode=\"200\";\n    } else if (msg.req.params.component=='weather'){\n        msg.payload=context.global.Weather;\n        msg.statusCode=\"200\";\n    } else\n    {\n        msg.payload={\n            \"error\":\"unknown component\"\n        };\n        msg.statusCode=\"500\";        \n    }\n    var Etag=\"\";\n    if ('CRYPTO' in context.global){\n        Etag=context.global.CRYPTO.createHash(\"md5\").update(JSON.stringify(msg.payload),\"utf8\").digest(\"hex\");\n        msg.headers={\n           'ETag': Etag,\n           'Content-Type': 'application/json'\n        };\n    }\n    return msg;\n} else\n{\n   msg.statusCode=\"403\";\n   return (msg);\n}\n",
-    "outputs": 1,
-    "noerr": 0,
-    "x": 468.4999694824219,
-    "y": 2845,
-    "wires": [
-      [
-        "ca02fec1.41a96"
-      ]
-    ]
-  },
-  {
-    "id": "ca02fec1.41a96",
-    "type": "http response",
-    "z": "17b3daf5.e84c25",
-    "name": "",
-    "x": 675.5,
-    "y": 2844,
-    "wires": []
-  },
-  {
     "id": "98790c8b.89154",
     "type": "delay",
     "z": "17b3daf5.e84c25",
@@ -2727,7 +2512,7 @@
     "type": "debug",
     "z": "17b3daf5.e84c25",
     "name": "",
-    "active": true,
+    "active": false,
     "console": "false",
     "complete": "false",
     "x": 898,
@@ -2863,6 +2648,221 @@
     "complete": "false",
     "x": 894,
     "y": 3044,
+    "wires": []
+  },
+  {
+    "id": "33a44d5a.63ad12",
+    "type": "function",
+    "z": "17b3daf5.e84c25",
+    "name": "",
+    "func": "//if ('uid' in msg.req.body && 'pwd' in msg.req.body && msg.req.body.uid==context.global.WinkUser.uid && msg.req.body.pwd==context.global.WinkUser.pwd){\nvar cred=context.global.genJwtToken(msg.req.body);\nif (cred.isSet){\n    msg.statusCode=\"200\";\n    msg.payload={\"status\":\"OK\"};    \n    msg.headers={\n//        \"Set-Cookie\":\"exchange_token=\"+context.global.FREEBOARD_TOKEN+'; Path=/'\n        \"Set-Cookie\":\"exchange_token=\"+cred.token+'; Path=/'\n        }\n} else \n    {\n        msg.statusCode=\"401\";\n        msg.payload={\"status\":\"Unathorized\"};  \n    }\nreturn msg;",
+    "outputs": 1,
+    "noerr": 0,
+    "x": 252,
+    "y": 2567,
+    "wires": [
+      [
+        "6152228f.f7c4ec"
+      ]
+    ]
+  },
+  {
+    "id": "c12b809e.a3d9b",
+    "type": "http in",
+    "z": "17b3daf5.e84c25",
+    "name": "",
+    "url": "/auth",
+    "method": "post",
+    "swaggerDoc": "",
+    "x": 99,
+    "y": 2566,
+    "wires": [
+      [
+        "33a44d5a.63ad12"
+      ]
+    ]
+  },
+  {
+    "id": "64596b55.26a5b4",
+    "type": "comment",
+    "z": "17b3daf5.e84c25",
+    "name": "WNR 2.0 ---------------------------------------------------------------------------------------",
+    "info": "",
+    "x": 287,
+    "y": 2519,
+    "wires": []
+  },
+  {
+    "id": "6152228f.f7c4ec",
+    "type": "http response",
+    "z": "17b3daf5.e84c25",
+    "name": "",
+    "x": 424,
+    "y": 2567,
+    "wires": []
+  },
+  {
+    "id": "f2b34622.e54d68",
+    "type": "http in",
+    "z": "17b3daf5.e84c25",
+    "name": "",
+    "url": "/red/getApplDataJSon",
+    "method": "get",
+    "swaggerDoc": "",
+    "x": 128,
+    "y": 2652,
+    "wires": [
+      [
+        "dd0a696e.6f7598"
+      ]
+    ]
+  },
+  {
+    "id": "dd0a696e.6f7598",
+    "type": "function",
+    "z": "17b3daf5.e84c25",
+    "name": "Throw Wink Data",
+    "func": "//if(msg.req.headers.authorization && msg.req.headers.authorization==\"Bearer \"+context.global.FREEBOARD_TOKEN){\nif ((msg.req.body.uid==context.global.WinkUser.uid && msg.req.body.pwd==context.global.WinkUser.pwd)||context.global.getCookie('exchange_token',msg.req.headers.cookie)==context.global.FREEBOARD_TOKEN || msg.payload.token==context.global.FREEBOARD_TOKEN){\nmsg.payload.WinkData=context.global.winkState;\nmsg.payload.WinkCapbs=context.global.winkDevCap;\n//msg.payload.WeatherData=context.global.Weather;\n//msg.payload.Weather=context.global.Weather;\n//msg.payload.WinkSubscriptions=context.global.WinkSubscriptions;\nmsg.payload.Presence=context.global.checkPresence();\nmsg.payload.PresenceDetail=context.global.Presence;\nmsg.payload.PresenceHistory=context.global.PresenceHistory;\n\n//msg.payload.foscamP=context.global.FosCam;\n//msg.payload.SamsungP=context.global.SamsungCam;\n//msg.payload.DlinkCam=context.global.DlinkCam;\n//msg.payload.VCAP_SERVICES=context.global.VCAP_SERVICES\n//msg.payload.ImageArchive=context.global.ImageArchive\n//msg.payload.camera_motion=context.global.camera_motion\n//msg.payload.netatmo=context.global.netatmo\nmsg.statusCode=\"200\";\nvar Etag=\"\";\nif ('CRYPTO' in context.global){\n    Etag=context.global.CRYPTO.createHash(\"md5\").update(JSON.stringify(msg.payload),\"utf8\").digest(\"hex\");\n    msg.headers={\n       'ETag': Etag,\n       'Content-Type': 'application/json'\n    };\n//    msg.res.set({\n//       'ETag': Etag,\n//       'Content-Type': 'application/json'\n//    });\n}\nreturn msg;\n}\nelse\n{\n    //msg.payload=\"Not Authorized\";\n   msg.statusCode=\"403\";\n   node.send(msg);\n   //res.send(\"403\",\"Forbidden\");\n  return;\n}\n",
+    "outputs": 1,
+    "noerr": 0,
+    "x": 472.4999694824219,
+    "y": 2648,
+    "wires": [
+      [
+        "cdf2c1c1.20338"
+      ]
+    ]
+  },
+  {
+    "id": "cdf2c1c1.20338",
+    "type": "http response",
+    "z": "17b3daf5.e84c25",
+    "name": "",
+    "x": 697.5,
+    "y": 2649,
+    "wires": []
+  },
+  {
+    "id": "27023e0.34fbbc2",
+    "type": "http in",
+    "z": "17b3daf5.e84c25",
+    "name": "",
+    "url": "/red/components/:component",
+    "method": "get",
+    "swaggerDoc": "",
+    "x": 148,
+    "y": 2730,
+    "wires": [
+      [
+        "ffb1546c.d4aa38"
+      ]
+    ]
+  },
+  {
+    "id": "ffb1546c.d4aa38",
+    "type": "function",
+    "z": "17b3daf5.e84c25",
+    "name": "component_details",
+    "func": "if(context.global.getCookie('exchange_token',msg.req.headers.cookie)==context.global.FREEBOARD_TOKEN ){\n//if (context.global.getCookie('exchange_token',msg.req.headers.cookie)==context.global.FREEBOARD_TOKEN){\n    if (msg.req.params.component in context.global.winkState) {\n        msg.payload=context.global.winkState[msg.req.params.component];\n        msg.statusCode=\"200\";\n    } else if (msg.req.params.component=='weather'){\n        msg.payload=context.global.Weather;\n        msg.statusCode=\"200\";\n    } else\n    {\n        msg.payload={\n            \"error\":\"unknown component\"\n        };\n        msg.statusCode=\"404\";        \n    }\n    var Etag=\"\";\n    if ('CRYPTO' in context.global){\n        Etag=context.global.CRYPTO.createHash(\"md5\").update(JSON.stringify(msg.payload),\"utf8\").digest(\"hex\");\n        msg.headers={\n           'ETag': Etag,\n           'Content-Type': 'application/json'\n        };\n    }\n    return msg;\n} else\n{\n   msg.statusCode=\"403\";\n   return (msg);\n}\n",
+    "outputs": 1,
+    "noerr": 0,
+    "x": 459.4999694824219,
+    "y": 2728,
+    "wires": [
+      [
+        "5ce86150.1143e"
+      ]
+    ]
+  },
+  {
+    "id": "5ce86150.1143e",
+    "type": "http response",
+    "z": "17b3daf5.e84c25",
+    "name": "",
+    "x": 666.5,
+    "y": 2727,
+    "wires": []
+  },
+  {
+    "id": "a42eca12.86afd8",
+    "type": "http in",
+    "z": "17b3daf5.e84c25",
+    "name": "",
+    "url": "/red/group_members/:group",
+    "method": "get",
+    "swaggerDoc": "",
+    "x": 147,
+    "y": 2788,
+    "wires": [
+      [
+        "eabd6043.6d422"
+      ]
+    ]
+  },
+  {
+    "id": "eabd6043.6d422",
+    "type": "function",
+    "z": "17b3daf5.e84c25",
+    "name": "group_members",
+    "func": "if(context.global.getCookie('exchange_token',msg.req.headers.cookie)==context.global.FREEBOARD_TOKEN ){\n//if (context.global.getCookie('exchange_token',msg.req.headers.cookie)==context.global.FREEBOARD_TOKEN){\n//    node.warn(msg.req.params.group);\n    if (msg.req.params.group in context.global.winkState.groups) {\n        msg.payload=context.global.winkState.groups[msg.req.params.group].members;\n        msg.statusCode=\"200\";\n    } else\n    {\n        msg.payload={\n            \"error\":\"unknown component\"\n        };\n        msg.statusCode=\"500\";        \n    }\n    var Etag=\"\";\n    if ('CRYPTO' in context.global){\n        Etag=context.global.CRYPTO.createHash(\"md5\").update(JSON.stringify(msg.payload),\"utf8\").digest(\"hex\");\n        msg.headers={\n           'ETag': Etag,\n           'Content-Type': 'application/json'\n        };\n    }\n    return msg;\n} else\n{\n   msg.statusCode=\"403\";\n   return (msg);\n}\n",
+    "outputs": 1,
+    "noerr": 0,
+    "x": 430.4999694824219,
+    "y": 2787,
+    "wires": [
+      [
+        "2c9c6246.8e058e"
+      ]
+    ]
+  },
+  {
+    "id": "2c9c6246.8e058e",
+    "type": "http response",
+    "z": "17b3daf5.e84c25",
+    "name": "",
+    "x": 637.5,
+    "y": 2786,
+    "wires": []
+  },
+  {
+    "id": "dec404c3.2a4698",
+    "type": "http in",
+    "z": "17b3daf5.e84c25",
+    "name": "",
+    "url": "/red/sensors/:type",
+    "method": "get",
+    "swaggerDoc": "",
+    "x": 107,
+    "y": 2848,
+    "wires": [
+      [
+        "28ff511a.4e472e"
+      ]
+    ]
+  },
+  {
+    "id": "28ff511a.4e472e",
+    "type": "function",
+    "z": "17b3daf5.e84c25",
+    "name": "component_details",
+    "func": "if(context.global.getCookie('exchange_token',msg.req.headers.cookie)==context.global.FREEBOARD_TOKEN ){\n//if (context.global.getCookie('exchange_token',msg.req.headers.cookie)==context.global.FREEBOARD_TOKEN){\n    if ('@'+msg.req.params.type in context.global.winkState.groups) {\n        msg.payload=context.global.winkState.groups['@'+msg.req.params.type].members;\n        msg.statusCode=\"200\";\n    } else if (msg.req.params.component=='weather'){\n        msg.payload=context.global.Weather;\n        msg.statusCode=\"200\";\n    } else\n    {\n        msg.payload={\n            \"error\":\"unknown component\"\n        };\n        msg.statusCode=\"404\";        \n    }\n    var Etag=\"\";\n    if ('CRYPTO' in context.global){\n        Etag=context.global.CRYPTO.createHash(\"md5\").update(JSON.stringify(msg.payload),\"utf8\").digest(\"hex\");\n        msg.headers={\n           'ETag': Etag,\n           'Content-Type': 'application/json'\n        };\n    }\n    return msg;\n} else\n{\n   msg.statusCode=\"403\";\n   return (msg);\n}\n",
+    "outputs": 1,
+    "noerr": 0,
+    "x": 458.4999694824219,
+    "y": 2846,
+    "wires": [
+      [
+        "1559e6be.e7dd39"
+      ]
+    ]
+  },
+  {
+    "id": "1559e6be.e7dd39",
+    "type": "http response",
+    "z": "17b3daf5.e84c25",
+    "name": "",
+    "x": 665.5,
+    "y": 2845,
     "wires": []
   }
 ]
