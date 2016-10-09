@@ -8,7 +8,26 @@ UI 2.0
 https://(your_app_name).mybluemix.net/wnrUI <br>
 == UPDATE ==
 -
+10/09/2016
+------------
+###Security improvements.
+*  Browser sends md5 hash for user/password combination. This is better working for users with local installations where no SSL is configured.
+*  Application now using JWT (https://jwt.io/) for authorization. This is first step for better security for browser UI.
+
+#####Required steps (WNR)
+*  Import updated [winkCore.json](winkCore.json)
+*  Import updated [winkIntegration.json](winkIntegration.json)
+*  Import updated [tabletUI.json](tabletUI.json)
+*  do not forget to check [duplicate websockets](../../README-WebsocketFix.md)
+*  perform "FULL" deployment<br>
+
+######Bluemix git console:<br>
+*  re-deploy application in git<br>
+<img src="images/deploy.png">
+
+
 10/05/2016
+------------
 ###Holiday Mode improvements.
 When holiday mode is turned off affected lights are turned off as well
 #####Required steps (WNR)
