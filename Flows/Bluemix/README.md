@@ -8,6 +8,36 @@ UI 2.0
 https://(your_app_name).mybluemix.net/wnrUI <br>
 == UPDATE ==
 -
+10/15/2016
+------------
+###Security improvements.
+Browser fingerprints added to most of request. JWT token will be verified to make sure request came from same browser where user authenticated to prevent "false" requests.
+
+###Robot flow improvements.
+Added Key data for locks that support key data.
+if you use WNR robots when "lock" message will come to your flow it will have following payload:
+
+	{ 	
+		"name": "Front door Lock", 
+		"object_type": "lock", 
+		"new_state": "Locked", 
+		"old_state": "Unlocked", 
+		"key_used": "Key #3" 
+	}
+	
+<br>
+
+#####Required steps (WNR)
+*  Import updated [winkCore.json](winkCore.json)
+*  Import updated [winkIntegration.json](winkIntegration.json)
+*  Import updated [tabletUI.json](tabletUI.json)
+*  do not forget to check [duplicate websockets](../../README-WebsocketFix.md)
+*  perform "FULL" deployment<br>
+
+######Bluemix git console:<br>
+*  re-deploy application in git<br>
+<img src="images/deploy.png">
+
 10/09/2016
 ------------
 ###Security improvements.
