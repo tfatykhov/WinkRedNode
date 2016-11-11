@@ -61,7 +61,8 @@ In `bluemix-settings.js` delete all contents and copy everything from this file
 #### manifest.yml
 In 'manifest.yml', below the line:
 
-          domain: mybluemix.net
+          services:
+          - xxx-cloudantNoSQLDB
 
 add these three lines:
 
@@ -93,7 +94,6 @@ When you're done the entire file should look something like: ((remember to chang
           disk_quota: 1024M          
           services:
           - xxx-cloudantNoSQLDB
-          - xxx-MonitoringAndAnalytics
           env:
             NODE_RED_USERNAME: pseudo-random-string-one
             NODE_RED_PASSWORD: pseudo-random-string-two
