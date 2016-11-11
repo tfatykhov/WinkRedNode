@@ -77,8 +77,10 @@ e.g.,
 
 Keep in mind that what you enter for the username and password will be what you will use to log in to the Node Red application. Don't make it too complex, but don't make it too easy either -- your login page is visible to everyone on the internet! If your username/password combo is too easy then anyone can gain access to your Node Red application. 
 
-Note that indentation is important!
-
+<b>Note that indentation is important!</b><br>
+* you can use following file as a sample:
+[https://github.com/tfatykhov/WinkRedNode/blob/master/Flows/Bluemix/manifest.yaml](https://github.com/tfatykhov/WinkRedNode/blob/master/Flows/Bluemix/manifest.yaml)
+<br>
 When you're done the entire file should look something like: ((remember to change <b>MyWinkNodeRed</b> part to the app name you selected during BlueMix configuration))
 
         applications:
