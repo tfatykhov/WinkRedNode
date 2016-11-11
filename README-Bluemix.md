@@ -84,20 +84,20 @@ Keep in mind that what you enter for the username and password will be what you 
 When you're done the entire file should look something like: ((remember to change <b>xxx</b> part to the app name you selected during BlueMix configuration))
 
         applications:
-        - services:
+        - path: .        
+          memory: 512M   
+          instances: 1          
+          domain: mybluemix.net          
+          name: xxx          
+          host: xxx          
+          disk_quota: 1024M          
+          services:
           - xxx-cloudantNoSQLDB
           - xxx-MonitoringAndAnalytics
-          disk_quota: 1024M
-          host: xxx
-          name: xxx
-          command: node --max-old-space-size=384 node_modules/node-red/red.js --settings ./bluemix-settings.js -v
-          path: .
-          domain: mybluemix.net
           env:
             NODE_RED_USERNAME: pseudo-random-string-one
             NODE_RED_PASSWORD: pseudo-random-string-two
-          instances: 1
-          memory: 512M
+          command: node --max-old-space-size=384 node_modules/node-red/red.js --settings ./bluemix-settings.js -v            
 
 **Remember to use "File" -> "Save" so your changes are saved.**
 
