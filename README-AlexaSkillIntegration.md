@@ -4,13 +4,13 @@
 Follow these instructions to create the skill you would like to use  
 [Create your own scustom skill](https://developer.amazon.com/public/solutions/alexa/alexa-skills-kit/overviews/steps-to-build-a-custom-skill "Skill instructions")
 #### Skill Information
-I've included images from my skill for reference. For my skill I have used the invocation name of "jarvis" so when I want to use my skill I start by saying "Alexa, ask Jarvis..." So whatever you put in "Invocation Name" calls the skill then whatever you put in the next section, "Intents" is what you waat "Jarvis" to do.  
+I've included images from my skill for reference. For my skill I have used the invocation name of "jarvis" so when I want to use my skill I start by saying "Alexa, ask Jarvis..." So whatever you put in "Invocation Name" calls the skill then whatever you put in the next section, "Intents" is what you want "Jarvis" to do.  
 
 ![image](https://github.com/tfatykhov/WinkRedNode/blob/master/images/custom-skill-1.PNG?raw=true)
 #### Interaction Model
 You can add as many "intents" as you'd like to match the different things you want the skill to do. Under "Sample Utterances" add any combination of phrases you can think of using for each intent.
 
-![image]  
+![image](https://github.com/tfatykhov/WinkRedNode/blob/master/images/customskill2.PNG?raw=true) 
 #### Configuration
 This is what I used for the "Configuration settings" mainly because I am not familiar with the "Lambda" settings. I used a random key generator to create the end location in the url (marked out in image)
 
