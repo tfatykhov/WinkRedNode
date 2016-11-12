@@ -43,11 +43,13 @@ Now add a TEMPLATE node. This is where you can get creative with Alexa's voice r
 ![image](https://github.com/tfatykhov/WinkRedNode/blob/master/images/alexa9.PNG?raw=true)  
 When I say "Alexa, tell Jarvis I am going to be" she changes the bedtimeEvent variable to true and responds "Good night, I have prepared the house for bedtime mode"  
 ![image](https://github.com/tfatykhov/WinkRedNode/blob/master/images/alexa10.PNG?raw=true)  
-The next node can simply be a TEMPLATE node and can be formatted a couple of ways.  
-This format simply passes through whatever was in the previous template for voice output from Alexa.  
+Next is a TEMPLATE node.  
 ![image](https://github.com/tfatykhov/WinkRedNode/blob/master/images/alexa11.PNG?raw=true)  
-This format is a little more complex(you only have to type it once though) and it passes the previous node info but it also generates a card in the Alexa app.  
+This TEMPLATE node and can be formatted a couple of ways.  
+This format simply passes through whatever was in the previous template for voice output from Alexa.  
 ![image](https://github.com/tfatykhov/WinkRedNode/blob/master/images/alexa12.PNG?raw=true)  
+This format is a little more complex(you only have to type it once though) and it passes the previous node info but it also generates a card in the Alexa app.  
+![image](https://github.com/tfatykhov/WinkRedNode/blob/master/images/alexa13.PNG?raw=true)  
 
 
 
