@@ -43,13 +43,35 @@ Now add a TEMPLATE node. This is where you can get creative with Alexa's voice r
 ![image](https://github.com/tfatykhov/WinkRedNode/blob/master/images/alexa9.PNG?raw=true)  
 When I say "Alexa, tell Jarvis I am going to be" she changes the bedtimeEvent variable to true and responds "Good night, I have prepared the house for bedtime mode"  
 ![image](https://github.com/tfatykhov/WinkRedNode/blob/master/images/alexa10.PNG?raw=true)  
-Next is a TEMPLATE node.  
+Next is a TEMPLATE node and all of your intent nodes combine back into this template node(see first image).  
 ![image](https://github.com/tfatykhov/WinkRedNode/blob/master/images/alexa11.PNG?raw=true)  
 This TEMPLATE node and can be formatted a couple of ways.  
 This format simply passes through whatever was in the previous template for voice output from Alexa.  
 ![image](https://github.com/tfatykhov/WinkRedNode/blob/master/images/alexa12.PNG?raw=true)  
 This format is a little more complex(you only have to type it once though) and it passes the previous node info but it also generates a card in the Alexa app.  
 ![image](https://github.com/tfatykhov/WinkRedNode/blob/master/images/alexa13.PNG?raw=true)  
+*just copy and paste the below and change the title to whatever you are using*
+```{
+  "version": "1.0",
+  "response": {
+    "outputSpeech": {"type":"PlainText","text":"{{payload}}"},
+    "card": {
+      "type": "Simple",
+      "title": "Jarvis",
+      "content": "{{payload}}"
+    }
+  }
+}
+```
+
+After the above Template node simply add a JSON node followed by an HTTP RESPONSE node. Neither of these nodes need to be edited.  
+![image](https://github.com/tfatykhov/WinkRedNode/blob/master/images/alexa14.PNG?raw=true)  
+![image](https://github.com/tfatykhov/WinkRedNode/blob/master/images/alexa15.PNG?raw=true)  
+**That's it for bedtime event!**
+
+
+
+
 
 
 
