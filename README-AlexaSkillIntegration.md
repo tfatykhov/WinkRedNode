@@ -2,7 +2,7 @@
 
 ## Create Custom Skill for Alexa
 Follow these instructions to create the skill you would like to use  
-[Create your own scustom skill](https://developer.amazon.com/public/solutions/alexa/alexa-skills-kit/overviews/steps-to-build-a-custom-skill "Skill instructions")
+[Create your own custom skill](https://developer.amazon.com/public/solutions/alexa/alexa-skills-kit/overviews/steps-to-build-a-custom-skill "Skill instructions")
 #### Skill Information
 I've included images from my skill for reference. For my skill I have used the invocation name of "jarvis" so when I want to use my skill I start by saying "Alexa, ask Jarvis..." So whatever you put in "Invocation Name" calls the skill then whatever you put in the next section, "Intents" is what you want "Jarvis" to do.  
 
