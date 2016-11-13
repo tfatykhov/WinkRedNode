@@ -8,6 +8,38 @@ UI 2.0
 https://(your_app_name).mybluemix.net/wnrUI <br>
 == UPDATE ==
 -
+
+11/13/2016
+------------
+###Support for dynamic IFTTT applets for Google Home Assistant
+Google Home Assistant in IFTTT has ability to create "dynamic" applets where you can specify numeric and text entries that can be different. With that ability there is an easy way to add support for WinkNodeRed:
+Here is the sample of such request:
+First you need to create a new IFTTT Applet, select Google Assistant as "THIS" and then choose "Say a phrase with both a number and a text ingredient" as a trigger. You can put any wording you like and applet gives you ability to put several different ways for your phrase. For "dynamic part" you need to use $ for a text component and # for a number component. For example if I want to turn a light on at specific dim level I can put following phrase: "set $ on at # percent":
+<img src="images/google_home_1.png"><br>
+Once you do that - select Maker channel as "THAT" and put following:
+ * Url: https://your_app_name.mybluemix.net/red/ifttt
+ * Method: POST
+ * Content Type: application/json
+ * Body: {"winkName":"{{TextField}}","type":"light", "cmd":"on", "level":{{NumberField}},"iftttkey":"your_ifttt_key")
+ <img src="images/google_home_2.png"><br>
+Save this applet.<br>
+
+Now moving to WinkNodeRed side:<br>
+In order for this to work you need:
+
+#####Required steps (WNR)
+*  Import updated [winkCore.json](winkCore.json)
+*  Import updated [winkIntegration.json](winkIntegration.json)
+*  Import updated [tabletUI.json](tabletUI.json)
+*  do not forget to check [duplicate websockets](../../README-WebsocketFix.md)
+*  perform "FULL" deployment<br>
+
+######Bluemix git console:<br>
+*  re-deploy application in git<br>
+<img src="images/deploy.png">
+
+
+
 10/15/2016
 ------------
 ###Security improvements.
