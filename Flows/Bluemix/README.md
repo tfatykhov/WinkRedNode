@@ -11,6 +11,8 @@ https://(your_app_name).mybluemix.net/wnrUI <br>
 
 11/13/2016
 ------------
+###Summary page shows counts and averages for all supported lights and sensors and systems. (WINK SmartThings, LifX)
+
 ###Support for dynamic IFTTT applets for Google Home Assistant
 Google Home Assistant in IFTTT has ability to create "dynamic" applets where you can specify numeric and text entries that can be different. With that ability there is an easy way to add support for WinkNodeRed:
 Here is the sample of such request:
