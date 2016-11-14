@@ -22,7 +22,7 @@ Once you do that - select Maker channel as "THAT" and put following:
  * Url: https://your_app_name.mybluemix.net/red/ifttt
  * Method: POST
  * Content Type: application/json
- * Body: {"winkName":"{{TextField}}","type":"light", "cmd":"on", "level":{{NumberField}},"iftttkey":"your_ifttt_key")
+ * Body: {"winkName":"{{TextField}}","type":"light", "cmd":"on", "level":{{NumberField}},"iftttkey":"your_ifttt_key"}
  <img src="images/google_home_2.png"><br>
 Save this applet.<br>
 
