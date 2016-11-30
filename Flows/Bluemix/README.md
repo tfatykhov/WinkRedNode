@@ -8,7 +8,12 @@ UI 2.0
 https://(your_app_name).mybluemix.net/wnrUI <br>
 == UPDATE ==
 -
-
+11/30/2016
+-----------
+###Fix presence sensor issue.
+#####Required steps (WNR)
+*  Import updated [winkIntegration.json](winkIntegration.json)
+*  perform "Modified Nodes" deployment<br>
 11/13/2016
 ------------
 ###Summary page shows counts and averages for all supported lights and sensors and systems. (WINK SmartThings, LifX)
