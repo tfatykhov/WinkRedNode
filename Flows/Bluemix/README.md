@@ -8,6 +8,42 @@ UI 2.0
 https://(your_app_name).mybluemix.net/wnrUI <br>
 == UPDATE ==
 -
+12/17/2016
+-----------
+### SmartThings Swithces data flow from ST to Node Red (one way for now)
+* Data will appear on dashboards, and total lights count will reflect ST lights as well.
+* You can use it in Robots to control WINK and LIFX devices
+* You will see swithces on Controls tab but no controls for now.
+
+### Fixes
+* wink dashboard properly shows lights which are not part of any group
+
+### New Functionality
+* context.global.checkPresence() function now has parameter 'newMode'. By default it will use old way to check presence. but if you call it with new parameter ex. context.global.checkPresence('newMode') it will use context.global.winkState.groups['@wnrSensors'].presence to check Presence. That will include SmartThings sensors as well.
+
+#####Required steps (WNR)
+*  Import updated [winkCore.json](winkCore.json)
+*  Import updated [winkIntegration.json](winkIntegration.json)
+*  Import updated [tabletUI.json](tabletUI.json)
+*  do not forget to check [duplicate websockets](../../README-WebsocketFix.md)
+*  perform "FULL" deployment<br>
+
+Required steps (SmartThings):
+* You need to open SmartThings management page (https://graph.api.smartthings.com/)
+######If you did not use this feature before
+* Navigate to "My SmartApps" page and click on "add smart app" button, select "from Code"
+![add stapp](images/STApp1.png)
+![add stapp](images/STApp2.png)
+######If you already has app installed
+* edit WNR Poster smartApp
+* Open following link [WNR Poster](../../SmartThings/httpPoster.groovy) and copy all code to the "code" section
+* Click on "save" and "publish" " for me"
+![add stapp](images/STApp3.png)
+* then on the right side - select you Location, devices and actions that should go to Wnr
+* at the bottom you need to populate your WNR url
+* populate same SmartThings secret key that you entered in WNR configuration
+* click Install
+
 11/30/2016
 -----------
 ###Fix presence sensor issue.
