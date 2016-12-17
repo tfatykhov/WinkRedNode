@@ -21,7 +21,7 @@ https://(your_app_name).mybluemix.net/wnrUI <br>
 ### New Functionality
 * context.global.checkPresence() function now has parameter 'newMode'. By default it will use old way to check presence. but if you call it with new parameter ex. context.global.checkPresence('newMode') it will use context.global.winkState.groups['@wnrSensors'].presence to check Presence. That will include SmartThings sensors as well.
 
-#####Required steps (WNR)
+##### Required steps (WNR)
 *  Import updated [winkCore.json](winkCore.json)
 *  Import updated [winkIntegration.json](winkIntegration.json)
 *  Import updated [tabletUI.json](tabletUI.json)
@@ -29,12 +29,14 @@ https://(your_app_name).mybluemix.net/wnrUI <br>
 *  perform "FULL" deployment<br>
 
 Required steps (SmartThings):
-* You need to open SmartThings management page (https://graph.api.smartthings.com/)
-######If you did not use this feature before
+* You need to open SmartThings management page (https://graph.api.smartthings.com/)<br>
+
+##### If you did not use this feature before
 * Navigate to "My SmartApps" page and click on "add smart app" button, select "from Code"
 ![add stapp](images/STApp1.png)
-![add stapp](images/STApp2.png)
-######If you already has app installed
+![add stapp](images/STApp2.png)<br>
+
+##### If you already has app installed
 * edit WNR Poster smartApp
 * Open following link [WNR Poster](../../SmartThings/httpPoster.groovy) and copy all code to the "code" section
 * Click on "save" and "publish" " for me"
