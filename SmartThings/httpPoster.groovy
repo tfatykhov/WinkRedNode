@@ -1,7 +1,7 @@
 /**
- *  HTTP POSTer for WNR
+ *  HTTP POSTer
  *
- *  Copyright 2016 Timur Fatykhov
+ *  Copyright 20165 Timur Fatykhov
  *
  *  Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except
  *  in compliance with the License. You may obtain a copy of the License at:
@@ -34,7 +34,8 @@ preferences {
         input "accelerations", "capability.accelerationSensor", title: "Accelerations", required: false, multiple: true
         input "motions", "capability.motionSensor", title: "Motions", required: false, multiple: true
         input "presence", "capability.presenceSensor", title: "Presence", required: false, multiple: true
-//        input "switches", "capability.switch", title: "Switches", required: false, multiple: true
+        input "switches", "capability.switch", title: "Switches", required: false, multiple: true
+//	    input "switchLevels", "capability.switchLevel", title: "Switch Levels", required: false, multiple: true        
         input "waterSensors", "capability.waterSensor", title: "Water sensors", required: false, multiple: true
         input "batteries", "capability.battery", title: "Batteries", required: false, multiple: true
 //        input "energies", "capability.energyMeter", title: "Energy Meters", required: false, multiple: true
@@ -60,7 +61,7 @@ def updated() {
 }
 
 def initialize() {
-    subscribe(powers, "power", handlePowerEvent)
+//    subscribe(powers, "power", handlePowerEvent)
     subscribe(temperatures, "temperature", handleTemperatureEvent)
     subscribe(waterSensors, "water", handleWaterEvent)
     subscribe(humidities, "humidity", handleHumidityEvent)
@@ -68,7 +69,8 @@ def initialize() {
     subscribe(accelerations, "acceleration", handleAccelerationEvent)
     subscribe(motions, "motion", handleMotionEvent)
     subscribe(presence, "presence", handlePresenceEvent)
-//    subscribe(switches, "switch", handleSwitchEvent)
+    subscribe(switches, "switch", handleSwitchEvent)
+//	subscribe(switchLevels, "level", handleSwitchLevelEvent)    
     subscribe(batteries, "battery", handleBatteryEvent)
 //    subscribe(energies, "energy", handleEnergyEvent)
     subscribe(illuminances, "illuminance", handleIlluminanceEvent)
@@ -87,7 +89,7 @@ def handleWaterEvent(evt) {
 }
  
 def handleHumidityEvent(evt) {
-    sendValue(evt) { it.toFloat() }
+    sendValue(evt) { it.toFloat()/100 }
 }
  
 def handleContactEvent(evt) {
@@ -109,9 +111,13 @@ def handlePresenceEvent(evt) {
 def handleSwitchEvent(evt) {
     sendValue(evt) { it == "on" ? true : false }
 }
+
+def handleSwitchLevelEvent(evt) {
+    sendValue(evt) { it.toInteger() }
+}
  
 def handleBatteryEvent(evt) {
-    sendValue(evt) { it.toFloat() }
+    sendValue(evt) { it.toFloat()/100 }
 }
  
 def handleEnergyEvent(evt) {
@@ -130,6 +136,7 @@ private sendValue(evt, Closure convert) {
     def type = (value == true || value == false ? "boolean" : "float"); 
 
     log.debug "Sending ${compId}/${streamId} data to ${url}..."
+    log.debug "The unit for this event: ${evt.unit}"
 
 	def payload = [
         component: compId,
