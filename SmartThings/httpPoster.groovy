@@ -17,7 +17,7 @@ definition(
     name: "HTTP POST for Wink Node Red",
     namespace: "winknodered",
     author: "Timur Fatykhov",
-    description: "Sends POST messages from ST devices to WNR URL.",
+    description: "Sends POST messages from ST devices to WNR URL. Accept switch control from WNR to ST",
     category: "My Apps",
     iconUrl: "https://s3.amazonaws.com/smartapp-icons/Convenience/Cat-Convenience.png",
     iconX2Url: "https://s3.amazonaws.com/smartapp-icons/Convenience/Cat-Convenience@2x.png",
@@ -47,6 +47,20 @@ preferences {
     section ("YOUR WNR ST Key") {
         input "key", "text", title: "Enter same secret ST key you set in WNR", required: true
     }    
+}
+
+
+mappings {
+  path("/switches") {
+    action: [
+      GET: "listSwitches"
+    ]
+  }
+  path("/switches/:id/:command") {
+    action: [
+      PUT: "updateSwitches"
+    ]
+  }
 }
 
 def installed() {
@@ -126,6 +140,35 @@ def handleEnergyEvent(evt) {
 
 def handleIlluminanceEvent(evt) {
     sendValue(evt) { it.toFloat() }
+}
+
+def listSwitches() {
+    def resp = []
+    switches.each {
+        resp << [name: it.displayName, id: it.id, value: it.currentValue("switch")]
+    }
+    return resp
+}
+
+void updateSwitches() {
+    // use the built-in request object to get the command parameter
+    def command = params.command
+	def id = params.id
+    def theSwitch = switches.find{ it.id == id }
+    // all switches have the comand
+    // execute the command on all switches
+    // (note we can do this on the array - the command will be invoked on every element
+    switch(command) {
+        case "on":
+            theSwitch.on()
+            break
+        case "off":
+            theSwitch.off()
+            break
+        default:
+            httpError(400, "$command is not a valid command for all switches specified")
+    }
+
 }
 
 private sendValue(evt, Closure convert) {
