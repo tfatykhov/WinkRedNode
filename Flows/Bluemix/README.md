@@ -8,6 +8,46 @@ UI 2.0
 https://(your_app_name).mybluemix.net/wnrUI <br>
 == UPDATE ==
 -
+12/18/2016
+-----------
+### SmartThings Swithces can be controlled from WNR UI (no dimmers yet. need some test device)
+This is next step in integration for SmartThings hub. You will be able to see ST switches under binary switches section in UI control tab.
+
+Required steps (SmartThings):
+* You need to open SmartThings management page (https://graph.api.smartthings.com/)<br>
+
+##### If you did not use this feature before
+* Navigate to "My SmartApps" page and click on "add smart app" button, select "from Code"
+![add stapp](images/STApp1.png)
+![add stapp](images/STApp2.png)<br>
+
+##### If you already has app installed
+* edit WNR Poster smartApp
+* Open following link [WNR Poster](../../SmartThings/httpPoster.groovy) and copy all code to the "code" section
+* Click on App Settings and Enable Oauth for the app.
+![add stapp](images/stapp5.png)
+* Click Update
+* Click on "save" and "publish" " for me"
+![add stapp](images/STApp3.png)
+* then on the right side - select you Location, devices and actions that should go to Wnr
+* at the bottom you need to populate your WNR url
+* populate same SmartThings secret key that you entered in WNR configuration
+* click Install
+* copy 2 parameters that appear once app is installed to some temp location(notepad):<br> 
+![add stapp](images/stapp6.png)
+
+##### Required steps (WNR)
+*  Import updated [winkCore.json](winkCore.json)
+*  Import updated [winkIntegration.json](winkIntegration.json)
+*  Import updated [tabletUI.json](tabletUI.json)
+*  do not forget to check [duplicate websockets](../../README-WebsocketFix.md)
+*  perform "FULL" deployment<br>
+* navigate to freeboard/ui (UI 1.0) and open configuration tab
+* On integration settings section scroll down and populate SmartThings API Token and SmartThings API Endpoint using values you copied from SmartThings smaprtApp in previous steps.<br>
+![add stapp](images/stapp4.png)
+* Click Submit, once you see the message that Configuration has been saved successfully, click Refresh Wink Data
+* once that is done you should be able to see your SmartThings switches in controls section adn in Details page as well as in UI 2.0
+
 12/17/2016
 -----------
 ### SmartThings Swithces data flow from ST to Node Red (one way for now)
