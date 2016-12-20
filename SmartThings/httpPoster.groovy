@@ -231,6 +231,7 @@ private sendValue(evt, Closure convert) {
         stream: streamId,
         value: value,
         type: type,
+		temperature_scale: location.temperatureScale,
         attributes: deviceAttributeList(device)
     ]
 
