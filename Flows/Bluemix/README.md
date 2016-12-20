@@ -8,6 +8,9 @@ UI 2.0
 https://(your_app_name).mybluemix.net/wnrUI <br>
 == UPDATE ==
 -
+12/20/2016
+New system added to the integration:[WirelessTag]( ../../wirelesstag)
+
 12/19/2016
 -----------
 ### SmartThings Dimmers can be properly controlled from WNR UI
