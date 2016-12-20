@@ -9,7 +9,8 @@ https://(your_app_name).mybluemix.net/wnrUI <br>
 == UPDATE ==
 -
 12/20/2016
-New system added to the integration:[WirelessTag]( ../../wirelesstag)
+### New system added to the integration: [WirelessTag]( ../../wirelesstag)
+You can find more details about Wireless Tag [here](http://wirelesstag.net/)
 
 12/19/2016
 -----------
