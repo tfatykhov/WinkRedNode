@@ -35,7 +35,7 @@ preferences {
         input "motions", "capability.motionSensor", title: "Motions", required: false, multiple: true
         input "presence", "capability.presenceSensor", title: "Presence", required: false, multiple: true
         input "switches", "capability.switch", title: "Switches", required: false, multiple: true
-//	    input "switchLevels", "capability.switchLevel", title: "Switch Levels", required: false, multiple: true        
+	    input "switchLevels", "capability.switchLevel", title: "Switch Levels", required: false, multiple: true        
         input "waterSensors", "capability.waterSensor", title: "Water sensors", required: false, multiple: true
         input "batteries", "capability.battery", title: "Batteries", required: false, multiple: true
 //        input "energies", "capability.energyMeter", title: "Energy Meters", required: false, multiple: true
@@ -84,7 +84,7 @@ def initialize() {
     subscribe(motions, "motion", handleMotionEvent)
     subscribe(presence, "presence", handlePresenceEvent)
     subscribe(switches, "switch", handleSwitchEvent)
-//	subscribe(switchLevels, "level", handleSwitchLevelEvent)    
+	subscribe(switchLevels, "level", handleSwitchLevelEvent)    
     subscribe(batteries, "battery", handleBatteryEvent)
 //    subscribe(energies, "energy", handleEnergyEvent)
     subscribe(illuminances, "illuminance", handleIlluminanceEvent)
@@ -145,7 +145,12 @@ def handleIlluminanceEvent(evt) {
 def listSwitches() {
     def resp = []
     switches.each {
-        resp << [name: it.displayName, id: it.id, value: it.currentValue("switch")]
+        resp << [name: it.displayName, 
+        		 id: it.id, 
+        		 value: it.currentValue("switch"),
+        	     capabilities: deviceCapabilityList(it),
+            	 commands: deviceCommandList(it),
+            	 attributes: deviceAttributeList(it) ]
     }
     return resp
 }
@@ -155,12 +160,18 @@ void updateSwitches() {
     def command = params.command
 	def id = params.id
     def theSwitch = switches.find{ it.id == id }
+    def level = request.JSON?.level
     // all switches have the comand
     // execute the command on all switches
     // (note we can do this on the array - the command will be invoked on every element
     switch(command) {
         case "on":
-            theSwitch.on()
+        	if (level && theSwitch.hasCommand('setLevel')) {
+            	log.info("level set to "+level)
+                theSwitch.setLevel(level)
+            } else {
+            	theSwitch.on()            
+            }
             break
         case "off":
             theSwitch.off()
@@ -171,8 +182,41 @@ void updateSwitches() {
 
 }
 
+def deviceCapabilityList(device) {
+  	def i=0
+  	device.capabilities.collectEntries { capability->
+    	[
+      		(capability.name):1
+    	]
+  	}
+}
+
+def deviceCommandList(device) {
+  	def i=0
+  	device.supportedCommands.collectEntries { command->
+    	[
+      		(command.name): (command.arguments)
+    	]
+  	}
+}
+
+def deviceAttributeList(device) {
+  	device.supportedAttributes.collectEntries { attribute->
+    	try {
+      		[
+        		(attribute.name): device.currentValue(attribute.name)
+      		]
+    	} catch(e) {
+      		[
+        		(attribute.name): null
+      		]
+    	}
+  	}
+}
+
 private sendValue(evt, Closure convert) {
     def compId = URLEncoder.encode(evt.displayName.trim())
+    def device = evt.device
     def devId = evt.device.id
     def streamId = evt.name
     def value = convert(evt.value)
@@ -186,7 +230,8 @@ private sendValue(evt, Closure convert) {
         devid: devId,
         stream: streamId,
         value: value,
-        type: type
+        type: type,
+        attributes: deviceAttributeList(device)
     ]
 
     def params = [

@@ -623,8 +623,8 @@
     "method": "use",
     "ret": "obj",
     "url": "",
-    "x": 1242.0001220703125,
-    "y": 1101.72216796875,
+    "x": 1316.0001220703125,
+    "y": 1218.72216796875,
     "wires": [
       [
         "c9231a9a.c93668"
@@ -639,8 +639,8 @@
     "func": "if (('ok' in msg.payload && msg.payload.ok) ||('error' in msg.payload && msg.payload.error=='not_found') ){\n    //node.warn('deleting '+msg.topic+' position '+ msg.position)\n    context.global.winkState.cameras[msg.topic].activities.splice(msg.position,1)\n}\nreturn;",
     "outputs": 1,
     "noerr": 0,
-    "x": 1407.0001220703125,
-    "y": 1100.72216796875,
+    "x": 1481.0001220703125,
+    "y": 1217.72216796875,
     "wires": [
       []
     ]
@@ -2571,13 +2571,14 @@
     "type": "function",
     "z": "17b3daf5.e84c25",
     "name": "",
-    "func": "function roundUsing(func, number, prec) {\n    var tempnumber = number * Math.pow(10, prec);\n    tempnumber = func(tempnumber);\n    return tempnumber / Math.pow(10, prec);\n}\n\nfunction setDeviceCapabilities(device,capb,type){\n    var capbExists=false;\n    var newCapb={};\n    newCapb.fields=[];\n    if (!(device in context.global.winkDevCap) || (device in context.global.winkDevCap && !('fields' in context.global.winkDevCap[device]))) {\n        return {fields:[{ field:capb, type: type }]};\n    } else {\n        for (var i=0;i<context.global.winkDevCap[device].fields.length;i++ ) {\n            r=context.global.winkDevCap[device].fields[i];\n            if (r.field == capb) capbExists=true;\n            newCapb.fields.push(r);\n        }\n        if (!capbExists) newCapb.fields.push({\n          field:capb, type: type  \n        });\n    }\n    return newCapb;\n}\n\nfunction setSensorStMsg(Sdevice) {\nreturn {\n            url:context.global.BlueMixUrlBase+'/red/wink/subscribtions',\n            method:\"POST\",\n            payload: {\n               capabilities: setDeviceCapabilities(Sdevice.component.replace('+',' '),Sdevice.stream, Sdevice.type),\n              device_manufacturer: 'SmartThings',\n              \"eco_system\" : \"SmartThings\",\n              last_event: \n               { brightness_occurred_at: null,\n                 loudness_occurred_at: null,\n                 vibration_occurred_at: null },\n              last_reading: \n               { \n                    agent_session_id: 'FALSE',\n                    connection: true,\n                    'lastUpdated' : new Date().getTime()\n               },\n              manufacturer_device_model: 'smartthings_'+Sdevice.stream+'_sensor',\n              model_name:'Smartthings Sensor', \n              name:Sdevice.component.replace('+',' '),\n              object_id:Sdevice.devid,\n              object_type: 'sensor_pod',\n              radio_type: 'wifi',\n              sensor_pod_id:Sdevice.devid,\n              triggers: [],\n              units: {},\n              upc_code:Sdevice.component.replace('+',' '),\n              upc_id: Sdevice.devid\n              }\n        };\n}\n\nfunction setSwitchStMsg(Sdevice) {\nreturn {\n            url:context.global.BlueMixUrlBase+'/red/wink/subscribtions',\n            method:\"POST\",\n            payload: {\n               capabilities: setDeviceCapabilities(Sdevice.component.replace('+',' '),'powered', 'boolean'),\n              device_manufacturer: 'SmartThings',\n              \"eco_system\" : \"SmartThings\",\n              desired_state:{},\n              last_reading: \n               { \n                    connection: true,\n                    'powered': Sdevice.value,\n                    'lastUpdated' : new Date().getTime()\n               },\n              manufacturer_device_model: 'smartthings_'+Sdevice.stream+'_switch',\n              model_name:'Smartthings Switch', \n              name:Sdevice.component.replace('+',' '),\n              object_id:Sdevice.devid,\n              object_type: 'binary_switch',\n              radio_type: 'wifi',\n              sensor_pod_id:Sdevice.devid,\n              triggers: [],\n              units: {},\n              upc_code:Sdevice.component.replace('+',' '),\n              upc_id: Sdevice.devid\n              }\n        };\n}\n\n\n//if (true){\nif(msg.req.headers.authorization && msg.req.headers.authorization==\"Bearer \"+context.global.SmartThingsSecret){    \n//if (context.global.SmartThingsKey === msg.req.params.key) {\n\n    if('component' in msg.payload) {\n        var Sdevice = msg.payload;\n        Sdevice.component=Sdevice.component.replace('+',' ');\n        Sdevice.stream=Sdevice.stream.replace('acceleration','tamper_detected');\n        Sdevice.stream=Sdevice.stream.replace('water','liquid_detected');\n        if (Sdevice.stream=='switch') \n            {\n                st_msg=setSwitchStMsg(Sdevice);\n            }\n        else \n            {\n                st_msg=setSensorStMsg(Sdevice);\n                st_msg.payload.last_reading[Sdevice.stream] = Sdevice.value;\n            }\n        node.send(st_msg); \n    }\n}",
+    "func": "function roundUsing(func, number, prec) {\n    var tempnumber = number * Math.pow(10, prec);\n    tempnumber = func(tempnumber);\n    return tempnumber / Math.pow(10, prec);\n}\n\nfunction setDeviceCapabilities(device,capabilities){\n    var capbExists=false;\n    var newCapb={};\n    newCapb.fields=[];\n    if (device in context.global.winkDevCap &&  'fields' in context.global.winkDevCap[device]) {\n        for (var i=0;i<context.global.winkDevCap[device].fields.length;i++ ) {\n                r=context.global.winkDevCap[device].fields[i];\n                newCapb.fields.push(r);\n        }\n    }\n    for (var j=0;j<capabilities.length; j++) {\n        c = capabilities[j];\n        capbExists=false;\n            for (var k=0;k<newCapb.fields.length;k++ ) {\n                r=newCapb.fields[k];\n                if (r.field == c.capb){\n                    capbExists=true;\n                    break;\n                }\n            }\n        if (!capbExists) newCapb.fields.push({\n              field:c.capb, type: c.type  \n        });\n    }\n    return newCapb;\n}\n\n\nfunction setSensorStMsg(Sdevice) {\nreturn {\n            url:context.global.BlueMixUrlBase+'/red/wink/subscribtions',\n            method:\"POST\",\n            payload: {\n               capabilities: setDeviceCapabilities(Sdevice.component.replace('+',' '),[{capb: Sdevice.stream, type: Sdevice.type}]),\n              device_manufacturer: 'SmartThings',\n              \"eco_system\" : \"SmartThings\",\n              last_event: \n               { brightness_occurred_at: null,\n                 loudness_occurred_at: null,\n                 vibration_occurred_at: null },\n              last_reading: \n               { \n                    agent_session_id: 'FALSE',\n                    connection: true,\n                    'lastUpdated' : new Date().getTime()\n               },\n              manufacturer_device_model: 'smartthings_'+Sdevice.stream+'_sensor',\n              model_name:'Smartthings Sensor', \n              name:Sdevice.component.replace('+',' '),\n              object_id:Sdevice.devid,\n              object_type: 'sensor_pod',\n              radio_type: 'wifi',\n              sensor_pod_id:Sdevice.devid,\n              triggers: [],\n              units: {},\n              upc_code:Sdevice.component.replace('+',' '),\n              upc_id: Sdevice.devid\n              }\n        };\n}\n\nfunction setSwitchStMsg(Sdevice) {\n    var devCapb=[];\n    if (\"attributes\" in Sdevice && 'level' in Sdevice.attributes) {\n        devType='light_bulb';\n        devCapb = setDeviceCapabilities(Sdevice.component.replace('+',' '),[{capb:'powered', type:'boolean'},{capb:'brightness', \"type\": 'percentage'}]);\n    } else {\n        devType='binary_switch';\n        devCapb = setDeviceCapabilities(Sdevice.component.replace('+',' '),[{capb:'powered', type:'boolean'}]);        \n    }\n        \n wDevice = {\n            url:context.global.BlueMixUrlBase+'/red/wink/subscribtions',\n            method:\"POST\",\n            payload: {\n              capabilities: devCapb,\n              device_manufacturer: 'SmartThings',\n              \"eco_system\" : \"SmartThings\",\n              desired_state:{},\n              last_reading: \n               { \n                    connection: true,\n                    'powered': Sdevice.attributes.switch=='on' ? true : false,\n                    'lastUpdated' : new Date().getTime()\n               },\n              manufacturer_device_model: 'smartthings_'+Sdevice.stream+'_switch',\n              model_name:'Smartthings '+devType, \n              name:Sdevice.component.replace('+',' '),\n              object_id:Sdevice.devid,\n              object_type: devType,\n              radio_type: 'wifi',\n              sensor_pod_id:Sdevice.devid,\n              triggers: [],\n              units: {},\n              upc_code:Sdevice.component.replace('+',' '),\n              upc_id: Sdevice.devid\n              }\n        };\n    if (devType=='light_bulb') wDevice.payload.last_reading.brightness=Sdevice.attributes.level/100;        \n    return wDevice;\n}\n\n\n//if (true){\nif(msg.req.headers.authorization && msg.req.headers.authorization==\"Bearer \"+context.global.SmartThingsSecret){    \n//if (context.global.SmartThingsKey === msg.req.params.key) {\n\n    if('component' in msg.payload) {\n        var Sdevice = msg.payload;\n        Sdevice.component=Sdevice.component.replace('+',' ');\n        Sdevice.stream=Sdevice.stream.replace('acceleration','tamper_detected');\n        Sdevice.stream=Sdevice.stream.replace('water','liquid_detected');\n        if (Sdevice.stream=='switch' || Sdevice.stream=='level') \n            {\n                st_msg=setSwitchStMsg(Sdevice);\n            }\n        else \n            {\n                st_msg=setSensorStMsg(Sdevice);\n                st_msg.payload.last_reading[Sdevice.stream] = Sdevice.value;\n            }\n        node.send(st_msg); \n    }\n}",
     "outputs": 1,
     "noerr": 0,
     "x": 579,
     "y": 3044,
     "wires": [
       [
+        "eae72774.66d858",
         "1e9a65cb.92639a"
       ]
     ]
@@ -2869,6 +2870,18 @@
     "complete": "true",
     "x": 1151,
     "y": 170,
+    "wires": []
+  },
+  {
+    "id": "eae72774.66d858",
+    "type": "debug",
+    "z": "17b3daf5.e84c25",
+    "name": "",
+    "active": false,
+    "console": "false",
+    "complete": "false",
+    "x": 733,
+    "y": 3097,
     "wires": []
   }
 ]
