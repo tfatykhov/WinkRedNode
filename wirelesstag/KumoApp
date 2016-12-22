@@ -1,28 +1,18 @@
-var target = <#Sensor(s)_[12|13|21|72]_N#>;
+var target = <#Sensor(s)_[12|13|21|26|52|72]_N#>;
 target.forEach(function(tag){
-    tag.opened=function(){
-        KumoApp.Log("WNR: Tag open detected");
-        KumoApp.Log("Calling URL" + <%URL%> + "/red/wirelesstag/", "POST", '{"APIKEY":"' + <%API%> + '","component":"' + tag.name + '","devid":"' + tag.uuid + '","object_type":"sensor_pod","value":"' + tag.isOpen + '","type":"boolean"}');
-        KumoApp.httpCallExternal(<%URL%> + "/red/wirelesstag/", "POST", '{"APIKEY":"' + <%API%> + '","component":"' + tag.name + '","devid":"' + tag.uuid + '","object_type":"sensor_pod","value":"' + tag.isOpen + '","type":"boolean"}');
-    };
-    tag.closed=function(){
-        KumoApp.Log("WNR: Tag closed detected");
-        KumoApp.Log("Calling URL" + <%URL%> + "/red/wirelesstag/", "POST", '{"APIKEY":"' + <%API%> + '","component":"' + tag.name + '","devid":"' + tag.uuid + '","object_type":"sensor_pod","value":"' + tag.isClosed + '","type":"boolean"}');
-        KumoApp.httpCallExternal(<%URL%> + "/red/wirelesstag/", "POST", '{"APIKEY":"' + <%API%> + '","component":"' + tag.name + '","devid":"' + tag.uuid + '","object_type":"sensor_pod","value":"' + tag.isClosed + '","type":"boolean"}');
-    };
-    tag.moved=function(){
-        KumoApp.Log("WNR: Tag movement detected");
-        KumoApp.Log("Calling URL" + <%URL%> + "/red/wirelesstag/", "POST", '{"APIKEY":"' + <%API%> + '","component":"' + tag.name + '","devid":"' + tag.uuid + '","object_type":"sensor","value":"' + tag.hasMoved + '","type":"boolean"}');
-        KumoApp.httpCallExternal(<%URL%> + "/red/wirelesstag/", "POST", '{"APIKEY":"' + <%API%> + '","component":"' + tag.name + '","devid":"' + tag.uuid + '","object_type":"sensor_pod","value":"' + tag.hasMoved + '","type":"boolean"}');
-    };
-    tag.detected=function(){
-        KumoApp.Log("WNR: PIR movement detected");
-        KumoApp.Log("Calling URL" + <%URL%> + "/red/wirelesstag/", "POST", '{"APIKEY":"' + <%API%> + '","component":"' + tag.name + '","devid":"' + tag.uuid + '","object_type":"sensor_pod","value":"' + tag.isDetected + '","type":"boolean"}');
-        KumoApp.httpCallExternal(<%URL%> + "/red/wirelesstag/", "POST", '{"APIKEY":"' + <%API%> + '","component":"' + tag.name + '","devid":"' + tag.uuid + '","object_type":"sensor_pod","value":"' + tag.isDetected + '","type":"boolean"}');
-    };
-    tag.timedOut=function(){
-        KumoApp.Log("WNR: PIR stop movement detected");
-        KumoApp.Log("Calling URL" + <%URL%> + "/red/wirelesstag/", "POST", '{"APIKEY":"' + <%API%> + '","component":"' + tag.name + '","devid":"' + tag.uuid + '","object_type":"sensor_pod","value":"' + tag.isDetected + '","type":"boolean"}');
-        KumoApp.httpCallExternal(<%URL%> + "/red/wirelesstag/", "POST", '{"APIKEY":"' + <%API%> + '","component":"' + tag.name + '","devid":"' + tag.uuid + '","object_type":"sensor_pod","value":"' + tag.isDetected + '","type":"boolean"}');
+    $lasttemp = parseFloat(tag.temperature).toFixed(<%Decimal Points%>);
+    $lasthumidity = parseFloat(tag.moisture).toFixed(<%Decimal Points%>);
+    $lastbatteryVolt = parseFloat(tag.batteryVolt).toFixed(1);
+    $lastHasMoved = tag.hasMoved;
+    tag.updated=function(){
+        if (parseFloat(tag.temperature).toFixed(<%Decimal Points%>) != $lasttemp || parseFloat(tag.moisture).toFixed(<%Decimal Points%>) != $lasthumidity || tag.eventState == 5 || tag.eventState == 6 || tag.hasMoved != $lastHasMoved || parseFloat(tag.batteryVolt).toFixed(1) != $lastbatteryVolt) {
+            $lasttemp = parseFloat(tag.temperature).toFixed(<%Decimal Points%>);
+            $lasthumidity = parseFloat(tag.moisture).toFixed(<%Decimal Points%>);
+            $lastbatteryVolt = parseFloat(tag.batteryVolt).toFixed(1);
+            $lastHasMoved = tag.hasMoved;
+            KumoApp.httpCallExternal(<%URL%> + "/red/wirelesstag/", "POST", '{"APIKEY":"' + <%API%> + '", "name": "' + tag.name + '", "uuid": "' + tag.uuid + '", "eventState": ' + tag.eventState + ', \
+            "temperature": ' + tag.temperature + ', "angleX": ' + tag.angleX + ', "angleY": ' + tag.angleY + ', "angleZ": ' + tag.angleZ + ', "lux": ' + tag.lux + ', "moisture": ' + tag.moisture + ', \
+            "batteryVolt": ' + tag.batteryVolt + ', "waterDetected": ' + tag.waterDetected + ', "hasMoved" : ' + tag.hasMoved + '}');
+        }
     };
 });
