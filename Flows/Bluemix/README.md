@@ -8,6 +8,19 @@ UI 2.0
 https://(your_app_name).mybluemix.net/wnrUI <br>
 == UPDATE ==
 -
+12/22/2016
+### 3 independed color bulbs groups configurable for holiday mode
+You can configure 2 additional color groups for holiday mode. Make it total to 3. Each group has its own delay and color mode.
+It is self explanatory on configuration tab/Holiday mode settings.
+
+#####Required steps (WNR)
+
+*  If you have holiday mode running, stop it first
+*  Import updated [winkIntegration.json](winkIntegration.json)
+*  Import updated [tabletUI.json](tabletUI.json)
+*  Import updated [HolidayMode.json](HolidayMode.json) if you have color bulbs.
+*  perform "Modified Flows" deployment<br>
+
 12/20/2016
 ### New system added to the integration: [WirelessTag]( ../../wirelesstag)
 You can find more details about Wireless Tag [here](http://wirelesstag.net/)
