@@ -23,15 +23,15 @@
     "type": "function",
     "z": "cc10b0bb.a2452",
     "name": "",
-    "func": "get_color=function(){\n    return context.global.wnr.randomColor({\n        hue: context.global.holiday_light_mode,\n        luminosity: 'bright'\n        }).replace(\"#\",\"\");\n}\n\ngen_msg=function(winkName,color){\n    if (context.global.HOLIDAY_DEBUG ) {\n        node.warn(\"   Activating bulb: \"+ winkName);\n        node.warn(\"   color: \"+ color);\n    }\n    var WinkCMDmsg = context.global.executeWinkCMD(winkName,\"light\",\"color\",color);\n    node.send(WinkCMDmsg);\n};\n\nstop_msg=function(winkName){\n    if (context.global.HOLIDAY_DEBUG ) {\n        node.warn(\"   Turning off bulb: \"+ winkName);\n    }\n    var WinkCMDmsg = context.global.executeWinkCMD(winkName,\"light\",\"off\");\n    node.send(WinkCMDmsg);\n};\n\n\nfunction doAndRepeat(delay){\n    setTimeout( function(){\n        var color=('holiday_mode_group' in context.global && context.global.holiday_mode_group ? get_color() : null);\n     if ('holiday_mode_on' in context.global && context.global.holiday_mode_on){        \n        if ('holiday_light_bulbs' in context.global) {\n            var lights=[];\n            if(!Array.isArray(context.global.holiday_light_bulbs)){\n                 lights[0]=context.global.holiday_light_bulbs;\n            } else{\n                 lights=context.global.holiday_light_bulbs;\n            }\n            for (var i=0;i<lights.length;i++){\n                var light=lights[i];\n                gen_msg(light,(color===null ? get_color() : color));\n            }\n            doAndRepeat(1000*context.global.holiday_keep_color);\n         } \n        } else{\n                if ('holiday_light_bulbs' in context.global) {\n                    var olights=[];\n                    if(!Array.isArray(context.global.holiday_light_bulbs)){\n                         olights[0]=context.global.holiday_light_bulbs;\n                    } else{\n                         olights=context.global.holiday_light_bulbs;\n                                }            \n                    context.global.holiday_mode_running = false;   \n                    if (context.global.HOLIDAY_DEBUG ) {\n                        node.warn(\"   Holiday mode off, stopping...\");\n                    }\n                    for (var j=0;j<olights.length;j++){\n                        var olight=olights[j];\n                        stop_msg(olight);\n                    } \n                }\n            } \n    },delay);\n}\nif (!('holiday_mode_running' in context.global)) context.global.holiday_mode_running=false;\n    if (context.global.HOLIDAY_DEBUG ) {\n        node.warn(\"Holiday Mode: \"+context.global.holiday_mode_on);\n        node.warn(\"Holiday Mode running: \"+context.global.holiday_mode_running);\n        node.warn(\"Holiday Mode bulbs: \"+context.global.holiday_light_bulbs);\n        node.warn(\"Holiday Mode grouping: \"+context.global.holiday_mode_group);        \n    }\nif ('holiday_mode_on' in context.global && context.global.holiday_mode_on && !context.global.holiday_mode_running) {\n    context.global.holiday_mode_running=true;\n    var effect_delay = 1000*context.global.holiday_keep_color;\n    var colorRng=context.global.wnr.randomColor({\n        hue: context.global.holiday_light_mode,\n        luminosity: 'bright'\n        });\n        doAndRepeat(0);\n}",
+    "func": "get_color=function(mode){\n    return context.global.wnr.randomColor({\n        hue: mode,\n        luminosity: 'bright'\n        }).replace(\"#\",\"\");\n};\n\ngen_msg=function(winkName,color){\n    if (context.global.HOLIDAY_DEBUG ) {\n        node.warn(\"   Activating bulb: \"+ winkName);\n        node.warn(\"   color: \"+ color);\n    }\n    var WinkCMDmsg = context.global.executeWinkCMD(winkName,\"light\",\"color\",color);\n    node.send(WinkCMDmsg);\n};\n\nstop_msg=function(winkName){\n    if (context.global.HOLIDAY_DEBUG ) {\n        node.warn(\"   Turning off bulb: \"+ winkName);\n    }\n    var WinkCMDmsg = context.global.executeWinkCMD(winkName,\"light\",\"off\");\n    node.send(WinkCMDmsg);\n};\n\n\nfunction doAndRepeat(delay){\n    setTimeout( function(){\n        var color=('holiday_mode_group' in context.global && context.global.holiday_mode_group ? get_color(context.global.holiday_light_mode) : null);\n     if ('holiday_mode_on' in context.global && context.global.holiday_mode_on){        \n        if ('holiday_light_bulbs' in context.global) {\n            var lights=[];\n            if(!Array.isArray(context.global.holiday_light_bulbs)){\n                 lights[0]=context.global.holiday_light_bulbs;\n            } else{\n                 lights=context.global.holiday_light_bulbs;\n            }\n            for (var i=0;i<lights.length;i++){\n                var light=lights[i];\n                gen_msg(light,(color===null ? get_color(context.global.holiday_light_mode) : color));\n            }\n            doAndRepeat(1000*parseInt(context.global.holiday_keep_color));\n         } \n        } else{\n                if ('holiday_light_bulbs' in context.global) {\n                    var olights=[];\n                    if(!Array.isArray(context.global.holiday_light_bulbs)){\n                         olights[0]=context.global.holiday_light_bulbs;\n                    } else{\n                         olights=context.global.holiday_light_bulbs;\n                                }            \n                    context.global.holiday_mode_running = false;   \n                    if (context.global.HOLIDAY_DEBUG ) {\n                        node.warn(\"   Holiday mode off, stopping...\");\n                    }\n                    for (var j=0;j<olights.length;j++){\n                        var olight=olights[j];\n                        stop_msg(olight);\n                    } \n                }\n            } \n    },delay);\n}\n\nfunction doAndRepeat2(delay){\n    setTimeout( function(){\n        var color=('holiday_mode_group2' in context.global && context.global.holiday_mode_group2 ? get_color(context.global.holiday_light_mode2) : null);\n     if ('holiday_mode_on' in context.global && context.global.holiday_mode_on){        \n        if ('holiday_light_bulbs2' in context.global) {\n            var lights=[];\n            if(!Array.isArray(context.global.holiday_light_bulbs2)){\n                 lights[0]=context.global.holiday_light_bulbs2;\n            } else{\n                 lights=context.global.holiday_light_bulbs2;\n            }\n            for (var i=0;i<lights.length;i++){\n                var light=lights[i];\n                gen_msg(light,(color===null ? get_color(context.global.holiday_light_mode2) : color));\n            }\n            doAndRepeat2(1000*parseInt(context.global.holiday_keep_color2));\n         } \n        } else{\n                if ('holiday_light_bulbs2' in context.global) {\n                    var olights=[];\n                    if(!Array.isArray(context.global.holiday_light_bulbs2)){\n                         olights[0]=context.global.holiday_light_bulbs2;\n                    } else{\n                         olights=context.global.holiday_light_bulbs2;\n                                }            \n                    context.global.holiday_mode_running = false;   \n                    if (context.global.HOLIDAY_DEBUG ) {\n                        node.warn(\"   Holiday mode off, stopping...\");\n                    }\n                    for (var j=0;j<olights.length;j++){\n                        var olight=olights[j];\n                        stop_msg(olight);\n                    } \n                }\n            } \n    },delay);\n}\n\nfunction doAndRepeat3(delay){\n    setTimeout( function(){\n        var color=('holiday_mode_group3' in context.global && context.global.holiday_mode_group3 ? get_color(context.global.holiday_light_mode3) : null);\n     if ('holiday_mode_on' in context.global && context.global.holiday_mode_on){        \n        if ('holiday_light_bulbs3' in context.global) {\n            var lights=[];\n            if(!Array.isArray(context.global.holiday_light_bulbs3)){\n                 lights[0]=context.global.holiday_light_bulbs3;\n            } else{\n                 lights=context.global.holiday_light_bulbs3;\n            }\n            for (var i=0;i<lights.length;i++){\n                var light=lights[i];\n                gen_msg(light,(color===null ? get_color(context.global.holiday_light_mode3) : color));\n            }\n            doAndRepeat3(1000*parseInt(context.global.holiday_keep_color3));\n         } \n        } else{\n                if ('holiday_light_bulbs3' in context.global) {\n                    var olights=[];\n                    if(!Array.isArray(context.global.holiday_light_bulbs3)){\n                         olights[0]=context.global.holiday_light_bulbs3;\n                    } else{\n                         olights=context.global.holiday_light_bulbs3;\n                                }            \n                    context.global.holiday_mode_running = false;   \n                    if (context.global.HOLIDAY_DEBUG ) {\n                        node.warn(\"   Holiday mode off, stopping...\");\n                    }\n                    for (var j=0;j<olights.length;j++){\n                        var olight=olights[j];\n                        stop_msg(olight);\n                    } \n                }\n            } \n    },delay);\n}\n\n\nif (!('holiday_mode_running' in context.global)) context.global.holiday_mode_running=false;\n    if (context.global.HOLIDAY_DEBUG ) {\n        node.warn(\"Holiday Mode: \"+context.global.holiday_mode_on);\n        node.warn(\"Holiday Mode running: \"+context.global.holiday_mode_running);\n        node.warn(\"Holiday Mode bulbs: \"+context.global.holiday_light_bulbs);\n        node.warn(\"Holiday Mode grouping: \"+context.global.holiday_mode_group);\n        \n        node.warn(\"Holiday Mode bulbs group2: \"+context.global.holiday_light_bulbs2);\n        node.warn(\"Holiday Mode grouping bulbs group2: \"+context.global.holiday_mode_group2);        \n        \n        node.warn(\"Holiday Mode bulbs bulbs group3: \"+context.global.holiday_light_bulbs3);\n        node.warn(\"Holiday Mode grouping bulbs group3: \"+context.global.holiday_mode_group3);        \n    }\nif ('holiday_mode_on' in context.global && context.global.holiday_mode_on && !context.global.holiday_mode_running) {\n    context.global.holiday_mode_running=true;\n        setTimeout( function(){doAndRepeat(0)},10);\n        setTimeout( function(){doAndRepeat2(1)},15);\n        setTimeout( function(){doAndRepeat3(1)},20);\n}",
     "outputs": 1,
     "noerr": 0,
-    "x": 503,
-    "y": 124,
+    "x": 544,
+    "y": 125,
     "wires": [
       [
         "9fb37da5.5d7d3",
-        "d4a913ba.98565"
+        "d8c01cb.c7c31e"
       ]
     ]
   },
@@ -44,8 +44,8 @@
     "ret": "txt",
     "url": "",
     "tls": "",
-    "x": 662,
-    "y": 88,
+    "x": 860,
+    "y": 77,
     "wires": [
       [
         "9fb37da5.5d7d3"
@@ -60,8 +60,8 @@
     "active": false,
     "console": "false",
     "complete": "payload",
-    "x": 839,
-    "y": 124,
+    "x": 1027,
+    "y": 126,
     "wires": []
   },
   {
@@ -149,6 +149,42 @@
     "wires": [
       [
         "c6415a29.8b0448"
+      ]
+    ]
+  },
+  {
+    "id": "c45e2f7.84677d",
+    "type": "function",
+    "z": "cc10b0bb.a2452",
+    "name": "old_version",
+    "func": "get_color=function(){\n    return context.global.wnr.randomColor({\n        hue: context.global.holiday_light_mode,\n        luminosity: 'bright'\n        }).replace(\"#\",\"\");\n}\n\ngen_msg=function(winkName,color){\n    if (context.global.HOLIDAY_DEBUG ) {\n        node.warn(\"   Activating bulb: \"+ winkName);\n        node.warn(\"   color: \"+ color);\n    }\n    var WinkCMDmsg = context.global.executeWinkCMD(winkName,\"light\",\"color\",color);\n    node.send(WinkCMDmsg);\n};\n\nstop_msg=function(winkName){\n    if (context.global.HOLIDAY_DEBUG ) {\n        node.warn(\"   Turning off bulb: \"+ winkName);\n    }\n    var WinkCMDmsg = context.global.executeWinkCMD(winkName,\"light\",\"off\");\n    node.send(WinkCMDmsg);\n};\n\n\nfunction doAndRepeat(delay){\n    setTimeout( function(){\n        var color=('holiday_mode_group' in context.global && context.global.holiday_mode_group ? get_color() : null);\n     if ('holiday_mode_on' in context.global && context.global.holiday_mode_on){        \n        if ('holiday_light_bulbs' in context.global) {\n            var lights=[];\n            if(!Array.isArray(context.global.holiday_light_bulbs)){\n                 lights[0]=context.global.holiday_light_bulbs;\n            } else{\n                 lights=context.global.holiday_light_bulbs;\n            }\n            for (var i=0;i<lights.length;i++){\n                var light=lights[i];\n                gen_msg(light,(color===null ? get_color() : color));\n            }\n            doAndRepeat(1000*context.global.holiday_keep_color);\n         } \n        } else{\n                if ('holiday_light_bulbs' in context.global) {\n                    var olights=[];\n                    if(!Array.isArray(context.global.holiday_light_bulbs)){\n                         olights[0]=context.global.holiday_light_bulbs;\n                    } else{\n                         olights=context.global.holiday_light_bulbs;\n                                }            \n                    context.global.holiday_mode_running = false;   \n                    if (context.global.HOLIDAY_DEBUG ) {\n                        node.warn(\"   Holiday mode off, stopping...\");\n                    }\n                    for (var j=0;j<olights.length;j++){\n                        var olight=olights[j];\n                        stop_msg(olight);\n                    } \n                }\n            } \n    },delay);\n}\nif (!('holiday_mode_running' in context.global)) context.global.holiday_mode_running=false;\n    if (context.global.HOLIDAY_DEBUG ) {\n        node.warn(\"Holiday Mode: \"+context.global.holiday_mode_on);\n        node.warn(\"Holiday Mode running: \"+context.global.holiday_mode_running);\n        node.warn(\"Holiday Mode bulbs: \"+context.global.holiday_light_bulbs);\n        node.warn(\"Holiday Mode grouping: \"+context.global.holiday_mode_group);        \n    }\nif ('holiday_mode_on' in context.global && context.global.holiday_mode_on && !context.global.holiday_mode_running) {\n    context.global.holiday_mode_running=true;\n    var effect_delay = 1000*context.global.holiday_keep_color;\n    var colorRng=context.global.wnr.randomColor({\n        hue: context.global.holiday_light_mode,\n        luminosity: 'bright'\n        });\n        doAndRepeat(0);\n}",
+    "outputs": 1,
+    "noerr": 0,
+    "x": 548,
+    "y": 180,
+    "wires": [
+      []
+    ]
+  },
+  {
+    "id": "d8c01cb.c7c31e",
+    "type": "delay",
+    "z": "cc10b0bb.a2452",
+    "name": "",
+    "pauseType": "rate",
+    "timeout": "5",
+    "timeoutUnits": "seconds",
+    "rate": "3",
+    "rateUnits": "second",
+    "randomFirst": "1",
+    "randomLast": "5",
+    "randomUnits": "seconds",
+    "drop": false,
+    "x": 697,
+    "y": 77,
+    "wires": [
+      [
+        "d4a913ba.98565"
       ]
     ]
   }
