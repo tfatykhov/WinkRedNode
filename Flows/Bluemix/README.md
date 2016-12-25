@@ -8,6 +8,19 @@ UI 2.0
 https://(your_app_name).mybluemix.net/wnrUI <br>
 == UPDATE ==
 -
+12/25/2016
+### Details tab in UI v 1.0 shows actual color for color enabled bulbs
+![color](images/color_bulbs_dash.png)
+
+#####Required steps (WNR)
+*  Import updated [winkCore.json](winkCore.json)
+*  do not forget to check [duplicate websockets](../../README-WebsocketFix.md)
+*  perform "FULL" deployment<br>
+
+######Bluemix git console:<br>
+*  re-deploy application in git<br>
+<img src="images/deploy.png">
+
 12/22/2016
 ### 3 independed color bulbs groups configurable for holiday mode
 You can configure 2 additional color groups for holiday mode. Make it total to 3. Each group has its own delay and color mode.
