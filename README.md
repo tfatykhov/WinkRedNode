@@ -10,6 +10,7 @@ you can make use of that data.
 This application is Node-Red based app which helps joining together various systesms for better home automation experience:
 
 * Wink http://winkapp.com (HA system with extensive list of supported devices)
+* SmartThings http://smartthings.com (Samsung HA system with extensive list of supported devices)
 * Lifx http://lifx.com (color wifi enabled ligjt bulbs)
 * IFTTT http://ifttt.com (connecting services and more together)
 * Forecast.io http://forecast.io (one of the best weather forecast systems)
