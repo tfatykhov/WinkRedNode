@@ -23,11 +23,11 @@ written in JavaScript and powered by Node-Red and Node.js it allows to build add
 
 
 ### Installation instructions:
-- Blue Mix Cloud
+####Blue Mix Cloud
 Use following [HOWTO](README-Bluemix.md) for instructions on how to create BlueMix node.js container with node red as well as how to configure application for initial run,
 
 
-- Running Locally.
+####Running Locally.
 
 use following [Readme](https://github.com/tfatykhov/local-wink-node-red/blob/master/README.md) for instructions on how to install local modified node-red instance using just single command and also Optional, but <b>but highly recommended</b> instruction on how to obtain SSL certificate and protect your local node-red instance.
 
