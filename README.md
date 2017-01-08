@@ -29,23 +29,7 @@ Use following [HOWTO](README-Bluemix.md) for instructions on how to create BlueM
 
 - Running Locally.
 
-You can run this software on your own computer,
-such as a [Raspberry Pi 2 model B](https://www.raspberrypi.org/products/raspberry-pi-2-model-b/)
-or even your own laptop computer!
-In order to run Node-RED locally,
-take a look at the [documentation](http://nodered.org/docs/).
-Here is the [QUICKSTART](http://nodered.org/docs/hardware/raspberrypi.html) for running Node-RED on Raspberry Pi.
-You can use configuration settings from [local windows config](README-Local-Windows.md)
-if you do not see package.json in .node-red installation folder. Things you need to install in order to start using node-red authentication: 
-on your raspbery pi session, execute the following prior to logging into the node-red application: (assumption is that your user name on rasp pi is 'pi')
-* cd /home/pi/.node-red
-* npm install when
-* npm install path
-* npm install winknodered@"git://github.com/tfatykhov/WinkRedNode.git#master"
-* npm install node-red-contrib-freeboard@"git://github.com/tfatykhov/node-red-contrib-freeboard.git"
-* npm install "suncalc"@"git://github.com/mourner/suncalc.git"
-* npm install tinycolor2
-* npm install "wnr-ui"@"git://github.com/tfatykhov/wnrUI.git"  (run this if you would like to get WNR UI v 2.0)
+use following [Readme](https://github.com/tfatykhov/local-wink-node-red/blob/master/README.md) for instructions on how to install local modified node-red instance using just single command and also Optional, but <b>but highly recommended</b> instruction on how to obtain SSL certificate and protect your local node-red instance.
 
 
 Once you have Node-RED running, you can deploy your flows described below
