@@ -19,6 +19,7 @@ The flow looks like this but obviously can be modified to fit your needs.
 
 The column of Button nodes contain where I want them on my keypad, in this example I want the "1" to be in the Group "Keypad Left" in the "[Alarm]" tab of my dashboard. The location is easier to do once the flow is completely built from the dashboard config tab in the right of the editor (where debug is there should be a dashboard option).
 ![alt text][buttonEdit]
+
 All of these buttons go to a "Join" node except for teh "Enter" button which first passes through a "Template" node which sets the property to "msg.complete" and the body is just "return;". This is the trigger for the join node to pass the message along.
 ![alt text][join]
 
@@ -27,7 +28,7 @@ The "Enter" button is a little different as I have it's Payload set as e
 
 From the Join node we go to a switch node. I use the switch node to cancel and incorrect(typo) entry in the panel. The switch node is set for three outputs. The first two are for if the paylod it received contains an * or # it basically stops there. If it does not it continues on to the next switch node which drops the "e" that is in the current message from the "Enter" button.
 ![alt text][switch]
-1[alt text][dropE]
+![alt text][dropE]
 
 From the Drop E switch we go to the main switch that checks the pin numbers and directs the response of the system.
 ![alt text][mainSwitch]
@@ -36,8 +37,10 @@ The main switch checks for the proper code and forwards it out the proper output
 
 Each correct code goes to that person's respective Template node which contains a plain text message that is then passed to a PushBullet node.
 ![alt text][template]
+
 And each correct code goes to a function node which tells the system what you want to happen if that code is entered. In my case I disarm my alarm using teh global variable context.global.alarmArmed (on/off)
 ![alt text][armed]
+
 The "Emergency" Function node below the "alarm Off" node does whatever you want to happen if teh emergency code is entered. That may be nothing, maybe sound the alarm, or in my case it still disarms the alarm but it also turns on ALL lights in the house.
 
 The "Unknown Code" function node checks if(msg.payload=="1111"||msg.payload=="2222"|| so on and so on then return false; but if not make msg.payload "unknon code entered" and it sends that message to pushbullet.
@@ -55,8 +58,8 @@ I'm sure that there is an easier or "better" way to do this but this is the way 
 [keypad]: https://github.com/tfatykhov/WinkRedNode/blob/master/images/AlarmKeypad.png "Alarm Keypad"
 [keypadflow]: https://github.com/tfatykhov/WinkRedNode/blob/master/images/AlarmKeypadFlow.png "Alarm Keypad Flow"
 [buttonEdit]: https://github.com/tfatykhov/WinkRedNode/blob/master/images/AlarmButtonEdit.png "One Button"
-[join]: https://github.com/tfatykhov/WinkRedNode/blob/master/images/AlarmJoinNode.png "Join"
-[enter]: https://github.com/tfatykhov/WinkRedNode/blob/master/images/AlarmEnter.png "Enter"
+[join]: https://github.com/tfatykhov/WinkRedNode/blob/master/images/alarmJoinNode.PNG "Join"
+[enter]: https://github.com/tfatykhov/WinkRedNode/blob/master/images/AlarmEnter.PNG "Enter"
 [switch]: https://github.com/tfatykhov/WinkRedNode/blob/master/images/AlarmSwitch.png "Switch"
 [dropE]: https://github.com/tfatykhov/WinkRedNode/blob/master/images/AlarmDropE.png "Drop E"
 [mainSwitch]: https://github.com/tfatykhov/WinkRedNode/blob/master/images/AlarmMainSwitch.png "Main Switch"
