@@ -9,6 +9,7 @@ https://(your_app_name).mybluemix.net/wnrUI <br>
 == UPDATE ==
 -
 02/26/2017
+-----------
 ### Added ability to set color temperature for color bulbs (for warious white modes)
 
 when using in Robots:
@@ -26,6 +27,7 @@ Please use https://en.wikipedia.org/wiki/Color_temperature for value guidence.
 		
 
 12/25/2016
+-----------
 ### Details tab in UI v 1.0 shows actual color for color enabled bulbs
 ![color](images/color_bulbs_dash.png)
 
@@ -39,6 +41,7 @@ Please use https://en.wikipedia.org/wiki/Color_temperature for value guidence.
 <img src="images/deploy.png">
 
 12/22/2016
+-----------
 ### 3 independed color bulbs groups configurable for holiday mode
 You can configure 2 additional color groups for holiday mode. Make it total to 3. Each group has its own delay and color mode.
 It is self explanatory on configuration tab/Holiday mode settings.
@@ -52,6 +55,7 @@ It is self explanatory on configuration tab/Holiday mode settings.
 *  perform "Modified Flows" deployment<br>
 
 12/20/2016
+-----------
 ### New system added to the integration: [WirelessTag]( ../../wirelesstag)
 You can find more details about Wireless Tag [here](http://wirelesstag.net/)
 
