@@ -8,6 +8,23 @@ UI 2.0
 https://(your_app_name).mybluemix.net/wnrUI <br>
 == UPDATE ==
 -
+02/26/2017
+### Added ability to set color temperature for color bulbs (for warious white modes)
+
+when using in Robots:
+* ecuteWinkCMD("light name","light","color_temperature",value in kelvin);
+	*Example: ecuteWinkCMD("Living room","light","color_temperature",2700);
+when using in IFTTT maker:
+* {"winkName": "light name", "type": "light","cmd":"color_temperature", "level":"value in kelvin","iftttkey": "xxxxxxxx"}
+	* Example: {"winkName": "Living room", "type": "light","cmd":"color_temperature", "level":"2700","iftttkey": "xxxxxxxx"}
+
+
+Value in kelvin:
+* for LifX - between 2500 and 9000
+* for Wink, including HUE connected via WINK - between 2500 and 6500
+Please use https://en.wikipedia.org/wiki/Color_temperature for value guidence.
+		
+
 12/25/2016
 ### Details tab in UI v 1.0 shows actual color for color enabled bulbs
 ![color](images/color_bulbs_dash.png)
