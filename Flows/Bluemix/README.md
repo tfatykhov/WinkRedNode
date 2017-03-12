@@ -10,6 +10,22 @@ https://(your_app_name).mybluemix.net/wnrUI <br>
 -
 02/26/2017
 -----------
+### Added bloomSky Storm data, some bug fixes.
+Storm data now visible in dashboard, Support for multipe bloomsky stations.
+Closest station to home will be used for tempereature applet.
+
+#####Required steps (WNR)
+*  Import updated [winkCore.json](winkCore.json)
+*  Import updated [winkIntegration.json](winkIntegration.json)
+*  do not forget to check [duplicate websockets](../../README-WebsocketFix.md)
+*  perform "FULL" deployment<br>
+
+######Bluemix git console:<br>
+*  re-deploy application in git<br>
+<img src="images/deploy.png">
+
+02/26/2017
+-----------
 ### Added ability to set color temperature for color bulbs (for warious white modes)
 
 when using in Robots:
