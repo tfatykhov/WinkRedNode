@@ -20,11 +20,11 @@
     "type": "function",
     "z": "17b3daf5.e84c25",
     "name": "",
-    "func": "if ('wnr' in context.global){\nvar WinkCMDmsg={};\nvar web_req=(context.global.getCookie('exchange_token',msg.req.headers.cookie)=='0' ? false:true);\n\nif (msg.payload.iftttkey==context.global.IFTTT_TOKEN || msg.payload.iftttkey==context.global.FREEBOARD_TOKEN) web_req=true;\nif (web_req)\n{\n    if ('ifttt' in  msg.payload)\n    {\n      context.global.ifttt=(msg.payload.ifttt.toLowerCase()==\"on\" ? true:false)\n      msg.res.StatusCode=200;\n      return [msg];\n    }\n    if ('winkName' in msg.payload)\n    {\n//    node.warn('Name '+msg.payload.winkName)\n    if ('cmd' in msg.payload)\n    {\n        cmd=msg.payload.cmd\n    } else cmd='on' \n    if ('level' in msg.payload)\n    {\n        level=msg.payload.level\n    }  else level= (cmd.toLowerCase() =='on' ? 100 : 0)\n//    node.warn(level)\n    WinkCMDmsg = context.global.executeWinkCMD(msg.payload.winkName,msg.payload.type,msg.payload.cmd,level);\n    msg.statusCode=200;\n//    node.warn('Message '+ JSON.stringify(WinkCMDmsg))\n    }\n    if ('nodeRedVar' in msg.payload) {\n        if ('value' in msg.payload) value=msg.payload.value \n        else value = true;\n    context.global[msg.payload.nodeRedVar]=value;\n    WinkCMDmsg=context.global.send_ui_note('information',30000,'Variable '+msg.payload.nodeRedVar+' set to: '+context.global[msg.payload.nodeRedVar],null);\n    WinkCMDmsg.topic=msg.payload.nodeRedVar;\n    WinkCMDmsg.var_val=value;    \n    }\n}\nelse {\n    node.warn(\"ifttt messages bad request\")\n     msg.statusCode=403;\n     return [msg,null];\n}\nif (WinkCMDmsg!==\"\")\n{\n    return [msg,WinkCMDmsg];\n}\nelse\n{\nreturn [msg,null];\n}\n} else return [msg,null];",
+    "func": "if ('wnr' in context.global){\nvar WinkCMDmsg={};\nvar web_req=(context.global.getCookie('exchange_token',msg.req.headers.cookie)=='0' ? false:true);\n\nif (msg.payload.iftttkey==context.global.IFTTT_TOKEN || msg.payload.iftttkey==context.global.FREEBOARD_TOKEN) web_req=true;\nif (web_req)\n{\n    if ('ifttt' in  msg.payload)\n    {\n      context.global.ifttt=(msg.payload.ifttt.toLowerCase()==\"on\" ? true:false)\n      msg.res.StatusCode=200;\n      return [msg];\n    }\n    if ('winkName' in msg.payload)\n    {\n    //    node.warn('Name '+msg.payload.winkName)\n        if ('cmd' in msg.payload)\n        {\n            cmd=msg.payload.cmd\n        } else cmd='on' \n        if ('level' in msg.payload)\n        {\n            level=msg.payload.level\n        }  else level= (cmd.toLowerCase() =='on' ? 100 : 0)\n    //    node.warn(level)\n        WinkCMDmsg = context.global.executeWinkCMD(msg.payload.winkName,msg.payload.type,msg.payload.cmd,level);\n        msg.statusCode=200;\n    //    node.warn('Message '+ JSON.stringify(WinkCMDmsg))\n    }\n    if ('nodeRedVar' in msg.payload) {\n        if ('value' in msg.payload) value=msg.payload.value \n        else value = true;\n    context.global[msg.payload.nodeRedVar]=value;\n    WinkCMDmsg=context.global.send_ui_note('information',30000,'Variable '+msg.payload.nodeRedVar+' set to: '+context.global[msg.payload.nodeRedVar],null);\n    WinkCMDmsg.topic=msg.payload.nodeRedVar;\n    WinkCMDmsg.var_val=value;  \n    msg.statusCode=200;    \n    }\n    if ('nodeRedFunction' in msg.payload){\n        if (context.global[msg.payload.nodeRedFunction] instanceof Function) {\n            WinkCMDmsg=context.global.send_ui_note('information',30000,'Function '+msg.payload.nodeRedFunction+' executed',null);\n            WinkCMDmsg.topic=msg.payload.nodeRedFunction; \n            msg.statusCode=200;             \n            context.global[msg.payload.nodeRedFunction]();\n        }\n    }\n}\nelse {\n    node.warn(\"ifttt messages bad request\")\n     msg.statusCode=403;\n     return [msg,null];\n}\nif (WinkCMDmsg!==\"\")\n{\n    return [msg,WinkCMDmsg];\n}\nelse\n{\nreturn [msg,null];\n}\n} else return [msg,null];",
     "outputs": "2",
     "noerr": 0,
-    "x": 632.5,
-    "y": 245.49993896484375,
+    "x": 630,
+    "y": 240,
     "wires": [
       [
         "76cc9990.5ec7b8"
@@ -66,8 +66,8 @@
     "z": "17b3daf5.e84c25",
     "name": "IFTTT Integration-------------------------------------------------------------------------------------------------------------------------------",
     "info": "",
-    "x": 441.5,
-    "y": 172.5,
+    "x": 440,
+    "y": 160,
     "wires": []
   },
   {
@@ -422,7 +422,7 @@
     "type": "function",
     "z": "17b3daf5.e84c25",
     "name": "Try to create DB",
-    "func": "if (typeof context.global.VCAP_SERVICES!=='undefined' && 'cloudantNoSQLDB' in context.global.VCAP_SERVICES){\n    var DBmsg={\n        url: context.global.VCAP_SERVICES.cloudantNoSQLDB[0].credentials.url+\"/winkapp\",\n        method:\"PUT\"\n    }\n    node.send(DBmsg);\n} else{\nnode.warn('Cloudant credentials are not present. DB backup will be disabled');\ncontext.global.CloudantBkUP=false;\n}\nreturn;",
+    "func": "if (typeof context.global.VCAP_SERVICES!=='undefined' && 'cloudantNoSQLDB' in context.global.VCAP_SERVICES){\n    var DBmsg={\n        url: context.global.VCAP_SERVICES.cloudantNoSQLDB[0].credentials.url+\"/winkapp\",\n        method:\"PUT\"\n    };\n    node.send(DBmsg);\n} else{\n    node.warn('Cloudant credentials are not present. DB backup will be disabled');\n    context.global.CloudantBkUP=false;\n    if (context.global.LocalBkup) node.warn('local installation will be used');\n    }\nreturn;",
     "outputs": 1,
     "noerr": 0,
     "x": 308.5000305175781,
@@ -1333,8 +1333,8 @@
     "func": "var effectMsg={};\nvar web_req=(context.global.getCookie('exchange_token',msg.req.headers.cookie)=='0' ? false:true);\nif (msg.payload.iftttkey==context.global.IFTTT_TOKEN || msg.payload.iftttkey==context.global.FREEBOARD_TOKEN || (msg.req.headers.authorization && msg.req.headers.authorization==\"Bearer \"+context.global.FREEBOARD_TOKEN)) web_req=true;\nif (web_req)\n{\nvar effect=msg.req.originalUrl.split('/').pop();\nnode.warn(effect);\nmsg.statusCode=200;\neffectMsg.payload=msg.payload;\neffectMsg.topic=effect;\nreturn [msg,effectMsg];\n}\nelse {\n    node.warn(\"ifttt messages bad request\")\n     msg.statusCode=403;\n     return [msg,null];\n}\n",
     "outputs": "2",
     "noerr": 0,
-    "x": 586,
-    "y": 310,
+    "x": 570,
+    "y": 320,
     "wires": [
       [
         "9ff0bd6a.aac6c"
@@ -1889,8 +1889,8 @@
     "method": "use",
     "ret": "obj",
     "url": "",
-    "x": 571,
-    "y": 1873,
+    "x": 670,
+    "y": 1860,
     "wires": [
       [
         "4e175c5e.9a8bc4",
@@ -1922,8 +1922,8 @@
     "active": false,
     "console": "false",
     "complete": "payload",
-    "x": 749,
-    "y": 1871,
+    "x": 890,
+    "y": 1860,
     "wires": []
   },
   {
@@ -1931,7 +1931,7 @@
     "type": "function",
     "z": "17b3daf5.e84c25",
     "name": "",
-    "func": "if (msg.statusCode=='200') {\n    data_set=msg.payload;\n    i=0;\n    data_set.forEach(function(dev){\n       var weatherData=dev.Data;\n       if (context.global.DEBUG){\n           node.warn('device '+ dev.DeviceName);           \n           node.warn('temperature: '+ weatherData.Temperature);\n           node.warn('humidity: '+ weatherData.Humidity);\n           node.warn('night: '+ weatherData.Night);\n           node.warn('rain: '+ weatherData.Rain);\n           node.warn('pressure: '+ weatherData.Pressure);       \n           node.warn('luminance: '+ weatherData.Luminance);   \n           node.warn('uvindex: ' + weatherData.UVIndex);\n           node.warn('ImageURL: ' + weatherData.ImageURL);\n           node.warn('devide id: '+ dev.DeviceID);\n           node.warn('url: '+context.global.Weather.Bloomsky.URL);\n       }\n       if(!('Bloomsky' in context.global.Weather)) context.global.Weather.Bloomsky={};\n       context.global.Weather.Bloomsky.Rain=weatherData.Rain;\n       context.global.Weather.Bloomsky.Night=weatherData.Night;\n       context.global.Weather.Bloomsky.TemperatureC=weatherData.Temperature;\n       context.global.Weather.Bloomsky.TemperatureF=Math.round(weatherData.Temperature*1.8+32);       \n       context.global.Weather.Bloomsky.Luminance=weatherData.Luminance;  \n       context.global.Weather.Bloomsky.Humidity=weatherData.Humidity; \n       context.global.Weather.Bloomsky.Pressure=weatherData.Pressure;\n       context.global.Weather.Bloomsky.UVIndex=weatherData.UVIndex; \n        var postMsg={\n            url:context.global.BlueMixUrlBase+'/red/wink/subscribtions',\n            method:\"POST\",\n                headers: {\n                \"Content-Type\":\"application/json\"\n            },\n            payload:{\n          capabilities: { fields: [ \n              { field: 'temperature', type: 'float' },\n              { field: 'humidity', type: 'percentage' },\n              { field: 'timeframe', type: 'boolean' },\n              { field: 'rain', type: 'boolean' },\n              { field: 'pressure', type: 'float' },\n              { field: 'luminance', type: 'float' },\n              { field: 'uvindex', type: 'float' }\n              ] },\n          device_manufacturer: 'BloomSky',\n          \"eco_system\" : \"BLOOMSKY\",\n          last_event: \n           { brightness_occurred_at: null,\n             loudness_occurred_at: null,\n             vibration_occurred_at: null },\n          last_reading: \n           { \n                agent_session_id: 'FALSE',\n                connection: true,\n                'temperature': weatherData.Temperature,\n                'humidity': weatherData.Humidity,\n                'timeframe': weatherData.Night,\n                'rain': weatherData.Rain,\n                'pressure': weatherData.Pressure,\n                'luminance': weatherData.Luminance,   \n                'uvindex': weatherData.UVIndex\n           },\n          manufacturer_device_model: 'bloomsky_weather_sensor',\n          model_name: 'Weather Sensor',\n          name:dev.DeviceName,\n          object_id:  dev.DeviceID+'_BloomSky',\n          object_type: 'sensor_pod',\n          radio_type: 'wifi',\n          sensor_pod_id: dev.DeviceID+'_BloomSky',\n          triggers: [],\n          units: {},\n          upc_code: dev.DeviceName+'_weather_sensor',\n          upc_id: 'BloomSky_'+i\n          }\n        };\n    context.global.sendWithTimeout(node,postMsg,i*2000);\n    i++;\n    var proto=context.global.BlueMixUrlBase.split(':')[0]+':';\n        var camMsg={\n            topic:dev.DeviceName,\n            url:context.global.BlueMixUrlBase+'/red/wink/subscribtions',\n            method:\"POST\",\n                headers: {\n                \"Content-Type\":\"application/json\"\n            },\n            payload:{    \n            \"name\": dev.DeviceName,\n            \"object_type\": \"camera\",\n            \"eco_system\" : \"BloomSky\",\n            \"object_id\": dev.DeviceID+'_BloomSky',\n            \"freeboard\": 0,\n            \"manufacturer_device_model\":\"BloomSky camera\",\n            \"connection\": true,\n            \"capturing_audio\": true,\n            \"capturing_video\": true,\n            \"url\":context.global.BlueMixUrlBase+'/red/bloomsky',\n            \"snap_url\": context.global.BlueMixUrlBase+'/red/bloomsky?token='+context.global.FREEBOARD_TOKEN,\n            \"history_url\":context.global.BlueMixUrlBase+\"/freeboard/cameraSnapshots?token=\"+context.global.FREEBOARD_TOKEN+\"&camera_name=\"+dev.DeviceName,\n            \"refresh_time\":300,\n            \"motion\": \"N/A\",\n            \"activities\":[],\n            last_reading:{\n                \"motion\":false\n            }\n            }\n        };\n        context.global.sendWithTimeout(node,camMsg,i*2000);\n        i++;\n        context.global.Weather.Bloomsky.URL=proto+weatherData.ImageURL.split(':')[1];\n    });\n}",
+    "func": "\nif (msg.statusCode=='200') {\n    data_set=msg.payload;\n    i=0;\n    distanceFromHome=-1;\n    data_set.forEach(function(dev){\n       var weatherData=dev.Data;\n       var stationDistanceFromHome = null;\n        if ('HomeLocation' in context.global){ \n            stationDistanceFromHome=Math.round(context.global.calcCrow(dev.LAT,dev.LON,context.global.HomeLocation.lat,context.global.HomeLocation.lon)*1000);\n        }       \n       if (context.global.DEBUG){\n           node.warn('device '+ dev.DeviceName);           \n           node.warn('temperature: '+ weatherData.Temperature);\n           node.warn('humidity: '+ weatherData.Humidity);\n           node.warn('night: '+ weatherData.Night);\n           node.warn('rain: '+ weatherData.Rain);\n           node.warn('pressure: '+ weatherData.Pressure);       \n           node.warn('luminance: '+ weatherData.Luminance);   \n           node.warn('uvindex: ' + weatherData.UVIndex);\n           node.warn('ImageURL: ' + weatherData.ImageURL);\n           node.warn('devide id: '+ dev.DeviceID);\n           node.warn('url: '+context.global.Weather.Bloomsky.URL);\n       }\n       if (stationDistanceFromHome !== null &&( distanceFromHome < 0 ||(distanceFromHome >=0 && distanceFromHome > stationDistanceFromHome))) {\n           /*if(!('Bloomsky' in context.global.Weather))*/ \n           context.global.Weather.Bloomsky={};\n           context.global.Weather.Bloomsky.Rain=weatherData.Rain;\n           context.global.Weather.Bloomsky.Night=weatherData.Night;\n           context.global.Weather.Bloomsky.TemperatureC=weatherData.Temperature;\n           context.global.Weather.Bloomsky.TemperatureF=Math.round(weatherData.Temperature*1.8+32);       \n           context.global.Weather.Bloomsky.Humidity=weatherData.Humidity; \n           context.global.Weather.Bloomsky.Pressure=weatherData.Pressure;          \n            if (weatherData.DeviceType == 'SKY1') {           \n                context.global.Weather.Bloomsky.Luminance=weatherData.Luminance;  \n               if (Object.keys(dev.Storm).length === 0) {\n                    context.global.Weather.Bloomsky.UVIndex=weatherData.UVIndex;\n               }\n            }\n            if (Object.keys(dev.Storm).length !== 0) { \n                context.global.Weather.Bloomsky.UVIndex=dev.Storm.UVIndex;\n            }\n           distanceFromHome = stationDistanceFromHome;\n       }\n        var postMsg={\n            url:context.global.BlueMixUrlBase+'/red/wink/subscribtions',\n            method:\"POST\",\n                headers: {\n                \"Content-Type\":\"application/json\"\n            },\n            payload:{\n          capabilities: { fields: [ \n              { field: 'temperature', type: 'float' },\n              { field: 'humidity', type: 'percentage' },\n              { field: 'timeframe', type: 'boolean' },\n              { field: 'rain', type: 'boolean' },\n              { field: 'pressure', type: 'float' }\n              ] },\n          device_manufacturer: 'BloomSky',\n          \"eco_system\" : \"BLOOMSKY\",\n          last_event: \n           { brightness_occurred_at: null,\n             loudness_occurred_at: null,\n             vibration_occurred_at: null },\n          last_reading: \n           { \n                agent_session_id: 'FALSE',\n                connection: true,\n                'temperature': weatherData.Temperature,\n                'humidity': weatherData.Humidity,\n                'timeframe': weatherData.Night,\n                'rain': weatherData.Rain,\n                'pressure': weatherData.Pressure\n           },\n          manufacturer_device_model: 'bloomsky_weather_sensor',\n          model_name: 'Weather Sensor',\n          external:true,\n          name:dev.DeviceName,\n          object_id:  dev.DeviceID+'_BloomSky',\n          object_type: 'sensor_pod',\n          radio_type: 'wifi',\n          sensor_pod_id: dev.DeviceID+'_BloomSky',\n          triggers: [],\n          units: {},\n          upc_code: dev.DeviceName+'_weather_sensor',\n          upc_id: 'BloomSky_'+i\n          }\n        };\n        if (weatherData.DeviceType == 'SKY1')\n        {\n            postMsg.payload.last_reading.luminance = weatherData.Luminance;\n            postMsg.payload.capabilities.fields.push({ field: 'luminance', type: 'float' });            \n            if (Object.keys(dev.Storm).length === 0) {\n                postMsg.payload.last_reading.uvindex = weatherData.UVIndex;\n                postMsg.payload.capabilities.fields.push({ field: 'uvindex', type: 'float' });\n            }\n        }\n        if(Object.keys(dev.Storm).length !== 0){\n            stormData= dev.Storm;\n            postMsg.payload.last_reading.uvindex = stormData.UVIndex;\n            postMsg.payload.last_reading.windDirection = stormData.WindDirection;\n            postMsg.payload.last_reading.rainDaily = stormData.RainDaily;            \n            postMsg.payload.last_reading.windGust = stormData.WindGust; \n            postMsg.payload.last_reading.sustainedWindSpeed = stormData.SustainedWindSpeed;\n            postMsg.payload.last_reading.rainRate = stormData.RainRate;\n            postMsg.payload.capabilities.fields.push({ field: 'uvindex', type: 'float' });            \n            postMsg.payload.capabilities.fields.push({ field: 'windDirection', type: 'string' });\n            postMsg.payload.capabilities.fields.push({ field: 'rainDaily', type: 'float' });\n            postMsg.payload.capabilities.fields.push({ field: 'windGust', type: 'float' });\n            postMsg.payload.capabilities.fields.push({ field: 'sustainedWindSpeed', type: 'float' });\n            postMsg.payload.capabilities.fields.push({ field: 'rainRate', type: 'float' });                        \n        }\n    context.global.sendWithTimeout(node,postMsg,i*2000);\n    i++;\n    var proto=context.global.BlueMixUrlBase.split(':')[0]+':';\n        var camMsg={\n            topic:dev.DeviceName,\n            url:context.global.BlueMixUrlBase+'/red/wink/subscribtions',\n            method:\"POST\",\n                headers: {\n                \"Content-Type\":\"application/json\"\n            },\n            payload:{    \n            \"name\": dev.DeviceName,\n            \"object_type\": \"camera\",\n            \"eco_system\" : \"BloomSky\",\n            \"object_id\": dev.DeviceID+'_BloomSky',\n            \"freeboard\": 0,\n            \"manufacturer_device_model\":\"BloomSky camera\",\n            \"connection\": true,\n            \"capturing_audio\": true,\n            \"capturing_video\": true,\n            \"imageURL\": weatherData.ImageURL,\n            \"url\":context.global.BlueMixUrlBase+'/red/bloomsky'+\"?camera_name=\"+dev.DeviceName,\n            \"snap_url\": context.global.BlueMixUrlBase+'/red/bloomsky?token='+context.global.FREEBOARD_TOKEN+\"&camera_name=\"+dev.DeviceName,\n            \"history_url\":context.global.BlueMixUrlBase+\"/freeboard/cameraSnapshots?token=\"+context.global.FREEBOARD_TOKEN+\"&camera_name=\"+dev.DeviceName,\n            \"refresh_time\":300,\n            \"motion\": \"N/A\",\n            \"activities\":[],\n            last_reading:{\n                \"motion\":false\n            }\n            }\n        };\n        context.global.sendWithTimeout(node,camMsg,i*2000);\n        i++;\n        context.global.Weather.Bloomsky.URL=proto+weatherData.ImageURL.split(':')[1];\n    });\n}",
     "outputs": 1,
     "noerr": 0,
     "x": 708,
@@ -1965,8 +1965,8 @@
     "z": "17b3daf5.e84c25",
     "name": "Integration with BloomSky ---------------------------------------------------------------------------------------",
     "info": "",
-    "x": 335,
-    "y": 1829,
+    "x": 350,
+    "y": 1760,
     "wires": []
   },
   {
@@ -1977,8 +1977,8 @@
     "active": false,
     "console": "false",
     "complete": "false",
-    "x": 879,
-    "y": 1971,
+    "x": 890,
+    "y": 1980,
     "wires": []
   },
   {
@@ -2000,11 +2000,11 @@
     "type": "debug",
     "z": "17b3daf5.e84c25",
     "name": "",
-    "active": true,
+    "active": false,
     "console": "false",
     "complete": "false",
-    "x": 828,
-    "y": 91,
+    "x": 270,
+    "y": 200,
     "wires": []
   },
   {
@@ -2045,11 +2045,11 @@
     "type": "function",
     "z": "17b3daf5.e84c25",
     "name": "",
-    "func": "var web_req=(context.global.getCookie('exchange_token',msg.req.headers.cookie)=='0' ? false:true);\nif (msg.payload.token==context.global.FREEBOARD_TOKEN || (msg.req.headers.authorization && msg.req.headers.authorization==\"Bearer \"+context.global.FREEBOARD_TOKEN)) web_req=true;\nif (web_req)\n{\n    msg.statusCode=200;\n    msg.url=context.global.Weather.Bloomsky.URL;\n    msg.method=\"GET\";\n    return [msg,null];\n\n    \n}\nelse {\n    node.warn(\"ifttt messages bad request\");\n    msg.payload=\"403: Bad request\";\n    msg.statusCode=403;\n    return [null,msg];\n}\nreturn msg;",
+    "func": "var web_req=(context.global.getCookie('exchange_token',msg.req.headers.cookie)=='0' ? false:true);\nif (msg.payload.token==context.global.FREEBOARD_TOKEN || (msg.req.headers.authorization && msg.req.headers.authorization==\"Bearer \"+context.global.FREEBOARD_TOKEN)) web_req=true;\nif (web_req && 'camera_name' in msg.payload)\n{\n    var cam=msg.payload.camera_name || null;\n    msg.statusCode=200;\n    msg.url=context.global.winkState.cameras[cam].imageURL;\n    msg.method=\"GET\";\n    return [msg,null];\n\n    \n}\nelse {\n    node.warn(\"ifttt messages bad request\");\n    msg.payload=\"403: Bad request\";\n    msg.statusCode=403;\n    return [null,msg];\n}\nreturn msg;",
     "outputs": "2",
     "noerr": 0,
-    "x": 280,
-    "y": 1965,
+    "x": 270,
+    "y": 1960,
     "wires": [
       [
         "ba09bbf.6168a48",
