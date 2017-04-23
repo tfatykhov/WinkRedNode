@@ -27,7 +27,7 @@ definition(
 
 preferences {
     section ("Sensors that should go to WNR") {
-//        input "powers", "capability.powerMeter", title: "Power Meters", required: false, multiple: true
+        input "powers", "capability.powerMeter", title: "Power Meters", required: false, multiple: true
         input "temperatures", "capability.temperatureMeasurement", title: "Temperatures", required: false, multiple: true
         input "humidities", "capability.relativeHumidityMeasurement", title: "Humidities", required: false, multiple: true
         input "contacts", "capability.contactSensor", title: "Doors open/close", required: false, multiple: true
@@ -38,7 +38,7 @@ preferences {
 	    input "switchLevels", "capability.switchLevel", title: "Switch Levels", required: false, multiple: true        
         input "waterSensors", "capability.waterSensor", title: "Water sensors", required: false, multiple: true
         input "batteries", "capability.battery", title: "Batteries", required: false, multiple: true
-//        input "energies", "capability.energyMeter", title: "Energy Meters", required: false, multiple: true
+        input "energies", "capability.energyMeter", title: "Energy Meters", required: false, multiple: true
         input "illuminances" ,"capability.illuminanceMeasurement", title: "Illuminance Meters" , required: false, multiple: true
     }
     section ("YOUR WNR URL") {
@@ -75,7 +75,7 @@ def updated() {
 }
 
 def initialize() {
-//    subscribe(powers, "power", handlePowerEvent)
+    subscribe(powers, "power", handlePowerEvent)
     subscribe(temperatures, "temperature", handleTemperatureEvent)
     subscribe(waterSensors, "water", handleWaterEvent)
     subscribe(humidities, "humidity", handleHumidityEvent)
@@ -86,7 +86,7 @@ def initialize() {
     subscribe(switches, "switch", handleSwitchEvent)
 	subscribe(switchLevels, "level", handleSwitchLevelEvent)    
     subscribe(batteries, "battery", handleBatteryEvent)
-//    subscribe(energies, "energy", handleEnergyEvent)
+    subscribe(energies, "energy", handleEnergyEvent)
     subscribe(illuminances, "illuminance", handleIlluminanceEvent)
 }
 
