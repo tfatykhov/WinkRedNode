@@ -8,13 +8,23 @@ UI 2.0
 https://(your_app_name).mybluemix.net/wnrUI <br>
 == UPDATE ==
 -
+04/23/2017
+-----------
+### SmartThings Energy Meter data can be seen in summary page for both UI versions
+![add stapp](images/energy1.png)
+
+#####Required steps (WNR)
+*  Import updated [winkCore.json](winkCore.json)
+*  do not forget to check [duplicate websockets](../../README-WebsocketFix.md)
+*  perform "FULL" deployment<br>
+
 
 04/23/2017
 -----------
-12/19/2016
------------
 ### SmartThings Energy Meter data can be seen in freeboard version of UI and used in robots, etc.
 SmartThings DEnergy Meter data
+
+
 
 Required steps (SmartThings):
 * You need to open SmartThings management page (https://graph.api.smartthings.com/)<br>
