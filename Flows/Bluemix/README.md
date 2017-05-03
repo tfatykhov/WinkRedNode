@@ -8,6 +8,18 @@ UI 2.0
 https://(your_app_name).mybluemix.net/wnrUI <br>
 == UPDATE ==
 -
+05/03/2017
+-----------
+### Nest cameras are back
+Wink changed device manufacturer string for nest cameras and set it as "nest_thermostat" not sure for how long but I updated core scripts to accomodoate this change
+
+
+
+#####Required steps (WNR)
+*  Import updated [winkCore.json](winkCore.json)
+*  Import updated [winkIntegration.json](winkIntegration.json)
+*  do not forget to check [duplicate websockets](../../README-WebsocketFix.md)
+*  perform "FULL" deployment<br>
 04/23/2017
 -----------
 ### SmartThings Energy Meter data can be seen in summary page for both UI versions
