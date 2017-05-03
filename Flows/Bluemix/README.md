@@ -6,6 +6,8 @@ https://(your_app_name).mybluemix.net/freeboard/winkboardautogroup - sample free
 
 UI 2.0
 https://(your_app_name).mybluemix.net/wnrUI <br>
+
+---
 == UPDATE ==
 -
 05/03/2017
