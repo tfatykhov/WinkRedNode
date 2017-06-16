@@ -1,6 +1,6 @@
 
 # Honeywell LyricAPI Wink Node Red
-Access hoenywell lyric API with node red
+Access honeywell lyric API with node red
 # Integrating Wink Node Red and Honeywell Lyric API
 This will detail step by step how to gain access to the Honeywell Lyric API, create a Lyric App to access connect devices and integrate into Node Red
 ## 1)Wink Node Red
