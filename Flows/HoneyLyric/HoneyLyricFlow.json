@@ -8,8 +8,8 @@
     "ret": "obj",
     "url": "",
     "tls": "",
-    "x": 945.8049774169922,
-    "y": 517.0708103179932,
+    "x": 879.8049774169922,
+    "y": 501.07081031799316,
     "wires": [
       [
         "13244dd5.6b9192"
@@ -24,8 +24,8 @@
     "func": "LyricCMDmsg ={\n    \"url\":\"https://api.honeywell.com/v1/locations?apikey=\"+context.global.honeywellAPIKey,\n    \"method\": \"GET\",\n    headers:\n    {\n        \"Authorization\":\"Bearer \"+context.global.honeywellLyricAccessToken\n    }\n};\n    \nreturn LyricCMDmsg;\n\n\n//\"url\":\"https://api.honeywell.com/v2/devices/thermostats?apikey=8bFYM0sl5YI7SyYgzz4Qv7IqqBUq19Do&locationId=138889\",",
     "outputs": 1,
     "noerr": 0,
-    "x": 761.8015747070312,
-    "y": 517.1334228515625,
+    "x": 695.8015747070312,
+    "y": 501.1334228515625,
     "wires": [
       [
         "f2f1fe36.e1788"
@@ -41,8 +41,8 @@
     "ret": "obj",
     "url": "",
     "tls": "",
-    "x": 724.8605041503906,
-    "y": 443.3209390640259,
+    "x": 658.8605041503906,
+    "y": 427.3209390640259,
     "wires": [
       [
         "d9f4ff63.343bd",
@@ -55,11 +55,11 @@
     "type": "function",
     "z": "54686246.278bfc",
     "name": "Request Acess Token",
-    "func": "var LyricCMDmsg ={\n    \"url\":\"https://api.honeywell.com/oauth2/token\",\n    \"method\": \"POST\",\n    headers:\n    {\n        \"Authorization\":context.global.honeywellOauth2Token,\n        \"Content-Type\": \"application/x-www-form-urlencoded\"\n    },\n    payload:\n    {\n        \"grant_type\":\"refresh_token\",\n        \"refresh_token\":context.global.honeywellLyricRefreshToken\n    }\n};\n    node.send(LyricCMDmsg);\nreturn; ",
+    "func": "var b = new Buffer(context.global.honeywellAPIKey+\":\"+context.global.honeywellConsumerSecert);\ncontext.global.honeywellOauth2Token = b.toString('base64');\n\nvar LyricCMDmsg ={\n    \"url\":\"https://api.honeywell.com/oauth2/token\",\n    \"method\": \"POST\",\n    headers:\n    {\n        \"Authorization\":context.global.honeywellOauth2Token,\n        \"Content-Type\": \"application/x-www-form-urlencoded\"\n    },\n    payload:\n    {\n        \"grant_type\":\"refresh_token\",\n        \"refresh_token\":context.global.honeywellLyricRefreshToken\n    }\n};\n    node.send(LyricCMDmsg);\nreturn; ",
     "outputs": 1,
     "noerr": 0,
-    "x": 525.8569831848145,
-    "y": 443.3833131790161,
+    "x": 459.85698318481445,
+    "y": 427.3833131790161,
     "wires": [
       [
         "119d74df.76e28b"
@@ -77,8 +77,8 @@
     "repeat": "30",
     "crontab": "",
     "once": true,
-    "x": 245.0422821044922,
-    "y": 442.8270683288574,
+    "x": 179.0422821044922,
+    "y": 426.8270683288574,
     "wires": [
       [
         "e61c6e12.745d2"
@@ -104,8 +104,8 @@
     "from": "",
     "to": "",
     "reg": false,
-    "x": 551.8604583740234,
-    "y": 517.3207998275757,
+    "x": 485.86045837402344,
+    "y": 501.3207998275757,
     "wires": [
       [
         "676e684e.d4c1c8"
@@ -120,8 +120,8 @@
     "func": "var honeywellLyric=msg.payload;\n\nif (typeof context.global.winkState.thermostats=='undefined'){ context.global.winkState.thermostats = new Object({}); }\n\nif (Object.prototype.toString.call(honeywellLyric)==='[object Array]'){\n    \n    honeywellLyric.forEach(function (therm) {\n\n        therm.capabilities={\n            fields:[\n                {'field':\"connection\",'type':'boolean'},\n                //{'field':'temperature','type':'float'}, //messes with summary page\n                {'field':'fan','type':'selection','choices':[\"on\",\"off\",\"auto\"]},\n                {'field':'mode','type':'selection', 'choices':[\"heat\",\"off\",\"cool\"]}\n            ]\n        };\n        \n        //node.warn(\"Importing: \"+therm.name+\" thermostat\");\n        \n        LyricTherm ={\n            \"name\":therm.name,\n            \"eco_system\": \"Honeywell Lyric\",\n            \"manufacturer_id\": therm.deviceID,\n            \"device_manufacturer\":\"Honeywell\",\n            \"object_type\": therm.deviceType.toLowerCase(),\n            \"object_id\": therm.deviceID,\n            \"freeboard\": 0,\n            \"desired_state\":{},\n            \"last_reading\": {\n                \"mode\": therm.changeableValues.mode,\n                \"fan_mode\": therm.settings.fan.changeableValues.mode,\n                \"temperature\": therm.indoorTemperature,\n                \"units\":therm.units,\n                \"humidity\": therm.displayedOutdoorHumidity,\n                \"external_temperature\": therm.outdoorTemperature,\n                \"connection\": therm.isProvisioned,\n                \"powered\": therm.operationStatus.mode,\n                \"users_away\":therm.vacationHold.enabled,\n                \"scheduleStatus\":therm.scheduleStatus,\n                \"cool_set_point\": therm.changeableValues.coolSetpoint,\n                \"heat_set_point\": therm.changeableValues.heatSetpoint,\n                \"minHeatSetpoint\": therm.minHeatSetpoint,\n                \"maxHeatSetpoint\": therm.maxHeatSetpoint,\n                \"minCoolSetpoint\": therm.minCoolSetpoint,\n                \"maxCoolSetpoint\": therm.maxCoolSetpoint,\n            },\n        };\n        context.global.getWinkState(LyricTherm);\n        \n        if (!('winkDevCap' in context.global)) context.global.winkDevCap={};\n        context.global.winkDevCap[therm.name]=therm.capabilities;\n     \n    });//for each therm\n}\n\nvar msgs = [];\nfor (var i = 0; i< msg.payload.length; i++) {\n  msgs.push({payload: msg.payload[i]});\n}\n\nreturn msgs;\n",
     "outputs": 1,
     "noerr": 0,
-    "x": 677.8959350585938,
-    "y": 659.8944667577744,
+    "x": 611.8959350585938,
+    "y": 643.8944667577744,
     "wires": [
       [
         "adb2dabb.fc5268",
@@ -157,8 +157,8 @@
     "from": "",
     "to": "",
     "reg": false,
-    "x": 981.8855972290039,
-    "y": 660.3562870025635,
+    "x": 915.8855972290039,
+    "y": 644.3562870025635,
     "wires": [
       [
         "59e771a7.d20c1"
@@ -173,8 +173,8 @@
     "active": false,
     "console": "false",
     "complete": "true",
-    "x": 1318.5641555786133,
-    "y": 515.3775758743286,
+    "x": 1252.5641555786133,
+    "y": 499.3775758743286,
     "wires": []
   },
   {
@@ -188,8 +188,8 @@
     "repeat": "",
     "crontab": "",
     "once": true,
-    "x": 452.8958435058594,
-    "y": 373.8888969421387,
+    "x": 386.8958435058594,
+    "y": 357.8888969421387,
     "wires": [
       [
         "d9b361e8.094fc",
@@ -205,8 +205,8 @@
     "func": "// Honeywell Lyric\n\nif (typeof context.global.honeywellAPIKey==='undefined' )\n{\n    context.global.honeywellAPIKey = \"\";\n}\nif (typeof context.global.honeywellConsumerSecert==='undefined' )\n{\n    context.global.honeywellConsumerSecert = \"\";\n}\n\nif (typeof context.global.honeywellLyricRefreshToken==='undefined' )\n{\n    context.global.honeywellLyricRefreshToken = \"\";\n}\nif (typeof context.global.honeywellAPIcode==='undefined' )\n{\n    context.global.honeywellAPIcode = \"\";\n}\nif (typeof context.global.honeywellOauth2Token==='undefined' )\n{\n    context.global.honeywellOauth2Token = \"\";\n}\nif (typeof context.global.honeywellLyricAccessToken==='undefined' )\n{\n    context.global.honeywellLyricAccessToken = \"\";\n}\n\n\ncontext.global.honeywellLyricDeviceID = \"\";\ncontext.global.honeywellLyricLocationID = \"\";\ncontext.global.honeywellLyricName = \"\";\ncontext.global.changeableValues = {};\n\ncontext.global.executeLyricTstatCMD = function (lyricName,command,Param) {\n    var WinkCMDmsg = {};\n    if ('new_version' in context.global && context.global.new_version){ \n        var cmd = command.toLowerCase();\n        var xParam = (typeof Param === 'string' ? Param.toLowerCase() : Param);\n        node.warn(lyricName+' '+cmd+' '+xParam);\n        try {\n            if (lyricName in context.global.winkState.thermostats)\n            {\n                var devCapbs=context.global.winkDevCap[lyricName].fields || [];\n                //node.warn(devCapbs);\n                if (cmd != \"fan\"){\n                WinkCMDmsg ={\n                        \"url\":\"https://api.honeywell.com/v2/devices/thermostats/\"+context.global.honeywellLyricDeviceID+\"?apikey=\"+context.global.honeywellAPIKey+\"&locationId=\"+context.global.honeywellLyricLocationID,\n                    \"method\": \"POST\",\n                    headers: {\n                        \"Authorization\":\"Bearer \"+context.global.honeywellLyricAccessToken\n                    },\n                    //payload set in switch statement below\n                };\n                }\n                switch (cmd){\n                    case 'mode':\n                        if (devCapbs[context.global.searchArray(devCapbs,'mode','field')]!=-1 ){\n                            WinkCMDmsg.payload={\n                                \"mode\":xParam ,\n                                \"coolSetpoint\": context.global.winkState.thermostats[lyricName].cool_set_point,\n                                \"heatSetpoint\": context.global.winkState.thermostats[lyricName].heat_set_point,\n                                \"thermostatSetpointStatus\": \"PermanentHold\"\n                            };\n                        } else WinkCmd={};\n                    break;\n                    case 'temperature':\n                        WinkCMDmsg.payload={\n                            \"mode\":context.global.winkState.thermostats[lyricName].mode,\n                            \"coolSetpoint\": xParam,\n                            \"heatSetpoint\": xParam,//context.global.winkState.thermostats[lyricName].heat_set_point,\n                            \"thermostatSetpointStatus\": \"PermanentHold\"\n                        };\n                    break;\n                    case 'adjust':\n                        WinkCMDmsg.payload={\n                            \"mode\":context.global.winkState.thermostats[lyricName].mode,\n                            \"coolSetpoint\": (context.global.winkState.thermostats[lyricName].cool_set_point +xParam),\n                            \"heatSetpoint\": (context.global.winkState.thermostats[lyricName].heat_set_point +xParam),\n                            \"thermostatSetpointStatus\": \"PermanentHold\"\n                        };\n                    break;\n                    case 'fan':\n                        WinkCMDmsg ={\n                            \"url\":\"https://api.honeywell.com/v2/devices/thermostats/\"+context.global.honeywellLyricDeviceID+\"/fan?apikey=\"+context.global.honeywellAPIKey+\"&locationId=\"+context.global.honeywellLyricLocationID,\n                            \"method\": \"POST\",\n                            headers: {\n                                \"Authorization\":\"Bearer \"+context.global.honeywellLyricAccessToken\n                            },    \n                            payload:{\n                                \"mode\":xParam                            \n                            }};                          \n                    break;                     \n                    default:\n                    WinkCMDmsg={};    \n                }\n            }\n        }\n        catch (error){\n                node.warn('execute tStat CMD error: '+ error.message);\n        }        \n    }\n    return WinkCMDmsg;\n}",
     "outputs": 1,
     "noerr": 0,
-    "x": 742.899299621582,
-    "y": 374.26389503479004,
+    "x": 676.899299621582,
+    "y": 358.26389503479004,
     "wires": [
       []
     ]
@@ -220,8 +220,8 @@
     "ret": "txt",
     "url": "",
     "tls": "",
-    "x": 1194.7627258300781,
-    "y": 879.8888823986053,
+    "x": 1128.7627258300781,
+    "y": 863.8888823986053,
     "wires": [
       [
         "3002a3af.84c4ac"
@@ -236,8 +236,8 @@
     "func": "var thermostat = context.global.honeywellLyricName;\n//return context.global.executeLyricTstatCMD(thermostat,\"fan\",\"auto\");\n//return context.global.executeLyricTstatCMD(thermostat,\"temperature\",\"65\");\nreturn context.global.executeLyricTstatCMD(thermostat,\"mode\",\"cool\");\n",
     "outputs": 1,
     "noerr": 0,
-    "x": 1017.75927734375,
-    "y": 879.9514770507812,
+    "x": 951.75927734375,
+    "y": 863.9514770507812,
     "wires": [
       [
         "29031557.54349a"
@@ -253,8 +253,8 @@
     "ret": "obj",
     "url": "",
     "tls": "",
-    "x": 637.8182487487793,
-    "y": 880.1390466690063,
+    "x": 571.8182487487793,
+    "y": 864.1390466690063,
     "wires": [
       [
         "53b02f1.3d8ccd"
@@ -269,8 +269,8 @@
     "func": "var LyricCMDmsg ={\n    \"url\":\"https://api.honeywell.com/oauth2/token\",\n    \"method\": \"POST\",\n    headers:\n    {\n        \"Authorization\":context.global.honeywellOauth2Token,\n        \"Content-Type\": \"application/x-www-form-urlencoded\"\n    },\n    payload:\n    {\n        \"grant_type\":\"refresh_token\",\n        \"refresh_token\":context.global.honeywellLyricRefreshToken\n    }\n};\n    node.send(LyricCMDmsg);\nreturn; ",
     "outputs": 1,
     "noerr": 0,
-    "x": 438.8147277832031,
-    "y": 880.2014207839966,
+    "x": 372.8147277832031,
+    "y": 864.2014207839966,
     "wires": [
       [
         "e4873053.807db"
@@ -288,8 +288,8 @@
     "repeat": "",
     "crontab": "",
     "once": false,
-    "x": 251.63639450073242,
-    "y": 879.9179422855377,
+    "x": 185.63639450073242,
+    "y": 863.9179422855377,
     "wires": [
       [
         "1a492933.236a17"
@@ -315,8 +315,8 @@
     "from": "",
     "to": "",
     "reg": false,
-    "x": 824.8182144165039,
-    "y": 880.1388556957245,
+    "x": 758.8182144165039,
+    "y": 864.1388556957245,
     "wires": [
       [
         "313dfe3c.2a9812"
@@ -331,8 +331,8 @@
     "active": true,
     "console": "false",
     "complete": "true",
-    "x": 1340.7037467956543,
-    "y": 880.0138137340546,
+    "x": 1274.7037467956543,
+    "y": 864.0138137340546,
     "wires": []
   },
   {
@@ -344,8 +344,8 @@
     "ret": "obj",
     "url": "",
     "tls": "",
-    "x": 1115.30810546875,
-    "y": 1027.5858764648438,
+    "x": 1049.30810546875,
+    "y": 1011.5858764648438,
     "wires": [
       [
         "4a540f8e.67379",
@@ -362,8 +362,8 @@
     "func": "LyricCMDmsg ={\n    \"url\":\"https://api.honeywell.com/v2/devices/thermostats/\"+context.global.honeywellLyricDeviceID+\"?apikey=\"+context.global.honeywellAPIKey+\"&locationId=\"+context.global.honeywellLyricLocationID,\n    \"method\": \"GET\",\n    headers:\n    {\n        \"Authorization\":\"Bearer \"+context.global.honeywellLyricAccessToken\n    }\n};\n    \nreturn LyricCMDmsg;\n",
     "outputs": 1,
     "noerr": 0,
-    "x": 939.3047752380371,
-    "y": 1026.6484031677246,
+    "x": 873.3047752380371,
+    "y": 1010.6484031677246,
     "wires": [
       [
         "26634646.07713a"
@@ -379,8 +379,8 @@
     "ret": "obj",
     "url": "",
     "tls": "",
-    "x": 547.1819305419922,
-    "y": 1027.7449836730957,
+    "x": 481.1819305419922,
+    "y": 1011.7449836730957,
     "wires": [
       [
         "f60bfe4.39904"
@@ -395,8 +395,8 @@
     "func": "var LyricCMDmsg ={\n    \"url\":\"https://api.honeywell.com/oauth2/token\",\n    \"method\": \"POST\",\n    headers:\n    {\n        \"Authorization\":context.global.honeywellOauth2Token,\n        \"Content-Type\": \"application/x-www-form-urlencoded\"\n    },\n    payload:\n    {\n        \"grant_type\":\"refresh_token\",\n        \"refresh_token\":context.global.honeywellLyricRefreshToken\n    }\n};\n    node.send(LyricCMDmsg);\nreturn; ",
     "outputs": 1,
     "noerr": 0,
-    "x": 348.178409576416,
-    "y": 1027.807357788086,
+    "x": 282.178409576416,
+    "y": 1011.8073577880859,
     "wires": [
       [
         "33753a1d.0a99e6"
@@ -414,8 +414,8 @@
     "repeat": "",
     "crontab": "",
     "once": false,
-    "x": 162.72735595703125,
-    "y": 1027.6147224903107,
+    "x": 96.72735595703125,
+    "y": 1011.6147224903107,
     "wires": [
       [
         "8e4abcc1.8722c"
@@ -441,8 +441,8 @@
     "from": "",
     "to": "",
     "reg": false,
-    "x": 738.3637008666992,
-    "y": 1027.835780620575,
+    "x": 672.3637008666992,
+    "y": 1011.835780620575,
     "wires": [
       [
         "483bf85b.fe2868"
@@ -457,8 +457,8 @@
     "active": true,
     "console": "false",
     "complete": "payload",
-    "x": 1296.2491607666016,
-    "y": 1027.7107944488525,
+    "x": 1230.2491607666016,
+    "y": 1011.7107944488525,
     "wires": []
   },
   {
@@ -480,8 +480,8 @@
     "from": "",
     "to": "",
     "reg": false,
-    "x": 1314.9175033569336,
-    "y": 1064.9104480743408,
+    "x": 1248.9175033569336,
+    "y": 1048.9104480743408,
     "wires": [
       [
         "4edfe5d2.7e914c"
@@ -496,8 +496,8 @@
     "active": true,
     "console": "false",
     "complete": "payload",
-    "x": 1628.4411849975586,
-    "y": 1063.4950428009033,
+    "x": 1562.4411849975586,
+    "y": 1047.4950428009033,
     "wires": []
   },
   {
@@ -519,8 +519,8 @@
     "from": "",
     "to": "",
     "reg": false,
-    "x": 1476.3720321655273,
-    "y": 1064.092393875122,
+    "x": 1410.3720321655273,
+    "y": 1048.092393875122,
     "wires": [
       [
         "37fc4287.c3c61e"
@@ -535,8 +535,8 @@
     "active": false,
     "console": "false",
     "complete": "payload",
-    "x": 925.8049392700195,
-    "y": 443.0707197189331,
+    "x": 859.8049392700195,
+    "y": 427.0707197189331,
     "wires": []
   },
   {
@@ -565,8 +565,8 @@
     "from": "",
     "to": "",
     "reg": false,
-    "x": 590.8048629760742,
-    "y": 588.0707731246948,
+    "x": 524.8048629760742,
+    "y": 572.0707731246948,
     "wires": [
       [
         "6d7dcf99.b2cd8"
@@ -581,8 +581,8 @@
     "active": false,
     "console": "false",
     "complete": "payload",
-    "x": 1235.8048706054688,
-    "y": 587.0707111358643,
+    "x": 1169.8048706054688,
+    "y": 571.0707111358643,
     "wires": []
   },
   {
@@ -593,8 +593,8 @@
     "func": "var msgs = [];\nfor (var i = 0; i< msg.payload.length; i++) {\n  msgs.push({payload: msg.payload[i]});\n}\n\nreturn msgs;",
     "outputs": 1,
     "noerr": 0,
-    "x": 1137.7459182739258,
-    "y": 516.5429353713989,
+    "x": 1071.7459182739258,
+    "y": 500.5429353713989,
     "wires": [
       [
         "e4fd1374.c6fb4",
@@ -611,8 +611,8 @@
     "ret": "obj",
     "url": "",
     "tls": "",
-    "x": 1020.8048553466797,
-    "y": 588.0707025527954,
+    "x": 954.8048553466797,
+    "y": 572.0707025527954,
     "wires": [
       [
         "c8cb3873.4a2c98",
@@ -628,8 +628,8 @@
     "func": "LyricCMDmsg ={\n    \"url\":\"https://api.honeywell.com/v2/devices/thermostats?apikey=\"+context.global.honeywellAPIKey+\"&locationId=\"+context.global.honeywellLyricLocationID,\n    \"method\": \"GET\",\n    headers:\n    {\n        \"Authorization\":\"Bearer \"+context.global.honeywellLyricAccessToken\n    }\n};\n    \nreturn LyricCMDmsg;\n\n//\"url\":\"https://api.honeywell.com/v2/devices/thermostats?apikey=8bFYM0sl5YI7SyYgzz4Qv7IqqBUq19Do&locationId=138889\",",
     "outputs": 1,
     "noerr": 0,
-    "x": 826.8014526367188,
-    "y": 588.1333150863647,
+    "x": 760.8014526367188,
+    "y": 572.1333150863647,
     "wires": [
       [
         "55a33a32.b668d4"
@@ -644,8 +644,8 @@
     "active": false,
     "console": "false",
     "complete": "payload",
-    "x": 1201.3597793579102,
-    "y": 695.191915512085,
+    "x": 1135.3597793579102,
+    "y": 679.191915512085,
     "wires": []
   },
   {
@@ -674,8 +674,8 @@
     "from": "",
     "to": "",
     "reg": false,
-    "x": 962.2906188964844,
-    "y": 694.7892198562622,
+    "x": 896.2906188964844,
+    "y": 678.7892198562622,
     "wires": [
       [
         "59e771a7.d20c1"
@@ -708,8 +708,8 @@
     "from": "",
     "to": "",
     "reg": false,
-    "x": 963.9269714355469,
-    "y": 729.3245820999146,
+    "x": 897.9269714355469,
+    "y": 713.3245820999146,
     "wires": [
       [
         "59e771a7.d20c1"
@@ -724,8 +724,8 @@
     "url": "/red/honeywell",
     "method": "get",
     "swaggerDoc": "",
-    "x": 182.8958511352539,
-    "y": 100.888916015625,
+    "x": 116.8958511352539,
+    "y": 84.888916015625,
     "wires": [
       [
         "92fff49e.2d99c8"
@@ -740,8 +740,8 @@
     "func": "return msg;",
     "outputs": 1,
     "noerr": 0,
-    "x": 420.89581298828125,
-    "y": 100.88885498046875,
+    "x": 354.89581298828125,
+    "y": 84.88885498046875,
     "wires": [
       [
         "488fc8f.0a6a438",
@@ -754,8 +754,8 @@
     "type": "http response",
     "z": "54686246.278bfc",
     "name": "",
-    "x": 646.8958435058594,
-    "y": 100.888916015625,
+    "x": 580.8958435058594,
+    "y": 84.888916015625,
     "wires": []
   },
   {
@@ -766,8 +766,8 @@
     "active": true,
     "console": "false",
     "complete": "payload",
-    "x": 462.895751953125,
-    "y": 205.88885498046875,
+    "x": 396.895751953125,
+    "y": 189.88885498046875,
     "wires": []
   },
   {
@@ -789,8 +789,8 @@
     "from": "",
     "to": "",
     "reg": false,
-    "x": 961.8957824707031,
-    "y": 767.8888788223267,
+    "x": 895.8957824707031,
+    "y": 751.8888788223267,
     "wires": [
       [
         "331df504.407f6a"
@@ -802,11 +802,11 @@
     "type": "debug",
     "z": "54686246.278bfc",
     "name": "",
-    "active": false,
+    "active": true,
     "console": "false",
     "complete": "payload",
-    "x": 1168.8957214355469,
-    "y": 767.8888788223267,
+    "x": 1102.8957214355469,
+    "y": 751.8888788223267,
     "wires": []
   },
   {
@@ -828,8 +828,8 @@
     "from": "",
     "to": "",
     "reg": false,
-    "x": 1306.930809020996,
-    "y": 989.5973377227783,
+    "x": 1240.930809020996,
+    "y": 973.5973377227783,
     "wires": [
       [
         "9a3d0f59.afe53"
@@ -844,8 +844,8 @@
     "active": true,
     "console": "false",
     "complete": "payload",
-    "x": 1602.0000228881836,
-    "y": 989.9999866485596,
+    "x": 1536.0000228881836,
+    "y": 973.9999866485596,
     "wires": []
   },
   {
@@ -867,8 +867,8 @@
     "from": "",
     "to": "",
     "reg": false,
-    "x": 1458.930809020996,
-    "y": 989.5973377227783,
+    "x": 1392.930809020996,
+    "y": 973.5973377227783,
     "wires": [
       [
         "15f5070a.f062a9"
@@ -894,8 +894,8 @@
     "from": "",
     "to": "",
     "reg": false,
-    "x": 264,
-    "y": 160,
+    "x": 198,
+    "y": 144,
     "wires": [
       [
         "2609a89f.488968",
@@ -911,8 +911,8 @@
     "func": "var b = new Buffer(context.global.honeywellAPIKey+\":\"+context.global.honeywellConsumerSecert);\nmsg.payload = b.toString('base64');\ncontext.global.honeywellOauth2Token = msg.payload\nreturn msg;",
     "outputs": 1,
     "noerr": 0,
-    "x": 556,
-    "y": 161,
+    "x": 490,
+    "y": 145,
     "wires": [
       [
         "86a06034.bdab1"
@@ -928,8 +928,8 @@
     "ret": "obj",
     "url": "",
     "tls": "",
-    "x": 1039,
-    "y": 161,
+    "x": 973,
+    "y": 145,
     "wires": [
       [
         "beeb2914.ac7348",
@@ -945,8 +945,8 @@
     "func": "context.global.BlueMixUrlBase = context.global.BlueMixUrlBase.toLowerCase();\nvar LyricCMDmsg ={\n    \"url\":\"https://api.honeywell.com/oauth2/token\",\n    \"method\": \"POST\",\n    headers:\n    {\n        \"Authorization\":context.global.honeywellOauth2Token,\n        \"Content-Type\": \"application/x-www-form-urlencoded\"\n    },\n    payload:\n    {\n        \"grant_type\":\"authorization_code\",\n        \"code\":context.global.honeywellAPIcode,\n        \"redirect_uri\":context.global.BlueMixUrlBase+'/red/honeywell'\n    }\n};\n    node.send(LyricCMDmsg);\nreturn; ",
     "outputs": 1,
     "noerr": 0,
-    "x": 847.9964599609375,
-    "y": 161.0623779296875,
+    "x": 781.9964599609375,
+    "y": 145.0623779296875,
     "wires": [
       [
         "9f81707e.56c93"
@@ -961,8 +961,8 @@
     "active": true,
     "console": "false",
     "complete": "payload",
-    "x": 1231.9444580078125,
-    "y": 161.74978637695312,
+    "x": 1165.9444580078125,
+    "y": 145.74978637695312,
     "wires": []
   },
   {
@@ -991,8 +991,8 @@
     "from": "",
     "to": "",
     "reg": false,
-    "x": 1078,
-    "y": 212,
+    "x": 1012,
+    "y": 196,
     "wires": [
       []
     ]
@@ -1003,8 +1003,8 @@
     "z": "54686246.278bfc",
     "name": "API Access Authentication Flow",
     "info": "",
-    "x": 230,
-    "y": 43,
+    "x": 164,
+    "y": 27,
     "wires": []
   },
   {
@@ -1013,8 +1013,8 @@
     "z": "54686246.278bfc",
     "name": "Device Access and Integration Flow",
     "info": "",
-    "x": 256,
-    "y": 325,
+    "x": 190,
+    "y": 309,
     "wires": []
   },
   {
@@ -1023,8 +1023,8 @@
     "z": "54686246.278bfc",
     "name": "Sample Flow for setting device data",
     "info": "",
-    "x": 241,
-    "y": 808,
+    "x": 175,
+    "y": 792,
     "wires": []
   },
   {
@@ -1033,8 +1033,8 @@
     "z": "54686246.278bfc",
     "name": "Sample Flow for getting device data",
     "info": "",
-    "x": 211,
-    "y": 971,
+    "x": 145,
+    "y": 955,
     "wires": []
   }
 ]
