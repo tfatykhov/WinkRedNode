@@ -6,7 +6,7 @@ This will detail step by step how to gain access to the Honeywell Lyric API, cre
 ## 1)Wink Node Red
 
 * Create new tab  - give it a meaningful name (Honeywell Lyric Integration)
-* Import from clipboard - [HoneywellLyricAPI_Flow](HoneywellLyricAPI_Flow)
+* Import from clipboard - [HoneyLyricFlow.json](HoneyLyricFlow.json)
 * Deploy flow
 ## 2)Honeywell Developer Site
 Here you will create an App that will allow access to your Honeywell Lyric devices through there API.
