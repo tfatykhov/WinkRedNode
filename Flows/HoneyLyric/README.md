@@ -59,4 +59,4 @@ Log in with your Honeywell Lyric credentials (the ones for the Lyric App if diff
 ### 2.9)Select devices and Connect
 <img src='images/connect.jpg'/>
 
-*  If all things went according to plan you should see in the your Node-RED debug console the "access_token and refresh_token"
+###  If all things went according to plan you should see in the your Node-RED debug console the "access_token and refresh_token"
