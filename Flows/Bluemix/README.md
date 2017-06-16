@@ -14,6 +14,7 @@ https://(your_app_name).mybluemix.net/wnrUI <br>
 -----------
 ### Support added for Honeywell Lyric WI-FI Thermostats
 See this [README](../HoneyLyric/README.md) for details
+
 <img src='../HoneyLyric/images/signup.jpg'/>
 
 05/03/2017
