@@ -21,7 +21,10 @@
     },
     "contributors": [
         {
-            "name": "Brian Meissen"
+            "name": "Brian Meissen",
+            "email":"",
+            "name": "Will Scarangello",
+            "email": "wscambo@gmail.com"
         }
     ]
 }
