@@ -13,6 +13,9 @@ This will detail step by step how to gain access to the Honeywell Lyric API, cre
 *  Import updated [tabletUI.json](../Bluemix/tabletUI.json)
 *  do not forget to check [duplicate websockets](../../README-WebsocketFix.md)
 *  perform "FULL" deployment<br>
+###### Bluemix git console:<br>
+*  re-deploy application in git<br>
+<img src="../Bluemix/images/deploy.png">
 
 ## 2)Honeywell Developer Site
 Here you will create an App that will allow access to your Honeywell Lyric devices through there API.
