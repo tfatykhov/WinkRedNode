@@ -47,7 +47,7 @@ Copy keys to Wink Node Red Home Dashboard UI and then "submit" the changes
 ### 2.7)Responce from access code request
 <img src='images/response.jpg'/>
 
-highlight the Responce Location: URL and goto the URL Link.  This will take you to the Lyric Authorization page.
+Highlight the Responce Location: URL and goto the URL Link.  This will take you to the Lyric Authorization page.
 <img src='images/goto.jpg'/>
 
 ### 2.8)Log On and Allow access
