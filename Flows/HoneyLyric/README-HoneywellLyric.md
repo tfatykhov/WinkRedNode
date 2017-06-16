@@ -10,7 +10,7 @@ This will detail step by step how to gain access to the Honeywell Lyric API, cre
 *  Deploy flow
 *  Import updated [winkCore.json](../Bluemix/winkCore.json)
 *  Import updated [winkIntegration.json](../Bluemix/winkIntegration.json)
-*  Import updated [tableUI.json](../Bluemix/tabletUI.json)
+*  Import updated [tabletUI.json](../Bluemix/tabletUI.json)
 *  do not forget to check [duplicate websockets](../../README-WebsocketFix.md)
 *  perform "FULL" deployment<br>
 
@@ -31,8 +31,7 @@ Here you will create an App that will allow access to your Honeywell Lyric devic
 <img src='/images/appCreated.jpg'/>
 
 Copy keys to Node Red
-<img src='/images/nodeRedKeys.jpg'/>
-<img src='/images/setKeys.jpg'/>
+<img src='/images/nodeRedKeys1.jpg'/>
 
 ### 2.5)Authorization API
 <img src='/images/authAPIs.jpg'/>
