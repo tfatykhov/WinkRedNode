@@ -31,7 +31,7 @@ Here you will create an App that will allow access to your Honeywell Lyric devic
 ### 2.3)Name App
 <img src='images/appName.jpg'/>
 
-### 2.4)App created get Keys
+### 2.4)App created. Now get the Keys
 <img src='images/appCreated.jpg'/>
 
 Copy keys to Wink Node Red Home Dashboard UI and then "submit" the changes
