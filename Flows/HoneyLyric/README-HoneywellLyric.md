@@ -8,7 +8,7 @@ This will detail step by step how to gain access to the Honeywell Lyric API, cre
 *  Create new tab  - give it a meaningful name (Honeywell Lyric Integration)
 *  Import from clipboard - [HoneyLyricFlow.json](HoneyLyricFlow.json)
 *  Deploy flow
-*  Import updated [winkCore.json](WinkRedNode/Flows/Bluemix/winkCore.json)
+*  Import updated [winkCore.json](../Bluemix/winkCore.json)
 *  Import updated [winkIntegration.json](winkIntegration.json)
 *  Import updated [tableUI.json](tableUI.json)
 *  do not forget to check [duplicate websockets](../../README-WebsocketFix.md)
