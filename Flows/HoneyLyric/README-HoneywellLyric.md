@@ -46,13 +46,15 @@ Copy keys to Wink Node Red Home Dashboard UI and then "submit" the changes
 ### 2.7)Responce from access code request
 <img src='images/response.jpg'/>
 
-goto responce Link
+highlight the Responce Location: URL and goto the URL Link.  This will take you to the Lyric Authorization page.
 <img src='images/goto.jpg'/>
 
 ### 2.8)Log On and Allow access
+Log in with your Honeywell Lyric credentials (the ones for the Lyric App if different then the developer site)
 <img src='images/logOn.jpg'/>
 <img src='images/allow.jpg'/>
 
 ### 2.9)Select devices and Connect
 <img src='images/connect.jpg'/>
 
+*  If all things went according to plan you so see in the Node-RED debug console your "access_token and refresh_token"
