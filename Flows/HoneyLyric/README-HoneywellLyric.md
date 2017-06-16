@@ -19,7 +19,7 @@ Here you will create an App that will allow access to your Honeywell Lyric devic
 
 ### 2.1)Create account
 [Honeywell Developer](https://developer.honeywell.com/):
-<img src='/images/signup.jpg'/>
+<img src='../images/signup.jpg'/>
 
 ### 2.2)Create App
 <img src='/images/createApp.jpg'/>
