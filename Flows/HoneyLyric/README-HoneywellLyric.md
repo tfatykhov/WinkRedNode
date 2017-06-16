@@ -1,13 +1,19 @@
 
-# HoneywellLyricAPInodeRed
+# Honeywell LyricAPI Wink Node Red
 Access hoenywell lyric API with node red
 # Integrating Wink Node Red and Honey Lyric API
 This will detail step by step how to gain access to the Honeywell Lyric API, create a Lyric App to access connect devices and integrate into Node Red
 ## 1)Wink Node Red
+#####Required steps (WNR)
+*  Create new tab  - give it a meaningful name (Honeywell Lyric Integration)
+*  Import from clipboard - [HoneyLyricFlow.json](HoneyLyricFlow.json)
+*  Deploy flow
+*  Import updated [winkCore.json](WinkRedNode/Flows/Bluemix/winkCore.json)
+*  Import updated [winkIntegration.json](winkIntegration.json)
+*  Import updated [tableUI.json](tableUI.json)
+*  do not forget to check [duplicate websockets](../../README-WebsocketFix.md)
+*  perform "FULL" deployment<br>
 
-* Create new tab  - give it a meaningful name (Honeywell Lyric Integration)
-* Import from clipboard - [HoneyLyricFlow.json](HoneyLyricFlow.json)
-* Deploy flow
 ## 2)Honeywell Developer Site
 Here you will create an App that will allow access to your Honeywell Lyric devices through there API.
 
