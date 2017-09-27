@@ -23,12 +23,12 @@ Download the following file which is a prepopulated Agent for the wink node-red 
 * [winkNodeRed_0_2.zip](winkNodeRed_0_2.zip)
 * In "Agent Setting"  Click on "Export and Import" and select "Import from zip"
 
-<img src='/images/importAgent.jpg'/>
+<img src='images/importAgent.jpg'/>
 
 ### 1.4)Finding your Api.ai API keys
 The API keys we will need are further down on this agent page. Scroll down and you will find the “API keys” section. Copy and paste the “Developer access token” somewhere safe. This will be need to make queries to the Wink Node Red (context.global.googleHomeKey):
 
-<img src='/images/agentAPIKeys.png'/>
+<img src='images/agentAPIKeys.png'/>
 
 ### 1.5)Connect your API.AI action to your webhook
 * Open ‘Fulfillment’ window on the right panel.
@@ -40,7 +40,7 @@ The API keys we will need are further down on this agent page. Scroll down and y
 * In any relevant Intent, enable the Fulfillment for the response: open ‘Intents’ window, open the intent that you want to connect, scroll down to ‘Fulfillment’ section, check “Use webhook”.
 * Make sure all domains in the ‘Domains’ window are turned off.
 
-<img src='/images/fulfillment.png'/>
+<img src='images/fulfillment.png'/>
 
 ## 2)Node-Red
 The behavior of the Assistant when triggered by an Intent.  For example, what should the Assistant do when you ask “Turn On the Bedroom light”. API.AI recognize the words ‘On’(@command), and ‘Bedroom’(@winkName) but we need an application that process those words,  carry out the command and give us a responce. This is called a webhook. 
@@ -54,22 +54,22 @@ Details of the "Process Request" function node will be added at sometime in the 
 
 ## 3)Test Integration API.AI=>Node-Red=>API.AI
 We can now test out our new Agent by executing the "update my devices" Intent. 
-<img src='/images/updateDeviceIntent.jpg'/>
+<img src='images/updateDeviceIntent.jpg'/>
 
 Click on the "Entities" selection on the left pane and type the test statement "update devices" into the test console on the right.
-<img src='/images/testUpdateDevices.jpg'/>
+<img src='images/testUpdateDevices.jpg'/>
 
 The agent responds back with the number of wink devices WNR detected.    
-<img src='/images/newDevices.jpg'/>
+<img src='images/newDevices.jpg'/>
 
 Clicking on the @winkName entity should display all of your wink devices.  The left column is the winkName and the right is synonyms that you can add to.
-<img src='/images/winkNameEntity.jpg'/>
+<img src='images/winkNameEntity.jpg'/>
 
 Again Details of the Intents and Enities will be added at sometime in the future that I can find the time to write it up.  I would suggest reading [Get started in 5 steps](https://docs.api.ai/docs/get-started)
 
 ## 4)Enable Actions on Google
 * In the API.AI console, select Integrations in the left-hand panel.
 * Enable the toggle switch on the Actions on Google card, as the following example shows:
-<img src='/images/enableActions.jpg'/>
+<img src='images/enableActions.jpg'/>
 
 After you have enabled Actions on Google, you can configure your Conversation Action to prepare the Draft for testing
