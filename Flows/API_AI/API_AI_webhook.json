@@ -1,0 +1,517 @@
+[
+  {
+    "id": "18c8981b.2ce298",
+    "type": "comment",
+    "z": "d3396a61.a88b48",
+    "name": "Webhook-API.AI ---------------------------------------------------------------------------------------",
+    "info": "",
+    "x": 809.8957824707031,
+    "y": 32,
+    "wires": []
+  },
+  {
+    "id": "c2254311.b36f9",
+    "type": "http in",
+    "z": "d3396a61.a88b48",
+    "name": "",
+    "url": "/red/googleActions",
+    "method": "post",
+    "swaggerDoc": "",
+    "x": 216,
+    "y": 348.2221984863281,
+    "wires": [
+      [
+        "25a8fe8d.bf23c2",
+        "5404a4e1.e3f0ec"
+      ]
+    ]
+  },
+  {
+    "id": "3f2507a0.2a14a8",
+    "type": "http response",
+    "z": "d3396a61.a88b48",
+    "name": "Response to API.AI",
+    "x": 1347.909423828125,
+    "y": 275.1315002441406,
+    "wires": []
+  },
+  {
+    "id": "182bcdc4.294d22",
+    "type": "function",
+    "z": "d3396a61.a88b48",
+    "name": "Process Request",
+    "func": "var WinkCMDmsg = \"\";\nvar WinkCMDmsg2 = \"\";\nvar localMsg = \"\";\nvar speechVar = \"unknown\";\nvar displayVar = \"not available at this time\";\nvar result = msg.payload.result;\nvar action = result.action;\n//var action = inputs.intent;\nvar parameters = result.parameters;\nvar cmd = parameters.command;\nvar winkName = parameters.winkName;\nvar winkRobot = parameters.winkRobot;\nvar robotCmd = parameters.robotCmd;\nvar globVarName = parameters.globVarName;\nvar temperature = parameters.temperature;\nvar mode = parameters.mode;\nvar type = \"\";\nvar level = parameters.level;\nvar winkData = context.global.winkState;\nvar eid;\nvar new_entries;\n//var thermName = context.global.honeywellLyricName;\n//var mode = context.global.winkState.thermostats[thermName].mode;\n//var setPoint= (mode === 'Cool' ? context.global.winkState.thermostats[thermName].cool_set_point : context.global.winkState.thermostats[thermName].heat_set_point);\n\nvar welcome = [\n        \"Hi, can I help you today?\",\n        \"Hello, something I can help you with?\",\n        \"Greetings!, can i be of some help today?\",\n        \"Good Day!, what can i help you with?\",\n        \"How can I help you today?\",\n        \"Is there something I can help you with?\"\n    ];\n\nvar WNRcmd = [\n        \"The command \" +winkName + \" \" + cmd + \" has been executed\",\n        winkName + \" \" + cmd + \" processed\",\n        winkName +\" is now \" +cmd\n    ];\n    \nvar VARcmd = [\n        \"The command \" +globVarName + \" \" + cmd + \" has been executed\",\n        globVarName + \" \" + cmd + \" processed\",\n        globVarName +\" is now \" +cmd\n    ];\n\n//return an array of objects according to key matching\nfunction getTypeByName(obj, query) {\n    for (var key in obj) {\n        var value = obj[key];\n        for(var winkname in value){\n            if (winkname == query) {\n                //node.warn('type=' + key);\n                return (key);\n            }\n        }\n    }\n}\n\nfunction getWinkDevices(obj){\n    var array = [];\n        for (var device in obj){\n            var name=obj[device];\n            var str = JSON.stringify(name.name);\n            if ( !(str.includes(\"@\",0)) && !(str.includes(\".\",0)) )\n                array.push({\"value\":name.name});\n        }\n    return array;\n}\n\nvar web_req=false;\nif (msg.req.headers['authorization']==context.global.googleHomeKey) web_req=true;\nif (web_req){\n    \n    switch(action)\n    {\n        case \"WNRcmd\":\n            type = getTypeByName(winkData,parameters.winkName);\n            node.warn(type);\n            switch(type)\n            {\n                case \"binary_switches\":\n                case \"light_bulbs\":\n                    type = \"light\";\n                    break;\n                case \"groups\":\n                    type = \"group\";\n                    break;  \n                case \"scenes\":\n                    type = \"shortcut\";\n                    break;\n                default:\n                    type = \"undefined\";\n                break;\n            }\n            \n            if (type === \"undefined\"){\n                speechVar = parameters.winkName +\" is not a defined Device in your list\";\n            }\n            else{\n                if (level === \"\"){               \n                    level = 100;\n                    speechVar = WNRcmd[Math.floor((Math.random() * WNRcmd.length) + 0)];\n                }\n                else{\n                    cmd = \"on\";\n                    speechVar = WNRcmd[Math.floor((Math.random() * WNRcmd.length) + 0)];\n                    speechVar = speechVar + \" at brightness of \" +level;\n                }\n                WinkCMDmsg = context.global.executeWinkCMD(parameters.winkName,type,cmd,level);\n            }\n            break;\n            \n        case \"sendVarCmd\":\n            \n            global.set(globVarName,cmd);\n\n            //node.warn(globVarName + \" turned \" + cmd);\n            speechVar = VARcmd[Math.floor((Math.random() * VARcmd.length) + 0)];\n            WinkCMDmsg=context.global.send_ui_note('information',30000,'Variable '+globVarName+' set to: '+cmd,null);\n            WinkCMDmsg.topic=globVarName;\n            WinkCMDmsg.var_val=cmd;   \n            break;\n \n        case \"updateWinkDevices\":\n            eid = getWinkDevices(context.global.winkState.light_bulbs);\n            eid = eid.concat(getWinkDevices(context.global.winkState.binary_switches));\n            eid = eid.concat(getWinkDevices(context.global.winkState.groups));\n            //what other devices need to be added here?\n            \n            //Find values that are in context.global.googleHomeWinkDevices but not in eid\n            new_entries = eid.filter(function(obj) {\n                return !context.global.googleHomeWinkDevices.some(function(obj2) {\n                    return obj.value == obj2.value;\n                });\n            });\n            speechVar = new_entries.length +\" new devices were retrieved,  Is there anything else I can do for you?\";\n            WinkCMDmsg ={\n                \"url\":\"https://api.api.ai/v1/entities/winkName/entries?v=20150910\",\n                \"method\": \"PUT\",\n                headers: {\n                    \"Content-Type\": \"application/json\",\n                    \"Authorization\":\"Bearer \"+context.global.googleHomeKey\n                },\n                payload: \n                    new_entries\n            };\n            break;\n\n        case \"input.welcome\":\n        case \"assistant.intent.action.MAIN\":\n            speechVar = welcome[Math.floor((Math.random() * welcome.length) + 1)];\n            break;\n            \n        case \"updateGlbVars\":\n            speechVar = \"This action is not supported yet\";\n            break;\n\n        case \"goodNight\":\n            //your code that will handle goodNight action\n            speechVar = \"Nighty night don't let the bed bugs bite\";\n            break;\n            \n        case \"comfortZone\":  //This intent is not in the sample API.AI code\n            speechVar = \"This action is used for testing\";\n            break;\n\n/* This code will only work if you have a honey lyric termostat (it could be modified to work with other brands          \n        case \"comfortZone.queryTemp\":\n            speechVar = thermName+\" current temperature is \" \n                            +context.global.winkState.thermostats[thermName].temperature +\" degrees  With a Setpoint of\" +setPoint;\n            break;\n            \n        case \"comfortZone.queryTherm\":\n            speechVar = thermName+\" current status is: \" \n                            +\"\\nTemperature: \" +context.global.winkState.thermostats[thermName].temperature +\" degrees\"\n                            +\"\\nMode: \" +mode\n                            +\"\\nFan Mode: \" +context.global.winkState.thermostats[thermName].fan_mode\n                            +\"\\nSetpoint: \" +setPoint\n                            +\"\\nOp Stat: \" +context.global.winkState.thermostats[thermName].powered;\n            node.send(context.global.sendViaPushBullet('note','Thermostat Status',speechVar,''));\n            break;\n            \n        case \"comfortZone.temp\":\n            //WinkCMDmsg = context.global.executeLyricTstatCMD(thermName,\"temperature\",temperature);\n            speechVar = \"Temperature is being set to \"+temperature;\n            break;\n        \n        case \"comfortZone.adjustTemp\":\n            var numb = parseInt(parameters.number);\n            if(parameters.adjust === \"decrease\"  || parameters.adjust === \"down\" || parameters.adjust === \"lower\"){\n                numb = -Math.abs( numb );    \n            }\n            WinkCMDmsg = context.global.executeLyricTstatCMD(thermName,\"adjust\",numb);\n            speechVar = \"Temperature \" +parameters.adjust +\"d by \"+parameters.number +\" degrees.  Setpoint now is\" +(setPoint + numb);\n            break;\n            \n        case \"comfortZone.mode\":\n            WinkCMDmsg = context.global.executeLyricTstatCMD(thermName,\"mode\",mode);\n            speechVar = \"HVAC system is being set to \"+mode;\n            break;\n            \n        case \"comfortZone.fan\":\n            WinkCMDmsg = (context.global.executeLyricTstatCMD(thermName,\"fan\",mode));\n            speechVar = \"HVAC fan is being set to \"+mode;\n            break;\nend thermostat actions */\n\n        default:\n            speechVar = \"Unknown action\";\n            break;\n    }//end switch(action)\n}\n//web request denided\nelse {\n    node.warn(\"Google Home messages bad request\");\n    msg.statusCode=403;\n    return [msg,null];\n}\n\n//message returned to api.ai\n//this always needs to be returned\nmsg.headers = {\n        \"Content-type\" : \"application/json\",\n        \"my-custom-header\": \"a value\"\n    };\nmsg.statusCode=200; \nmsg.payload= {\n    \"speech\": speechVar,\n    \"displayText\": speechVar,  //this could be different then speech it is want is displayed on google assistant screens\n    \"data\": {\"WNR\": action},\n    \"contextOut\": [],\n    \"source\": \"WinkNodeRed\"\n    };\n\n\nif (WinkCMDmsg!==\"\")\n{\n    return [WinkCMDmsg,msg];\n}\n\nelse\n{\n    return [null,msg];\n}",
+    "outputs": "2",
+    "noerr": 0,
+    "x": 890.0000152587891,
+    "y": 561.2221728563309,
+    "wires": [
+      [
+        "2b49d76a.69d068"
+      ],
+      [
+        "987953d0.f0a76",
+        "4e7199a2.d1d038"
+      ]
+    ]
+  },
+  {
+    "id": "e665682b.073b38",
+    "type": "http request",
+    "z": "d3396a61.a88b48",
+    "name": "",
+    "method": "use",
+    "ret": "txt",
+    "url": "",
+    "tls": "",
+    "x": 1371.0001907348633,
+    "y": 506.2222319841385,
+    "wires": [
+      []
+    ]
+  },
+  {
+    "id": "c31ef22a.005ce",
+    "type": "delay",
+    "z": "d3396a61.a88b48",
+    "name": "",
+    "pauseType": "rate",
+    "timeout": "5",
+    "timeoutUnits": "seconds",
+    "rate": "1",
+    "rateUnits": "second",
+    "randomFirst": "1",
+    "randomLast": "5",
+    "randomUnits": "seconds",
+    "drop": false,
+    "x": 1211.0002517700195,
+    "y": 506.22221767902374,
+    "wires": [
+      [
+        "e665682b.073b38"
+      ]
+    ]
+  },
+  {
+    "id": "8183af83.723bc",
+    "type": "function",
+    "z": "d3396a61.a88b48",
+    "name": "",
+    "func": "var msg ={\n    \"url\":\"https://api.api.ai/v1/entities/winkName\",\n    \"method\": \"GET\",\n    headers: {\n        \"Authorization\":\"Bearer \"+context.global.googleHomeKey,\n        }\n}\nreturn msg;",
+    "outputs": 1,
+    "noerr": 0,
+    "x": 711.732666015625,
+    "y": 200.61113739013672,
+    "wires": [
+      [
+        "a0231fbe.55602",
+        "be604dc2.69633"
+      ]
+    ]
+  },
+  {
+    "id": "a0231fbe.55602",
+    "type": "http request",
+    "z": "d3396a61.a88b48",
+    "name": "Google Home wink_devices",
+    "method": "use",
+    "ret": "obj",
+    "url": "",
+    "tls": "",
+    "x": 904.7917175292969,
+    "y": 200.33330535888672,
+    "wires": [
+      [
+        "7fe50ec3.c62f8"
+      ]
+    ]
+  },
+  {
+    "id": "7fe50ec3.c62f8",
+    "type": "function",
+    "z": "d3396a61.a88b48",
+    "name": "googleHomeWinkDevices",
+    "func": "function getEntries(obj,search){\n    for (var i in obj){\n        var entries=obj[i];\n        if (i == search){\n            return(entries);\n        }\n    }\n}\n\ncontext.global.googleHomeWinkDevices = getEntries(msg.payload,\"entries\");\n//node.warn(context.global.googleHomeWinkDevices);\nreturn msg;\n",
+    "outputs": 1,
+    "noerr": 0,
+    "x": 1163.7917175292969,
+    "y": 200.33330535888672,
+    "wires": [
+      [
+        "821d65a9.a26788"
+      ]
+    ]
+  },
+  {
+    "id": "1e3d9986.7a6fb6",
+    "type": "inject",
+    "z": "d3396a61.a88b48",
+    "name": "",
+    "topic": "",
+    "payload": "",
+    "payloadType": "date",
+    "repeat": "43200",
+    "crontab": "",
+    "once": true,
+    "x": 535.7361145019531,
+    "y": 199.68755340576172,
+    "wires": [
+      [
+        "8183af83.723bc"
+      ]
+    ]
+  },
+  {
+    "id": "821d65a9.a26788",
+    "type": "debug",
+    "z": "d3396a61.a88b48",
+    "name": "",
+    "active": true,
+    "console": "false",
+    "complete": "payload",
+    "x": 1365.7918395996094,
+    "y": 200.66680145263672,
+    "wires": []
+  },
+  {
+    "id": "a736bf75.cd475",
+    "type": "inject",
+    "z": "d3396a61.a88b48",
+    "name": "",
+    "topic": "",
+    "payload": "",
+    "payloadType": "date",
+    "repeat": "",
+    "crontab": "",
+    "once": true,
+    "x": 302.83001708984375,
+    "y": 104.35763549804688,
+    "wires": [
+      [
+        "81a372b6.029c9"
+      ]
+    ]
+  },
+  {
+    "id": "81a372b6.029c9",
+    "type": "function",
+    "z": "d3396a61.a88b48",
+    "name": "Define Globals",
+    "func": "\ncontext.global.googleHomeKey=\"your developer access token\";  // winknodered\n\nif (typeof context.global.goodNight === 'undefined')\n{\n    context.global.goodNight=false;\n}\n\nif (typeof(context.global.googleHomeWinkDevices) === 'undefined')\n{\n    context.global.googleHomeWinkDevices = [];  \n}\n\nif (typeof(context.global.googleHomeGlbVariables) === 'undefined')\n{\n    context.global.googleHomeGlbVariables = [];  \n}",
+    "outputs": 1,
+    "noerr": 0,
+    "x": 490.1971435546875,
+    "y": 104.82356262207031,
+    "wires": [
+      []
+    ]
+  },
+  {
+    "id": "9f50c265.d3113",
+    "type": "comment",
+    "z": "d3396a61.a88b48",
+    "name": "request API.AI for wink_devices entity",
+    "info": "",
+    "x": 1077.0591430664062,
+    "y": 158.94442749023438,
+    "wires": []
+  },
+  {
+    "id": "7b7f1cc2.b8a214",
+    "type": "switch",
+    "z": "d3396a61.a88b48",
+    "name": "Switch on Action",
+    "property": "payload.result.action",
+    "propertyType": "msg",
+    "rules": [
+      {
+        "t": "eq",
+        "v": "input.welcome",
+        "vt": "str"
+      },
+      {
+        "t": "eq",
+        "v": "updateWinkDevices",
+        "vt": "str"
+      },
+      {
+        "t": "eq",
+        "v": "detectPresence",
+        "vt": "str"
+      },
+      {
+        "t": "eq",
+        "v": "vacMode",
+        "vt": "str"
+      },
+      {
+        "t": "eq",
+        "v": "winkStatus",
+        "vt": "str"
+      },
+      {
+        "t": "else"
+      }
+    ],
+    "checkall": "true",
+    "outputs": 6,
+    "x": 640.8367919921875,
+    "y": 343.06614685058594,
+    "wires": [
+      [
+        "8183af83.723bc"
+      ],
+      [
+        "8183af83.723bc"
+      ],
+      [
+        "1e9b6f56.9426c1"
+      ],
+      [
+        "587f082d.442408"
+      ],
+      [
+        "6e8b5123.09334"
+      ],
+      [
+        "182bcdc4.294d22"
+      ]
+    ]
+  },
+  {
+    "id": "2b49d76a.69d068",
+    "type": "function",
+    "z": "d3396a61.a88b48",
+    "name": "",
+    "func": "var t=msg.topic;\nnode.send(msg);\nif ('topic' in msg){\n    var wsMsg={};\n    wsMsg.payload={\n        varName:t,\n        varVal:context.global[t]\n    }\n    wsMsg.method=\"POST\";\n    wsMsg.url=context.global.BlueMixUrlBase+'/red/wscomms';\n    wsMsg.headers= {\n        \"Authorization\":\"Bearer \"+context.global.FREEBOARD_TOKEN\n    };    \n    node.send(wsMsg);\n    \n    if (t=='VacationMode' && context.global.VacationMode=='on'){\n        var Msg1={}\n        Msg1.method=\"POST\";\n        Msg1.url=context.global.BlueMixUrlBase+'/red/vacation_init';\n        Msg1.headers= {\n            \"Authorization\":\"Bearer \"+context.global.FREEBOARD_TOKEN\n        };\n        context.global.sendWithTimeout(node,Msg1,4000);\n    }\n    if (t=='VacationMode' && context.global.VacationMode=='off') context.global.clearAllIntervals();\n\n} \nreturn;",
+    "outputs": 1,
+    "noerr": 0,
+    "x": 1073.5625610351562,
+    "y": 506.24652099609375,
+    "wires": [
+      [
+        "c31ef22a.005ce"
+      ]
+    ]
+  },
+  {
+    "id": "25a8fe8d.bf23c2",
+    "type": "debug",
+    "z": "d3396a61.a88b48",
+    "name": "",
+    "active": true,
+    "console": "false",
+    "complete": "true",
+    "x": 406,
+    "y": 311,
+    "wires": []
+  },
+  {
+    "id": "be604dc2.69633",
+    "type": "debug",
+    "z": "d3396a61.a88b48",
+    "name": "",
+    "active": true,
+    "console": "false",
+    "complete": "false",
+    "x": 823,
+    "y": 158,
+    "wires": []
+  },
+  {
+    "id": "5404a4e1.e3f0ec",
+    "type": "function",
+    "z": "d3396a61.a88b48",
+    "name": "Verify Request",
+    "func": "if (msg.req.headers['authorization']==context.global.googleHomeKey){\n    return [msg,null];\n}\nelse {\n    node.warn(\"Google Home messages bad request\");\n    msg.headers = {\n        \"Content-type\" : \"application/json\",\n        \"my-custom-header\": \"a value\"\n    };\n    msg.statusCode=206;\n    msg.payload= {\n    \"speech\": \"Bad Request\",\n    \"displayText\": \"Bad Request\",\n    \"data\": {\"WNR\": msg.payload.result.action},\n    \"contextOut\": [],\n    \"source\": \"WinkNodeRed\"\n    };\n    return [null,msg];\n}",
+    "outputs": "2",
+    "noerr": 0,
+    "x": 437,
+    "y": 349,
+    "wires": [
+      [
+        "7b7f1cc2.b8a214"
+      ],
+      [
+        "bb8a6308.2a98"
+      ]
+    ]
+  },
+  {
+    "id": "987953d0.f0a76",
+    "type": "debug",
+    "z": "d3396a61.a88b48",
+    "name": "",
+    "active": true,
+    "console": "false",
+    "complete": "false",
+    "x": 1173,
+    "y": 567,
+    "wires": []
+  },
+  {
+    "id": "6496362.c882ec8",
+    "type": "link in",
+    "z": "d3396a61.a88b48",
+    "name": "Responce",
+    "links": [
+      "bb8a6308.2a98",
+      "bdb2c74b.62d3d8",
+      "4e7199a2.d1d038",
+      "b78c9406.ff24d8",
+      "91f410e1.73bb9"
+    ],
+    "x": 1214.9998779296875,
+    "y": 275,
+    "wires": [
+      [
+        "3f2507a0.2a14a8"
+      ]
+    ]
+  },
+  {
+    "id": "bb8a6308.2a98",
+    "type": "link out",
+    "z": "d3396a61.a88b48",
+    "name": "Bad Request",
+    "links": [
+      "6496362.c882ec8"
+    ],
+    "x": 571,
+    "y": 413,
+    "wires": []
+  },
+  {
+    "id": "b99dd926.ccf038",
+    "type": "comment",
+    "z": "d3396a61.a88b48",
+    "name": "Send Wink CMD message",
+    "info": "",
+    "x": 1169,
+    "y": 468,
+    "wires": []
+  },
+  {
+    "id": "1e9b6f56.9426c1",
+    "type": "function",
+    "z": "d3396a61.a88b48",
+    "name": "Report Presence",
+    "func": "varSpeech = \"\";\nvarText   = \"\";\n\n\nvar obj = context.global.Presence;\nvar keys = Object.keys(obj);\nvar presence = keys.filter(function(key) {\n    return obj[key]\n});\n\nnode.warn(presence)\n\nswitch (presence.length){\n    case 0:\n        varText = \"No boby is Home\";\n        varSpeech = \"There isn't anyone home at this time\";\n        break;\n    case 1:\n        varSpeech = \"There is \" +presence.length + \" person home\";\n        varText = presence +\" is Home\";\n        break;\n    default:\n        varSpeech = \"There are \" +presence.length + \" people in the house\";\n        varText = presence +\" are Home\";\n    break;\n    \n    \n}\n\nmsg.headers = {\n    \"Content-type\" : \"application/json\",\n    \"my-custom-header\": \"a value\"\n};\nmsg.statusCode=200;\nmsg.payload= {\n    \"speech\": varSpeech,\n    \"displayText\": varText,\n    \"data\": {\"WNR\": msg.payload.result.action},\n    \"contextOut\": [],\n    \"source\": \"WinkNodeRed\"\n};\n\nreturn msg;",
+    "outputs": 1,
+    "noerr": 0,
+    "x": 898,
+    "y": 275,
+    "wires": [
+      [
+        "bdb2c74b.62d3d8"
+      ]
+    ]
+  },
+  {
+    "id": "bdb2c74b.62d3d8",
+    "type": "link out",
+    "z": "d3396a61.a88b48",
+    "name": "Report Presence",
+    "links": [
+      "6496362.c882ec8"
+    ],
+    "x": 1031,
+    "y": 275,
+    "wires": []
+  },
+  {
+    "id": "4e7199a2.d1d038",
+    "type": "link out",
+    "z": "d3396a61.a88b48",
+    "name": "Process Request",
+    "links": [
+      "6496362.c882ec8"
+    ],
+    "x": 1057,
+    "y": 568,
+    "wires": []
+  },
+  {
+    "id": "587f082d.442408",
+    "type": "change",
+    "z": "d3396a61.a88b48",
+    "name": "Vacation Mode",
+    "rules": [
+      {
+        "t": "set",
+        "p": "VacationMode",
+        "pt": "global",
+        "to": "payload.result.parameters.command",
+        "tot": "msg"
+      }
+    ],
+    "action": "",
+    "property": "",
+    "from": "",
+    "to": "",
+    "reg": false,
+    "x": 872,
+    "y": 356,
+    "wires": [
+      [
+        "6368b26e.93f75c"
+      ]
+    ]
+  },
+  {
+    "id": "6368b26e.93f75c",
+    "type": "function",
+    "z": "d3396a61.a88b48",
+    "name": "Verify VacationMode",
+    "func": "if(msg.payload.result.parameters.command != context.global.VacationMode){\n    var varSpeech = \"Vacation Mode was not set to \" +msg.payload.result.parameters.command;\n    node.warn(varSpeech);\n}\nelse{\n    var varSpeech = \"Vacation Mode successfully set to \" +msg.payload.result.parameters.command;\n}\nmsg.headers = {\n    \"Content-type\" : \"application/json\",\n    \"my-custom-header\": \"a value\"\n};\nmsg.statusCode=200;\nmsg.payload= {\n    \"speech\": varSpeech,\n    \"displayText\": varSpeech,\n    \"data\": {\"WNR\": msg.payload.result.action},\n    \"contextOut\": [],\n    \"source\": \"WinkNodeRed\"\n};\n\nreturn msg;",
+    "outputs": 1,
+    "noerr": 0,
+    "x": 1074,
+    "y": 356,
+    "wires": [
+      [
+        "b78c9406.ff24d8"
+      ]
+    ]
+  },
+  {
+    "id": "b78c9406.ff24d8",
+    "type": "link out",
+    "z": "d3396a61.a88b48",
+    "name": "vacMode",
+    "links": [
+      "6496362.c882ec8"
+    ],
+    "x": 1218,
+    "y": 356,
+    "wires": []
+  },
+  {
+    "id": "6e8b5123.09334",
+    "type": "function",
+    "z": "d3396a61.a88b48",
+    "name": "Wink Status",
+    "func": "var lights=context.global.winkState.groups['@lights'].powered.true_count+ \" lights on \";\nnode.warn(lights);\nvar varSpeech = \"Wink reports that there are \" +lights;\n\nmsg.statusCode=200;\nmsg.payload= {\n    \"speech\": varSpeech,\n    \"displayText\": varSpeech,\n    \"data\": {\"WNR\": msg.payload.result.action},\n    \"contextOut\": [],\n    \"source\": \"WinkNodeRed\"\n};\nreturn msg;\n",
+    "outputs": 1,
+    "noerr": 0,
+    "x": 896,
+    "y": 407,
+    "wires": [
+      [
+        "91f410e1.73bb9"
+      ]
+    ]
+  },
+  {
+    "id": "91f410e1.73bb9",
+    "type": "link out",
+    "z": "d3396a61.a88b48",
+    "name": "winkStatus",
+    "links": [
+      "6496362.c882ec8"
+    ],
+    "x": 1010,
+    "y": 407,
+    "wires": []
+  }
+]
