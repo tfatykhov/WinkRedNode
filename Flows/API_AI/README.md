@@ -20,7 +20,7 @@ When you have input your agent’s settings, choose “Save” next to the agent
 
 ### 1.3)Import Agent
 Download the following file which is a prepopulated Agent for the wink node-red interface.  This file will be imported as described.
-* [winkNodeRed_0_2.zip](winkNodeRed_0_2.zip)
+* [winkNodeRed_0_3.zip](winkNodeRed_0_3.zip)
 * In "Agent Setting"  Click on "Export and Import" and select "Import from zip"
 
 <img src='images/importAgent.jpg'/>
@@ -46,7 +46,7 @@ The API keys we will need are further down on this agent page. Scroll down and y
 The behavior of the Assistant when triggered by an Intent.  For example, what should the Assistant do when you ask “Turn On the Bedroom light”. API.AI recognize the words ‘On’(@command), and ‘Bedroom’(@winkName) but we need an application that process those words,  carry out the command and give us a responce. This is called a webhook. 
 
 * Create new tab  - give it a meaningful name (Google Home Integration)
-* Import from clipboard - [API_AI_webhook.json](API_AI_webhook.json)
+* Import from clipboard - [API_AI_webhook_0_3.json](API_AI_webhook_0_3.json)
 * Set Global Defines - context.global.googleHomeKey="your developer access token";
 * Deploy flow
 
