@@ -18,7 +18,9 @@ Example, let say we want to set value of context.global.LigthsNotification to fa
 ```
 context.global.setGlobalVar('LightsNotification',false);
 ```
+##### Required steps (WNR)
 
+Import updated winkCore.json
 06/16/2017
 -----------
 ### Support added for Honeywell Lyric WI-FI Thermostats
@@ -43,7 +45,7 @@ Wink changed device manufacturer string for nest cameras and set it as "nest_the
 ### SmartThings Energy Meter data can be seen in summary page for both UI versions
 ![add stapp](images/energy1.png)
 
-#####Required steps (WNR)
+##### Required steps (WNR)
 *  Import updated [winkCore.json](winkCore.json)
 *  do not forget to check [duplicate websockets](../../README-WebsocketFix.md)
 *  perform "FULL" deployment<br>
