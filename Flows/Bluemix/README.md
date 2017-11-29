@@ -35,7 +35,7 @@ Wink changed device manufacturer string for nest cameras and set it as "nest_the
 
 
 
-#####Required steps (WNR)
+##### Required steps (WNR)
 *  Import updated [winkCore.json](winkCore.json)
 *  Import updated [winkIntegration.json](winkIntegration.json)
 *  do not forget to check [duplicate websockets](../../README-WebsocketFix.md)
