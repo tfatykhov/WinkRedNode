@@ -10,6 +10,15 @@ https://(your_app_name).mybluemix.net/wnrUI <br>
 ---
 == UPDATE ==
 -
+11/28/2017
+-----------
+### Saving global variable changes to InfluxDB/Grafana
+Added support to store global variable changes to InfluxDB. In order to capture change, you need to use function context.global.setGlobalVar(varName,varValue); to set global variable value instead of setting it directly.<br>
+Example, let say we want to set value of context.global.LigthsNotification to false. In that case you need to use following in function node:
+```
+context.global.setGlobalVar('LightsNotification',false);
+```
+
 06/16/2017
 -----------
 ### Support added for Honeywell Lyric WI-FI Thermostats
