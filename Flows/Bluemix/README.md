@@ -19,8 +19,8 @@ Example, let say we want to set value of context.global.LigthsNotification to fa
 context.global.setGlobalVar('LightsNotification',false);
 ```
 ##### Required steps (WNR)
+*  Import updated [winkCore.json](winkCore.json)
 
-Import updated winkCore.json
 06/16/2017
 -----------
 ### Support added for Honeywell Lyric WI-FI Thermostats
